@@ -76,16 +76,7 @@
 
 %------------- PROFILE AND OBJECTIVES --------------------------------------------
 \section{Profile and Objectives}
-\small I’m a trustful, goal-oriented, detail-focused professional with experience in both research and 
-software engineering (also in both academic and non-academic environments), particularly in the fields of 
-machine learning, artificial intelligence, and distributed systems. As a Research Engineer, I love 
-exploring and implementing with cutting-edge technologies, particularly in AI/ML, to tackle complex 
-challenges and foster innovation. As a Software Engineer, I can design, develop, and ensure the maintainability 
-of robust and scalable big data applications, whether on-prem or cloud, always prioritizing high availability, 
-scalability, performance, and reliability. I am adaptable, capable of taking initiative and leading efforts 
-with a strategic approach when needed, or collaborating as a communicative, supportive, and empathetic team 
-player to achieve shared goals. I thrive in open, dynamic, and multidisciplinary environments, integrating 
-visionary and practical insights to deliver impactful results while empowering others and fostering collaboration.
+\small I am a reliable, goal-oriented, and detail-focused professional with extensive experience in research and software engineering across both academic and industry settings, specializing in machine learning, artificial intelligence, and distributed systems. As a Research Engineer, I love exploring and implementing with cutting-edge technologies, particularly in AI/ML, to tackle complex challenges and foster innovation. As a Software Engineer, I can design, develop, and ensure the maintainability of robust and scalable big data applications, whether on-prem or cloud, always prioritizing high availability, scalability, performance, and reliability. I am adaptable, capable of taking initiative and leading efforts with a strategic approach when needed, or collaborating as a communicative, supportive, and empathetic team player to achieve shared goals. I thrive in open, dynamic, and multidisciplinary environments, integrating visionary and practical insights to deliver impactful results while empowering others and fostering collaboration.
 %\vspace{-0.2cm}
 %------------- PROFILE AND OBJECTIVES --------------------------------------------
 
@@ -94,35 +85,41 @@ visionary and practical insights to deliver impactful results while empowering o
 
 \cventry{2023--Now}{\large Principal Research Engineer}{Knowledge Graph Science @ Yahoo Inc.}{}{Sunnyvale}{}
 
-\cventry{}{\small YKG}{Dev/Test Dataset Imnprovement}{2024}{\textbf{Roles}: ML/AI Expert}{
-\textbf{Goal} As dataset labels were semi-supervised generated, develop an LLM-based solution to re-assure the labeling accuracy of the dev and test datasets  \\
-\textbf{Achievement} Generative Entity Matching solution with Llama 2 to identify and fix misclassified examples in the dev/test sets \\
+\cventry{}{\small YKG}{Dev/Test Dataset Quality Imnprovement}{2024}{\textbf{Roles}: ML/AI Expert}{
+\textbf{Goal} Since many dataset labels were semi-supervised generated for most pairs, I developed an LLM-based solution to validate and enhance the labeling accuracy of the dev and test datasets \\
+\textbf{Achievement} I implemented a generative Entity Matching solution with Llama 2 to identify and fix (by re-labeling) misclassified examples in the dev/test sets \\
 }
 
 \cventry{}{\small YKG}{Entity Reconciliation Model Training}{2023-2024}{\textbf{Roles}: Machine Learning/AI Expert}{
-I developed and trained reconciliation models to dedup People \& Creative Work meta-entities \\
+Fine-tuned transformer-based language models (LMs) on heter labeled datasets, integrating editorially curated data with automatically labeled data through entity linking via common identifiers. This approach aimed to deduplicate and reconcile meta-entities related to People and Creative Works. \\
 \textbf{Goal} Improve current production metrics on both categories \\
-\textbf{Achievements}
+\textbf{Achievements} \\
+- I trained and optimized a unified, type-agnostic LM model for entity matching/reconciliation, replacing tens of type-specific production models and simplifying the maintenance of the reconciliation stage in the Knowledge Graph \\
+- Metric improvements: \\
 1) Overall increases of 22.23\% and 16.11\% in precision and recall for Person \\
 2) Overall increases of 5\% and 4\% in precision and recall for Creative Works \\
+- Reduced model size by 33\%, lowering the model's storage requirements and improving efficiency without compromising its entity matching accuracy \\
 }
 
 \cventry{}{\small YKG}{Entity Reconciliation Pipeline}{2023}{\textbf{Roles}: Machine Learning/AI Expert, MLOps}{
-Developed an automated pipeline for training entity reconciliation models for YK, from data curation to inference testing \\
-\textbf{Goal/Achievement} Devise a solution to reduce the current number of models maintained in production from \~30 heterogeneous (heuristic-based, SVMs, Tree-based...) to just 4, which encompass the main 4 meta-entity types in YK \\
+- Built pipelines for distributed sampling, preprocessing, and transformation of large-scale entity data extracted from various complementary sources that that accurately reflect user search behavior. \\
+- Developed an automated pipeline for training entity reconciliation models for YK, from data curation to inference testing \\
+\textbf{Goal/Achievements} 
+- We devised a solution to reduce the current number of models maintained in production from \~30 heterogeneous (heuristic-based, SVMs, Tree-based...) to just 4, which encompass the main 4 meta-entity types in YK \\
+- We expanded entity type coverage to 20 new types of people entities (e.g., directors, producers, composers, writers, politicians, etc.) and 32 new types of creative works (e.g., visual works, theatrical works, critic’s reviews, periodicals, poems, etc.) \\
 }
 
 \cventry{}{\small YKG}{Entity Reconciliation Inference}{2023}{\textbf{Roles}: MLOps}{
-Architect a develop a PoC solution for inference in the cloud \\
-\textbf{Goal} Explore a Ray-Serve based approach for putting into production the new YK models in the cloud \\
+\textbf{Goal} Designed and architected a PoC solution for cloud-based inference \\
+\textbf{Achievement} I implemented a Ray Serve-based solution to deploy new YK models in the cloud, optimizing for cost efficiency by evaluating CPU and GPU-based approaches \\
 }
 
 \cventry{Jun--Dec 2022}{\large Principal Research Engineer}{Yahoo Mail}{}{Sunnyvale}{}
 
 \cventry{}{\small Science @ Mail}{Kamino Project - mail classification system}{2022}{\textbf{Roles}: Machine Learning/AI Expert}{
-\textbf{Goal} Update the old production models with a new breed of deep learning based small distilled models suitable for running at scale. The models were classifying the incoming mail based on a new multilabel taxonomy created specifically for new use-cases required by the mail team.
+\textbf{Goal} Upgraded legacy production models to a new generation of deep learning-based, small distilled models optimized for large-scale deployment. These models were designed to classify incoming mail using a newly developed multilabel taxonomy tailored to the mail team’s specific use cases
 \textbf{Approach}
-I built a deep learning based pipeline with Hugging Face to train/evaluate deep learning models performing knowledge distillation following the Teacher/Student approach. Starting first from limited human-labeled training data, we built a large/complex, more accurate model; then we used a large amount of teacher-labeled data to train lightweight student models for suitable for deployment. Produce two kinds of models: 1) online student models; faster but less accurate suitable for real-time classification tasks. 2) offline student model; slower but include richer information that provides better accuracy results. \\
+I developed a deep learning based pipeline with Hugging Face to train/evaluate deep learning models performing knowledge distillation following thDeveloped a deep learning pipeline using Hugging Face to train and evaluate models based on the Teacher/Student knowledge distillation framework. Starting with limited human-labeled training data, a large and complex teacher model was created to achieve high accuracy. This model was then used to generate teacher-labeled data for training lightweight student models optimized for deployment. Two types of student models were produced: (1) online models, optimized for speed and suitable for real-time classification tasks, and (2) offline models, designed to include richer information for improved accuracy in non-real-time applications \\
 \textbf{Achievements}
 The resulting student models for an expanded taxonomy, more than doubling the number of deployable categories in the taxonomy while improving performance on existing categories in production by 3.1-5.9\%
 }
@@ -130,10 +127,10 @@ The resulting student models for an expanded taxonomy, more than doubling the nu
 \cventry{Apr--Sep 2022}{\large Principal Research Engineer}{Digital Transformation Office @ Yahoo}{}{Sunnyvale}{}
 
 \cventry{}{\small AI/ML Working Group}{AI/ML future strategy definition in the cloud}{}{\textbf{Roles}: ML/AI Expert, Strategy}{
-As Yahoo's infrastructure was going to transition from its own datacenters and resources to work fully in the cloud. Scientist and Research Engineers training, running, and serving ML/DL models needed a modern set of tools to share datasets, models and reproducible experiments with colleagues, rapidly experiment with, and iterate on new models, and finally, publish and deploy them easily into pre-production/production environments \\
-\textbf{Goal} The Model Development group in particular had as mission to determine the requirements, standards, tools, and frameworks to enable ML/DL applications at scale across the company \\
+As Yahoo transitioned its infrastructure from on-premises data centers to a fully cloud-based environment, scientists and research engineers required modern tools to streamline their workflows. These tools needed to facilitate dataset and model sharing, ensure reproducibility of experiments, enable rapid experimentation and iteration on new models, and support seamless publishing and deployment into pre-production/production environments \\
+\textbf{Goal} Specifically, the Model Development subgroup was dedicated to establishing the requirements, standards, tools, and frameworks needed to scale ML/DL applications effectively across the company \\
 \textbf{Achievements} \\
-- I led the subgroup on Model Development, although I participated actively in the remaining three (Data Management, Model Management, and Model Serving) \\
+- I led the discussions on the Model Development subgroup, although I participated actively in the remaining three (Data Management, Model Management, and Model Serving) \\
 - We delivered a set of recommendations (prioritized and categorized in topics) and tasks to do (internal processes, external relations, tools, etc.) to guarantee that ML/DL practitioners could work with less friction in the new cloud environments \\
 }
 
@@ -146,7 +143,7 @@ Yahoo. We proposed and implemented a multilingual model that can accurately clas
 \textbf{Goal} Transfer the knowledge and experience in taxonomy-based multi-label classification into Ads team and build a platform for training/evaluating the models \\
 \textbf{Achievements} \\
 - I helped the Ads team to develop a pipeline for training models for the task at hand \\
-- \textit{Multilingual taxonomic web page classification for contextual targeting at Yahoo} paper. In the 28th ACM SIGKDD Conference, 2022 \textbf{7 Citations}\newline
+- \textit{Multilingual taxonomic web page classification for contextual targeting at Yahoo} paper. In the 28th ACM SIGKDD Conference, 2022 \textbf{7 Citations} \\
 }
 
 \cventry{2018--2023}{\large Principal Research Engineer}{Science @ Content Platform @ Yahoo Inc.}{}{Sunnyvale}{}
@@ -157,8 +154,8 @@ Research Engineer}{
 \textbf{Achievements}
 - I developed modern pipeline based on HuggingFace Transformers to train/evaluate multi-label, multi-class and binary classification problems \\
 - I built tool for plugin taxonomies for the multi-label configurations \\
-- I trained models with significant better metrics over the ones in production (+10\% over baseline) \\
-- I developed a serving pipeline based on NVDIA's Triton Server to deploy in production \\
+- I trained new models obtaining significant better metrics over the ones in production (+10\% over baseline) \\
+- We developed a serving pipeline based on NVDIA's Triton Server to deploy in production \\
 }
 \cventry{}{\small Science @ CAP}{Scalable Few-shot Classification with Parallel Prefix Conditioning}{2021}{\textbf{Roles}: ML/DL Engineer, 
 Research Engineer}{
@@ -167,15 +164,15 @@ few-shot classification by prefixing multiple category labels to the input. \\
 \textbf{Method} Class representations are encoded in parallel but produce independent binary \\
 labels for each input through a shared classification output layer. \\
 \textbf{Achievements}
-- Experiments on the DBPedia dataset demonstrated improved few-shot performance over standard multi-class classifiers and a speedup over binarized formulations. \\
-- Further analysis showed that the approach can scale to a large number of categories and may hold promise for zero-shot learning of unseen categories. \\
+- I conducted experiments on the DBPedia dataset demonstrated improved few-shot performance over standard multi-class classifiers and a speedup over binarized formulations. \\
+- Further analysis showed that the approach could be scaled to a large number of categories and may hold promise for zero-shot learning of unseen categories. \\
 }
 \cventry{}{\small Science @ CAP}{Clickbait Classifier based on Transformers}{2019}{\textbf{Roles}: ML/DL Engineer, 
 Research Engineer}{
 \textbf{Goal} Improve the current SVM-based model in production using a BERT-based model
 \textbf{Achievements} \\
-- Improve the current classifier in production by 5\% \\
-- I proposed an integration strategy for serving the model in production using the existing pipeline \\
+- We proposed an integration strategy for serving the model in production using the existing pipeline \\
+- The F1 metric was improved over 5\% over current classifier in production \\
 - PoC of a generative-based clickbait classification approach using Google's T5 \\
 }
 \cventry{}{\small Science @ CAP}{Hierarchical Transfer Learning for Multi-label Text Classification}{2018}{\textbf{Roles}: ML/DL Engineer, 
@@ -188,8 +185,8 @@ Research Engineer}{
 \cventry{2015--2018}{\large Senior Research Engineer}{Content Ingestion Platform (CAP) @ Yahoo Inc.}{}{Sunnyvale}{}
 
 \cventry{}{\small CAP}{DL-based multi-class Classification for Content Ingestion}{2018}{\textbf{Roles}: ML/DL Engineer}{
-- Experiment with LSTM/GRU-based models for multi-class classification using TF/Keras \\
-- Explore transfer learning for multi-label text classification \\
+- I experimented with LSTM/GRU-based models for multi-class classification using TF/Keras \\
+- We explored transfer learning techniques for multi-label text classification \\
 }
 \cventry{}{\small CAP}{Machine Learning Content Classification Pipeline}{2017}{\textbf{Roles}: ML Engineer}{
 I built a pipeline for easy data ingestion, model training and evaluation based on SVMs for the Sieve platform \\
@@ -201,59 +198,59 @@ We build k8s-make, a tool and a worflow-based framework to harness the compute-p
 \cventry{2015--2017}{\large Senior Research Engineer}{Sieve @ Yahoo Inc.}{}{Sunnyvale}{}
 
 \cventry{}{\small Sieve}{Twitter Firehose: At scale, ingestion streaming system for Tweets}{2017}{\textbf{Roles}: Distributed Systems Expert, Research Engineer} {
-- Reimplement the new Twitter API \\
-- Re-architect previous solution to be more performant yet keeping the backwards compatibility \\
-- Collaborate with the Sports team for productization \\
+- I reimplemented the new Twitter API (v2.0) in the firehose \\
+- I re-architected previous solution to be more performant yet keeping the backwards compatibility \\
+- I collaborated with the Sports team for the productization of the new firehose \\
 }
 
 \cventry{}{\small Sieve}{Scalable Content Ingestion Platform}{2016}{\textbf{Roles}: Distributed Systems Expert, Research Engineer} {
-- Move Omid as full open-source project into the ASF (https://github.com/apache/incubator-omid) \\ 
-- Continue Supporting the Omid transaction manager project in production \\
+- I transfered Omid as full open-source project into the \href{https://github.com/apache/incubator-omid}{Apache Software Foundation (ASF)} \\ 
+- I continued supporting the Omid transaction manager project in production \\
 - \textit{Omid} presented at Hadoop Summit. 2016, San Jose, CA (USA)
 - \textit{Omid, reloaded: scalable and {Highly-Available} transaction processing} paper. In USENIX FAST, 2017 \textbf{20 Citations}\newline
 }
 
 \cventry{}{\small Sieve}{Scalable Content Ingestion Platform}{2015}{\textbf{Roles}: Distributed Systems Expert, Research Engineer}{
-- Work at multi-tenant content ingestion platform at Search organization\\
-- Add High Availability to the Omid Transaction Manager for HBase\\
-- Scale Omid in multi-core architectures\\
-- Support Omid transaction manager project in production infrastructure for content ingestion platform\\
-- Explore moving Omid as open-source project in the Apache Software Foundation (ASF) \\
+- I worked at the multi-tenant content ingestion platform at Search organization \\
+- I added High Availability to the Omid Transaction Manager for HBase \\
+- We scaled Omid in multi-core architectures \\
+- I supported the Omid transaction manager in the production infrastructure of the content ingestion platform\\
+- I started exploring the transfer of Omid as open-source project to the Apache Software Foundation \\
 }
 
 \cventry{2012--2015}{\large Research Engineer}{Scalable Computing Group @ Yahoo Labs.}{}{Spain}{}
 
 \cventry{}{\small Omid}{Transaction Manager for Big Datastores}{2014}{\textbf{Roles}: Distributed Systems Expert, 
 Research Software Engineer}{
-- Re-architect original codebase/Implementation of new features\\
-- Support integration in Sieve project\\
-- Presentation and poster at Yahoo's Techpulse Conf. 2014
+- I re-architected the original codebase and implementated new features \\
+- I supported the Omid integration in Sieve project (Yahoo's large scale Internet content ingestion platform)\\
+- I presented Omid and its poster at Yahoo's internal technical conference (Techpulse Conf. 2014)
 }
 
 \cventry{}{\small Edentity/Pachiderm}{Ubiquitous content access and management of personal data (images, video\ldots{}) held on 3rd party services (Flickr, GDrive, Dropbox\ldots{}).}{2014}{\textbf{Roles}: Distributed Systems Expert, 
 Research Engineer}{
-- Design and implementation of a scalable synchronization module\\
-- REST API definition and implementation for each module defined (User Registration, Search, Content Fetching)
+- I designed and implementated a scalable synchronization data module \\
+- I defined and implemented a RESTful API for each module defined (User Registration, Search, Content Fetching)
 }
 
 \cventry{}{\small RiddlR}{Percolator-like incremental processing system.}{2013}{\textbf{Roles}: Distributed Systems Expert, Research Engineer}{
-- Prototype and example application implementation\\
-- Poster at Yahoo's Techpulse Conf. 2013
+- I prototyped the framework and build an multi-stage example application on top of it \\
+- I presented RiddlR and its poster at Yahoo's Techpulse Conf. 2013
 }
 
 \cventry{}{\small CumuloNimbo}{7th European Framework Programme (FP7-257993)}{2012--2013}{\textbf{Roles}: Distributed Systems Expert, 
 Research Engineer}{
-- Design and implementation of a prototype of an incremental processing system for Big Datastores\\
-- Provide durability to HBase through BookKeeper\\
-- Represent Yahoo in project meetings and evaluation
+- I designed and implementated of a prototype of an incremental processing system for Big Datastores \\
+- I added durability guarantees to HBase through BookKeeper \\
+- I represented Yahoo in project meetings and evaluation sessions \\
 }
 
 \cventry{2011--2012}{\large Software Architect}{Lumata}{}{Spain}{SONY Socialife application. High Scalable Big-Data Backend Platform for web and social content ingestion and aggregation}
 
 \cventry{}{\small Giddra Project}{}{2012}{\textbf{Roles}: Distributed Systems Expert, Architect} {
-- Architectural definition of the platform\\
-- Team coordination\\
-- REST API definition for allowing clients to access the backend
+- I contributed to the architectural definition of the platform\\
+- I did coordination over multiple teams \\
+- I defined the REST API for allowing clients to access/use the backend
 }
 
 \cventry{2010--2011}{\large Freelance Software Architect/Engineer}{Local Greenhouse Cooperative in Zaragoza}{}{Spain}{Analysis, design and Ruby/Rails implementation of a web application to manage the different domains of a greenhouse farm. LoC $\simeq $20.000}
@@ -261,42 +258,40 @@ Research Engineer}{
 % %\subsection{Vocational}
 
 \cventry{2003--2010}{\large %Distributed Systems Expert, %
-Software Architect/Research Engineer}{School of CS at Univ. Politécnica de Madrid (UPM)}{}{Spain}{%
-%I have participated in European and national research projects that include the analysis, design, implementation and testing of middleware architectures and applications.
-Participation in European and national research projects that included the analysis, design, implementation and testing of middleware architectures and applications.
-%Participation in European and national research projects. 
-\textit{Detailed achievements in projects}:%
+Software Architect/Research Engineer}{School of CS at Univ. Politécnica de Madrid (UPM)}{}{Spain}{
+I participated in European and national research projects that included the analysis, design, implementation and testing of different kinds of middleware architectures and applications.
+\\
 }
 \cventry{}{\small NEXOF-RA: NESSI Open Framework - Reference Architecture}{7th European Framework Programme (FP7-216446)}{2008--2010}{\textbf{Roles}: %Distributed Systems Expert, 
 Software Architect}{
-- Contribution to a reference architecture (RA) for a European service platform. Specification of a set of architectural patterns for non-functional attributes and analysis of how to integrate cloud platforms in the RA.
+- I contributed to a reference architecture (RA) for a European service platform. I build the specification of a set of architectural patterns for non-functional attributes and analysis of how to integrate cloud platforms in the RA.
 }
 \cventry{}{\small Highly Scalable Platform for the Construction of Dependable and Ubiquitous Services}{Spanish Ministry of Education and Science (TIN2007-67353-C02)}{2007--2010}{\textbf{Roles}: %Distributed Systems Expert, 
 Software Engineer}{
-- Analysis and tests of consistency problems that arise in end-user applications when second-level caches (e.g. Coherence, JBoss cache, etc.) are combined with object persistence mechanisms (e.g. Hibernate)
+- I did analysis and tests of consistency problems that arised in end-user applications when second-level caches (e.g. Coherence, JBoss cache, etc.) are combined with object persistence mechanisms (e.g. Hibernate)
 }
 \cventry{}{\small AUTOMAN: Autonomic Management of Grid-Based Enterprise Services}{}{2006--2007}{}{
-- Integration of self-configuration and self-repair properties of autonomic computing in the core of a cloud platform at INRIA (France).
+- I did the integration of self-configuration and self-repair properties of autonomic computing in the core of a cloud platform at INRIA (France).
 }
 \cventry{}{High Performance Distributed Systems}{Community of Madrid (S-0505/TIC/000285)}{2006--2009}{\textbf{Roles}: Software Architect, Software Engineer%, Distributed Systems Expert
 }{
-- Development of a high-available and scalable service for the JOnAS J(2)EE application server. It provided high availability for critical applications deployed in application server clusters, scaling-out the cluster when is overloaded. UPM \& BULL signed a pre-agreement to include it in the commercial version. LoC Java (HA\&S Service) $\simeq$ 4.000
+- I developed a high-available and scalable service for the JOnAS J(2)EE application server. It provided high availability for critical applications deployed in application server clusters, scaling-out the cluster when is overloaded. UPM \& BULL signed a pre-agreement to include it in the commercial version. LoC Java (HA\&S Service) $\simeq$ 4.000
 }
 \cventry{}{\small S4ALL (Services for All)}{5th European Framework Programme (IST-2001-37126)}{2005--2007}{\textbf{Roles}: Software Architect, Software Engineer%, Distributed Systems Expert
 }{
-- Development of a high-available service for the JOnAS application server maintained by Bull SAS (France). Available since v.4.8. LoC Java (JOnAS) $\simeq$ 150.000 
+- I developed a high-available service for the JOnAS application server maintained by Bull SAS (France). Available since v.4.8. LoC Java (JOnAS) $\simeq$ 150.000 
 }
 \cventry{}{\small AUTONOMIC: Autonomic, Dependable and Middleware for Scalable, Distributed, Ubiquitous and Highly Available e-Services}{Spanish Ministry of Education and Science (TIN2004-07474-C02-01)}{2004--2007}{\textbf{Roles}: Software Architect, Software Engineer}{
-- Open-source reference implementation of the WS-CAF specification for adding transactions to SOAP Web Services. LoC $\simeq$ 50.000 
+- I built an open-source reference implementation of the WS-CAF specification for adding transactions to SOAP Web Services. LoC $\simeq$ 50.000 
 }
 \cventry{}{\small ADAPT: Middleware for Adaptive and Composable Distributed Components}{EUREKA/ ITEA project (Label 04025)}{2002--2005}{\textbf{Roles}: Software Architect, Software Engineer}{
-- Implementation of a transactional-aware replication architecture for stateful EJBs for JBoss. LoC Java $\simeq$ 10.600\newline
-- Open-source implementation of the Activity Service specification to add advanced transactions models to J2EE. LoC Java $\simeq$ 10.000 
+- I implemented a transactional-aware replication architecture for stateful EJBs for JBoss. LoC Java $\simeq$ 10.600\newline
+- I open-sourced the implementation of the Activity Service specification to add advanced transactions models to J2EE. LoC Java $\simeq$ 10.000 
 }
 
 \cventry{2001--2003}{\large Lecturer}{School of CS at Universidad Pontificia de Salamanca (Madrid Campus)}{}{Spain}{Courses on Operating Systems and Programming (C and Pascal)}
 
-\cventry{2000--2001}{\large Systems Administrator}{School of CS at Universidad Pontificia de Salamanca (Madrid Campus)}{}{Spain}{Management and maintenance of UNIX/Linux servers and Windows workstations: task automation, security etc.}
+\cventry{2000--2001}{\large Systems Administrator}{School of CS at Universidad Pontificia de Salamanca (Madrid Campus)}{}{Spain}{I managed and maintained UNIX/Linux servers and Windows workstations: task automation, security etc.}
 
 \cventry{1999--1999}{\large Quality Analyst}{Meta 4 S.A. (now Cegid)}{Madrid}{Spain}{
 I tested the database connection modules of Meta4’s ERP suite (now Cegid), gaining hands-on experience with multiple DBMSs, including Oracle, Microsoft SQL Server, Informix, and Sybase, as well as JDBC (Java Database Connectivity). My responsibilities included configuring database connections via JDBC, planning and executing tests, analyzing results, and reporting bugs to ensure system reliability and performance.
@@ -314,7 +309,7 @@ I tested the database connection modules of Meta4’s ERP suite (now Cegid), gai
 
 \cventry{}{Ph.D. Thesis}{Middleware for High Available and Scalable Multi-Tier and Service-Oriented Architectures}{2003--2009}{Advisors: Prof.~Marta Patiño-Martínez and Prof.~Ricardo Jiménez-Péris (UPM)}{
  \textbf{Fields/Topics:} \textit{Distributed Systems, Transactional Systems, Scalability, High Availability, SOAs}\\
-- Development of a brand-new approach to provide high availability and scalability to multi-tier architectures by combining snapshot-isolation and an innovative vertical replication approach.
+- I developed a brand-new approach to provide high availability and scalability to multi-tier architectures by combining snapshot-isolation and an innovative vertical replication approach.
 }
 
 \cventry{}{Research Internship}{SARDES Research Group at INRIA Grenoble (France)}{2007}{Advisor: Prof. Sara Bouchenak}{
@@ -349,16 +344,16 @@ I tested the database connection modules of Meta4’s ERP suite (now Cegid), gai
 %------------- EDUCATION --------------------------------------------
 \section{Education}
 \cventry{2024}{Multi AI Agent Systems with CrewAI}{DeepLearning.AI}{MooC}{}{}
-\cventry{2024}{RAG Developer Bootcamp}{Pinecone+Anyscale}{In-Person}{San Francisco}{https://www.anyscale.com/events/2024/03/08/rag-developer-bootcamp}
-\cventry{2023}{LLM102x: Large Language Models: Foundation Models from the Ground Up}{edX/Databricks}{MooC}{https://courses.edx.org/certificates/e36174eec12748e7b62afd517060cf2d}{}
-\cventry{2023}{LLM101x: Large Language Models: Application through Production}{edX/Databricks}{MooC}{https://courses.edx.org/certificates/efcc7ec7b2234b538809447c1f37babf}{}
+\cventry{2024}{RAG Developer Bootcamp}{Pinecone + Anyscale}{In-Person}{San Francisco}{\href{https://www.anyscale.com/events/2024/03/08/rag-developer-bootcamp}{Bootcamp}}
+\cventry{2023}{LLM102x: Large Language Models: Foundation Models from the Ground Up}{edX/Databricks}{MooC}{\href{https://courses.edx.org/certificates/e36174eec12748e7b62afd517060cf2d}{Certification}}{}
+\cventry{2023}{LLM101x: Large Language Models: Application through Production}{edX/Databricks}{MooC}{\href{https://courses.edx.org/certificates/efcc7ec7b2234b538809447c1f37babf}{Certification}}{}
 \cventry{2023}{LLM Bootcamp}{FSDL}{In-Person}{South San Francisco, CA (USA)}{}
-\cventry{2022}{Full Stack Deep Learning 22'Edition}{FSDL}{MooC}{https://fullstackdeeplearning.com/course/2022/}{}
-\cventry{2022}{Machine Learning Specialization (3 Courses)}{Coursera/DeepLearning.AI/Stanford}{MooC}{https://www.coursera.org/account/accomplishments/specialization/certificate/KREGWAZ87SQN}{}
-\cventry{2021}{Full Stack Deep Learning 21'Edition}{FSDL}{MooC}{https://fullstackdeeplearning.com/spring2021/}{}
-\cventry{2019}{Machine Learning Specialization (4 Courses)}{Coursera/Univ. Washington}{MooC}{https://www.coursera.org/account/accomplishments/specialization/certificate/UY6W586XQMW3}{}
-\cventry{2018}{Mathematics for Machine Learning Specialization (3 Courses)}{Coursera/Imperial College London}{MooC}{https://www.coursera.org/account/accomplishments/specialization/K7TBGLD4Y6ML}{}
-\cventry{2018}{Deep Learning Specialization (5 Courses)}{Coursera/DeepLearning.AI}{MooC}{https://www.coursera.org/account/accomplishments/specialization/YTPXQJ42EUCK}{}
+\cventry{2022}{Full Stack Deep Learning 22'Edition}{FSDL}{MooC}{\href{https://fullstackdeeplearning.com/course/2022/}{Course}}{}
+\cventry{2022}{Machine Learning Specialization (3 Courses)}{Coursera/DeepLearning.AI/Stanford}{MooC}{\href{https://www.coursera.org/account/accomplishments/specialization/certificate/KREGWAZ87SQN}{Certification}}{}
+\cventry{2021}{Full Stack Deep Learning 21'Edition}{FSDL}{MooC}{\href{https://fullstackdeeplearning.com/spring2021/}{Course}}{}
+\cventry{2019}{Machine Learning Specialization (4 Courses)}{Coursera/Univ. Washington}{MooC}{\href{https://www.coursera.org/account/accomplishments/specialization/certificate/UY6W586XQMW3}{Certification}}{}
+\cventry{2018}{Mathematics for Machine Learning Specialization (3 Courses)}{Coursera/Imperial College London}{MooC}{\href{https://www.coursera.org/account/accomplishments/specialization/K7TBGLD4Y6ML}{Certification}}{}
+\cventry{2018}{Deep Learning Specialization (5 Courses)}{Coursera/DeepLearning.AI}{MooC}{\href{https://www.coursera.org/account/accomplishments/specialization/YTPXQJ42EUCK}{Certification}}{}
 \cventry{2011}{Certificate of Training, Advanced Scala}{Typesafe}{Switzerland}{}{}
 \cventry{2011}{Certificate of Training, Scala}{Typesafe}{Switzerland}{}{}
 \cventry{2011}{Course in Business Administration and Economics (268 hours)}{Funded by Community of Madrid}{Spain}{}{}
@@ -373,9 +368,9 @@ I tested the database connection modules of Meta4’s ERP suite (now Cegid), gai
 %------------- COMMUNICATION SKILLS --------------------------------------------
 \section{Communication Skills}
 %\vspace{-0cm}
-\cvline{}{\small Delivered talks and presentations at both international and national conferences, 
+\cvline{}{\small I delivered talks and presentations at both international and national conferences, 
 effectively communicating complex ideas to diverse audiences. Presented research findings and project
-updates in internal meetings within corporate environments. Additionally, demonstrated teaching 
+updates in internal meetings within corporate environments. Additionally, I demonstrated teaching 
 and mentoring skills by conducting undergraduate and Ph.D.-level courses at the university, fostering 
 understanding and engagement among students. }
 \vspace{-0.2cm}
