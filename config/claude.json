@@ -1,0 +1,8 @@
+{
+    "mcpServers": {
+      "cv": {
+        "command": "pixi",
+        "args": ["run", "python", "/Users/fperez/dev/cv/src/cv_mcp_server/main.py"]
+      }
+    }
+}
