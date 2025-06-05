@@ -119,7 +119,7 @@ packages:
 - pypi: .
   name: cv-mcp-server
   version: 0.1.0
-  sha256: ebc9c9a15f44f9a0cae65cbba4faed38aa305daf113f84e2bb7c789583ce1eea
+  sha256: 27e72e500e66991f0a9ddb597b4a7091134c00b217423e521664f128febf3cb5
   requires_dist:
   - httpx>=0.28.1,<0.29
   - pymupdf4llm>=0.0.24,<0.0.25
