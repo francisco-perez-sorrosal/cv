@@ -278,3 +278,7 @@ TSWLatexianTemp*
 # Editors
 .idea/
 .vscode/
+
+# pixi environments
+.pixi
+*.egg-info
