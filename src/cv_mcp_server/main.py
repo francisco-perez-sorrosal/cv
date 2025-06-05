@@ -9,6 +9,7 @@ import pymupdf4llm
 from mcp.server.fastmcp import FastMCP
 
 
+# Configure transport and statelessness
 match os.environ.get("TRANSPORT", "stdio"):
     case "stdio":
         transport = "stdio"
@@ -36,7 +37,6 @@ PROJECT_ROOT = find_project_root()
 
 # Initialize FastMCP server
 port = int(os.environ.get("PORT", 10000))
-print(f"Starting CV MCP server with {transport} transport (port={port}) and stateless_http={stateless_http}...")
 mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, port=port)
 
 @mcp.tool()
@@ -71,5 +71,5 @@ if __name__ == "__main__":
     # args: Namespace = parse_cli_arguments()
     
     # Initialize and run the server with the specified transport
-    print(f"Starting CV MCP server with streamable-http transport...")
-    mcp.run(transport="sse") #, mount_path="/cv")
+    print(f"Starting CV MCP server with {transport} transport (port={port}) and stateless_http={stateless_http}...")
+    mcp.run(transport=transport) #, mount_path="/cv")
