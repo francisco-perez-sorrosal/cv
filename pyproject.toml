@@ -1,0 +1,78 @@
+[project]
+name = "cv-mcp-server"
+version = "0.1.0"
+description = "MCP server using Anthropic library to expose a PDF CV as a resource."
+authors = [
+    {name = "Francisco Perez Sorrosal", email = "fperezsorrosal@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License", # Or your preferred license
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: FastAPI",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [ 
+    "httpx>=0.28.1,<0.29", 
+    "pymupdf4llm>=0.0.24,<0.0.25", 
+    "mcp[cli]>=1.9.2,<2", 
+]
+
+[project.urls]
+"Homepage" = "https://github.com/francisco-perez-sorrosal/cv"
+"Bug Tracker" = "https://github.com/francisco-perez-sorrosal/cv/issues"
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["osx-arm64"]
+
+[tool.pixi.pypi-dependencies]
+cv_mcp_server = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+mcps="pixi run src/cv_mcp_server/main.py"
+
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cv_mcp_server"]
+
+[project.scripts]
+cv-mcp-server = "cv_mcp_server.main:app"
+
+[tool.setuptools]
+packages = ["cv_mcp_server"]
+package-dir = {"" = "src"}
+
+[tool.black]
+line-length = 88
+target-version = ['py311', 'py312']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.9"
+warnings_as_errors = true
+strict = true
+# For FastAPI and Pydantic, if needed:
+# plugins = "pydantic.mypy"
+
+[[tool.mypy.overrides]]
+module = [
+    "aiofiles",
+    "multipart"
+]
+ignore_missing_imports = true
