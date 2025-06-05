@@ -3,10 +3,25 @@
 import os
 
 from pathlib import Path
-from argparse import ArgumentParser, Namespace
+# from argparse import ArgumentParser, Namespace
 
 import pymupdf4llm
 from mcp.server.fastmcp import FastMCP
+
+
+match os.environ.get("TRANSPORT", "stdio"):
+    case "stdio":
+        transport = "stdio"
+        stateless_http = False
+    case "sse":
+        transport = "sse"
+        stateless_http = False
+    case "streamable-http":
+        transport = "streamable-http"
+        stateless_http = True
+    case _:
+        transport = "stdio"
+        stateless_http = False
 
 
 def find_project_root():
@@ -20,8 +35,9 @@ def find_project_root():
 PROJECT_ROOT = find_project_root()
 
 # Initialize FastMCP server
-port = int(os.environ.get("PORT", 8001))
-mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=True, port=port)
+port = int(os.environ.get("PORT", 10000))
+print(f"Starting CV MCP server with {transport} transport (port={port}) and stateless_http={stateless_http}...")
+mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, port=port)
 
 @mcp.tool()
 def get_cv() -> str:
@@ -56,4 +72,4 @@ if __name__ == "__main__":
     
     # Initialize and run the server with the specified transport
     print(f"Starting CV MCP server with streamable-http transport...")
-    mcp.run(transport="streamable-http") #, mount_path="/cv")
+    mcp.run(transport="sse") #, mount_path="/cv")
