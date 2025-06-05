@@ -1,0 +1,95 @@
+# Git specific files
+.git
+.gitignore
+
+# Docker specific files (don't include Dockerfile in context if not needed by multi-stage builds in a specific way)
+# Dockerfile # Usually kept, but can be ignored if context is strictly for app code
+
+# Pixi specific files and directories
+.pixi/
+
+# Python build artifacts and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.eggs/
+dist/
+build/
+wheels/
+*.egg
+MANUAL_VERSION
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE / Editor specific configuration files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files (some might be redundant with LaTeX section in .gitignore but good for Docker context)
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Test artifacts and coverage reports
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+pytestdebug.log
+
+# Mypy static analysis cache
+.mypy_cache/
+
+# Ruff cache
+.ruff_cache/
+
+# Log files
+*.log
+logs/
+
+# Instance/local configuration (if any)
+instance/
+*.sqlite3
+*.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# LaTeX auxiliary files (since the project is in a CV repo)
+# These should generally be ignored to keep the Docker image clean,
+# unless a specific LaTeX file is a resource to be served (like the CV PDF).
+*.aux
+*.fdb_latexmk
+*.fls
+# *.log # Already covered by general log rule
+*.out
+*.synctex.gz
+*.toc
+# etc. (add more LaTeX specific temp files if needed)
+
+# The actual CV PDF should NOT be ignored if you plan to COPY it in Dockerfile.
+# If mounted as a volume, it doesn't need to be in the build context.
+# For example, if 'COPY 2025_FranciscoPerezSorrosal_CV_English.pdf ./' is in Dockerfile:
+# !2025_FranciscoPerezSorrosal_CV_English.pdf
+
+# Files from the root that are not part of the application's runtime or build process
+# Example: if you have .tex files that are not part of the app itself.
+# *.tex # Be careful, this would ignore your CV source if it's a .tex file and you need it.
+
+# README and other documentation files are often included, but can be ignored if image size is critical.
+# README.md
