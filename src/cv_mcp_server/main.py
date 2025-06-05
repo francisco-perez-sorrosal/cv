@@ -10,18 +10,20 @@ from mcp.server.fastmcp import FastMCP
 
 
 # Configure transport and statelessness
+trspt = "stdio"
+stateless_http = False
 match os.environ.get("TRANSPORT", "stdio"):
     case "stdio":
-        transport = "stdio"
+        trspt = "stdio"
         stateless_http = False
     case "sse":
-        transport = "sse"
+        trspt = "sse"
         stateless_http = False
     case "streamable-http":
-        transport = "streamable-http"
+        trspt = "streamable-http"
         stateless_http = True
     case _:
-        transport = "stdio"
+        trspt = "stdio"
         stateless_http = False
 
 
@@ -36,8 +38,9 @@ def find_project_root():
 PROJECT_ROOT = find_project_root()
 
 # Initialize FastMCP server
+host = os.environ.get("HOST", "0.0.0.0")
 port = int(os.environ.get("PORT", 10000))
-mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, port=port)
+mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host=host, port=port)
 
 @mcp.tool()
 def get_cv() -> str:
@@ -71,5 +74,5 @@ if __name__ == "__main__":
     # args: Namespace = parse_cli_arguments()
     
     # Initialize and run the server with the specified transport
-    print(f"Starting CV MCP server with {transport} transport (port={port}) and stateless_http={stateless_http}...")
-    mcp.run(transport=transport) #, mount_path="/cv")
+    print(f"Starting CV MCP server with {trspt} transport ({host}:{port}) and stateless_http={stateless_http}...")
+    mcp.run(transport=trspt) #, mount_path="/cv")
