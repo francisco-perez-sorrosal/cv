@@ -41,7 +41,6 @@ cv_mcp_server = { path = ".", editable = true }
 [tool.pixi.tasks]
 mcps="pixi run src/cv_mcp_server/main.py"
 
-
 [tool.hatch.metadata]
 allow-direct-references = true
 
