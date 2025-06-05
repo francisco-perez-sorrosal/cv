@@ -76,6 +76,8 @@ pixi run mcps --transport stdio  # or sse, streamable-http
 
 # Alternatively, using uv directly
 uv run --with "mcp[cli]" mcp run src/cv_mcp_server/main.py --transport streamable-http
+
+# Go to http://127.0.0.1:8000/mcp
 ```
 
 The server will start at `http://localhost:8000`. It will automatically reload if you make changes to files in the `src/` directory.
