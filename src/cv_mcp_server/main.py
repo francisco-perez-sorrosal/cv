@@ -20,7 +20,7 @@ def find_project_root():
 PROJECT_ROOT = find_project_root()
 
 # Initialize FastMCP server
-mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=True)
+mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=True, port=8001)
 
 @mcp.tool()
 def get_cv() -> str:
