@@ -1,8 +1,7 @@
-{
-    "mcpServers": {
-      "cv": {
-        "command": "pixi",
-        "args": ["run", "python", "/Users/fperez/dev/cv/src/cv_mcp_server/main.py"]
-      }
-    }
+"cv_francisco_perez_sorrosal": {
+  "command": "npx",
+  "args": [
+    "mcp-remote",
+    "https://cv-ltib.onrender.com/sse"
+  ]
 }
