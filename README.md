@@ -179,6 +179,8 @@ For connecting to a remote MCP server:
 
 > **Note**: Update the host and port as needed for your deployment.
 
+Currently I'm using `render.com` to host the MCP server. The configuration is in the `config/claude.json` file.
+
 Then you can query in Claude Desktop using the `cv_francisco_perez_sorrosal` MCP server to get info:
 
 ```text
