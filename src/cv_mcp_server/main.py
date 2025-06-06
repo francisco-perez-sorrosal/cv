@@ -37,9 +37,10 @@ def find_project_root():
 
 PROJECT_ROOT = find_project_root()
 
+
 # Initialize FastMCP server
-host = os.environ.get("HOST", "0.0.0.0")
-port = int(os.environ.get("PORT", 10000))
+host = os.environ.get("HOST", "0.0.0.0")  # render.com needs '0.0.0.0' specified as host when deploying the service
+port = int(os.environ.get("PORT", 10000))  # render.com has '10000' as default port
 mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host=host, port=port)
 
 @mcp.tool()
