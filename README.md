@@ -22,8 +22,7 @@ A Python-based MCP (Model Context Protocol) server that serves a CV PDF as a res
 - Python 3.11+
 - [Pixi](https://pixi.sh/) (for dependency management and task execution)
 - Docker (optional, for containerization)
-- Your CV PDF named `2025_FranciscoPerezSorrosal_CV_English.pdf` in the project root directory (`/Users/fperez/dev/cv/`)
-- An Anthropic API Key (set as the `ANTHROPIC_API_KEY` environment variable) for using Anthropic-related features
+- Your CV PDF named `2025_FranciscoPerezSorrosal_CV_English.pdf` in the project root directory
 
 ## Project Structure
 
@@ -77,10 +76,10 @@ pixi run mcps --transport stdio  # or sse, streamable-http
 # Alternatively, using uv directly
 uv run --with "mcp[cli]" mcp run src/cv_mcp_server/main.py --transport streamable-http
 
-# Go to http://127.0.0.1:8000/mcp
+# Go to http://127.0.0.1:10000/mcp
 ```
 
-The server will start at `http://localhost:8000`. It will automatically reload if you make changes to files in the `src/` directory.
+The server will start at `http://localhost:10000`. It will automatically reload if you make changes to files in the `src/` directory.
 
 ### MCP Inspection Mode
 
@@ -132,6 +131,8 @@ docker build -t cv-mcp-server .
 
 ### Run the Docker Container
 
+TODO: Rewrite this if necessary. Docker support not yet done.
+
 To run with your Anthropic API key and local CV PDF:
 
 ```bash
@@ -143,22 +144,9 @@ docker run -d -p 8000:8000 \
 
 The server will be available at `http://localhost:8000`.
 
-## PDF Text Extraction (Future Enhancement)
-
-The `/cv/analyze` endpoint currently uses simulated CV content. To make it fully functional, you would need to:
-
-1. Add a PDF parsing library (e.g., `PyPDF2`, `pdfplumber`, or `pymupdf`) to `pyproject.toml` and `pixi.toml`
-2. Implement the text extraction logic in `src/cv_mcp_server/main.py` within the `/cv/analyze` endpoint
-
-## License
-
-This project is licensed under the MIT License. See `pyproject.toml` (or create a `LICENSE` file) for details.
-
 ## MCP Server Configuration
 
-### Local Configuration
-
-Save this as `mcp.config.json` in your project root:
+### Local Configuration for Claude Desktop
 
 ```json
 {
@@ -176,7 +164,7 @@ Save this as `mcp.config.json` in your project root:
 }
 ```
 
-### Remote Configuration
+### Remote Configuration for Claude Desktop
 
 For connecting to a remote MCP server:
 
@@ -184,9 +172,19 @@ For connecting to a remote MCP server:
 {
   "cv_francisco_perez_sorrosal": {
     "command": "npx",
-    "args": ["mcp-remote", "http://localhost:8000/mcp"]
+    "args": ["mcp-remote", "http://localhost:10000/mcp"]
   }
 }
 ```
 
 > **Note**: Update the host and port as needed for your deployment.
+
+Then you can query in Claude Desktop using the `cv_francisco_perez_sorrosal` MCP server to get info:
+
+```text
+Give me an overview of the cv of Francisco Perez-Sorrosal hightlighting the most relevant skills.
+```
+
+## License
+
+This project is licensed under the MIT License. See `pyproject.toml` (or create a `LICENSE` file) for details.
