@@ -58,6 +58,13 @@ def cv() -> str:
         content: str = pymupdf4llm.to_markdown(cv_path)
     return content
 
+@mcp.prompt()
+def summary() -> str:
+    """Generate a prompt for Claude to summarize the CV of Francisco Perez-Sorrosal."""
+    return f"""Give me an overview of the cv of Francisco Perez-Sorrosal hightlighting the most skills.
+    At the end, provide a table with the publications with citations and impacts extracted from https://scholar.google.com/
+    """
+
 
 # TODO CLI Args not supported by MCP yet
 # def parse_cli_arguments() -> Namespace:
