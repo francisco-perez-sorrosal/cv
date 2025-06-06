@@ -47,6 +47,10 @@ mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host
 def get_cv() -> str:
     return cv()
 
+@mcp.tool()
+def summarize_cv() -> str:
+    return summary()
+
 @mcp.resource("cvfps://full")
 def cv() -> str:
     """
