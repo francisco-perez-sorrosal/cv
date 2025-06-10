@@ -124,6 +124,20 @@ def summarize_cv_for_executive_briefing_for_big_company() -> str:
         include_citations=False
     )
 
+@mcp.resource("cvfps://google_scholar_link")
+def google_scholar_link() -> str:
+    """
+    Return the link to the Google Scholar profile of Francisco Perez-Sorrosal.
+    """
+    return "https://scholar.google.com/citations?user=nemqgScAAAAJ&hl=en"
+
+@mcp.resource("cvfps://cv_pdf_link")
+def cv_pdf_link() -> str:
+    """
+    Return the link to the CV in pdf format.
+    """
+    return "https://github.com/francisco-perez-sorrosal/cv/blob/main/2025_FranciscoPerezSorrosal_CV_English.pdf"
+
 @mcp.resource("cvfps://full")
 def cv() -> str:
     """
@@ -232,9 +246,9 @@ Tone: {tone}
 
 {additional_instructions}
 
-{'Please, get his citations from his Google Scholar profile (https://scholar.google.com/citations?user=nemqgScAAAAJ&hl=en), and include a table of his publications with citations and impacts.' if include_citations else ''}
+{'Please, get his citations from his Google Scholar profile, analyze them,and include a table of his publications with citations and impacts.' if include_citations else 'No table of citations included.'}
 
-Finally, search for his CV in pdf format in his github repo (https://github.com/francisco-perez-sorrosal/cv) and include a link to the pdf file.
+Finally, get the link to the CV in pdf format, and include it at the end of the summary.
 """
 
 
