@@ -47,6 +47,17 @@ mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host
 def get_cv() -> str:
     return cv()
 
+
+@mcp.tool()
+def get_cv_pdf_link() -> str:
+    return cv_pdf_link()
+
+
+@mcp.tool()
+def get_google_scholar_link() -> str:
+    return google_scholar_link()
+
+
 @mcp.tool()
 def summarize_cv(
     depth_level: str = "comprehensive",
