@@ -5,12 +5,21 @@ A Python-based MCP (Model Context Protocol) server that serves a CV PDF as a res
 # TL;DR Install for Claude Desktop Access to the CV
 
 ```bash
-# Install the mcp server access in Claude Desktop
+# 1.a) Install the mcp server access in Claude Desktop
 ./install_claude_desktop_mcp.sh
 
-# Restart Claude and check that the 'Add from cv_francisco_perez_sorrosal` option is available in the mcp servers list
+# 1.b) or manually integrate this JSON snippet to the `mcpServers` section of your `claude_desktop_config.json` (e.g. `~/Library/Application\ Support/Claude/claude_desktop_config.json`)
 
-# Query the CV served from the mcp server in Claude Desktop!
+{
+  "cv_francisco_perez_sorrosal": {
+    "command": "npx",
+    "args": ["mcp-remote", "http://localhost:10000/mcp"]
+  }
+}
+
+# 2) Restart Claude and check that the 'Add from cv_francisco_perez_sorrosal` option is available in the mcp servers list
+
+# 3) Query the CV served from the mcp server in Claude Desktop!
 
 e.g. Give me a summary of Francisco Perez-Sorrosal's CV.
 e.g. Give me a brief summary of Francisco Perez-Sorrosal's CV for a quick hiring screen.
@@ -202,4 +211,4 @@ Give me an overview of the cv of Francisco Perez-Sorrosal hightlighting the most
 
 ## License
 
-This project is licensed under the MIT License. See `pyproject.toml` (or create a `LICENSE` file) for details.
+This project is licensed under the MIT License. See `pyproject.toml` (See `LICENSE` file) for details.
