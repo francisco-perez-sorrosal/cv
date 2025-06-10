@@ -15,6 +15,7 @@ A Python-based MCP (Model Context Protocol) server that serves a CV PDF as a res
 e.g. Give me a summary of Francisco Perez-Sorrosal's CV.
 e.g. Give me a brief summary of Francisco Perez-Sorrosal's CV for a quick hiring screen.
 e.g. Summarize Francisco Perez-Sorrosal's CV for an executive of a Google. Include citations.
+e.g. Generate an exhaustive summary of Francisco's CV for a hiring manager highlighting his skills. Do not include citations.
 ```
 
 ## Features
