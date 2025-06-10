@@ -232,9 +232,9 @@ Tone: {tone}
 
 {additional_instructions}
 
-{'Please, search for his Google Scholar profile, get the citations, and include a table of his publications with citations and impacts.' if include_citations else ''}
+{'Please, get his citations from his Google Scholar profile (https://scholar.google.com/citations?user=nemqgScAAAAJ&hl=en), and include a table of his publications with citations and impacts.' if include_citations else ''}
 
-Finally, search for his CV in pdf format in his github repo (a public project named cv) and include a link to the pdf file.
+Finally, search for his CV in pdf format in his github repo (https://github.com/francisco-perez-sorrosal/cv) and include a link to the pdf file.
 """
 
 
