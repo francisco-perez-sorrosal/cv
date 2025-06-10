@@ -21,10 +21,7 @@ e.g. Summarize Francisco Perez-Sorrosal's CV for an executive of a Google. Inclu
 
 - Serves your CV PDF (`2025_FranciscoPerezSorrosal_CV_English.pdf`) from the project root
 - Endpoints for downloading and viewing the CV PDF directly in the browser
-- Basic integration with the Anthropic API (requires `ANTHROPIC_API_KEY`)
-- Placeholder endpoint (`/cv/analyze`) to demonstrate interaction with Anthropic API using CV content
-- Built with FastAPI for high performance
-- Uses Pixi for dependency management and task running
+- Built with FastAPI for high performance and with Pixi for dependency management and task running
 - Source code organized in the `src/` directory
 - Includes configurations for:
   - Docker (optional, for containerization)
