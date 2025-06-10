@@ -2,6 +2,7 @@
 name = "cv-mcp-server"
 version = "0.1.0"
 description = "MCP server using Anthropic library to expose a PDF CV as a resource."
+license = {text = "MIT"}
 authors = [
     {name = "Francisco Perez Sorrosal", email = "fperezsorrosal@gmail.com"}
 ]
