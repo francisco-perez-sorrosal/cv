@@ -76,7 +76,7 @@ def summarize_cv(
         length_constraint=length_constraint,
         tone=tone,
         additional_instructions=additional_instructions,
-        include_citations=False
+        include_citations=include_citations
     )
     
 @mcp.tool()
