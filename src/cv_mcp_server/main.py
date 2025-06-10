@@ -43,6 +43,8 @@ host = os.environ.get("HOST", "0.0.0.0")  # render.com needs '0.0.0.0' specified
 port = int(os.environ.get("PORT", 10000))  # render.com has '10000' as default port
 mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host=host, port=port)
 
+# NOTE: We have to wrap the resources to be accessible from the prompts
+
 @mcp.tool()
 def get_cv() -> str:
     return cv()
