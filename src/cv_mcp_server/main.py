@@ -59,7 +59,7 @@ def summarize_cv(
     additional_instructions: str = "",
     include_citations: bool = False
 ) -> str:
-    """Generate a summary of Francisco Perez-Sorrosal's CV based on the specified parameters.
+    """Generate a summary/overview of Francisco Perez-Sorrosal's CV based on the specified parameters.
     
     This is a convenience wrapper around the summary() tool function that exposes the same parameters.
     See the summary() function returning the prompt, for detailed parameter documentation.
@@ -81,7 +81,7 @@ def summarize_cv(
     
 @mcp.tool()
 def summarize_cv_for_quick_hiring_screen() -> str:
-    """Generate a brief summary of Francisco Perez-Sorrosal's CV for a quick hiring screen."""
+    """Generate a brief summary/overview of Francisco Perez-Sorrosal's CV for a quick hiring screen."""
     return summary(
         depth_level="brief",
         context="industry R&D role",
@@ -96,7 +96,7 @@ def summarize_cv_for_quick_hiring_screen() -> str:
     
 @mcp.tool()
 def summarize_cv_for_executive_briefing_for_startup() -> str:
-    """Generate a summary of Francisco Perez-Sorrosal's CV for an executive briefing for a startup."""
+    """Generate a summary/overview of Francisco Perez-Sorrosal's CV for an executive briefing for a startup."""
     return summary(
         depth_level="moderate",
         context="startup technical leadership",
@@ -111,7 +111,7 @@ def summarize_cv_for_executive_briefing_for_startup() -> str:
 
 @mcp.tool()
 def summarize_cv_for_executive_briefing_for_big_company() -> str:
-    """Generate a summary of Francisco Perez-Sorrosal's CV for an executive briefing for a big company."""
+    """Generate a summary/overview of Francisco Perez-Sorrosal's CV for an executive briefing for a big company."""
     return summary(
         depth_level="moderate",
         context="big company technical leadership",
@@ -232,7 +232,9 @@ Tone: {tone}
 
 {additional_instructions}
 
-{'Please include a table of publications with citations and impacts from Google Scholar, and include a link to the Google Scholar profile.' if include_citations else ''}
+{'Please, search for his Google Scholar profile, get the citations, and include a table of his publications with citations and impacts.' if include_citations else ''}
+
+Finally, search for his CV in pdf format in his github repo (a public project named cv) and include a link to the pdf file.
 """
 
 
