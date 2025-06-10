@@ -246,9 +246,9 @@ Tone: {tone}
 
 {additional_instructions}
 
-{'Please, get his citations from his Google Scholar profile, analyze them,and include a table of his publications with citations and impacts.' if include_citations else 'No table of citations included.'}
+{'Please, use the resource to get his citations from the content of his Google Scholar profile url, analyze them,and generate a table of his publications with citations and impacts.' if include_citations else ''}
 
-Finally, get the link to the CV in pdf format, and include it at the end of the summary.
+Finally, get use the resource to get the link to the CV in pdf format, and include it at the end of the summary.
 """
 
 
