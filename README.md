@@ -2,6 +2,21 @@
 
 A Python-based MCP (Model Context Protocol) server that serves a CV PDF as a resource and integrates with the Anthropic API for potential CV analysis tasks. This project follows the `src` layout for Python packaging.
 
+# TL;DR Install for Claude Desktop Access to the CV
+
+```bash
+# Install the mcp server access in Claude Desktop
+./install_claude_desktop_mcp.sh
+
+# Restart Claude and check that the 'Add from cv_francisco_perez_sorrosal` option is available in the mcp servers list
+
+# Query the CV served from the mcp server in Claude Desktop!
+
+e.g. Give me a summary of Francisco Perez-Sorrosal's CV.
+e.g. Give me a brief summary of Francisco Perez-Sorrosal's CV for a quick hiring screen.
+e.g. Summarize Francisco Perez-Sorrosal's CV for an executive of a Google. Include citations.
+```
+
 ## Features
 
 - Serves your CV PDF (`2025_FranciscoPerezSorrosal_CV_English.pdf`) from the project root
