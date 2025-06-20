@@ -203,6 +203,25 @@ For connecting to a remote MCP server:
 
 Currently I'm using `render.com` to host the MCP server. The configuration is in the `config/claude.json` file.
 
+Render requires `requirements.txt` to be present in the root directory. You can generate it using:
+
+```bash
+uv pip compile pyproject.toml > requirements.txt
+```
+
+Also requires `runtime.txt` to be present in the root directory with the Python version specified:
+
+```txt
+python-3.11.11
+```
+
+Remember also to set the environment variables in the render.com dashboard:
+
+```bash
+TRANSPORT=sse
+PORT=10000
+```
+
 Then you can query in Claude Desktop using the `cv_francisco_perez_sorrosal` MCP server to get info:
 
 ```text
