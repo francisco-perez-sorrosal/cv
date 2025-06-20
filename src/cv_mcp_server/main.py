@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 # from argparse import ArgumentParser, Namespace
 
+import mcpcat
 import pymupdf4llm
 from mcp.server.fastmcp import FastMCP
 
@@ -42,6 +43,9 @@ PROJECT_ROOT = find_project_root()
 host = os.environ.get("HOST", "0.0.0.0")  # render.com needs '0.0.0.0' specified as host when deploying the service
 port = int(os.environ.get("PORT", 10000))  # render.com has '10000' as default port
 mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host=host, port=port)
+
+# Track usage to understand how users interact with the MCP server
+mcpcat.track(server=mcp, project_id="proj_2yl2y3eRvzgT2fUTQAUok0J6i6T")
 
 # NOTE: We have to wrap the resources to be accessible from the prompts
 
