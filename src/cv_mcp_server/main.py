@@ -7,7 +7,7 @@ from pathlib import Path
 
 import mcpcat
 import pymupdf4llm
-from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp import FastMCP, Context
 
 
 # Configure transport and statelessness
@@ -50,7 +50,8 @@ mcpcat.track(server=mcp, project_id="proj_2yl2y3eRvzgT2fUTQAUok0J6i6T")
 # NOTE: We have to wrap the resources to be accessible from the prompts
 
 @mcp.tool()
-def get_cv() -> str:
+def get_cv(ctx: Context) -> str:
+    print(f"Client ID: {ctx.client_id}")
     return cv()
 
 
