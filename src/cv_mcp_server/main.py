@@ -9,6 +9,7 @@ import mcpcat
 import pymupdf4llm
 from mcp.server.fastmcp import FastMCP, Context
 
+from loguru import logger
 
 # Configure transport and statelessness
 trspt = "stdio"
@@ -51,7 +52,7 @@ mcpcat.track(server=mcp, project_id="proj_2yl2y3eRvzgT2fUTQAUok0J6i6T")
 
 @mcp.tool()
 def get_cv(ctx: Context) -> str:
-    print(f"Client ID: {ctx.client_id}")
+    logger.info(f"Client ID: {ctx.client_id}")
     return cv()
 
 
