@@ -8,7 +8,11 @@ anyio==4.9.0
     #   mcp
     #   sse-starlette
     #   starlette
-certifi==2025.6.15
+attrs==25.3.0
+    # via
+    #   jsonschema
+    #   referencing
+certifi==2025.7.14
     # via
     #   httpcore
     #   httpx
@@ -26,21 +30,27 @@ httpx==0.28.1
     # via
     #   cv-mcp-server (pyproject.toml)
     #   mcp
-httpx-sse==0.4.0
+httpx-sse==0.4.1
     # via mcp
 idna==3.10
     # via
     #   anyio
     #   httpx
+jsonschema==4.25.0
+    # via mcp
+jsonschema-specifications==2025.4.1
+    # via jsonschema
+loguru==0.7.3
+    # via cv-mcp-server (pyproject.toml)
 markdown-it-py==3.0.0
     # via rich
-mcp==1.9.4
+mcp==1.12.3
     # via
     #   cv-mcp-server (pyproject.toml)
     #   mcpcat
-mcpcat==0.1.1
+mcpcat==0.1.2
     # via cv-mcp-server (pyproject.toml)
-mcpcat-api==0.1.3
+mcpcat-api==0.1.4
     # via mcpcat
 mdurl==0.1.2
     # via markdown-it-py
@@ -52,40 +62,51 @@ pydantic==2.11.7
     #   pydantic-settings
 pydantic-core==2.33.2
     # via pydantic
-pydantic-settings==2.9.1
+pydantic-settings==2.10.1
     # via mcp
-pygments==2.19.1
+pygments==2.19.2
     # via rich
-pymupdf==1.26.1
+pymupdf==1.26.3
     # via pymupdf4llm
 pymupdf4llm==0.0.24
     # via cv-mcp-server (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via mcpcat-api
-python-dotenv==1.1.0
+python-dotenv==1.1.1
     # via
     #   mcp
     #   pydantic-settings
 python-multipart==0.0.20
     # via mcp
-rich==14.0.0
+referencing==0.36.2
+    # via
+    #   jsonschema
+    #   jsonschema-specifications
+rich==14.1.0
     # via typer
+rpds-py==0.26.0
+    # via
+    #   jsonschema
+    #   referencing
 shellingham==1.5.4
     # via typer
 six==1.17.0
     # via python-dateutil
 sniffio==1.3.1
     # via anyio
-sse-starlette==2.3.6
+sse-starlette==3.0.2
     # via mcp
-starlette==0.47.0
+starlette==0.47.2
     # via mcp
 typer==0.16.0
     # via mcp
-typing-extensions==4.14.0
+typing-extensions==4.14.1
     # via
+    #   anyio
     #   pydantic
     #   pydantic-core
+    #   referencing
+    #   starlette
     #   typer
     #   typing-inspection
 typing-inspection==0.4.1
@@ -94,5 +115,5 @@ typing-inspection==0.4.1
     #   pydantic-settings
 urllib3==2.5.0
     # via mcpcat-api
-uvicorn==0.34.3
+uvicorn==0.35.0
     # via mcp
