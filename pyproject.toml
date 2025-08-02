@@ -22,7 +22,7 @@ dependencies = [
     "httpx>=0.28.1,<0.29", 
     "pymupdf4llm>=0.0.24,<0.0.25", 
     "mcp[cli]>=1.9.2,<2", 
-    "mcpcat>=0.1.1,<0.2", 
+    "mcpcat>=0.1.1,<0.2", "loguru>=0.7.3,<0.8", 
 ]
 
 [project.urls]
