@@ -125,13 +125,13 @@ packages:
 - pypi: .
   name: cv-mcp-server
   version: 0.1.0
-  sha256: c50fbcae40bdc2f7e121845a5fc43baa5a986756d9a4bd8af5dc50760bb0b9ad
+  sha256: d17bd15a148f2842384fa039fff8868a6c833fe85307bc9d51456057bc193805
   requires_dist:
   - httpx>=0.28.1,<0.29
   - pymupdf4llm>=0.0.24,<0.0.25
   - mcp[cli]>=1.9.2,<2
   - mcpcat>=0.1.1,<0.2
-  - loguru
+  - loguru>=0.7.3,<0.8
   requires_python: '>=3.11'
   editable: true
 - pypi: https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl

@@ -3,6 +3,8 @@
 import os
 
 from pathlib import Path
+from typing import Optional
+from pydantic import BaseModel, Field
 # from argparse import ArgumentParser, Namespace
 
 import mcpcat
@@ -48,35 +50,128 @@ mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host
 # Track usage to understand how users interact with the MCP server
 mcpcat.track(server=mcp, project_id="proj_2yl2y3eRvzgT2fUTQAUok0J6i6T")
 
-# NOTE: We have to wrap the resources to be accessible from the prompts
+# NOTE: We have to wrap the resources to be accessible to the LLMs from the prompts
 
 @mcp.tool()
-def get_cv(ctx: Context) -> str:
-    logger.info(f"Client ID: {ctx.client_id}")
+def get_cv() -> str:
+    """Retrieve the full CV of Francisco Perez-Sorrosal in markdown format.
+    
+    Extracts and converts Francisco's CV from PDF format to markdown,
+    making it easily readable and processable by AI systems.
+    
+    Includes, among other things:
+    - Educational background and academic credentials
+    - Research experience and publications
+    - Industry experience and technical roles
+    - Technical skills and expertise areas
+    - Professional achievements and awards
+    - Leadership and collaboration experience
+    
+    Returns:
+        str: The CV content in markdown format
+        
+    Example:
+        >>> get_cv()
+        "# Francisco Perez-Sorrosal\n\n## Education\nPhD in Computer Science..."
+    """
+    logger.debug(f"Returning the CV in markdown format...")
     return cv()
 
 
 @mcp.tool()
 def get_cv_pdf_link() -> str:
+    """Get the direct link to Francisco Perez-Sorrosal's CV in PDF format.
+    
+    Use cases:
+    - Direct access to the original PDF for download or viewing
+    - Sharing the CV link with others
+    - Integration with systems that require PDF format
+    - Professional document management and archiving
+    
+    Returns:
+        str: Direct URL to the CV PDF file on GitHub
+        
+    Example:
+        >>> get_cv_pdf_link()
+        "https://github.com/francisco-perez-sorrosal/cv/blob/main/2025_FranciscoPerezSorrosal_CV_English.pdf"
+        
+    Note:
+        The PDF is hosted on GitHub and is publicly accessible.
+        This is the authoritative source for Francisco's CV in PDF format.
+    """
     return cv_pdf_link()
 
 
 @mcp.tool()
 def get_google_scholar_link() -> str:
+    """Get the link to Francisco Perez-Sorrosal's Google Scholar profile.
+    
+    Profile contents include:
+    - Academic publications and research papers
+    - Citation counts and h-index metrics
+    - Research areas and expertise
+    - Co-authors and collaboration network
+    - Publication timeline and research evolution
+    
+    Use cases:
+    - Academic evaluation and research assessment
+    - Citation analysis and impact measurement
+    - Research collaboration opportunities
+    - Academic networking and discovery
+    - Publication verification and reference
+    
+    Returns:
+        str: Direct URL to Francisco's Google Scholar profile
+        
+    Example:
+        >>> get_google_scholar_link()
+        "https://scholar.google.com/citations?user=nemqgScAAAAJ&hl=en"
+        
+    Note:
+        The Google Scholar profile provides real-time citation metrics and
+        is regularly updated with new publications and citations.
+    """
     return google_scholar_link()
 
 
 @mcp.tool()
 def summarize_cv(
-    depth_level: str = "comprehensive",
-    context: str = "industry R&D role",
-    emphasis_distribution: str = "technical-first",
-    output_format: str = "structured paragraphs",
-    target_audience: str = "technical hiring manager",
-    length_constraint: str = "half-page summary",
-    tone: str = "professional and objective",
-    additional_instructions: str = "",
-    include_citations: bool = False
+    depth_level: str = Field(
+        default="comprehensive",
+        description="Level of detail for the summary. Examples: 'brief' (100-200 words), 'moderate' (200-400 words), 'comprehensive' (400-600 words), 'deep-dive' (600+ words)"
+    ),
+    context: str = Field(
+        default="industry R&D role",
+        description="The context for the summary. Examples: 'academic research position', 'industry R&D role', 'startup technical leadership', 'consulting engagement', 'investment evaluation', 'collaboration assessment'"
+    ),
+    emphasis_distribution: str = Field(
+        default="technical-first",
+        description="Where to place emphasis in the summary. Examples: 'equal weight', 'research-heavy', 'industry-focused', 'technical-first', 'leadership-oriented'"
+    ),
+    output_format: str = Field(
+        default="structured paragraphs",
+        description="Format of the output. Examples: 'structured paragraphs', 'bullet points', 'executive summary', 'technical brief', 'comparison table'"
+    ),
+    target_audience: str = Field(
+        default="technical hiring manager",
+        description="Intended audience for the summary. Examples: 'technical hiring manager', 'academic search committee', 'executive leadership', 'peer researchers', 'investment team', 'collaboration partners'"
+    ),
+    length_constraint: str = Field(
+        default="half-page summary",
+        description="Desired length of the summary. Examples: '1-2 paragraphs' (100-200 words), 'half-page summary' (200-400 words), 'full-page overview' (400-600 words), 'detailed report' (600+ words), 'presentation slide content' (50-100 words)"
+    ),
+    tone: str = Field(
+        default="professional and objective",
+        description="Tone of the summary. Examples: 'professional and objective', 'enthusiastic and promotional', 'analytical and critical', 'conversational and accessible', 'formal and academic'"
+    ),
+    additional_instructions: str = Field(
+        default="",
+        description="Any specific instructions for the summary. Examples: 'Focus on AI/ML experience in healthcare applications', 'Highlight open-source contributions and community engagement', 'Compare with industry benchmarks for similar roles'"
+    ),
+    include_citations: bool = Field(
+        default=False,
+        description="Whether to include citations and publication analysis from Google Scholar profile"
+    )
 ) -> str:
     """Generate a summary/overview of Francisco Perez-Sorrosal's CV based on the specified parameters.
     
@@ -271,21 +366,7 @@ Finally, get use the resource to get the link to the CV in pdf format, and inclu
 """
 
 
-# TODO CLI Args not supported by MCP yet
-# def parse_cli_arguments() -> Namespace:
-#     """Parse command line arguments."""
-#     parser: ArgumentParser = ArgumentParser(description='CV MCP Server')
-#     parser.add_argument('--transport', 
-#                       type=str, 
-#                       default='stdio',
-#                       choices=['stdio', 'sse', "streamable-http"],
-#                       help='Transport type for the MCP server (default: stdio)')
-#     return parser.parse_args()
-
-
 if __name__ == "__main__":
-    # args: Namespace = parse_cli_arguments()
-    
     # Initialize and run the server with the specified transport
-    print(f"Starting CV MCP server with {trspt} transport ({host}:{port}) and stateless_http={stateless_http}...")
+    logger.info(f"Starting CV MCP server with {trspt} transport ({host}:{port}) and stateless_http={stateless_http}...")
     mcp.run(transport=trspt) #, mount_path="/cv")
