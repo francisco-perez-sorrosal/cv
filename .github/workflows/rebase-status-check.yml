@@ -1,0 +1,246 @@
+name: Rebase Status Check
+
+on:
+  schedule:
+    # Run every day at 6 AM UTC to check rebase status
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      notify_always:
+        description: 'Send notification even if branches are in sync'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  TARGET_BRANCH: mcp
+  BASE_BRANCH: main
+
+jobs:
+  check-rebase-status:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Check branch synchronization status
+        id: sync_check
+        run: |
+          git fetch origin ${{ env.TARGET_BRANCH }}
+          git fetch origin ${{ env.BASE_BRANCH }}
+          
+          # Get commit information
+          MERGE_BASE=$(git merge-base origin/${{ env.BASE_BRANCH }} origin/${{ env.TARGET_BRANCH }})
+          MAIN_HEAD=$(git rev-parse origin/${{ env.BASE_BRANCH }})
+          MCP_HEAD=$(git rev-parse origin/${{ env.TARGET_BRANCH }})
+          
+          echo "merge_base=$MERGE_BASE" >> $GITHUB_OUTPUT
+          echo "main_head=$MAIN_HEAD" >> $GITHUB_OUTPUT
+          echo "mcp_head=$MCP_HEAD" >> $GITHUB_OUTPUT
+          
+          # Calculate commits ahead/behind
+          COMMITS_BEHIND=$(git rev-list --count $MERGE_BASE..$MAIN_HEAD)
+          COMMITS_AHEAD=$(git rev-list --count $MERGE_BASE..$MCP_HEAD)
+          
+          echo "commits_behind=$COMMITS_BEHIND" >> $GITHUB_OUTPUT
+          echo "commits_ahead=$COMMITS_AHEAD" >> $GITHUB_OUTPUT
+          
+          # Determine sync status
+          if [ "$MERGE_BASE" = "$MAIN_HEAD" ]; then
+            echo "sync_status=up_to_date" >> $GITHUB_OUTPUT
+            echo "✅ Branches are in sync"
+          elif [ "$COMMITS_BEHIND" -gt 0 ]; then
+            echo "sync_status=behind" >> $GITHUB_OUTPUT
+            echo "⚠️ MCP branch is $COMMITS_BEHIND commits behind main"
+          else
+            echo "sync_status=diverged" >> $GITHUB_OUTPUT
+            echo "🔄 Branches have diverged"
+          fi
+          
+          # Get last rebase attempt info
+          LAST_WORKFLOW=$(gh run list --workflow="auto-rebase-mcp.yml" --limit=1 --json conclusion,createdAt,status,headSha --jq '.[0]' 2>/dev/null || echo '{}')
+          echo "last_workflow=$LAST_WORKFLOW" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Check for recent rebase failures
+        id: failure_check
+        run: |
+          # Check for recent issues related to rebase conflicts
+          RECENT_ISSUES=$(gh issue list --label="rebase-conflict" --state=open --limit=5 --json number,title,createdAt --jq length 2>/dev/null || echo "0")
+          echo "open_rebase_issues=$RECENT_ISSUES" >> $GITHUB_OUTPUT
+          
+          if [ "$RECENT_ISSUES" -gt 0 ]; then
+            echo "has_open_conflicts=true" >> $GITHUB_OUTPUT
+            echo "⚠️ Found $RECENT_ISSUES open rebase conflict issues"
+          else
+            echo "has_open_conflicts=false" >> $GITHUB_OUTPUT
+            echo "✅ No open rebase conflict issues"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Generate branch status report
+        id: report
+        run: |
+          cat > status-report.md << 'EOF'
+          # 🔄 Branch Synchronization Status Report
+          
+          **Generated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          
+          ## Current Status
+          - **Main Branch:** `${{ env.BASE_BRANCH }}` ($(git log -1 --format="%h - %s" origin/${{ env.BASE_BRANCH }}))
+          - **MCP Branch:** `${{ env.TARGET_BRANCH }}` ($(git log -1 --format="%h - %s" origin/${{ env.TARGET_BRANCH }}))
+          - **Sync Status:** ${{ steps.sync_check.outputs.sync_status }}
+          EOF
+          
+          if [ "${{ steps.sync_check.outputs.sync_status }}" = "behind" ]; then
+            cat >> status-report.md << 'EOF'
+          - **Commits Behind:** ${{ steps.sync_check.outputs.commits_behind }}
+          - **Commits Ahead:** ${{ steps.sync_check.outputs.commits_ahead }}
+          
+          ### Recent Commits in Main (not in MCP)
+          ```
+          $(git log --oneline ${{ steps.sync_check.outputs.merge_base }}..${{ steps.sync_check.outputs.main_head }} | head -10)
+          ```
+          EOF
+          fi
+          
+          if [ "${{ steps.failure_check.outputs.has_open_conflicts }}" = "true" ]; then
+            cat >> status-report.md << 'EOF'
+          
+          ## ⚠️ Open Rebase Issues
+          There are currently ${{ steps.failure_check.outputs.open_rebase_issues }} open rebase conflict issues that need attention.
+          EOF
+          fi
+          
+          cat >> status-report.md << 'EOF'
+          
+          ## Recommendations
+          EOF
+          
+          if [ "${{ steps.sync_check.outputs.sync_status }}" = "up_to_date" ]; then
+            echo "- ✅ No action needed - branches are synchronized" >> status-report.md
+          elif [ "${{ steps.sync_check.outputs.sync_status }}" = "behind" ]; then
+            cat >> status-report.md << 'EOF'
+          - 🔄 Consider triggering a manual rebase using the [Auto Rebase workflow](../../actions/workflows/auto-rebase-mcp.yml)
+          - 📋 Review the commits listed above to understand what changes will be applied
+          EOF
+          fi
+          
+          if [ "${{ steps.failure_check.outputs.has_open_conflicts }}" = "true" ]; then
+            echo "- 🔧 Resolve open rebase conflict issues before proceeding with new rebases" >> status-report.md
+          fi
+          
+          cat status-report.md
+          
+          # Set output for notifications
+          echo "needs_attention=$([ '${{ steps.sync_check.outputs.sync_status }}' != 'up_to_date' ] || [ '${{ steps.failure_check.outputs.has_open_conflicts }}' = 'true' ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+      
+      - name: Create or update tracking issue
+        if: steps.report.outputs.needs_attention == 'true' || github.event.inputs.notify_always == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('status-report.md', 'utf8');
+            
+            // Look for existing status tracking issue
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'rebase-status,automation',
+              state: 'open',
+              per_page: 10
+            });
+            
+            const existingIssue = issues.find(issue => 
+              issue.title.includes('Branch Synchronization Status')
+            );
+            
+            const needsAttention = '${{ steps.report.outputs.needs_attention }}' === 'true';
+            const notifyAlways = '${{ github.event.inputs.notify_always }}' === 'true';
+            
+            const issueBody = `${report}
+            
+            ---
+            
+            **Next Check:** Scheduled for tomorrow at 06:00 UTC  
+            **Manual Trigger:** [Run Status Check](../../actions/workflows/rebase-status-check.yml)  
+            **Trigger Rebase:** [Run Auto Rebase](../../actions/workflows/auto-rebase-mcp.yml)
+            
+            *Auto-generated by rebase status check workflow*`;
+            
+            if (existingIssue && needsAttention) {
+              // Update existing issue
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: issueBody
+              });
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `🔄 **Status Update - ${new Date().toISOString().split('T')[0]}**\n\nBranch sync status has been updated. Check the issue description for current details.`
+              });
+              
+              console.log(`Updated existing status issue #${existingIssue.number}`);
+              
+            } else if (!existingIssue && (needsAttention || notifyAlways)) {
+              // Create new issue
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `🔄 Branch Synchronization Status - MCP behind Main`,
+                body: issueBody,
+                labels: ['rebase-status', 'automation', needsAttention ? 'attention-needed' : 'info']
+              });
+              
+              console.log(`Created new status issue #${issue.data.number}`);
+              
+            } else if (existingIssue && !needsAttention) {
+              // Close issue if no longer needs attention
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                state: 'closed',
+                state_reason: 'completed'
+              });
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `✅ **Issue Resolved**\n\nBranches are now synchronized. Closing this status tracking issue.`
+              });
+              
+              console.log(`Closed resolved status issue #${existingIssue.number}`);
+            } else {
+              console.log('No action needed - branches are in sync and no notification requested');
+            }
+      
+      - name: Summary
+        run: |
+          echo "## Rebase Status Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Sync Status:** ${{ steps.sync_check.outputs.sync_status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Needs Attention:** ${{ steps.report.outputs.needs_attention }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Open Conflicts:** ${{ steps.failure_check.outputs.has_open_conflicts }}" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.sync_check.outputs.sync_status }}" = "behind" ]; then
+            echo "- **Commits Behind:** ${{ steps.sync_check.outputs.commits_behind }}" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Next scheduled check:** Tomorrow at 06:00 UTC" >> $GITHUB_STEP_SUMMARY
