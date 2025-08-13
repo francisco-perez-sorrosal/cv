@@ -1,0 +1,413 @@
+name: Auto Rebase MCP Branch
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      force_rebase:
+        description: 'Force rebase even if no changes detected'
+        required: false
+        default: false
+        type: boolean
+      dry_run:
+        description: 'Perform dry run without pushing changes'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  actions: write
+  issues: write
+  pull-requests: write
+
+env:
+  TARGET_BRANCH: mcp
+  BASE_BRANCH: main
+
+jobs:
+  auto-rebase:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: "rebase-mcp-${{ github.ref }}"
+      cancel-in-progress: false
+    
+    outputs:
+      rebase_status: ${{ steps.rebase.outputs.rebase_status }}
+      backup_branch: ${{ steps.backup.outputs.backup_branch }}
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Check if rebase is needed
+        id: check_changes
+        run: |
+          git fetch origin ${{ env.TARGET_BRANCH }}
+          git fetch origin ${{ env.BASE_BRANCH }}
+          
+          # Get the merge base
+          MERGE_BASE=$(git merge-base origin/${{ env.BASE_BRANCH }} origin/${{ env.TARGET_BRANCH }})
+          MAIN_HEAD=$(git rev-parse origin/${{ env.BASE_BRANCH }})
+          
+          echo "merge_base=$MERGE_BASE" >> $GITHUB_OUTPUT
+          echo "main_head=$MAIN_HEAD" >> $GITHUB_OUTPUT
+          
+          if [ "$MERGE_BASE" != "$MAIN_HEAD" ]; then
+            echo "needs_rebase=true" >> $GITHUB_OUTPUT
+            echo "📋 Rebase needed: ${{ env.TARGET_BRANCH }} is behind ${{ env.BASE_BRANCH }}"
+            
+            # Show what commits are new
+            echo "New commits in ${{ env.BASE_BRANCH }}:"
+            git log --oneline $MERGE_BASE..$MAIN_HEAD
+          else
+            echo "needs_rebase=false" >> $GITHUB_OUTPUT
+            echo "✅ No rebase needed: ${{ env.TARGET_BRANCH }} is up to date"
+          fi
+      
+      - name: Create backup branch
+        id: backup
+        if: steps.check_changes.outputs.needs_rebase == 'true' || github.event.inputs.force_rebase == 'true'
+        run: |
+          BACKUP_BRANCH="${{ env.TARGET_BRANCH }}-backup-$(date +%Y%m%d-%H%M%S)"
+          git checkout origin/${{ env.TARGET_BRANCH }}
+          git checkout -b $BACKUP_BRANCH
+          
+          if [ "${{ github.event.inputs.dry_run }}" != "true" ]; then
+            git push origin $BACKUP_BRANCH
+            echo "🔄 Created backup branch: $BACKUP_BRANCH"
+          else
+            echo "🔍 [DRY RUN] Would create backup branch: $BACKUP_BRANCH"
+          fi
+          
+          echo "backup_branch=$BACKUP_BRANCH" >> $GITHUB_OUTPUT
+      
+      - name: Attempt automatic rebase
+        id: rebase
+        if: steps.check_changes.outputs.needs_rebase == 'true' || github.event.inputs.force_rebase == 'true'
+        run: |
+          git checkout origin/${{ env.TARGET_BRANCH }}
+          git checkout -b rebase-temp
+          
+          echo "🚀 Starting rebase of ${{ env.TARGET_BRANCH }} onto ${{ env.BASE_BRANCH }}"
+          
+          # Try rebase with automatic conflict resolution
+          if git rebase --strategy-option=ours origin/${{ env.BASE_BRANCH }}; then
+            echo "rebase_status=success" >> $GITHUB_OUTPUT
+            echo "✅ Rebase completed successfully"
+            
+            # Log the rebase details
+            echo "Rebase summary:" > rebase-summary.txt
+            echo "- Base branch: ${{ env.BASE_BRANCH }}" >> rebase-summary.txt
+            echo "- Target branch: ${{ env.TARGET_BRANCH }}" >> rebase-summary.txt
+            echo "- Commits rebased: $(git rev-list --count ${{ steps.check_changes.outputs.merge_base }}..HEAD)" >> rebase-summary.txt
+            echo "- Timestamp: $(date -u)" >> rebase-summary.txt
+            
+            cat rebase-summary.txt
+            
+          else
+            echo "rebase_status=conflict" >> $GITHUB_OUTPUT
+            echo "❌ Rebase failed due to conflicts"
+            
+            # Collect conflict information
+            echo "Conflicts detected in the following files:" > conflict-info.txt
+            git status --porcelain | grep '^UU' | awk '{print $2}' >> conflict-info.txt || true
+            git status --porcelain | grep '^AA' | awk '{print $2}' >> conflict-info.txt || true
+            
+            if [ -s conflict-info.txt ]; then
+              echo "📝 Conflicted files:"
+              cat conflict-info.txt
+            fi
+            
+            # Abort the failed rebase
+            git rebase --abort
+            git checkout ${{ env.BASE_BRANCH }}
+          fi
+      
+      - name: Advanced conflict resolution
+        id: resolve_conflicts
+        if: steps.rebase.outputs.rebase_status == 'conflict'
+        run: |
+          echo "🔧 Attempting advanced conflict resolution"
+          
+          git checkout origin/${{ env.TARGET_BRANCH }}
+          git checkout -b resolve-temp
+          git rebase origin/${{ env.BASE_BRANCH }}
+          
+          # Handle specific conflict types
+          RESOLVED=false
+          
+          # Strategy 1: Handle .gitignore conflicts by merging
+          if git status --porcelain | grep -q "^UU.*\.gitignore"; then
+            echo "🔄 Resolving .gitignore conflicts"
+            git show HEAD:.gitignore > .gitignore.theirs 2>/dev/null || touch .gitignore.theirs
+            git show origin/${{ env.TARGET_BRANCH }}:.gitignore > .gitignore.ours 2>/dev/null || touch .gitignore.ours
+            
+            # Merge .gitignore files intelligently
+            cat .gitignore.ours .gitignore.theirs | sort -u > .gitignore
+            rm -f .gitignore.theirs .gitignore.ours
+            git add .gitignore
+            echo "✅ Merged .gitignore files"
+          fi
+          
+          # Strategy 2: For LaTeX/PDF files, prefer main branch version
+          if git status --porcelain | grep -q "^UU.*\.\(tex\|pdf\)"; then
+            echo "🔄 Resolving LaTeX/PDF conflicts (keeping main branch version)"
+            git checkout --theirs "*.tex" 2>/dev/null || true
+            git checkout --theirs "*.pdf" 2>/dev/null || true
+            git add "*.tex" "*.pdf" 2>/dev/null || true
+            echo "✅ Resolved LaTeX/PDF conflicts"
+          fi
+          
+          # Strategy 3: For CLAUDE.md, try intelligent merge
+          if git status --porcelain | grep -q "^UU.*CLAUDE\.md"; then
+            echo "🔄 Resolving CLAUDE.md conflicts"
+            # For now, prefer the MCP branch version as it's more comprehensive
+            git checkout --ours CLAUDE.md
+            git add CLAUDE.md
+            echo "✅ Resolved CLAUDE.md conflicts (kept MCP version)"
+          fi
+          
+          # Check if all conflicts are resolved
+          if [ -z "$(git status --porcelain | grep '^UU\|^AA')" ]; then
+            git rebase --continue
+            echo "rebase_status=resolved" >> $GITHUB_OUTPUT
+            echo "✅ All conflicts resolved automatically"
+            RESOLVED=true
+          else
+            git rebase --abort
+            echo "rebase_status=manual_required" >> $GITHUB_OUTPUT
+            echo "❌ Manual intervention required for remaining conflicts"
+          fi
+          
+          echo "resolved=$RESOLVED" >> $GITHUB_OUTPUT
+      
+      - name: Validate rebased branch
+        id: validate
+        if: steps.rebase.outputs.rebase_status == 'success' || steps.resolve_conflicts.outputs.rebase_status == 'resolved'
+        run: |
+          echo "🔍 Validating rebased branch"
+          
+          # Check that essential MCP files are still present
+          VALIDATION_FAILED=false
+          
+          # These files should exist on the MCP branch after rebase
+          EXPECTED_FILES=(
+            "2025_FranciscoPerezSorrosal_CV_English.tex"
+            "CLAUDE.md"
+          )
+          
+          for file in "${EXPECTED_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Missing expected file: $file"
+              VALIDATION_FAILED=true
+            else
+              echo "✅ Found expected file: $file"
+            fi
+          done
+          
+          if [ "$VALIDATION_FAILED" = "true" ]; then
+            echo "validation_status=failed" >> $GITHUB_OUTPUT
+            echo "❌ Branch validation failed"
+            exit 1
+          else
+            echo "validation_status=passed" >> $GITHUB_OUTPUT
+            echo "✅ Branch validation passed"
+          fi
+      
+      - name: Push rebased branch
+        if: |
+          (steps.rebase.outputs.rebase_status == 'success' || steps.resolve_conflicts.outputs.rebase_status == 'resolved') &&
+          steps.validate.outputs.validation_status == 'passed' &&
+          github.event.inputs.dry_run != 'true'
+        run: |
+          # Push the rebased branch
+          git checkout rebase-temp || git checkout resolve-temp
+          git checkout -B ${{ env.TARGET_BRANCH }}
+          git push --force-with-lease origin ${{ env.TARGET_BRANCH }}
+          
+          echo "🚀 Successfully pushed rebased ${{ env.TARGET_BRANCH }} branch"
+      
+      - name: Cleanup temporary branches
+        if: always()
+        run: |
+          # Clean up temporary branches
+          git checkout ${{ env.BASE_BRANCH }} 2>/dev/null || true
+          git branch -D rebase-temp 2>/dev/null || true
+          git branch -D resolve-temp 2>/dev/null || true
+          echo "🧹 Cleaned up temporary branches"
+      
+      - name: Create success notification
+        if: |
+          (steps.rebase.outputs.rebase_status == 'success' || steps.resolve_conflicts.outputs.rebase_status == 'resolved') &&
+          steps.validate.outputs.validation_status == 'passed'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const isDryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+            const status = isDryRun ? '🔍 [DRY RUN]' : '✅';
+            const action = isDryRun ? 'Would have rebased' : 'Successfully rebased';
+            
+            const message = `${status} **Auto-rebase completed**: \`${{ env.TARGET_BRANCH }}\` branch has been ${isDryRun ? 'validated for rebase' : 'automatically rebased'} onto \`${{ env.BASE_BRANCH }}\`
+            
+            **Details:**
+            - Triggered by: ${context.eventName === 'workflow_dispatch' ? 'Manual trigger' : 'Push to main'}
+            - Commit: ${context.sha.substring(0,8)}
+            - Backup created: \`${{ steps.backup.outputs.backup_branch }}\`
+            - Resolution: ${{ steps.rebase.outputs.rebase_status == 'success' && 'Automatic' || 'Advanced conflict resolution' }}
+            
+            ${isDryRun ? '**Note**: This was a dry run. No changes were pushed.' : ''}`;
+            
+            if (context.eventName !== 'workflow_dispatch') {
+              await github.rest.repos.createCommitComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                commit_sha: context.sha,
+                body: message
+              });
+            } else {
+              console.log('Manual trigger - notification logged to workflow summary');
+              console.log(message);
+            }
+      
+      - name: Create conflict resolution issue
+        if: |
+          steps.rebase.outputs.rebase_status == 'conflict' ||
+          steps.resolve_conflicts.outputs.rebase_status == 'manual_required'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            let conflictFiles = '';
+            try {
+              conflictFiles = fs.readFileSync('conflict-info.txt', 'utf8');
+            } catch (e) {
+              conflictFiles = 'Unable to determine conflicted files';
+            }
+            
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🔧 Manual rebase required: ${process.env.TARGET_BRANCH} branch conflicts with ${process.env.BASE_BRANCH}`,
+              body: `## ❌ Automatic Rebase Failed
+            
+            The automatic rebase of the \`${process.env.TARGET_BRANCH}\` branch onto \`${process.env.BASE_BRANCH}\` failed due to merge conflicts that require manual resolution.
+            
+            **Trigger Information:**
+            - **Commit:** ${context.sha}
+            - **Branch:** ${context.ref}
+            - **Backup Branch:** \`${{ steps.backup.outputs.backup_branch }}\`
+            - **Workflow:** [${context.runId}](${context.payload.repository.html_url}/actions/runs/${context.runId})
+            
+            ## 🔧 Manual Resolution Steps
+            
+            ### Option 1: Command Line Resolution
+            \`\`\`bash
+            # 1. Checkout and update the MCP branch
+            git checkout ${process.env.TARGET_BRANCH}
+            git fetch origin ${process.env.BASE_BRANCH}
+            
+            # 2. Start the rebase
+            git rebase origin/${process.env.BASE_BRANCH}
+            
+            # 3. Resolve conflicts in the files listed below
+            # Edit each conflicted file manually
+            
+            # 4. Stage resolved files
+            git add <resolved-files>
+            
+            # 5. Continue the rebase
+            git rebase --continue
+            
+            # 6. Push the rebased branch
+            git push --force-with-lease origin ${process.env.TARGET_BRANCH}
+            \`\`\`
+            
+            ### Option 2: GitHub Web Interface
+            1. Create a Pull Request from \`${process.env.BASE_BRANCH}\` to \`${process.env.TARGET_BRANCH}\`
+            2. Resolve conflicts using GitHub's web editor
+            3. Merge the PR using "Rebase and merge" strategy
+            
+            ## 📋 Conflicted Files
+            \`\`\`
+            ${conflictFiles}
+            \`\`\`
+            
+            ## 💡 Common Conflict Resolution Strategies
+            
+            - **LaTeX CV files**: Keep the main branch version (main is authoritative for document changes)
+            - **CLAUDE.md**: Merge both versions, keeping comprehensive MCP documentation while adding any new main branch instructions
+            - **.gitignore**: Combine entries from both branches, removing duplicates
+            - **Binary files (PDFs)**: Keep the main branch version (main is authoritative for document changes)
+            
+            ## 🔄 Recovery Options
+            
+            If you need to start over:
+            \`\`\`bash
+            # Reset to backup
+            git checkout ${process.env.TARGET_BRANCH}
+            git reset --hard origin/${{ steps.backup.outputs.backup_branch }}
+            git push --force-with-lease origin ${process.env.TARGET_BRANCH}
+            \`\`\`
+            
+            ---
+            
+            **Auto-generated by:** GitHub Actions Auto-Rebase Workflow  
+            **Timestamp:** ${new Date().toISOString()}
+            `,
+              labels: ['automation', 'rebase-conflict', 'help wanted', 'high-priority']
+            });
+            
+            console.log(`Created issue #${issue.data.number} for manual conflict resolution`);
+
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: auto-rebase
+    if: always()
+    
+    steps:
+      - name: Cleanup old backup branches
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: branches } = await github.rest.repos.listBranches({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+            
+            const backupBranches = branches.filter(branch => 
+              branch.name.startsWith('${process.env.TARGET_BRANCH}-backup-')
+            );
+            
+            // Keep only the last 5 backup branches
+            if (backupBranches.length > 5) {
+              const toDelete = backupBranches
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .slice(0, -5);
+              
+              for (const branch of toDelete) {
+                try {
+                  await github.rest.git.deleteRef({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    ref: `heads/${branch.name}`
+                  });
+                  console.log(`Deleted old backup branch: ${branch.name}`);
+                } catch (error) {
+                  console.log(`Failed to delete ${branch.name}: ${error.message}`);
+                }
+              }
+            }
+            
+            console.log(`Backup branch cleanup completed. Kept ${Math.min(backupBranches.length, 5)} branches.`);
