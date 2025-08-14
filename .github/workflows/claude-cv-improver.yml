@@ -68,7 +68,7 @@ jobs:
           assignee_trigger: "claude-bot"
           
           # Optional: Allow Claude to run specific commands
-          allowed_tools: "Bash(latexmk), Bash(git), Bash(cat)"
+          allowed_tools: "Bash(latexmk:*), Bash(git:*), Bash(cat:*), Bash(pdflatex:*)"
           
           # Optional: Add custom instructions for Claude to customize its behavior for your project
           custom_instructions: |
