@@ -31,7 +31,6 @@ jobs:
         run: |
           # Core packages from the CV file
           tlmgr install moderncv
-          tlmgr install inputenc
           tlmgr install geometry
           tlmgr install babel babel-english
           
