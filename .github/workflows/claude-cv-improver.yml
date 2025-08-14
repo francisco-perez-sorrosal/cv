@@ -9,8 +9,8 @@ on:
 jobs:
   claude-cv-improver:
     if: |
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+      ((github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude') && github.event.comment.user.login == 'francisco-perez-sorrosal') ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')) && github.event.issue.user.login == 'francisco-perez-sorrosal'))
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -59,7 +59,7 @@ jobs:
             actions: read
           
           # Optional: Specify model (defaults to Claude Sonnet 4, uncomment for Claude Opus 4.1)
-          # model: "claude-opus-4-1-20250805"
+          model: "claude-3-5-haiku-20241022"
           
           # Optional: Customize the trigger phrase (default: @claude)
           trigger_phrase: "/claude"
@@ -88,15 +88,17 @@ jobs:
             Please review this issue request and act accordingly.
             Your objective is always to improve the CV to make it more effective 
             and is easy to read and understand.
-            Only change the format and the layout.
-            Do not change the content of the CV unless explicitly requested.
+            Only change the format and the layout. Sometimes the layout of the sections is tricky, so be extremely careful.
+            If you can foresee a simplification of the layout without losing ANY information (including the hyperlinks), do it.
+            Do not change the content or infromation contained in the CV (including the hyperlinks) unless explicitly requested.
             Your generic workflow plan is:
               1. Create a new worktree branch to work on it.
               2. Work on the changes proposed in the Issue in the latex CV file.
               3. Compile the CV to check if the changes are correct.
               4. Fix possible errors in the CV by examining the log file (e.g. using cat) and try to compile again.
               5. If the changes are correct, you can commit the changes and the new pdf file generated to it and create a PR to the main branch.
-              6. Do not mention yourself as an author of the PR.
+              6. Do not add any other artifacts than the latex and the pdf files with the CV.
+              7. Do not mention yourself as an author of the PR.
 
           # Optional: Custom environment variables for Claude
           # claude_env: |
