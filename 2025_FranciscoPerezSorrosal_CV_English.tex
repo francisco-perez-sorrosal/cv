@@ -11,15 +11,21 @@
 \documentclass[10pt,a4paper,english]{moderncv}      % a4paper, a5paper, b5paper, letterpaper, legalpaper, executivepaper, landscape
                                                     % 10pt, 11pt, 12pt
 % moderncv themes
-%\moderncvtheme[green]{casual}              % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
-                                            % casual (default), classic, banking, oldstyle, fancy
-\moderncvtheme[green]{classic}
+% moderncv themes - optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts)
+% available styles: casual (default), classic, banking, oldstyle, fancy
+\moderncvtheme[green]{banking}% Try banking theme which might have less TikZ dependencies
 
 % character encoding
 \usepackage[utf8]{inputenc}                   % replace by the encoding you are using
 
 % adjust the page margins
 \usepackage[scale=0.75]{geometry}
+\def\tikz#1{}% Disable all tikz commands
+\def\node#1{}
+\def\draw#1{}
+\def\path#1{}
+\def\filldraw#1{}
+\def\coordinate#1{}
 % \usepackage[scale=0.88]{geometry}
 
 % language
@@ -358,31 +364,31 @@ I tested the database connection modules of Meta4’s ERP suite (now Cegid), gai
 \vspace{0.2cm}
 %------------- EDUCATION --------------------------------------------
 \section{Certification/Courses}
-\cventry{2025}{Model Context Protocol: Advanced Topics}{Anthropic Education}{MooC}{\href{http://verify.skilljar.com/c/d7e2d2xp2hu9}{Certification}}{}
-\cventry{2025}{Introduction to Model Context Protocol}{Anthropic Education}{MooC}{\href{http://verify.skilljar.com/c/aaofdzhtwit2}{Certification}}{}
-\cventry{2025}{Claude Code in Action}{Anthropic Education}{MooC}{\href{https://verify.skilljar.com/c/kfpzhosaxa35}{Certification}}{}
-\cventry{2025}{Claude with the Anthropic API}{Anthropic Education}{MooC}{\href{https://verify.skilljar.com/c/k3pctnrj4k34}{Certification}}{}
+\cventry{2025}{Model Context Protocol: Advanced Topics}{Anthropic Education \href{http://verify.skilljar.com/c/d7e2d2xp2hu9}{[cert]}}{MooC}{}{}
+\cventry{2025}{Introduction to Model Context Protocol}{Anthropic Education \href{http://verify.skilljar.com/c/aaofdzhtwit2}{[cert]}}{MooC}{}{}
+\cventry{2025}{Claude Code in Action}{Anthropic Education \href{https://verify.skilljar.com/c/kfpzhosaxa35}{[cert]}}{MooC}{}{}
+\cventry{2025}{Claude with the Anthropic API}{Anthropic Education \href{https://verify.skilljar.com/c/k3pctnrj4k34}{[cert]}}{MooC}{}{}
 \cventry{2025}{LLMs as Operating Systems: Agent Memory (Letta)}{DeepLearning.AI}{MooC}{}{}
 \cventry{2025}{ACP: Agent Communication Protocol}{DeepLearning.AI}{MooC}{}{}
 \cventry{2025}{MCP: Build Rich-Context AI Apps with Anthropic}{DeepLearning.AI}{MooC}{}{}
 \cventry{2025}{Building toward Computer Use with Anthropic}{DeepLearning.AI}{MooC}{}{}
 \cventry{2025}{Fundamentals of Agents}{HuggingFace}{MooC}{}{}
-\cventry{2025}{Practical Multi AI Agents and Advanced Use Cases with crewAI}{DeepLearning.AI}{MooC}{}{}
-\cventry{2024}{Multi AI Agent Systems with CrewAI}{DeepLearning.AI}{MooC}{\href{https://www.linkedin.com/in/fperezsorrosal/overlay/1733693789455/single-media-viewer/}{Certification}}{}
-\cventry{2024}{RAG Developer Bootcamp}{Pinecone + Anyscale}{In-Person}{San Francisco}{\href{https://www.anyscale.com/events/2024/03/08/rag-developer-bootcamp}{Bootcamp}}
-\cventry{2023}{LLM102x: Large Language Models: Foundation Models from the Ground Up}{edX/Databricks}{MooC}{\href{https://courses.edx.org/certificates/e36174eec12748e7b62afd517060cf2d}{Certification}}{}
-\cventry{2023}{LLM101x: Large Language Models: Application through Production}{edX/Databricks}{MooC}{\href{https://courses.edx.org/certificates/efcc7ec7b2234b538809447c1f37babf}{Certification}}{}
-\cventry{2023}{LLM Bootcamp}{FSDL}{In-Person}{South San Francisco, CA (USA)}{}
-\cventry{2023}{Yahoo Leadership Program}{}{The Forem}{Remote}{}
-\cventry{2022}{Full Stack Deep Learning 22'Edition}{FSDL}{MooC}{\href{https://fullstackdeeplearning.com/course/2022/}{Course}}{}
-\cventry{2022}{Machine Learning Specialization (3 Courses)}{Coursera/DeepLearning.AI/Stanford}{MooC}{\href{https://www.coursera.org/account/accomplishments/specialization/certificate/KREGWAZ87SQN}{Certification}}{}
-\cventry{2021}{Full Stack Deep Learning 21'Edition}{FSDL}{MooC}{\href{https://fullstackdeeplearning.com/spring2021/}{Course}}{}
-\cventry{2019}{Machine Learning Specialization (4 Courses)}{Coursera/Univ. Washington}{MooC}{\href{https://www.coursera.org/account/accomplishments/specialization/certificate/UY6W586XQMW3}{Certification}}{}
-\cventry{2018}{Mathematics for Machine Learning Specialization (3 Courses)}{Coursera/Imperial College London}{MooC}{\href{https://www.coursera.org/account/accomplishments/specialization/K7TBGLD4Y6ML}{Certification}}{}
-\cventry{2018}{Deep Learning Specialization (5 Courses)}{Coursera/DeepLearning.AI}{MooC}{\href{https://www.coursera.org/account/accomplishments/specialization/YTPXQJ42EUCK}{Certification}}{}
-\cventry{2011}{Certificate of Training, Advanced Scala}{Typesafe}{Switzerland}{}{}
-\cventry{2011}{Certificate of Training, Scala}{Typesafe}{Switzerland}{}{}
-\cventry{2011}{Course in Business Administration and Economics (268 hours)}{Funded by Community of Madrid}{Spain}{}{}
+\cventry{2025}{Practical Multi AI Agents with crewAI}{DeepLearning.AI}{MooC}{}{}
+\cventry{2024}{Multi AI Agent Systems with CrewAI}{DeepLearning.AI \href{https://www.linkedin.com/in/fperezsorrosal/overlay/1733693789455/single-media-viewer/}{[cert]}}{MooC}{}{}
+\cventry{2024}{RAG Developer Bootcamp}{Pinecone + Anyscale \href{https://www.anyscale.com/events/2024/03/08/rag-developer-bootcamp}{[info]}}{In-Person, San Francisco}{}{}
+\cventry{2023}{LLM102x: Foundation Models}{edX/Databricks \href{https://courses.edx.org/certificates/e36174eec12748e7b62afd517060cf2d}{[cert]}}{MooC}{}{}
+\cventry{2023}{LLM101x: Application through Production}{edX/Databricks \href{https://courses.edx.org/certificates/efcc7ec7b2234b538809447c1f37babf}{[cert]}}{MooC}{}{}
+\cventry{2023}{LLM Bootcamp}{FSDL}{In-Person, South SF}{}{}
+\cventry{2023}{Yahoo Leadership Program}{The Forem}{Remote}{}{}
+\cventry{2022}{Full Stack Deep Learning '22}{FSDL \href{https://fullstackdeeplearning.com/course/2022/}{[info]}}{MooC}{}{}
+\cventry{2022}{Machine Learning Specialization}{Coursera/DeepLearning.AI/Stanford \href{https://www.coursera.org/account/accomplishments/specialization/certificate/KREGWAZ87SQN}{[cert]}}{MooC}{}{}
+\cventry{2021}{Full Stack Deep Learning '21}{FSDL \href{https://fullstackdeeplearning.com/spring2021/}{[info]}}{MooC}{}{}
+\cventry{2019}{Machine Learning Specialization}{Coursera/UW \href{https://www.coursera.org/account/accomplishments/specialization/certificate/UY6W586XQMW3}{[cert]}}{MooC}{}{}
+\cventry{2018}{Mathematics for Machine Learning}{Coursera/Imperial \href{https://www.coursera.org/account/accomplishments/specialization/K7TBGLD4Y6ML}{[cert]}}{MooC}{}{}
+\cventry{2018}{Deep Learning Specialization}{Coursera/DeepLearning.AI \href{https://www.coursera.org/account/accomplishments/specialization/YTPXQJ42EUCK}{[cert]}}{MooC}{}{}
+\cventry{2011}{Advanced Scala Training}{Typesafe}{Switzerland}{}{}
+\cventry{2011}{Scala Training}{Typesafe}{Switzerland}{}{}
+\cventry{2011}{Business Administration and Economics}{Community of Madrid}{Spain}{}{}
 \vspace{-0.2cm}
 
 \section{Education}
