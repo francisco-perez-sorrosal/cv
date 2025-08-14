@@ -1,0 +1,101 @@
+name: Claude CV Improver
+
+on:
+  issue_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+
+jobs:
+  claude-cv-improver:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude-cv-improver')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude-cv-improver') || contains(github.event.issue.title, '@claude-cv-improver')))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+      id-token: write
+      actions: read # Required for Claude to read CI results on PRs
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Cache LaTeX dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            /usr/share/texlive
+            /usr/bin/latexmk
+            /usr/bin/biber
+            /usr/bin/pandoc
+            /var/cache/apt
+            /var/lib/apt
+          key: latex-deps-${{ runner.os }}-${{ hashFiles('.github/workflows/claude-cv-improver.yml') }}
+          restore-keys: |
+            latex-deps-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          # Check if texlive is already installed (from cache)
+          if ! command -v pdflatex &> /dev/null; then
+            echo "Installing LaTeX dependencies..."
+            sudo apt-get update
+            sudo apt-get install -y texlive-full
+            sudo apt-get install -y texlive-latex-extra
+            sudo apt-get install -y texlive-bibtex-extra
+            sudo apt-get install -y biber
+            sudo apt-get install -y pandoc
+            sudo apt-get install -y latexmk
+          else
+            echo "LaTeX dependencies found in cache, skipping installation"
+          fi
+
+      - name: Run Claude Code
+        id: claude
+        uses: anthropics/claude-code-action@beta
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+
+          # This is an optional setting that allows Claude to read CI results on PRs
+          additional_permissions: |
+            actions: read
+          
+          # Optional: Specify model (defaults to Claude Sonnet 4, uncomment for Claude Opus 4.1)
+          # model: "claude-opus-4-1-20250805"
+          
+          # Optional: Customize the trigger phrase (default: @claude)
+          # trigger_phrase: "/claude"
+          
+          # Optional: Trigger when specific user is assigned to an issue
+          # assignee_trigger: "claude-bot"
+          
+          # Optional: Allow Claude to run specific commands
+          allowed_tools: "Bash(latexmk), Bash(git)"
+          
+          # Optional: Add custom instructions for Claude to customize its behavior for your project
+          custom_instructions: |
+            Read the @README.md file to understand the project how to compile the CV.
+            The project is already set up with all dependencies required to compile the CV installed.
+            Do not use the -c flag when compiling the CV to allow to see the auxiliary files.
+            One of the auxiliarty files contains a log with useful information for 
+            debugging purposes and has a .log extension.
+            The source file of the CV is the .tex file.
+            The compiled CV file is the .pdf file.
+            Your objective is always to improve the CV to make it more effective 
+            and is easy to read and understand.
+            Your work flow is:
+              1. Create a new worktree branch to work on it.
+              2. Work on the changes proposed in the Issue in the latex CV file.
+              3. Compile the CV to check if the changes are correct.
+              4. Fix possible errors in the CV by examining the log file.
+              5. If the changes are correct, you can commit the changes to it and create a PR to the main branch.
+              6. Do not mention yourself as an author of the PR.
+
+          # Optional: Custom environment variables for Claude
+          # claude_env: |
+          #   NODE_ENV: test
+
