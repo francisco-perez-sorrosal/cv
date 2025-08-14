@@ -68,7 +68,7 @@ jobs:
           assignee_trigger: "claude-bot"
           
           # Optional: Allow Claude to run specific commands
-          allowed_tools: "Bash(latexmk), Bash(git)"
+          allowed_tools: "Bash(latexmk), Bash(git), Bash(cat)"
           
           # Optional: Add custom instructions for Claude to customize its behavior for your project
           custom_instructions: |
@@ -88,12 +88,14 @@ jobs:
             Please review this issue request and act accordingly.
             Your objective is always to improve the CV to make it more effective 
             and is easy to read and understand.
-            Your work flow is:
+            Only change the format and the layout.
+            Do not change the content of the CV unless explicitly requested.
+            Your generic workflow plan is:
               1. Create a new worktree branch to work on it.
               2. Work on the changes proposed in the Issue in the latex CV file.
               3. Compile the CV to check if the changes are correct.
-              4. Fix possible errors in the CV by examining the log file.
-              5. If the changes are correct, you can commit the changes to it and create a PR to the main branch.
+              4. Fix possible errors in the CV by examining the log file (e.g. using cat) and try to compile again.
+              5. If the changes are correct, you can commit the changes and the new pdf file generated to it and create a PR to the main branch.
               6. Do not mention yourself as an author of the PR.
 
           # Optional: Custom environment variables for Claude
