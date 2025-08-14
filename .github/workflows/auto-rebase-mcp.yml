@@ -78,6 +78,17 @@ jobs:
         id: backup
         if: steps.check_changes.outputs.needs_rebase == 'true' || github.event.inputs.force_rebase == 'true'
         run: |
+          # Delete previous backup branch if it exists
+          PREVIOUS_BACKUP=$(git branch -r | grep "origin/${{ env.TARGET_BRANCH }}-backup-" | head -n1 | sed 's/origin\///' | xargs)
+          if [ -n "$PREVIOUS_BACKUP" ]; then
+            if [ "${{ github.event.inputs.dry_run }}" != "true" ]; then
+              git push origin --delete $PREVIOUS_BACKUP || echo "⚠️ Failed to delete previous backup: $PREVIOUS_BACKUP"
+              echo "🗑️ Deleted previous backup branch: $PREVIOUS_BACKUP"
+            else
+              echo "🔍 [DRY RUN] Would delete previous backup branch: $PREVIOUS_BACKUP"
+            fi
+          fi
+          
           BACKUP_BRANCH="${{ env.TARGET_BRANCH }}-backup-$(date +%Y%m%d-%H%M%S)"
           git checkout origin/${{ env.TARGET_BRANCH }}
           git checkout -b $BACKUP_BRANCH
@@ -177,6 +188,14 @@ jobs:
             echo "✅ Resolved CLAUDE.md conflicts (kept MCP version)"
           fi
           
+          # Strategy 4: For README.md, prefer main branch version
+          if git status --porcelain | grep -q "^UU.*README\.md"; then
+            echo "🔄 Resolving README.md conflicts (keeping main branch version)"
+            git checkout --theirs README.md
+            git add README.md
+            echo "✅ Resolved README.md conflicts (kept main version)"
+          fi
+          
           # Check if all conflicts are resolved
           if [ -z "$(git status --porcelain | grep '^UU\|^AA')" ]; then
             git rebase --continue
@@ -204,6 +223,7 @@ jobs:
           EXPECTED_FILES=(
             "2025_FranciscoPerezSorrosal_CV_English.tex"
             "CLAUDE.md"
+            "README.md"
           )
           
           for file in "${EXPECTED_FILES[@]}"; do
@@ -263,7 +283,7 @@ jobs:
             - Triggered by: ${context.eventName === 'workflow_dispatch' ? 'Manual trigger' : 'Push to main'}
             - Commit: ${context.sha.substring(0,8)}
             - Backup created: \`${{ steps.backup.outputs.backup_branch }}\`
-            - Resolution: ${{ steps.rebase.outputs.rebase_status == 'success' && 'Automatic' || 'Advanced conflict resolution' }}
+            - Resolution: ${'${{ steps.rebase.outputs.rebase_status }}' === 'success' ? 'Automatic' : 'Advanced conflict resolution'}
             
             ${isDryRun ? '**Note**: This was a dry run. No changes were pushed.' : ''}`;
             
@@ -370,44 +390,3 @@ jobs:
             
             console.log(`Created issue #${issue.data.number} for manual conflict resolution`);
 
-  cleanup:
-    runs-on: ubuntu-latest
-    needs: auto-rebase
-    if: always()
-    
-    steps:
-      - name: Cleanup old backup branches
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { data: branches } = await github.rest.repos.listBranches({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              per_page: 100
-            });
-            
-            const backupBranches = branches.filter(branch => 
-              branch.name.startsWith('${process.env.TARGET_BRANCH}-backup-')
-            );
-            
-            // Keep only the last 5 backup branches
-            if (backupBranches.length > 5) {
-              const toDelete = backupBranches
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .slice(0, -5);
-              
-              for (const branch of toDelete) {
-                try {
-                  await github.rest.git.deleteRef({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    ref: `heads/${branch.name}`
-                  });
-                  console.log(`Deleted old backup branch: ${branch.name}`);
-                } catch (error) {
-                  console.log(`Failed to delete ${branch.name}: ${error.message}`);
-                }
-              }
-            }
-            
-            console.log(`Backup branch cleanup completed. Kept ${Math.min(backupBranches.length, 5)} branches.`);

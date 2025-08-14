@@ -299,13 +299,14 @@ The system uses consistent labels across workflows:
 
 2. **Understand Conflict Patterns**
    - LaTeX files: Keep main branch version (main is authoritative for document changes)
-   - Documentation: Merge thoughtfully
+   - README.md: Keep main branch version (main is authoritative for documentation)
+   - CLAUDE.md: Keep MCP branch version (MCP has comprehensive documentation)
    - Configuration: Combine intelligently
 
 3. **Use Backup Branches**
    - Backup branches are created before every rebase
    - Use them for quick rollbacks if needed
-   - They're automatically cleaned up (last 5 kept)
+   - Only the latest backup is kept (previous ones automatically removed)
 
 #### For Contributors
 
