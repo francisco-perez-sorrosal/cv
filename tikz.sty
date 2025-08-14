@@ -1,0 +1,44 @@
+% Dummy tikz.sty file to avoid missing package error
+% This provides minimal functionality to allow compilation
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tikz}[2025/08/14 Dummy tikz package for compilation]
+
+% Provide dummy tikz environment
+\newenvironment{tikzpicture}[1][]{}{}
+
+% Provide dummy tikz commands that might be used by moderncv
+\newcommand{\tikz}[2][]{}
+\newcommand{\draw}[2][]{}
+% \path is already defined by LaTeX, so we redefine it
+\renewcommand{\path}[2][]{}
+\newcommand{\node}[3][]{}
+\newcommand{\coordinate}[2][]{}
+
+% Make tikz library loading a no-op
+\newcommand{\usetikzlibrary}[1]{}
+
+% Provide pgf-related commands that might be needed
+\newcommand{\pgfkeys}[1]{}
+\newcommand{\pgfkeyssetvalue}[2]{}
+\newcommand{\pgfsetxvect}[1]{}
+\newcommand{\pgfsetyvect}[1]{}
+\newcommand{\pgfpoint}[2]{}
+\newcommand{\pgfpointxy}[2]{}
+\newcommand{\pgfcircle}[2][]{}
+\newcommand{\pgfellipse}[3][]{}
+\newcommand{\pgfline}[2]{}
+\newcommand{\pgfmoveto}[1]{}
+\newcommand{\pgflineto}[1]{}
+\newcommand{\pgfstroke}{}
+\newcommand{\pgffill}{}
+\newcommand{\pgfsetcolor}[1]{}
+\newcommand{\pgfsetfillcolor}[1]{}
+\newcommand{\pgfsetstrokecolor}[1]{}
+
+% Common tikz color definitions used by moderncv
+\definecolor{color0}{rgb}{0,0,0}
+\definecolor{color1}{rgb}{0,0,0}
+\definecolor{color2}{rgb}{0,0,0}
+
+\endinput
