@@ -60,7 +60,7 @@ jobs:
             actions: read
           
           # Optional: Specify model (defaults to Claude Sonnet 4, uncomment for Claude Opus 4.1)
-          model: "claude-3-5-haiku-20241022"
+          model: "claude-3-5-sonnet-20241022"
           
           # Optional: Customize the trigger phrase (default: @claude)
           trigger_phrase: "/claude"
@@ -69,7 +69,7 @@ jobs:
           assignee_trigger: "claude-bot"
           
           # Optional: Allow Claude to run specific commands
-          allowed_tools: "Bash(latexmk:*), Bash(git:*), Bash(cat:*), Bash(pdflatex:*)"
+          allowed_tools: "Bash(latexmk:*), Bash(git:*), Bash(cat:*), Bash(pdflatex:*), Bash(sed:*)"
           
           # Optional: Add custom instructions for Claude to customize its behavior for your project
           custom_instructions: |
