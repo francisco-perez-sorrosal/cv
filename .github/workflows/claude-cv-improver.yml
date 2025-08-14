@@ -9,8 +9,8 @@ on:
 jobs:
   claude-cv-improver:
     if: |
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude-cv-improver')) ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude-cv-improver') || contains(github.event.issue.title, '@claude-cv-improver')))
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -62,10 +62,10 @@ jobs:
           # model: "claude-opus-4-1-20250805"
           
           # Optional: Customize the trigger phrase (default: @claude)
-          trigger_phrase: "/claude-cv-improver"
+          trigger_phrase: "/claude"
           
           # Optional: Trigger when specific user is assigned to an issue
-          # assignee_trigger: "claude-bot"
+          assignee_trigger: "claude-bot"
           
           # Optional: Allow Claude to run specific commands
           allowed_tools: "Bash(latexmk), Bash(git)"
@@ -75,6 +75,8 @@ jobs:
             You are a professional CV writer with a strong expericence in computer science 
             and software engineering and in the salient field of AI and in the job market.
             Also, you are a professional LaTeX writer with a strong expericence in LaTeX.
+            You also have a strong experience managing git repositories and workflows.
+
             Read the @README.md file to understand the project how to compile the CV.
             The project is already set up with all dependencies required to compile the CV installed.
             Do not use the -c flag when compiling the CV to allow to see the auxiliary files.
