@@ -33,19 +33,20 @@ jobs:
           tlmgr install moderncv
           tlmgr install geometry
           tlmgr install babel babel-english
+          tlmgr install color xcolor
           
           # Font and symbol packages
           tlmgr install fontawesome5 multirow arydshln
           tlmgr install collection-fontsrecommended
           
           # Bibliography and citation support
-          # tlmgr install biblatex biber
+          tlmgr install biblatex biber
           
           # Tools
           tlmgr install latexmk
           
           # Additional collections that might be needed
-          # tlmgr install collection-latex
+          tlmgr install collection-latex
           # tlmgr install collection-latexextra
 
       - name: Run Claude Code
