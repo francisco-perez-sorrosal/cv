@@ -24,35 +24,30 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Cache LaTeX dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            /usr/share/texlive
-            /usr/bin/latexmk
-            /usr/bin/biber
-            /usr/bin/pandoc
-            /var/cache/apt
-            /var/lib/apt
-          key: latex-deps-${{ runner.os }}-${{ hashFiles('.github/workflows/claude-cv-improver.yml') }}
-          restore-keys: |
-            latex-deps-${{ runner.os }}-
-
-      - name: Install dependencies
+      - name: Setup TinyTeX (Lightweight LaTeX) 
+        uses: r-lib/actions/setup-tinytex@v2
+        
+      - name: Install additional LaTeX packages
         run: |
-          # Check if texlive is already installed (from cache)
-          if ! command -v pdflatex &> /dev/null; then
-            echo "Installing LaTeX dependencies..."
-            sudo apt-get update
-            sudo apt-get install -y texlive-full
-            sudo apt-get install -y texlive-latex-extra
-            sudo apt-get install -y texlive-bibtex-extra
-            sudo apt-get install -y biber
-            sudo apt-get install -y pandoc
-            sudo apt-get install -y latexmk
-          else
-            echo "LaTeX dependencies found in cache, skipping installation"
-          fi
+          # Core packages from the CV file
+          tlmgr install moderncv
+          tlmgr install inputenc
+          tlmgr install geometry
+          tlmgr install babel babel-english
+          
+          # Font and symbol packages
+          tlmgr install fontawesome5 multirow arydshln
+          tlmgr install collection-fontsrecommended
+          
+          # Bibliography and citation support
+          # tlmgr install biblatex biber
+          
+          # Tools
+          tlmgr install latexmk
+          
+          # Additional collections that might be needed
+          # tlmgr install collection-latex
+          # tlmgr install collection-latexextra
 
       - name: Run Claude Code
         id: claude
