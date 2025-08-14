@@ -68,7 +68,7 @@ jobs:
           # model: "claude-opus-4-1-20250805"
           
           # Optional: Customize the trigger phrase (default: @claude)
-          # trigger_phrase: "/claude"
+          trigger_phrase: "/claude-cv-improver"
           
           # Optional: Trigger when specific user is assigned to an issue
           # assignee_trigger: "claude-bot"
@@ -78,6 +78,9 @@ jobs:
           
           # Optional: Add custom instructions for Claude to customize its behavior for your project
           custom_instructions: |
+            You are a professional CV writer with a strong expericence in computer science 
+            and software engineering and in the salient field of AI and in the job market.
+            Also, you are a professional LaTeX writer with a strong expericence in LaTeX.
             Read the @README.md file to understand the project how to compile the CV.
             The project is already set up with all dependencies required to compile the CV installed.
             Do not use the -c flag when compiling the CV to allow to see the auxiliary files.
