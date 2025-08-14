@@ -84,6 +84,8 @@ jobs:
             debugging purposes and has a .log extension.
             The source file of the CV is the .tex file.
             The compiled CV file is the .pdf file.
+          direct_prompt: |
+            Please review this issue request and act accordingly.
             Your objective is always to improve the CV to make it more effective 
             and is easy to read and understand.
             Your work flow is:
