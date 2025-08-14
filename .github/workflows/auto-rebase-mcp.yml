@@ -116,6 +116,16 @@ jobs:
             echo "rebase_status=success" >> $GITHUB_OUTPUT
             echo "✅ Rebase completed successfully"
             
+            # Ensure README.md from main branch exists
+            if [ ! -f "README.md" ]; then
+              echo "🔄 Adding README.md from main branch"
+              git show origin/${{ env.BASE_BRANCH }}:README.md > README.md 2>/dev/null && {
+                git add README.md
+                git commit --amend --no-edit 2>/dev/null || git commit -m "Add README.md from main branch"
+                echo "✅ Added README.md from main branch"
+              } || echo "⚠️ README.md not found in main branch"
+            fi
+            
             # Log the rebase details
             echo "Rebase summary:" > rebase-summary.txt
             echo "- Base branch: ${{ env.BASE_BRANCH }}" >> rebase-summary.txt
@@ -194,6 +204,15 @@ jobs:
             git checkout --theirs README.md
             git add README.md
             echo "✅ Resolved README.md conflicts (kept main version)"
+          fi
+          
+          # Strategy 5: Ensure README.md from main branch exists
+          if [ ! -f "README.md" ]; then
+            echo "🔄 Adding README.md from main branch"
+            git show origin/${{ env.BASE_BRANCH }}:README.md > README.md 2>/dev/null && {
+              git add README.md
+              echo "✅ Added README.md from main branch"
+            } || echo "⚠️ README.md not found in main branch"
           fi
           
           # Check if all conflicts are resolved
