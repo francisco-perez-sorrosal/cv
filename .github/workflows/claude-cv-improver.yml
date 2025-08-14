@@ -33,7 +33,7 @@ jobs:
           tlmgr install moderncv
           tlmgr install geometry
           tlmgr install babel babel-english
-          tlmgr install color xcolor
+          tlmgr install xcolor
           
           # Font and symbol packages
           tlmgr install fontawesome5 multirow arydshln
