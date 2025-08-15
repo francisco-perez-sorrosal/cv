@@ -17,6 +17,10 @@ on:
         required: false
         default: 'Manual trigger'
         type: string
+    outputs:
+      authorized:
+        description: 'Whether the user is authorized to trigger the workflow'
+        value: ${{ jobs.check-authorization.outputs.authorized }}
 
 jobs:
   check-authorization:
