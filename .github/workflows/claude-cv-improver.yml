@@ -7,10 +7,19 @@ on:
     types: [opened, assigned]
 
 jobs:
+  check-authorization:
+    uses: ./.github/workflows/check-authorization.yml
+    with:
+      workflow_name: 'Claude CV Improver'
+      authorized_user: 'francisco-perez-sorrosal'
+      trigger_context: ${{ github.event_name == 'issue_comment' && 'Issue comment' || 'Issue creation' }}
+
   claude-cv-improver:
+    needs: [check-authorization]
     if: |
-      ((github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude') && github.event.comment.user.login == 'francisco-perez-sorrosal') ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')) && github.event.issue.user.login == 'francisco-perez-sorrosal'))
+      needs.check-authorization.outputs.authorized == 'true' &&
+      ((github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude'))))
     runs-on: ubuntu-latest
     permissions:
       contents: read

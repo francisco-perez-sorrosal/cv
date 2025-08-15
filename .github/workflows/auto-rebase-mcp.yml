@@ -27,7 +27,16 @@ env:
   BASE_BRANCH: main
 
 jobs:
+  check-authorization:
+    uses: ./.github/workflows/check-authorization.yml
+    with:
+      workflow_name: 'Auto Rebase MCP Branch'
+      authorized_user: 'francisco-perez-sorrosal'
+      trigger_context: 'Manual (workflow_dispatch)'
+
   auto-rebase:
+    needs: [check-authorization]
+    if: needs.check-authorization.outputs.authorized == 'true'
     runs-on: ubuntu-latest
     concurrency:
       group: "rebase-mcp-${{ github.ref }}"
@@ -302,7 +311,7 @@ jobs:
             - Triggered by: ${context.eventName === 'workflow_dispatch' ? 'Manual trigger' : 'Push to main'}
             - Commit: ${context.sha.substring(0,8)}
             - Backup created: \`${{ steps.backup.outputs.backup_branch }}\`
-            - Resolution: ${'${{ steps.rebase.outputs.rebase_status }}' === 'success' ? 'Automatic' : 'Advanced conflict resolution'}
+            - Resolution: ${'${{ steps.rebase.outputs.rebase_status }}' == 'success' ? 'Automatic' : 'Advanced conflict resolution'}
             
             ${isDryRun ? '**Note**: This was a dry run. No changes were pushed.' : ''}`;
             

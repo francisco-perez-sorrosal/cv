@@ -1,0 +1,67 @@
+name: Check Authorization
+
+on:
+  workflow_call:
+    inputs:
+      authorized_user:
+        description: 'The username that is authorized to trigger the workflow'
+        required: true
+        default: 'francisco-perez-sorrosal'
+        type: string
+      workflow_name:
+        description: 'The name of the workflow being protected'
+        required: true
+        type: string
+      trigger_context:
+        description: 'Additional context about the trigger (e.g., Manual trigger, Issue comment)'
+        required: false
+        default: 'Manual trigger'
+        type: string
+
+jobs:
+  check-authorization:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    outputs:
+      authorized: ${{ steps.check.outputs.authorized }}
+    steps:
+      - name: Check authorization
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "authorized=true" >> $GITHUB_OUTPUT
+            echo "✅ Automatic trigger - authorization not required"
+          elif [ "${{ github.actor }}" = "${{ inputs.authorized_user }}" ]; then
+            echo "authorized=true" >> $GITHUB_OUTPUT
+            echo "✅ User ${{ github.actor }} is authorized to trigger ${{ inputs.workflow_name }}"
+          else
+            echo "authorized=false" >> $GITHUB_OUTPUT
+            echo "❌ User ${{ github.actor }} is NOT authorized to trigger ${{ inputs.workflow_name }}"
+          fi
+
+      - name: Log unauthorized attempt
+        if: steps.check.outputs.authorized == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `⚠️ Unauthorized ${{ inputs.workflow_name }} Attempt by @${github.context.actor}`,
+              body: `## 🚫 Access Denied
+              
+              User @${github.context.actor} attempted to trigger the **${{ inputs.workflow_name }}** workflow but is not authorized.
+              
+              **Details:**
+              - **User:** @${github.context.actor}
+              - **Workflow:** ${{ inputs.workflow_name }}
+              - **Trigger:** ${{ inputs.trigger_context }}
+              - **Time:** ${new Date().toISOString()}
+              
+              Only @${{ inputs.authorized_user }} is authorized to trigger this workflow.
+              
+              ---
+              *Auto-generated security log*`,
+              labels: ['security', 'unauthorized-access', 'automation']
+            });
