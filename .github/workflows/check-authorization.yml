@@ -49,13 +49,13 @@ jobs:
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `⚠️ Unauthorized ${{ inputs.workflow_name }} Attempt by @${github.context.actor}`,
+              title: `⚠️ Unauthorized ${{ inputs.workflow_name }} Attempt by @${context.actor}`,
               body: `## 🚫 Access Denied
               
-              User @${github.context.actor} attempted to trigger the **${{ inputs.workflow_name }}** workflow but is not authorized.
+              User @${context.actor} attempted to trigger the **${{ inputs.workflow_name }}** workflow but is not authorized.
               
               **Details:**
-              - **User:** @${github.context.actor}
+              - **User:** @${context.actor}
               - **Workflow:** ${{ inputs.workflow_name }}
               - **Trigger:** ${{ inputs.trigger_context }}
               - **Time:** ${new Date().toISOString()}
