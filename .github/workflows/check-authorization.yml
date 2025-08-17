@@ -33,10 +33,7 @@ jobs:
       - name: Check authorization
         id: check
         run: |
-          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
-            echo "authorized=true" >> $GITHUB_OUTPUT
-            echo "✅ Automatic trigger - authorization not required"
-          elif [ "${{ github.actor }}" = "${{ inputs.authorized_user }}" ]; then
+          if [ "${{ github.actor }}" = "${{ inputs.authorized_user }}" ]; then
             echo "authorized=true" >> $GITHUB_OUTPUT
             echo "✅ User ${{ github.actor }} is authorized to trigger ${{ inputs.workflow_name }}"
           else
