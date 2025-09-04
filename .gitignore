@@ -278,3 +278,6 @@ TSWLatexianTemp*
 # Editors
 .idea/
 .vscode/
+
+# MCP Servers
+.playwright-mcp/

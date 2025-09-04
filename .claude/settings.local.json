@@ -5,10 +5,18 @@
       "Bash(git stash:*)",
       "WebSearch",
       "Bash(mkdir:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "Bash(pdflatex:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": [],
     "defaultMode": "acceptEdits"
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "playwright"
+  ]
 }
