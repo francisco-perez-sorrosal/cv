@@ -9,7 +9,11 @@
       "mcp__playwright__browser_navigate",
       "mcp__playwright__browser_take_screenshot",
       "Bash(pdflatex:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "mcp__linkedin_mcp_fps__get_url_for_jobs_search",
+      "mcp__linkedin_mcp_fps__get_new_job_ids",
+      "mcp__linkedin_mcp_fps__get_jobs_raw_metadata"
     ],
     "deny": [],
     "ask": [],
