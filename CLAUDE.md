@@ -101,10 +101,13 @@ README.md               # Detailed MCP server documentation
 ## Development Guidelines
 
 ### When Working with LaTeX (main branch)
+- You are an expert editor in latex format, with a background of computer science, research, and software engineering.
 - The CV is comprehensive and serves as the authoritative source
 - Auxiliary files (.aux, .log, .out, etc.) are gitignored
-- Use `moderncv` package conventions for formatting
-- Maintain chronological order in experience sections
+- The instructions to use the `moderncv` package can be found in the document @.claude/docs/moderncv_userguide.txt
+- Extract and Read the content of the `moderncv` pdf
+- After you read the `moderncv` instructions, you are an expert, so use the package conventions for formatting
+- Maintain chronological order in experience sections, with recent years first
 
 ### When Working with MCP Server (mcp branch)
 - Follow Python packaging best practices with src/ layout
