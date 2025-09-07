@@ -128,3 +128,4 @@ README.md               # Detailed MCP server documentation
 - MCP server includes usage tracking via mcpcat
 - Both branches serve different purposes but reference the same CV content
 - The repository demonstrates both traditional document management and modern AI integration patterns
+- The main README.md file in the mcp branch is README_USER.md. To make this possible in github, a symlink in the @.github/ directory named README.md points to the file README_USER.md in the project root
