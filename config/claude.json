@@ -1,4 +1,4 @@
-"cv_francisco_perez_sorrosal": {
+"fps_cv_mcp_server": {
   "command": "npx",
   "args": [
     "mcp-remote",
