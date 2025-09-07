@@ -85,13 +85,13 @@
 
 \cventry{2023--Now}{\large Principal Research Engineer}{Knowledge Graph Science @ Yahoo Inc.}{}{Sunnyvale}{}
 
-\cventry{}{\small YKG}{Dataset Quality Imnprovement}{2024}{\textbf{Roles}: ML/AI Expert}{
+\cventry{}{\small YKG}{Dataset Quality Improvement}{2024}{\textbf{Roles}: ML/AI Expert}{
 \textbf{Goal} Since the labels of most entity pairs were generated in a semi-supervised manner, I developed an LLM-based solution to validate and enhance the labeling accuracy of the dev and test datasets \\
 \textbf{Achievement} I implemented a generative Entity Matching solution with Llama 2 to identify and fix (by re-labeling) misclassified examples in the dev/test sets \\
 }
 
 \cventry{}{\small YKG}{Entity Reconciliation Model Training}{2023-2024}{\textbf{Roles}: Machine Learning/AI Expert}{
-Fine-tuned transformer-based language models (LMs) on heter labeled datasets, integrating editorially curated data with automatically labeled data through entity linking via common identifiers. This approach aimed to deduplicate and reconcile meta-entities related to People and Creative Works. \\
+Fine-tuned transformer-based language models (LMs) on heterogeneously labeled datasets, integrating editorially curated data with automatically labeled data through entity linking via common identifiers. This approach aimed to deduplicate and reconcile meta-entities related to People and Creative Works. \\
 \textbf{Goal} Improve current production metrics on both categories \\
 \textbf{Achievements} \\
 - I trained and optimized a unified, type-agnostic LM model for entity matching/reconciliation, replacing tens of type-specific production models and simplifying the maintenance of the reconciliation stage in the Knowledge Graph \\
@@ -119,7 +119,7 @@ Fine-tuned transformer-based language models (LMs) on heter labeled datasets, in
 \cventry{}{\small Science @ Mail}{Kamino Project - mail classification system}{}{\textbf{Roles}: Machine Learning/AI Expert}{
 \textbf{Goal} Upgraded legacy production models to a new generation of deep learning-based, small distilled models optimized for large-scale deployment. These models were designed to classify incoming mail using a newly developed multilabel taxonomy tailored to the mail team’s specific use cases \\
 \textbf{Approach} \\
-I developed a deep learning based pipeline with Hugging Face to train/evaluate deep learning models performing knowledge distillation following thDeveloped a deep learning pipeline using Hugging Face to train and evaluate models based on the Teacher/Student knowledge distillation framework. Starting with limited human-labeled training data, a large and complex teacher model was created to achieve high accuracy. This model was then used to generate teacher-labeled data for training lightweight student models optimized for deployment. Two types of student models were produced: (1) online models, optimized for speed and suitable for real-time classification tasks, and (2) offline models, designed to include richer information for improved accuracy in non-real-time applications \\
+I developed a deep learning pipeline using Hugging Face to train/evaluate models based on the Teacher/Student knowledge distillation framework. Starting with limited human-labeled training data, a large and complex teacher model was created to achieve high accuracy. This model was then used to generate teacher-labeled data for training lightweight student models optimized for deployment. Two types of student models were produced: (1) online models, optimized for speed and suitable for real-time classification tasks, and (2) offline models, designed to include richer information for improved accuracy in non-real-time applications \\
 \textbf{Achievements} \\
 The resulting student models for an expanded taxonomy, more than doubling the number of deployable categories in the taxonomy while improving performance on existing categories in production by 3.1-5.9\%
 }
@@ -139,25 +139,23 @@ As Yahoo transitioned its infrastructure from on-premises data centers to a full
 \cventry{2021--2022}{\large Principal Research Engineer}{Ads @ Yahoo}{}{Sunnyvale}{}
 
 \cventry{}{\small Science @ Ads}{Contextual Targeting Solution}{}{\textbf{Roles}: ML/AI Expert, Strategy}{
-In the Ads platform, as we were moving towards a cookie-less world, the ability to track users’ online signals for behavioral targeting was be drastically reduced, making contextual targeting an appealing alternative for advertising platforms. Using our experience
-in hierarchical multilabel classification in other contexts, we helped the Ads team to use it in category-based contextual targeting at
-Yahoo. We proposed and implemented a multilingual model that can accurately classify web pages into a hierarchical taxonomy (specifically, the Yahoo Interest Categories taxonomy) without crawling their content \\
-\textbf{Goal} Transfer the knowledge and experience in taxonomy-based multi-label classification into Ads team and build a platform for training/evaluating the models \\
+In the Ads platform, as we were moving towards a cookie-less world, the ability to track users' online signals for behavioral targeting would be drastically reduced, making contextual targeting an appealing alternative for advertising platforms. Using our experience in hierarchical multilabel classification in other contexts, we helped the Ads team to use it in category-based contextual targeting at Yahoo. We proposed and implemented a multilingual model that can accurately classify web pages into a hierarchical taxonomy (specifically, the Yahoo Interest Categories taxonomy) without crawling their content \\
+\textbf{Goal} Transfer the knowledge and experience in taxonomy-based multi-label classification to the Ads team and build a platform for training/evaluating the models \\
 \textbf{Achievements} \\
 - I helped the Ads team to develop a pipeline for training models for the task at hand \\
-- \textit{Multilingual taxonomic web page classification for contextual targeting at Yahoo} paper. In the 28th ACM SIGKDD Conference, 2022 \textbf{7 Citations} \\
+- \textit{Multilingual taxonomic web page classification for contextual targeting at Yahoo} paper (ACM SIGKDD 2022) \textbf{7 Citations} \\
 }
 
 \cventry{2018--2023}{\large Principal Research Engineer}{Science @ Content Platform @ Yahoo Inc.}{}{Sunnyvale}{}
 
-\cventry{}{\small Science @ CAP}{Deep Learning-based Muiti-label Classification}{2020-2021}{\textbf{Roles}: ML/DL Engineer, 
+\cventry{}{\small Science @ CAP}{Deep Learning-based Multi-label Classification}{2020-2021}{\textbf{Roles}: ML/DL Engineer, 
 Research Engineer}{
 \textbf{Goal} Modernize the production models and infrastructure using new deep learning models \\
 \textbf{Achievements} \\
-- I developed modern pipeline based on HuggingFace Transformers to train/evaluate multi-label, multi-class and binary classification problems \\
-- I built tool for plugin taxonomies for the multi-label configurations \\
-- I trained new models obtaining significant better metrics over the ones in production (+10\% over baseline) \\
-- We developed a serving pipeline based on NVDIA's Triton Server to deploy in production \\
+- I developed a modern pipeline based on HuggingFace Transformers to train/evaluate multi-label, multi-class and binary classification problems \\
+- I built a tool for plugin taxonomies for the multi-label configurations \\
+- I trained new models obtaining significantly better metrics over the ones in production (+10\% over baseline) \\
+- We developed a serving pipeline based on NVIDIA's Triton Server to deploy in production \\
 }
 \cventry{}{\small Science @ CAP}{Scalable Few-shot Classification with Parallel Prefix Conditioning}{2021}{\textbf{Roles}: ML/DL Engineer, 
 Research Engineer}{
@@ -324,7 +322,7 @@ I tested the database connection modules of Meta4’s ERP suite (now Cegid), gai
 }
 
 \cventry{}{Ph.D. Thesis}{Middleware for High Available and Scalable Multi-Tier and Service-Oriented Architectures}{2003--2009}{Advisors: Prof.~Marta Patiño-Martínez and Prof.~Ricardo Jiménez-Péris (UPM)}{
- \textbf{Fields/Topics:} \textit{Distributed Systems, Transactional Systems, Scalability, High Availability, SOAs}\\
+ \textbf{Specialization:} \textit{Distributed Systems, Transactional Systems, Scalability, High Availability, SOAs}\\
 - I developed a brand-new approach to provide high availability and scalability to multi-tier architectures by combining snapshot-isolation and an innovative vertical replication approach.
 }
 
@@ -345,50 +343,49 @@ I tested the database connection modules of Meta4’s ERP suite (now Cegid), gai
 \vspace{0.2cm}
 %------------- COMPUTER SKILLS --------------------------------------------
 \section{Technical Skills}
-\cvline{Arch, Design \& Processes}{\small Software Architecture and Design, Design patterns, UML, Agile}
-\cvline{Lang. \& Fmwk.}{\small Python, Pytorch/TF/Scikit, HuggingFace, Langchain/Langgraph, Autogen, CrewAI, OAI Swarm, Java, Go, Rust, Ray, Pandas, Dask\ldots{}}
-\cvline{Tools and services}{\small VCS (Git/Github/GitLab) \& CI/CD (GitHub Actions/GitLab CI)}
-\cvline{Cloud \& Virt.}{\small AWS, GCloud, Docker, Kubernetes}
+\cvline{Arch, Design \& Processes}{\small Software Architecture and Design, Design patterns, RESTful APIs, UML, Agile}
+\cvline{Lang. \& Fmwk.}{\small Python, PyTorch, TF, Scikit, HuggingFace, LangChain, LangGraph, Autogen, CrewAI, OpenAI Swarm, Java, Rust, Go, Ray, Pandas, Dask, JavaScript (basic), \LaTeX, HTML\ldots{}}
+\cvline{Cloud}{\small AWS, GCloud, Docker, Kubernetes}
 \cvline{DBMS}{\small Experience with Relational, NoSQL, and Vector DBs}
-\cvline{O.S. admin.}{\small UNIX/Linux flavors, Android, iOS, Windows}
-\cvline{IDEs/Misc.}{\small Cursor, Claude Code, Windsurf, VSCode, IntelliJ, Vi, Emacs, UNIX shell scripting, \LaTeX, HTML, basic Javascript\ldots{}}
+\cvline{OS Admin.}{\small UNIX/Linux flavors, Android, iOS, Windows}
+\cvline{IDEs/Tools}{\small Cursor, Claude Code, Windsurf, VSCode, IntelliJ, Vi, Emacs, UNIX scripts, VCS (Git, Github, GitLab) \& CI/CD (GitHub Actions, GitLab CI)\ldots{}}
 %\cvline{Enterprise}{\small  Economy and business management basics}
 \vspace{-0.4cm}
 %------------- COMPUTER SKILLS --------------------------------------------
 \vspace{0.2cm}
 %------------- EDUCATION --------------------------------------------
-\section{Certification/Courses}
-\cventry{2025}{Claude Code: A Highly Agentic Coding Assistant}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/8a8a3b69-c549-4f9e-a301-8105436e4ff4?usp=sharing}{Certification}}{}
-\cventry{2025}{Model Context Protocol: Advanced Topics}{Anthropic Education}{}{\href{http://verify.skilljar.com/c/d7e2d2xp2hu9}{Certification}}{}
-\cventry{2025}{Introduction to Model Context Protocol}{Anthropic Education}{}{\href{http://verify.skilljar.com/c/aaofdzhtwit2}{Certification}}{}
-\cventry{2025}{Claude Code in Action}{Anthropic Education}{}{\href{https://verify.skilljar.com/c/kfpzhosaxa35}{Certification}}{}
-\cventry{2025}{Claude with the Anthropic API}{Anthropic Education}{}{\href{https://verify.skilljar.com/c/k3pctnrj4k34}{Certification}}{}
-\cventry{2025}{LLMs as Operating Systems: Agent Memory (Letta)}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/24080236-1809-44a5-af44-31f843eb7168?usp=sharing}{Certification}}{}
-\cventry{2025}{ACP: Agent Communication Protocol}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/da472e4b-b5a2-4d6e-bfbc-78615f32af0d?usp=sharing}{Certification}}{}
+\section{Courses}
+\cventry{2025}{Claude Code: A Highly Agentic Coding Assistant}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/8a8a3b69-c549-4f9e-a301-8105436e4ff4?usp=sharing}{Certificate}}{}
+\cventry{2025}{Model Context Protocol: Advanced Topics}{Anthropic Education}{}{\href{http://verify.skilljar.com/c/d7e2d2xp2hu9}{Certificate}}{}
+\cventry{2025}{Introduction to Model Context Protocol}{Anthropic Education}{}{\href{http://verify.skilljar.com/c/aaofdzhtwit2}{Certificate}}{}
+\cventry{2025}{Claude Code in Action}{Anthropic Education}{}{\href{https://verify.skilljar.com/c/kfpzhosaxa35}{Certificate}}{}
+\cventry{2025}{Claude with the Anthropic API}{Anthropic Education}{}{\href{https://verify.skilljar.com/c/k3pctnrj4k34}{Certificate}}{}
+\cventry{2025}{LLMs as Operating Systems: Agent Memory (Letta)}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/24080236-1809-44a5-af44-31f843eb7168?usp=sharing}{Certificate}}{}
+\cventry{2025}{ACP: Agent Communication Protocol}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/da472e4b-b5a2-4d6e-bfbc-78615f32af0d?usp=sharing}{Certificate}}{}
 \cventry{2025}{Fundamentals of Agents}{HuggingFace}{}{}{}
-\cventry{2025}{Building toward Computer Use with Anthropic}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/e3d34e5d-0865-4e25-8ab5-b1156cff1b82?usp=sharing}{Certification}}{}
-\cventry{2025}{MCP: Build Rich-Context AI Apps with Anthropic}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/e355dfbc-c428-426f-87ae-9473cd837b79?usp=sharing}{Certification}}{}
-\cventry{2025}{Attention in Transforners: Concepts and Code in PyTorch}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/3ed4ede6-132d-4c48-adac-1929a17a8980?usp=sharing}{Certification}}{}
-\cventry{2025}{How Transformer LLMs Work}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/73a5c102-d10f-4981-9c27-058505464db9?usp=sharing}{Certification}}{}
-\cventry{2025}{Practical Multi AI Agents and Advanced Use Cases with crewAI}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/1ff3a3e1-9cc0-43f7-a0e9-7069fe6a5c33?usp=sharing}{Certification}}{}
-\cventry{2024}{Multi AI Agent Systems with CrewAI}{DeepLearning.AI}{}{\href{https://www.linkedin.com/in/fperezsorrosal/overlay/1733693789455/single-media-viewer/}{Certification}}{}
-\cventry{2024}{Knowledge Graphs for RAG}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/e9934e71-56c4-4776-b59a-598d58f64a60?usp=sharing}{Certification}}{}
-\cventry{2024}{AI Agentic Design Patterns with AutoGen}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/f5763004-1e46-4153-a466-9fede55d2c8c?usp=sharing}{Certification}}{}
-\cventry{2024}{Functions, Tools and Agents with LangChain}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/2b4a25d6-3d3c-43b4-9909-29a5594d71a4?usp=sharing}{Certification}}{}
-\cventry{2024}{Improving Accuracy of LLM Applications}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/9ba0d65d-0c9b-4939-b5b9-7e5ac0369167?usp=sharing}{Certification}}{}
-\cventry{2024}{LangChain for LLM Application Development}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/f7c4a5b8-4bb9-4363-bf2e-14e475537873?usp=sharing}{Certification}}{}
-\cventry{2024}{AI Agents in LangGraph}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/34f2e69e-04f8-49b9-b402-2cc7331122d5?usp=sharing}{Certification}}{}
+\cventry{2025}{Building toward Computer Use with Anthropic}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/e3d34e5d-0865-4e25-8ab5-b1156cff1b82?usp=sharing}{Certificate}}{}
+\cventry{2025}{MCP: Build Rich-Context AI Apps with Anthropic}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/e355dfbc-c428-426f-87ae-9473cd837b79?usp=sharing}{Certificate}}{}
+\cventry{2025}{Attention in Transforners: Concepts and Code in PyTorch}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/3ed4ede6-132d-4c48-adac-1929a17a8980?usp=sharing}{Certificate}}{}
+\cventry{2025}{How Transformer LLMs Work}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/73a5c102-d10f-4981-9c27-058505464db9?usp=sharing}{Certificate}}{}
+\cventry{2025}{Practical Multi AI Agents and Advanced Use Cases with crewAI}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/1ff3a3e1-9cc0-43f7-a0e9-7069fe6a5c33?usp=sharing}{Certificate}}{}
+\cventry{2024}{Multi AI Agent Systems with CrewAI}{DeepLearning.AI}{}{\href{https://www.linkedin.com/in/fperezsorrosal/overlay/1733693789455/single-media-viewer/}{Certificate}}{}
+\cventry{2024}{Knowledge Graphs for RAG}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/e9934e71-56c4-4776-b59a-598d58f64a60?usp=sharing}{Certificate}}{}
+\cventry{2024}{AI Agentic Design Patterns with AutoGen}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/f5763004-1e46-4153-a466-9fede55d2c8c?usp=sharing}{Certificate}}{}
+\cventry{2024}{Functions, Tools and Agents with LangChain}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/2b4a25d6-3d3c-43b4-9909-29a5594d71a4?usp=sharing}{Certificate}}{}
+\cventry{2024}{Improving Accuracy of LLM Applications}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/9ba0d65d-0c9b-4939-b5b9-7e5ac0369167?usp=sharing}{Certificate}}{}
+\cventry{2024}{LangChain for LLM Application Development}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/f7c4a5b8-4bb9-4363-bf2e-14e475537873?usp=sharing}{Certificate}}{}
+\cventry{2024}{AI Agents in LangGraph}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/34f2e69e-04f8-49b9-b402-2cc7331122d5?usp=sharing}{Certificate}}{}
 \cventry{2024}{RAG Developer Bootcamp}{Pinecone + Anyscale}{In-Person}{San Francisco}{\href{https://www.anyscale.com/events/2024/03/08/rag-developer-bootcamp}{Bootcamp}}
-\cventry{2023}{LLM102x: Large Language Models: Foundation Models from the Ground Up}{edX/Databricks}{}{\href{https://courses.edx.org/certificates/e36174eec12748e7b62afd517060cf2d}{Certification}}{}
-\cventry{2023}{LLM101x: Large Language Models: Application through Production}{edX/Databricks}{}{\href{https://courses.edx.org/certificates/efcc7ec7b2234b538809447c1f37babf}{Certification}}{}
+\cventry{2023}{LLM102x: Large Language Models: Foundation Models from the Ground Up}{edX/Databricks}{}{\href{https://courses.edx.org/certificates/e36174eec12748e7b62afd517060cf2d}{Certificate}}{}
+\cventry{2023}{LLM101x: Large Language Models: Application through Production}{edX/Databricks}{}{\href{https://courses.edx.org/certificates/efcc7ec7b2234b538809447c1f37babf}{Certificate}}{}
 \cventry{2023}{LLM Bootcamp}{FSDL}{In-Person}{South San Francisco, CA (USA)}{}
 \cventry{2023}{Yahoo Leadership Program}{}{The Forem}{Remote}{}
 \cventry{2022}{Full Stack Deep Learning 22'Edition}{FSDL}{}{\href{https://fullstackdeeplearning.com/course/2022/}{Course}}{}
-\cventry{2022}{Machine Learning Specialization (3 Courses)}{Coursera/DeepLearning.AI/Stanford}{}{\href{https://www.coursera.org/account/accomplishments/specialization/certificate/KREGWAZ87SQN}{Certification}}{}
+\cventry{2022}{Machine Learning Specialization (3 Courses)}{Coursera/DeepLearning.AI/Stanford}{}{\href{https://www.coursera.org/account/accomplishments/specialization/certificate/KREGWAZ87SQN}{Certificate}}{}
 \cventry{2021}{Full Stack Deep Learning 21'Edition}{FSDL}{}{\href{https://fullstackdeeplearning.com/spring2021/}{Course}}{}
-\cventry{2019}{Machine Learning Specialization (4 Courses)}{Coursera/Univ. Washington}{}{\href{https://www.coursera.org/account/accomplishments/specialization/certificate/UY6W586XQMW3}{Certification}}{}
-\cventry{2018}{Mathematics for Machine Learning Specialization (3 Courses)}{Coursera/Imperial College London}{}{\href{https://www.coursera.org/account/accomplishments/specialization/K7TBGLD4Y6ML}{Certification}}{}
-\cventry{2018}{Deep Learning Specialization (5 Courses)}{Coursera/DeepLearning.AI}{}{\href{https://www.coursera.org/account/accomplishments/specialization/YTPXQJ42EUCK}{Certification}}{}
+\cventry{2019}{Machine Learning Specialization (4 Courses)}{Coursera/Univ. Washington}{}{\href{https://www.coursera.org/account/accomplishments/specialization/certificate/UY6W586XQMW3}{Certificate}}{}
+\cventry{2018}{Mathematics for Machine Learning Specialization (3 Courses)}{Coursera/Imperial College London}{}{\href{https://www.coursera.org/account/accomplishments/specialization/K7TBGLD4Y6ML}{Certificate}}{}
+\cventry{2018}{Deep Learning Specialization (5 Courses)}{Coursera/DeepLearning.AI}{}{\href{https://www.coursera.org/account/accomplishments/specialization/YTPXQJ42EUCK}{Certificate}}{}
 \cventry{2011}{Certificate of Training, Advanced Scala}{Typesafe}{Switzerland}{}{}
 \cventry{2011}{Certificate of Training, Scala}{Typesafe}{Switzerland}{}{}
 \cventry{2011}{Course in Business Administration and Economics (268 hours)}{Funded by Community of Madrid}{Spain}{}{}
@@ -406,10 +403,8 @@ I tested the database connection modules of Meta4’s ERP suite (now Cegid), gai
 %------------- COMMUNICATION SKILLS --------------------------------------------
 \section{Communication Skills}
 %\vspace{-0cm}
-\cvline{}{\small I delivered talks and presentations at both international and national conferences, 
-effectively communicating complex ideas to diverse audiences. Presented research findings and project
-updates in internal meetings within corporate environments. Additionally, I demonstrated teaching 
-and mentoring skills by conducting undergraduate and Ph.D.-level courses at the university, fostering 
+\cvline{}{\small Presented research findings at both international and national conferences, 
+effectively communicating complex ideas to diverse audiences. Delivered project updates in internal meetings within corporate environments. Additionally, I demonstrated teaching and mentoring skills by conducting undergraduate and Ph.D.-level courses at the university, fostering 
 understanding and engagement among students. }
 \vspace{-0.2cm}
 %------------- COMMUNICATION SKILLS --------------------------------------------
@@ -424,6 +419,9 @@ understanding and engagement among students. }
 \vspace{0.2cm}
 %------------- OTHER ACTIVITIES RELATED TO CS --------------------------------------------
 \section{Other Activities Related to Computer Science}
+\cventry{}{Open Source Project Maintainer}{}{}{}{
+- \textit{mdbook-bib}: Rust-based bibliography management plugin for mdBook (official Rust documentation system). Active maintenance and community engagement with significant adoption.\href{Crates Info}{https://crates.io/crates/mdbook-bib}
+}
 \cventry{}{Committer in the Apache Software Foundation}{}{}{}{
 - \textit{Apache Omid project, a high-performant and scalable Transaction Manager for HBase}
 }
@@ -437,36 +435,36 @@ understanding and engagement among students. }
 - \textit{International Workshop on Assurance in Distributed Systems and Networks (ADSN)}, 2010
 }
 \cventry{}{Speaker/Attendee in Academic/Technical Conferences}{}{}{}{
-- \textit{Agentic AI Summit}, Aug 2nd. 2025, Berkeley, CA (USA)\newline
-- \textit{AI Engineer World`s Fair}, Jun 3rd-5th. 2025, San Francisco, CA (USA)\newline
-- \textit{MLSys 2025 conference}, May 11th-15th. 2025, Santa Clara, CA (USA)\newline    
-- \textit{Neurips 2024 conference}, Dec 10th-15th. 2024, Vancouver, BC (Canada)\newline
-- \textit{ICML 2024 conference}, Jul 21st-27th. 2024, Vienna (Austria)\newline
-- \textit{AI Engineer World`s Fair}, Jun 25th-27th. 2024, San Francisco, CA (USA)\newline
-- \textit{MLSys 2024 conference}, May 13th-16th. 2024, Santa Clara, CA (USA)\newline
-- \textit{W\&B Fully Connected Conference 2024, The Era of Generative AI}, Apr 17th-18th. 2024, San Francisco, CA (USA)\newline
-- \textit{Neurips 2023 conference}, Dec 10th. 2023, New Orleans, LA (USA)\newline
-- \textit{Amazon Re:Invent 2023}, Nov 27th-30th. 2023, Las Vegas, NV (USA)\newline
-- \textit{Ray Summit 2023}, Sep 18th-20th. 2023, San Francisco, CA (USA)\newline
-- \textit{ICML 2023 conference}, Jul 23rd-29th. 2023, Honolulu, Hawaii (USA)\newline
-- \textit{MLSys 2023 conference}, Jun 4th-8th. 2023, Miami, FL (USA)\newline
-- \textit{Ray Summit 2022}, Aug 23th-24th. 2022, San Francisco, CA (USA)\newline
-- \textit{MLSys 2022 conference}, Aug 31th-Sept 3rd. 2022, Santa Clara, CA (USA)\newline
-- \textit{ACL 2019 conference (Speaker)}, Jul 28th-Aug 2nd. 2019, Florence (Italy)\newline
-- \textit{@Scale conference}, 31st Aug. 2016, San Jose, CA (USA)\newline
-- \textit{Hadoop Summit (Speaker)}, 28th-30th Jun. 2016, San Jose, CA (USA)\newline
-- \textit{@Scale conference}, 14th Sep. 2015, San Jose, CA (USA)\newline
-- \textit{Hadoop Summit Europe}, 15th-16th Apr. 2015, Brussels (Belgium)\newline
-- \textit{Hadoop Summit Europe}, 2nd-3rd Apr. 2014, Amsterdam (Netherlands)\newline
-- \textit{NoSQL Matters Conf.}, 21st-22nd Nov. 2014, Barcelona (Spain)\newline
-- \textit{NoSQL Matters Conf.}, 29th-30th Nov. 2013, Barcelona (Spain)\newline
-- \textit{NoSQL Matters Conf.}, 6th Oct. 2012, Barcelona (Spain)\newline
-- \textit{IEEE International Symposium on Reliable Distributed Systems (SRDS)}, 4-7th Oct. 2011, Madrid (Spain)\newline
-- \textit{World Wide Web Conference}, 20-24th Apr. 2009, Madrid (Spain)\newline
-- \textit{Spanish Conference on Concurrency and Distributed Systems}, 13-16th Sep. 2005, Granada (Spain)\newline
-- \textit{ObjectWebCon’05}, 17-20th Jan. 2005, Lyon (France)\newline
-- \textit{ObjectWeb’s Workshop on Transactions}, 23-24th Feb. 2004, Grenoble (France)\newline
-- \textit{ObjectWeb’s Architecture Meeting}, 13-15th Jan. 2004, Sevilla (Spain)
+- \textit{Agentic AI Summit}, Aug 2nd, 2025, Berkeley, CA (USA)\newline
+- \textit{AI Engineer World's Fair}, Jun 3rd-5th, 2025, San Francisco, CA (USA)\newline
+- \textit{MLSys 2025 conference}, May 11th-15th, 2025, Santa Clara, CA (USA)\newline    
+- \textit{Neurips 2024 conference}, Dec 10th-15th, 2024, Vancouver, BC (Canada)\newline
+- \textit{ICML 2024 conference}, Jul 21st-27th, 2024, Vienna (Austria)\newline
+- \textit{AI Engineer World's Fair}, Jun 25th-27th, 2024, San Francisco, CA (USA)\newline
+- \textit{MLSys 2024 conference}, May 13th-16th, 2024, Santa Clara, CA (USA)\newline
+- \textit{W\&B Fully Connected Conference 2024, The Era of Generative AI}, Apr 17th-18th, 2024, San Francisco, CA (USA)\newline
+- \textit{Neurips 2023 conference}, Dec 10th, 2023, New Orleans, LA (USA)\newline
+- \textit{Amazon Re:Invent 2023}, Nov 27th-30th, 2023, Las Vegas, NV (USA)\newline
+- \textit{Ray Summit 2023}, Sep 18th-20th, 2023, San Francisco, CA (USA)\newline
+- \textit{ICML 2023 conference}, Jul 23rd-29th, 2023, Honolulu, Hawaii (USA)\newline
+- \textit{MLSys 2023 conference}, Jun 4th-8th, 2023, Miami, FL (USA)\newline
+- \textit{Ray Summit 2022}, Aug 23rd-24th, 2022, San Francisco, CA (USA)\newline
+- \textit{MLSys 2022 conference}, Aug 31st-Sept 3rd, 2022, Santa Clara, CA (USA)\newline
+- \textit{ACL 2019 conference (Speaker)}, Jul 28th-Aug 2nd, 2019, Florence (Italy)\newline
+- \textit{@Scale conference}, Aug 31st, 2016, San Jose, CA (USA)\newline
+- \textit{Hadoop Summit (Speaker)}, Jun 28th-30th, 2016, San Jose, CA (USA)\newline
+- \textit{@Scale conference}, Sep 14th, 2015, San Jose, CA (USA)\newline
+- \textit{Hadoop Summit Europe}, Apr 15th-16th, 2015, Brussels (Belgium)\newline
+- \textit{Hadoop Summit Europe}, Apr 2nd-3rd, 2014, Amsterdam (Netherlands)\newline
+- \textit{NoSQL Matters Conf.}, Nov 21st-22nd, 2014, Barcelona (Spain)\newline
+- \textit{NoSQL Matters Conf.}, Nov 29th-30th, 2013, Barcelona (Spain)\newline
+- \textit{NoSQL Matters Conf.}, Oct 6th, 2012, Barcelona (Spain)\newline
+- \textit{IEEE International Symposium on Reliable Distributed Systems (SRDS)}, Oct 4th-7th, 2011, Madrid (Spain)\newline
+- \textit{World Wide Web Conference}, Apr 20th-24th, 2009, Madrid (Spain)\newline
+- \textit{Spanish Conference on Concurrency and Distributed Systems}, Sep 13th-16th, 2005, Granada (Spain)\newline
+- \textit{ObjectWebCon'05}, Jan 17th-20th, 2005, Lyon (France)\newline
+- \textit{ObjectWeb's Workshop on Transactions}, Feb 23rd-24th, 2004, Grenoble (France)\newline
+- \textit{ObjectWeb's Architecture Meeting}, Jan 13th-15th, 2004, Sevilla (Spain)
 }
 \cventry{}{Member}{}{}{}{
 - \textit{Apache Software Foundation (ASF)}, https://www.apache.org/\newline
