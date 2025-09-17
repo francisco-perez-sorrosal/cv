@@ -1,8 +1,13 @@
 # Francisco Perez-Sorrosal CV
 
-This repository contains Francisco Perez-Sorrosal's CV in LaTeX format.
+This repository contains Francisco Perez-Sorrosal's CV in multiple formats:
 
-## Requirements (macOS)
+- **Main branch (`main`)**: Contains the LaTeX source CV and generated PDF
+- **MCP branch (`mcp`)**: Contains a Python-based MCP (Model Context Protocol) server that serves the CV as a resource for AI systems
+
+## LaTeX CV (Main Branch)
+
+### Requirements (macOS)
 
 - LaTeX distribution (MacTeX recommended)
 
@@ -19,7 +24,7 @@ brew install --cask mactex
 
 Or download from https://tug.org/mactex/
 
-## CV Compilation
+### CV Compilation
 
 ```bash
 # Compile CV to PDF with latexmk (recommended) (-c cleans auxiliary files)
@@ -29,6 +34,10 @@ latexmk -pdf -c 2025_FranciscoPerezSorrosal_CV_English.tex
 pdflatex 2025_FranciscoPerezSorrosal_CV_English.tex
 ```
 
-## Dev
-1. [Dev Doc](https://github.com/francisco-perez-sorrosal/cv/blob/mcp/README_DEV.md)
-2. [CICD Doc](https://github.com/francisco-perez-sorrosal/cv/blob/mcp/README_CICD.md)
+## MCP Server (MCP Branch)
+
+Refer to the documentation below:
+
+1. [User Guide](https://github.com/francisco-perez-sorrosal/cv/blob/mcp/README_USER.md)
+2. [Dev Documentation](https://github.com/francisco-perez-sorrosal/cv/blob/mcp/README_DEV.md)
+3. [CI/CD Documentation](https://github.com/francisco-perez-sorrosal/cv/blob/mcp/README_CICD.md)

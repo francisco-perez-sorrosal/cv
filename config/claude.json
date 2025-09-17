@@ -1,7 +1,7 @@
-"fps_cv_mcp_server": {
+"fps_cv_mcp": {
   "command": "npx",
   "args": [
     "mcp-remote",
-    "https://cv-ltib.onrender.com/sse"
+    "https://cv-ltib.onrender.com/mcp"
   ]
 }
