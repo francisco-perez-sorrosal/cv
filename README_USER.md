@@ -49,14 +49,13 @@ The script above adds the following configuration to your Claude Desktop setting
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://cv-ltib.onrender.com/mcp"
+        "http://fps-cv.onrender.com/mcp""
       ]
     }
   }
 }
 ```
 
-**Note:** SSE transport has been deprecated. The server now uses `streamable-http` transport instead.
 **Note:** SSE transport has been deprecated. The server now uses `streamable-http` transport instead.
 
 #### Claude Code
