@@ -3,7 +3,7 @@
 import os
 
 from pathlib import Path
-from typing import Optional
+from typing import Literal, Optional, cast
 from pydantic import BaseModel, Field
 # from argparse import ArgumentParser, Namespace
 
@@ -16,13 +16,12 @@ from loguru import logger
 # Configure transport and statelessness
 trspt = "stdio"
 stateless_http = False
-match os.environ.get("TRANSPORT", "stdio"):
+match os.environ.get("TRANSPORT", trspt):
     case "stdio":
         trspt = "stdio"
         stateless_http = False
     case "sse":
-        trspt = "sse"
-        stateless_http = False
+        raise ValueError("SSE transport is deprecated! Use streamable-http instead.")
     case "streamable-http":
         trspt = "streamable-http"
         stateless_http = True
@@ -366,7 +365,12 @@ Finally, get use the resource to get the link to the CV in pdf format, and inclu
 """
 
 
-if __name__ == "__main__":
-    # Initialize and run the server with the specified transport
+def main():
+    """Main entry point: initialize and run the server with the specified transport."""
     logger.info(f"Starting CV MCP server with {trspt} transport ({host}:{port}) and stateless_http={stateless_http}...")
-    mcp.run(transport=trspt) #, mount_path="/cv")
+    transport_as_literal = cast(Literal['stdio', 'streamable-http'], trspt)
+    mcp.run(transport=transport_as_literal) #, mount_path="/cv")
+
+
+if __name__ == "__main__":
+    main()

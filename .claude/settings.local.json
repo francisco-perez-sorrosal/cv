@@ -15,7 +15,8 @@
       "mcp__linkedin_mcp_fps__get_new_job_ids",
       "mcp__linkedin_mcp_fps__get_jobs_raw_metadata",
       "mcp__fps_cv_mcp_server__get_cv_pdf_link",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(pixi run:*)"
     ],
     "deny": [],
     "ask": [],

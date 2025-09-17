@@ -49,12 +49,15 @@ The script above adds the following configuration to your Claude Desktop setting
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://cv-ltib.onrender.com/sse"
+        "https://cv-ltib.onrender.com/mcp"
       ]
     }
   }
 }
 ```
+
+**Note:** SSE transport has been deprecated. The server now uses `streamable-http` transport instead.
+**Note:** SSE transport has been deprecated. The server now uses `streamable-http` transport instead.
 
 #### Claude Code
 
@@ -82,6 +85,50 @@ Example prompts:
 - "Get Francisco's CV"
 - "Summarize Francisco's CV for a startup executive briefing"
 - "What is Francisco's Google Scholar profile link?"
+
+## Local Development
+
+For developers working with the MCP server locally:
+
+### Available Commands
+
+```bash
+# Main command to run the MCP server
+pixi run cv-mcp-server
+
+# Alternative aliases
+pixi run start           # Generic start alias
+pixi run mcps            # Short alias
+
+# Run with specific transport (SSE deprecated)
+TRANSPORT=stdio pixi run cv-mcp-server              # Default: stdio
+TRANSPORT=streamable-http pixi run cv-mcp-server    # For HTTP/web clients
+```
+
+### Transport Options
+
+- **`stdio`** (default): Standard input/output transport for local development
+- **`streamable-http`**: HTTP-based transport for web clients and remote access
+- **`sse`**: ⚠️ **DEPRECATED** - No longer supported, use `streamable-http` instead
+
+### Development Workflow
+
+1. Clone the repository and switch to the `mcp` branch:
+   ```bash
+   git clone https://github.com/francisco-perez-sorrosal/cv.git
+   cd cv
+   git checkout mcp
+   ```
+
+2. Install dependencies:
+   ```bash
+   pixi install
+   ```
+
+3. Run the server:
+   ```bash
+   pixi run cv-mcp-server
+   ```
 
 ## Support
 
