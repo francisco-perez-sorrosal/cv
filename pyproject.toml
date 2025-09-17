@@ -22,7 +22,8 @@ dependencies = [
     "httpx>=0.28.1,<0.29", 
     "pymupdf4llm>=0.0.24,<0.0.25", 
     "mcp[cli]>=1.9.2,<2", 
-    "mcpcat>=0.1.1,<0.2", "loguru>=0.7.3,<0.8", 
+    "mcpcat>=0.1.1,<0.2", 
+    "loguru>=0.7.3,<0.8", 
 ]
 
 [project.urls]
@@ -41,7 +42,8 @@ platforms = ["osx-arm64"]
 cv_mcp_server = { path = ".", editable = true }
 
 [tool.pixi.tasks]
-mcps="pixi run src/cv_mcp_server/main.py"
+mcps="python src/cv_mcp_server/main.py"
+start="python src/cv_mcp_server/main.py"
 
 [tool.hatch.metadata]
 allow-direct-references = true
@@ -50,7 +52,7 @@ allow-direct-references = true
 packages = ["src/cv_mcp_server"]
 
 [project.scripts]
-cv-mcp-server = "cv_mcp_server.main:app"
+cv-mcp-server = "cv_mcp_server.main:main"
 
 [tool.setuptools]
 packages = ["cv_mcp_server"]

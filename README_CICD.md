@@ -402,6 +402,14 @@ Potential improvements for the CI/CD system:
 
 This CI/CD system provides a robust, automated solution for maintaining branch synchronization while handling the complexity of two divergent branches with different purposes and file structures.
 
+## Recent Changes
+
+### Transport and Project Script Updates
+
+- **SSE Transport Deprecation**: The MCP server no longer supports `sse` transport. Use `streamable-http` instead.
+- **Project Script Fix**: The `pyproject.toml` now correctly defines `cv-mcp-server = "cv_mcp_server.main:main"` entry point.
+- **Enhanced Pixi Commands**: The server can now be launched using `pixi run cv-mcp-server` after proper installation.
+
 ## How the Rebase Status Check Provides Tracking and Recommendations
 
 The Rebase Status Check workflow delivers tracking and recommendation information through **GitHub Issues** as a centralized dashboard system. This section explains the comprehensive mechanism for information delivery and user interaction.
