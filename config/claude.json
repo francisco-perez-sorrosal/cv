@@ -2,6 +2,6 @@
   "command": "npx",
   "args": [
     "mcp-remote",
-    "http://fps-cv.onrender.com/mcp"
+    "https://fps-cv.onrender.com/mcp"
   ]
 }
