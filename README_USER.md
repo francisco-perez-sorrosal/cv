@@ -38,25 +38,25 @@ The script above adds the following configuration to your Claude Desktop setting
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
-**Configuration to add:**
+**Added configuration:**
 
 ```json
 {
   "mcpServers": {
     ...
     # The entry below is added by the install script
-    "fps_cv_mcp_server": {
+    "fps_cv_mcp": {
       "command": "npx",
       "args": [
         "mcp-remote",
-        "http://fps-cv.onrender.com/mcp""
+        "https://fps-cv.onrender.com/mcp""
       ]
     }
   }
 }
 ```
 
-**Note:** SSE transport has been deprecated. The server now uses `streamable-http` transport instead.
+**Note:** SSE transport has been DEPRECATED. The server now uses `streamable-http` transport instead.
 
 #### Claude Code
 
