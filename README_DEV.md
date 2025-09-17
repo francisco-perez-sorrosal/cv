@@ -150,7 +150,7 @@ install_claude_mcp.sh desktop
 install_claude_mcp.sh code
 ```
 
-This will make the MCP server accessible at `http://fps-cv.onrender.com/mcp". You can check it also with the MCP inspector:
+This will make the MCP server accessible at `https://fps-cv.onrender.com/mcp". You can check it also with the MCP inspector:
 
 ```sh
 DANGEROUSLY_OMIT_AUTH=true  npx @modelcontextprotocol/inspector
@@ -178,6 +178,13 @@ Remember also to set the environment variables in the render.com dashboard:
 TRANSPORT=streamable-http
 PORT=10000
 ```
+
+#### Publish to Github's MCP Server Registry
+
+Install tool
+```sh
+brew install mcp-publisher
+
 
 ## Development Workflow
 
