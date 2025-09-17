@@ -281,3 +281,6 @@ TSWLatexianTemp*
 
 # MCP Servers
 .playwright-mcp/
+
+# Python
+__pycache__/
