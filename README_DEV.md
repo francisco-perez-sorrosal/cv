@@ -130,9 +130,33 @@ For connecting to a remote MCP server:
 }
 ```
 
+Then check it exercising the MCP inspector with:
+
+```sh
+DANGEROUSLY_OMIT_AUTH=true  npx @modelcontextprotocol/inspector
+```
+
+And setting up the Transport Type to `Streamable HTTP` and the URL to `http://localhost:10000/mcp`. Then press the `Connect` button to connect the inspector to the server.
+
 > **Note**: Update the host and port as needed for your deployment.
 
-Currently I'm using `render.com` to host the MCP server. The configuration for Claude is in the `config/claude.json` file. It will use `streamable-https` as transport protocol, deprecating finally `sse`.
+Currently I'm using `render.com` to host the MCP server. The configuration for Claude Desktop/Code is in the `config/claude.json` file. It will use `streamable-http` as transport protocol, deprecating finally `sse`.
+
+There's a script to install the Claude Desktop or Code config files in the root directory:
+
+```sh
+install_claude_mcp.sh desktop
+# or
+install_claude_mcp.sh code
+```
+
+This will make the MCP server accessible at `http://fps-cv.onrender.com/mcp". You can check it also with the MCP inspector:
+
+```sh
+DANGEROUSLY_OMIT_AUTH=true  npx @modelcontextprotocol/inspector
+```
+
+And setting up the Transport Type to `Streamable HTTP` and the URL to `http://fps-cv.onrender.com/mcp"`. Then press the `Connect` button to connect the inspector to the server.
 
 Render requires `requirements.txt` to be present in the root directory. You can generate it using:
 

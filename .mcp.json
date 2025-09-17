@@ -15,11 +15,11 @@
         "https://linkedin-mcp-fps.onrender.com/sse"
       ]
     },
-    "fps_cv_mcp_server": {
+    "fps_cv_mcp": {
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://cv-ltib.onrender.com/sse"
+        "http://fps-cv.onrender.com/mcp"
       ]
     }
   }
