@@ -279,8 +279,8 @@ TSWLatexianTemp*
 .idea/
 .vscode/
 
-# MCP Servers
-.playwright-mcp/
+# UV
+uv.lock
 
 # Python code for MCP server
 .mcpregistry_github_token
