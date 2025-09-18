@@ -290,3 +290,21 @@ lib/
 mcpb-package/
 python-dist/
 __pycache__/
+.wheel/
+dist-bundle/
+dist/
+python-dist/
+
+# MCPB package
+mcpb-package/
+*.mcpb
+# Dependencies for the bundle
+src/cv_mcp_server/lib/
+lib/
+
+# MCP Servers
+.playwright-mcp/
+
+# MCP Registry
+.mcpregistry_github_token
+.mcpregistry_registry_token
