@@ -1,0 +1,156 @@
+name: Release MCPB Bundle
+
+on:
+  push:    
+    tags:
+      - 'v*'  # Triggers on version tags like v0.0.1, v0.0.2, v1.0.0, etc.
+
+jobs:
+  build-and-release:
+    runs-on: macos-latest  # Use macOS for ARM64 compatibility
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for proper tag handling
+    
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+    
+    - name: Install Node.js for MCPB CLI
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    
+    - name: Install MCPB CLI
+      run: npm install -g @anthropic-ai/mcpb
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+    
+    - name: Install pixi
+      uses: prefix-dev/setup-pixi@v0.8.1
+      with:
+        pixi-version: latest
+        cache: true
+    
+    - name: Extract version from tag
+      id: extract_version
+      run: |
+        # Extract version from git tag (remove 'v' prefix if present)
+        VERSION=${GITHUB_REF#refs/tags/}
+        VERSION=${VERSION#v}
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Extracted version: $VERSION"
+    
+    - name: Update manifest.json with tag version
+      run: |
+        # Update the version in manifest.json to match the git tag
+        python3 -c "
+        import json
+        with open('manifest.json', 'r') as f:
+            manifest = json.load(f)
+        manifest['version'] = '${{ steps.extract_version.outputs.version }}'
+        with open('manifest.json', 'w') as f:
+            json.dump(manifest, f, indent=2)
+        "
+        echo "Updated manifest.json version to: ${{ steps.extract_version.outputs.version }}"
+    
+    - name: Install project dependencies
+      run: |
+        pixi install
+        echo "Pixi dependencies installed"
+    
+    - name: Update and export dependencies
+      run: |
+        pixi run update-mcpb-deps
+        echo "Dependencies updated and requirements.txt exported"
+    
+    - name: Build MCPB bundle with Python 3.13 dependencies
+      run: |
+        # Use pixi task with Python 3.13 for Claude Desktop compatibility
+        pixi run mcp-bundle
+        echo "Dependencies installed to lib/ directory using pixi Python 3.13"
+    
+    - name: Create MCPB bundle
+      run: |
+        pixi run pack
+        echo "MCPB bundle created successfully"
+    
+    - name: Verify bundle creation
+      id: verify_bundle
+      run: |
+        BUNDLE_NAME=$(python3 -c "import json; print(f\"{json.load(open('manifest.json'))['name']}-{json.load(open('manifest.json'))['version']}.mcpb\")")
+        BUNDLE_PATH="mcpb-package/$BUNDLE_NAME"
+        
+        if [ -f "$BUNDLE_PATH" ]; then
+          echo "bundle_name=$BUNDLE_NAME" >> $GITHUB_OUTPUT
+          echo "bundle_path=$BUNDLE_PATH" >> $GITHUB_OUTPUT
+          echo "Bundle created successfully: $BUNDLE_PATH"
+          ls -lh "$BUNDLE_PATH"
+        else
+          echo "Error: Bundle file not found at $BUNDLE_PATH"
+          exit 1
+        fi
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ github.ref_name }}
+        name: "Release ${{ steps.extract_version.outputs.version }}"
+        body: |
+          ## Francisco Perez-Sorrosal CV MCP Server v${{ steps.extract_version.outputs.version }}
+          
+          This release contains the MCPB bundle for the CV MCP Server.
+          
+          ### 📦 Bundle Information
+          - **File**: `${{ steps.verify_bundle.outputs.bundle_name }}`
+          - **Python Compatibility**: 3.13+ (built with Python 3.13 for Claude Desktop)
+          - **Architecture**: ARM64 (macOS Apple Silicon)
+          - **Transport**: stdio (default), streamable-http (web clients)
+          
+          ### 🚀 Installation
+
+          1. Download the `.mcpb` file from this release
+          2. Install using Claude Desktop's extension manager
+          3. The MCP server will be available with tools for CV access and summarization
+          
+          ### 🛠️ Available Tools
+          - `get_cv` - Retrieve full CV in markdown format
+          - `get_cv_pdf_link` - Get direct PDF download link
+          - `get_google_scholar_link` - Access Google Scholar profile
+          - `summarize_cv` - Generate customizable CV summaries
+          - ...
+          
+          ### 📋 Requirements
+          - Python 3.13+ (automatically handled by bundle)
+          - Claude Desktop/Code or compatible MCP client
+          
+          ### 🔧 Troubleshooting
+          If you encounter issues, check the [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging).
+        draft: false
+        prerelease: false
+        files: |
+          ${{ steps.verify_bundle.outputs.bundle_path }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Upload bundle as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mcpb-bundle-${{ steps.extract_version.outputs.version }}
+        path: ${{ steps.verify_bundle.outputs.bundle_path }}
+    
+    - name: Summary
+      run: |
+        echo "## 🎉 Release Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Version**: ${{ steps.extract_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Bundle**: ${{ steps.verify_bundle.outputs.bundle_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Size**: $(ls -lh ${{ steps.verify_bundle.outputs.bundle_path }} | awk '{print $5}')" >> $GITHUB_STEP_SUMMARY
+        echo "- **Python**: 3.13 compatible" >> $GITHUB_STEP_SUMMARY
+        echo "- **Release**: [View Release](https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }})" >> $GITHUB_STEP_SUMMARY
