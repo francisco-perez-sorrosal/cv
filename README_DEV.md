@@ -222,7 +222,7 @@ Use the pixi tasks to create the MCPB bundle:
 # Update dependencies and export requirements.txt
 pixi run update-mcpb-deps
 
-# Install dependencies to lib/ directory
+# Install dependencies to lib/ directory (uses Python 3.13)
 pixi run mcp-bundle
 
 # Package into .mcpb file
@@ -287,10 +287,56 @@ DANGEROUSLY_OMIT_AUTH=true npx @modelcontextprotocol/inspector
 ```bash
 pixi run python-bundle    # Build Python wheel package to python-dist/
 pixi run update-mcpb-deps # Update dependencies and export requirements.txt
-pixi run mcp-bundle       # Install dependencies to lib/ directory
+pixi run mcp-bundle       # Install dependencies to lib/ directory (uses Python 3.13)
 pixi run pack             # Package bundle into .mcpb file
 pixi run clean-bundles    # Remove temporary files and bundles
 ```
+
+#### Automated Releases
+
+The project includes GitHub Actions workflows for automated MCPB bundle releases.
+
+##### Creating a Release
+
+Use the release script for easy version management:
+
+```bash
+# Create a new release (updates versions and creates git tag)
+./scripts/release.sh 0.0.1
+
+# This will:
+# 1. Update manifest.json and pyproject.toml versions
+# 2. Commit the changes
+# 3. Create and push a git tag (v0.0.1)
+# 4. Trigger GitHub Actions to build and release the MCPB bundle
+```
+
+##### Manual Release Process
+
+If you prefer manual control:
+
+```bash
+# 1. Update versions in manifest.json and pyproject.toml
+# 2. Commit changes
+git add manifest.json pyproject.toml
+git commit -m "chore: bump version to 0.0.1"
+
+# 3. Create and push tag
+git tag -a v0.0.1 -m "Release version 0.0.1"
+git push origin mcp
+git push origin v0.0.1
+```
+
+##### GitHub Workflows
+
+- **`release-mcpb.yml`**: Builds and releases MCPB bundle when tags are pushed
+- **`check-mcpb-creation.yml`**: Tests MCPB bundle build on pull requests and pushes
+
+The release workflow automatically:
+- Builds dependencies with Python 3.13 for Claude Desktop compatibility
+- Creates versioned MCPB bundle (`fps-cv-mcp-{version}.mcpb`)
+- Publishes GitHub release with bundle attached
+- Provides detailed release notes and installation instructions
 
 #### Publish to Github's MCP Server Registry
 
