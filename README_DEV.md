@@ -60,6 +60,13 @@ pixi run cv-mcp-server    # Main MCP server command (project script)
 pixi run mcps            # Direct Python module execution
 pixi run start           # Alias for mcps
 
+# MCPB (MCP Bundle) tasks
+pixi run python-bundle   # Build Python wheel package to python-dist/
+pixi run update-mcpb-deps # Update dependencies and export requirements.txt
+pixi run mcp-bundle      # Install dependencies to lib/ directory
+pixi run pack            # Package bundle into .mcpb file
+pixi run clean-bundles   # Remove temporary files and bundles
+
 # Development tasks
 pixi run test            # Run tests (if available)
 pixi run lint            # Code linting (if available)
@@ -177,6 +184,112 @@ Remember also to set the environment variables in the render.com dashboard:
 ```bash
 TRANSPORT=streamable-http
 PORT=10000
+```
+
+#### Create MCPB package
+
+The project supports creating MCP Bundle (MCPB) packages for easy distribution and installation. MCPB is the standard format for distributing MCP servers as portable, installable bundles.
+
+##### Prerequisites
+
+Ensure you have all required files in the project root:
+- `manifest.json` - MCPB manifest (already created)
+- `requirements.txt` - Python dependencies (generate if missing)
+- `runtime.txt` - Python version specification (generate if missing)
+- `2025_FranciscoPerezSorrosal_CV_English.pdf` - CV PDF (optional, will use remote if missing)
+
+```bash
+# Generate requirements.txt if missing
+uv pip compile pyproject.toml > requirements.txt
+
+# Create runtime.txt if missing
+echo "python-3.11.11" > runtime.txt
+```
+
+##### Build MCPB Bundle
+
+Install the CLI:
+
+```sh
+npm install -g @anthropic-ai/mcpb
+```
+
+**Important**: The MCPB bundle dependencies are built using the system Python to ensure compatibility with Claude Desktop. The build process automatically uses the appropriate Python version to match the target deployment environment.
+
+Use the pixi tasks to create the MCPB bundle:
+
+```bash
+# Update dependencies and export requirements.txt
+pixi run update-mcpb-deps
+
+# Install dependencies to lib/ directory
+pixi run mcp-bundle
+
+# Package into .mcpb file
+pixi run pack
+
+# Clean up temporary files (optional)
+pixi run clean-bundles
+```
+
+Or use the Makefile for convenience:
+```bash
+make build-wheel     # Build Python wheel package
+make build-mcpb      # Runs: pixi install && pixi run update-mcpb-deps && pixi run mcp-bundle && pixi run pack
+make clean           # Removes generated .mcpb files, python-dist/, and lib/ directories
+```
+
+This creates `fps-cv-mcp-0.0.1.mcpb` ready for distribution.
+
+##### Bundle Contents
+
+The MCPB bundle includes:
+- `src/` - Python source code
+- `lib/` - Bundled Python dependencies (built for target Python version)
+- `start_mcpb.sh` - Startup script with proper PYTHONPATH configuration
+- `manifest.json` - Bundle metadata and configuration
+- `requirements.txt` - Python dependencies list
+- `2025_FranciscoPerezSorrosal_CV_English.pdf` - CV PDF (if available)
+
+##### Installation and Usage
+
+Users can install the bundle using MCPB tooling (no additional prerequisites required - all dependencies are bundled):
+
+```bash
+# Install MCPB CLI tool
+npm install -g @anthropic-ai/mcpb
+
+# Install the bundle
+mcpb install fps-cv-mcp-0.0.1.mcpb
+
+# Or for development/testing
+mcpb install --dev fps-cv-mcp-0.0.1.mcpb
+```
+
+##### Testing the Bundle
+
+Before distribution, test the bundle locally:
+
+```bash
+# Extract and test bundle
+unzip fps-cv-mcp-0.0.1.mcpb -d test-bundle/
+cd test-bundle/
+
+# Test server startup using the startup script
+./start_mcpb.sh
+
+# Test with MCP inspector
+DANGEROUSLY_OMIT_AUTH=true npx @modelcontextprotocol/inspector
+```
+
+##### Available MCPB Tasks
+
+```bash
+pixi run python-bundle    # Build Python wheel package to python-dist/
+pixi run update-mcpb-deps # Update dependencies and export requirements.txt
+pixi run mcp-bundle       # Install dependencies to lib/ directory
+pixi run pack             # Package bundle into .mcpb file
+pixi run clean-bundles    # Remove temporary files and bundles
 ```
 
 #### Publish to Github's MCP Server Registry

@@ -16,7 +16,14 @@
       "mcp__linkedin_mcp_fps__get_jobs_raw_metadata",
       "mcp__fps_cv_mcp_server__get_cv_pdf_link",
       "Bash(cat:*)",
-      "Bash(pixi run:*)"
+      "Bash(pixi run:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(chmod:*)",
+      "Bash(/usr/bin/python3 -m pip install --user build)",
+      "Bash(/usr/bin/python3 -m build:*)",
+      "Bash(pixi build:*)",
+      "Bash(pixi list:*)",
+      "Bash(pixi add:*)"
     ],
     "deny": [],
     "ask": [],

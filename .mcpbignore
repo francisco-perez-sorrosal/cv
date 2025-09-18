@@ -1,0 +1,84 @@
+# Ignore development and cache files
+.git/
+.gitignore
+.pixi/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.coverage
+.pytest_cache/
+.hypothesis/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build and distribution files
+build/
+dist/
+*.egg-info/
+.tox/
+.coverage
+htmlcov/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Development files
+Dockerfile
+.dockerignore
+pixi.lock
+runtime.txt
+
+# Test and documentation files
+tests/
+docs/
+DXT_README.md
+LICENSE
+
+# Claude settings (sensitive)
+.claude/
+
+# Github
+.github/
+
+# MCP Related
+.mcpregistry_github_token
+.mcpregistry_registry_token
+.mcp.json
+.playwright-mcp/
+
+## Core latex/pdflatex auxiliary files:
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+# pdflatex
+*.fdb_latexmk
+*.synctex.gz
+
+# Misc
+CLAUDE.md
+README_DEV.md
+README_CICD.md
+MCPB_DEV_PRACTICES_IMPROVEMENTS.md
+MCPB_TEST_CONSIDERATIONS.md
+Makefile
