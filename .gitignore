@@ -292,6 +292,9 @@ python-dist/
 # MCPB package
 mcpb-package/
 *.mcpb
+test-*/
+test-extract/
+test-lib/
 # Dependencies for the bundle
 src/cv_mcp_server/lib/
 lib/

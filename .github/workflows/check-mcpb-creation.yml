@@ -1,0 +1,159 @@
+name: Checks the creation of the MCPB Bundle everytime a PR is created or pushed to the mcp branch
+
+on:
+  pull_request:
+    branches: [ mcp ]
+    paths:
+      - 'src/**'
+      - 'pyproject.toml'
+      - 'manifest.json'
+      - 'start_mcpb.sh'
+      - '.github/workflows/check-mcpb-creation.yml'
+  push:
+    branches: [ mcp ]
+    paths:
+      - 'src/**'
+      - 'pyproject.toml'
+      - 'manifest.json'
+      - 'start_mcpb.sh'
+      - '.github/workflows/check-mcpb-creation.yml'
+
+jobs:
+  test-build:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+    
+    - name: Install Node.js for MCPB CLI
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    
+    - name: Install MCPB CLI
+      run: npm install -g @anthropic-ai/mcpb
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+    
+    - name: Install pixi
+      uses: prefix-dev/setup-pixi@v0.8.1
+      with:
+        pixi-version: latest
+        cache: true
+    
+    - name: Validate manifest.json
+      run: |
+        # Basic JSON validation
+        python3 -c "import json; json.load(open('manifest.json'))"
+        echo "✅ manifest.json is valid JSON"
+        
+        # Check required fields
+        python3 -c "
+        import json
+        manifest = json.load(open('manifest.json'))
+        required_fields = ['name', 'version', 'description', 'author', 'server']
+        missing = [f for f in required_fields if f not in manifest]
+        if missing:
+            raise ValueError(f'Missing required fields: {missing}')
+        print('✅ All required manifest fields present')
+        "
+    
+    - name: Install project dependencies
+      run: |
+        pixi install
+        echo "✅ Pixi dependencies installed"
+    
+    - name: Test MCP server startup
+      run: |
+        # Test that the server can start (with timeout)
+        timeout 10s pixi run start || [ $? -eq 124 ]
+        echo "✅ MCP server startup test passed"
+    
+    - name: Update and export dependencies
+      run: |
+        pixi run update-mcpb-deps
+        echo "✅ Dependencies updated and requirements.txt exported"
+    
+    - name: Build MCPB bundle (test only)
+      run: |
+        # Use pixi task with Python 3.13 for Claude Desktop compatibility
+        pixi run mcp-bundle
+        echo "✅ Dependencies installed to lib/ directory using pixi Python 3.13"
+    
+    - name: Test MCPB bundle creation
+      run: |
+        pixi run pack
+        echo "✅ MCPB bundle created successfully"
+    
+    - name: Verify bundle
+      run: |
+        BUNDLE_NAME=$(python3 -c "import json; print(f\"{json.load(open('manifest.json'))['name']}-{json.load(open('manifest.json'))['version']}.mcpb\")")
+        BUNDLE_PATH="mcpb-package/$BUNDLE_NAME"
+        
+        if [ -f "$BUNDLE_PATH" ]; then
+          echo "✅ Bundle created: $BUNDLE_PATH"
+          echo "📦 Bundle size: $(ls -lh "$BUNDLE_PATH" | awk '{print $5}')"
+          
+          # Basic bundle validation
+          file "$BUNDLE_PATH"
+          
+          # Check if it's a valid zip file (MCPB bundles are zip files)
+          if unzip -t "$BUNDLE_PATH" > /dev/null 2>&1; then
+            echo "✅ Bundle is a valid archive"
+          else
+            echo "❌ Bundle is not a valid archive"
+            exit 1
+          fi
+        else
+          echo "❌ Bundle file not found at $BUNDLE_PATH"
+          exit 1
+        fi
+    
+    - name: Test bundle extraction
+      run: |
+        BUNDLE_NAME=$(python3 -c "import json; print(f\"{json.load(open('manifest.json'))['name']}-{json.load(open('manifest.json'))['version']}.mcpb\")")
+        BUNDLE_PATH="mcpb-package/$BUNDLE_NAME"
+        
+        # Extract bundle to test directory
+        mkdir -p test-extract
+        cd test-extract
+        unzip "../$BUNDLE_PATH" > /dev/null
+        
+        # Verify key files exist
+        if [ -f "start_mcpb.sh" ] && [ -f "src/cv_mcp_server/main.py" ] && [ -d "lib" ] && [ -f "manifest.json" ]; then
+          echo "✅ Bundle contains all required files"
+        else
+          echo "❌ Bundle missing required files"
+          ls -la
+          exit 1
+        fi
+        
+        # Test startup script exists and is executable
+        if [ -x "start_mcpb.sh" ]; then
+          echo "✅ Startup script is executable"
+        else
+          echo "❌ Startup script is not executable"
+          exit 1
+        fi
+    
+    - name: Clean up test files
+      run: |
+        pixi run clean-bundles
+        echo "✅ Cleaned up temporary files"
+    
+    - name: Summary
+      run: |
+        echo "## 🧪 MCPB Bundle Test Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status**: ✅ All tests passed" >> $GITHUB_STEP_SUMMARY
+        echo "- **Bundle**: Ready for release" >> $GITHUB_STEP_SUMMARY
+        echo "- **Python**: 3.13 compatible" >> $GITHUB_STEP_SUMMARY
+        echo "- **Architecture**: ARM64 (macOS)" >> $GITHUB_STEP_SUMMARY
