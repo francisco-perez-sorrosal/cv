@@ -1,0 +1,27 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.francisco-perez-sorrosal/cv",
+  "version": "0.0.1",
+  "description": "An MCP server that provides access to Francisco Perez-Sorrosal's CV",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/francisco-perez-sorrosal/cv",
+    "branch": "mcp",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registry_type": "pypi",
+      "identifier": "fps-cv-mcp",
+      "version": "0.0.1",
+      "runtime_hint": "python",
+      "transport": {"type": "stdio"}
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://fps-cv.onrender.com/mcp"
+    }
+  ]
+}

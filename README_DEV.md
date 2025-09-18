@@ -181,10 +181,63 @@ PORT=10000
 
 #### Publish to Github's MCP Server Registry
 
-Install tool
+**Install tool**
+
 ```sh
 brew install mcp-publisher
+```
 
+**Create `server.json`**
+
+```sh
+# In the project dir
+mcp-publisher init
+```
+
+The output is a json file `server.json` with content similar to this:
+
+```json
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.francisco-perez-sorrosal/cv",
+  "description": "An MCP server that provides Francisco Perez-Sorrosal's CV",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/francisco-perez-sorrosal/cv",
+    "source": "github"
+  },
+  "version": "0.0.1",
+  "packages": [
+    {
+      "registry_type": "pypi",
+      "registry_base_url": "https://pypi.org",
+      "identifier": "cv-mcp-server",
+      "version": "0.0.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environment_variables": [
+        {
+          "description": "Your API key for the service",
+          "is_required": true,
+          "format": "string",
+          "is_secret": true,
+          "name": "YOUR_API_KEY"
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Publish**
+
+```sh
+# Login to github
+mcp-publisher login github  # for io.github.* or other method ([see doc](https://github.com/modelcontextprotocol/registry/blob/main/docs/guides/publishing/publish-server.md))
+# Publish to github
+mcp-publisher publish
+```
 
 ## Development Workflow
 
