@@ -1,6 +1,6 @@
 [project]
 name = "cv-mcp-server"
-version = "0.1.0"
+version = "0.0.1"
 description = "MCP server using Anthropic library to expose a PDF CV as a resource."
 license = {text = "MIT"}
 authors = [
@@ -18,12 +18,14 @@ classifiers = [
     "Framework :: FastAPI",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-dependencies = [ 
-    "httpx>=0.28.1,<0.29", 
-    "pymupdf4llm>=0.0.24,<0.0.25", 
-    "mcp[cli]>=1.9.2,<2", 
-    "mcpcat>=0.1.1,<0.2", 
+dependencies = [
+    "httpx>=0.28.1,<0.29",
+    "pymupdf4llm>=0.0.24,<0.0.25",
+    "mcp[cli]>=1.9.2,<2",
+    "mcpcat>=0.1.1,<0.2",
     "loguru>=0.7.3,<0.8", 
+    "build>=1.3.0,<2", 
+    "pip>=25.2,<26",
 ]
 
 [project.urls]
@@ -44,6 +46,13 @@ cv_mcp_server = { path = ".", editable = true }
 [tool.pixi.tasks]
 mcps="python src/cv_mcp_server/main.py"
 start="python src/cv_mcp_server/main.py"
+
+# MCPB (MCP Bundle) tasks - updated to use lib directory approach
+python-bundle="mkdir -p python-dist && pixi run python -m build --wheel --outdir python-dist && echo 'Wheel built and ready for MCPB bundle'"
+update-mcpb-deps="pixi run uv sync && pixi run uv lock && pixi run uv export --no-hashes --format requirements-txt > requirements.txt"
+mcp-bundle="rm -rf lib/ && mkdir -p lib && pixi run python -m pip install -r requirements.txt --target lib --upgrade --force-reinstall"
+pack="BUNDLE_NAME=$(python3 -c \"import json; print(f\\\"{json.load(open('manifest.json'))['name']}-{json.load(open('manifest.json'))['version']}.mcpb\\\")\") && npx @anthropic-ai/mcpb pack . mcpb-package/$BUNDLE_NAME"
+clean-bundles="rm -rf python-dist/ mcpb-package/ *.mcpb lib/"
 
 [tool.hatch.metadata]
 allow-direct-references = true
@@ -79,3 +88,4 @@ module = [
     "multipart"
 ]
 ignore_missing_imports = true
+

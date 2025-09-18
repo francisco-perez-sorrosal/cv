@@ -1,0 +1,89 @@
+{
+  "manifest_version": "0.1",
+  "name": "fps-cv-mcp",
+  "display_name": "Francisco Perez-Sorrosal CV MCP Server",
+  "version": "0.0.1",
+  "description": "MCP server that serves Francisco Perez-Sorrosal's CV as a resource for AI systems with comprehensive analysis and summarization tools",
+  "long_description": "A comprehensive MCP Bundle that exposes Francisco Perez-Sorrosal's curriculum vitae through multiple MCP tools and resources. This server provides access to the CV in markdown format, PDF links, Google Scholar profile, and includes sophisticated summarization capabilities with configurable parameters for different audiences and contexts. The server supports both local (stdio) and remote (streamable-http) deployment modes, making it suitable for various integration scenarios.",
+  "author": {
+    "name": "Francisco Perez-Sorrosal",
+    "email": "fperezsorrosal@gmail.com",
+    "url": "https://github.com/francisco-perez-sorrosal"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/francisco-perez-sorrosal/cv",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/francisco-perez-sorrosal/cv.git"
+  },
+  "documentation": "https://github.com/francisco-perez-sorrosal/cv/blob/mcp/README_USER.md",
+  "support": "https://github.com/francisco-perez-sorrosal/cv/issues",
+  "icon": "icon.png",
+  "server": {
+    "type": "python",
+    "entry_point": "start_mcpb.sh",
+    "mcp_config": {
+      "command": "bash",
+      "args": [
+        "${__dirname}/start_mcpb.sh"
+      ],
+      "env": {
+        "TRANSPORT": "stdio",
+        "HOST": "0.0.0.0",
+        "PORT": "10000"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "get_cv",
+      "description": "Retrieve the full CV of Francisco Perez-Sorrosal in markdown format, including educational background, research experience, industry experience, technical skills, and professional achievements"
+    },
+    {
+      "name": "get_cv_pdf_link",
+      "description": "Get the direct link to Francisco Perez-Sorrosal's CV in PDF format for download, viewing, or sharing"
+    },
+    {
+      "name": "get_google_scholar_link",
+      "description": "Get the link to Francisco Perez-Sorrosal's Google Scholar profile with academic publications, citation metrics, and research areas"
+    },
+    {
+      "name": "summarize_cv",
+      "description": "Generate a customizable summary of Francisco Perez-Sorrosal's CV with configurable parameters for depth, context, emphasis, format, audience, length, and tone"
+    },
+    {
+      "name": "summarize_cv_for_quick_hiring_screen",
+      "description": "Generate a brief, technical-first summary optimized for quick hiring screens by technical managers"
+    },
+    {
+      "name": "summarize_cv_for_executive_briefing_for_startup",
+      "description": "Generate a leadership-oriented executive summary tailored for startup environments with an enthusiastic tone"
+    },
+    {
+      "name": "summarize_cv_for_executive_briefing_for_big_company",
+      "description": "Generate a comprehensive executive summary appropriate for large company technical leadership evaluations"
+    }
+  ],
+  "prompts": [
+    {
+      "name": "summary",
+      "text": "Configurable prompt for generating CV summaries with extensive customization options for different use cases and audiences"
+    }
+  ],
+  "keywords": [
+    "cv",
+    "resume",
+    "curriculum vitae",
+    "Francisco Perez-Sorrosal",
+    "AI/ML",
+    "research",
+    "industry experience",
+    "technical leadership",
+    "academic",
+    "publications",
+    "citations"
+  ],
+  "compatibility": {
+    "python": ">=3.13"
+  }
+}
