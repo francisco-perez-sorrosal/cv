@@ -52,7 +52,7 @@ python-bundle="mkdir -p python-dist && pixi run python -m build --wheel --outdir
 update-mcpb-deps="pixi run uv sync && pixi run uv lock && pixi run uv export --no-hashes --format requirements-txt > requirements.txt"
 mcp-bundle="rm -rf lib/ && mkdir -p lib && pixi run python -m pip install -r requirements.txt --target lib --upgrade --force-reinstall"
 pack="BUNDLE_NAME=$(python3 -c \"import json; print(f\\\"{json.load(open('manifest.json'))['name']}-{json.load(open('manifest.json'))['version']}.mcpb\\\")\") && npx @anthropic-ai/mcpb pack . mcpb-package/$BUNDLE_NAME"
-clean-bundles="rm -rf python-dist/ mcpb-package/ *.mcpb lib/"
+clean-bundles="rm -rf python-dist/ mcpb-package/ lib/"
 
 [tool.hatch.metadata]
 allow-direct-references = true
