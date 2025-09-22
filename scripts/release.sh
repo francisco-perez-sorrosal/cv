@@ -82,6 +82,40 @@ with open('pyproject.toml', 'w') as f:
 print('Updated pyproject.toml version')
 "
 
+# Build MCPB package to calculate SHA256
+info "Building MCPB package for version $VERSION..."
+if ! make; then
+    error "Failed to build MCPB package. Please check the build process."
+fi
+
+# Calculate SHA256 of the built package
+MCPB_FILE="./mcpb-package/fps-cv-mcp-${VERSION}.mcpb"
+if [ ! -f "$MCPB_FILE" ]; then
+    error "MCPB file not found at $MCPB_FILE after build. Build may have failed."
+fi
+
+info "Calculating SHA256 for $MCPB_FILE..."
+SHA256=$(openssl dgst -sha256 "$MCPB_FILE" | cut -d' ' -f2)
+info "SHA256: $SHA256"
+
+# Generate server.json from template with actual SHA256
+info "Generating server.json from template with SHA256..."
+python3 -c "
+import re
+with open('server.json.template', 'r') as f:
+    template = f.read()
+
+# Replace version placeholders
+content = template.replace('{{VERSION}}', '$VERSION')
+
+# Replace SHA256 placeholder with actual hash
+content = content.replace('{{FILE_SHA256}}', '$SHA256')
+
+with open('server.json', 'w') as f:
+    f.write(content)
+print('Generated server.json from template with SHA256: $SHA256')
+"
+
 # Check if tag already exists
 if git tag -l | grep -q "^$TAG$"; then
     error "Tag $TAG already exists. Please use a different version."
