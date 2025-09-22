@@ -9,22 +9,16 @@ anyio==4.9.0
     #   mcp
     #   sse-starlette
     #   starlette
-build==1.3.0
-    # via cv-mcp-server
 certifi==2025.4.26
     # via
     #   httpcore
     #   httpx
-    #   requests
-charset-normalizer==3.4.3
-    # via requests
 click==8.2.1
     # via
     #   typer
     #   uvicorn
-colorama==0.4.6 ; os_name == 'nt' or sys_platform == 'win32'
+colorama==0.4.6 ; sys_platform == 'win32'
     # via
-    #   build
     #   click
     #   loguru
 h11==0.16.0
@@ -34,39 +28,24 @@ h11==0.16.0
 httpcore==1.0.9
     # via httpx
 httpx==0.28.1
-    # via
-    #   cv-mcp-server
-    #   mcp
+    # via mcp
 httpx-sse==0.4.0
     # via mcp
 idna==3.10
     # via
     #   anyio
     #   httpx
-    #   requests
 loguru==0.7.3
     # via cv-mcp-server
 markdown-it-py==3.0.0
     # via rich
 mcp==1.9.2
-    # via
-    #   cv-mcp-server
-    #   mcpcat
-mcpcat==0.1.5
     # via cv-mcp-server
-mcpcat-api==0.1.4
-    # via mcpcat
 mdurl==0.1.2
     # via markdown-it-py
-packaging==25.0
-    # via build
-pip==25.2
-    # via cv-mcp-server
 pydantic==2.11.5
     # via
     #   mcp
-    #   mcpcat
-    #   mcpcat-api
     #   pydantic-settings
 pydantic-core==2.33.2
     # via pydantic
@@ -78,24 +57,16 @@ pymupdf==1.26.0
     # via pymupdf4llm
 pymupdf4llm==0.0.24
     # via cv-mcp-server
-pyproject-hooks==1.2.0
-    # via build
-python-dateutil==2.9.0.post0
-    # via mcpcat-api
 python-dotenv==1.1.0
     # via
     #   mcp
     #   pydantic-settings
 python-multipart==0.0.20
     # via mcp
-requests==2.32.5
-    # via mcpcat
 rich==14.0.0
     # via typer
 shellingham==1.5.4
     # via typer
-six==1.17.0
-    # via python-dateutil
 sniffio==1.3.1
     # via anyio
 sse-starlette==2.3.6
@@ -115,10 +86,6 @@ typing-inspection==0.4.1
     # via
     #   pydantic
     #   pydantic-settings
-urllib3==2.5.0
-    # via
-    #   mcpcat-api
-    #   requests
 uvicorn==0.34.3 ; sys_platform != 'emscripten'
     # via mcp
 win32-setctime==1.2.0 ; sys_platform == 'win32'

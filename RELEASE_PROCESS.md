@@ -90,7 +90,7 @@ make build-mcpb
 cd mcpb-package
 unzip fps-cv-mcp-0.0.1.mcpb -d test/
 cd test/
-./start_mcpb.sh  # Should start without errors
+python3 src/cv_mcp_server/main.py  # Should start without errors
 
 # Clean up
 cd ../../..
