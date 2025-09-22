@@ -1,0 +1,33 @@
+prompt: |
+  Please provide a {depth_level} summary of the CV of Francisco Perez-Sorrosal for a candidate with AI/ML expertise in {context}.
+
+  Focus on the following aspects with {emphasis_distribution} emphasis:
+  - Technical skills and expertise areas
+  - Research contributions and publications
+  - Industry experience and impact
+  - Academic background and achievements
+  - Leadership and collaboration experience
+
+  The main requirements and instructions are:
+
+  <requirements>
+  - Style: {style}
+  - Output format: {output_format}
+  - Target audience: {target_audience}
+  - Length: {length_constraint}
+  - Tone: {tone}
+  </requirements>
+
+  <additional_instructions>
+  {additional_instructions}
+  </additional_instructions>
+
+  <citation_instructions>
+  {citation_instructions}
+  </citation_instructions>
+
+  Finally, use the available resource to get the link to the CV in pdf format, and include it at the end of the summary.
+
+citation_instructions: |
+  Please, use the resource to get his citations from the content of his Google Scholar profile 
+  url, analyze them,and generate a table of his publications with citations and impacts.
