@@ -128,8 +128,6 @@ source = { editable = "." }
 dependencies = [
     { name = "loguru" },
     { name = "mcp", extra = ["cli"] },
-    { name = "mcpcat" },
-    { name = "pip" },
     { name = "pymupdf4llm" },
     { name = "pyyaml" },
 ]
@@ -138,8 +136,6 @@ dependencies = [
 requires-dist = [
     { name = "loguru", specifier = ">=0.7.3,<0.8" },
     { name = "mcp", extras = ["cli"], specifier = ">=1.9.2,<2" },
-    { name = "mcpcat", specifier = ">=0.1.1,<0.2" },
-    { name = "pip", specifier = ">=25.2,<26" },
     { name = "pymupdf4llm", specifier = ">=0.0.24,<0.0.25" },
     { name = "pyyaml", specifier = ">=6.0,<7.0" },
 ]
