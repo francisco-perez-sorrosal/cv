@@ -123,11 +123,14 @@ fi
 
 # Commit version updates
 info "Committing version updates..."
-git add manifest.json pyproject.toml
+git add manifest.json pyproject.toml server.json pixi.lock uv.lock
 git commit -m "chore: bump version to $VERSION
 
 - Update manifest.json version to $VERSION
 - Update pyproject.toml version to $VERSION
+- Update server.json version to $VERSION
+- Update pixi.lock to $VERSION
+- Update uv.lock to $VERSION
 - Prepare for release $TAG"
 
 # Create and push tag

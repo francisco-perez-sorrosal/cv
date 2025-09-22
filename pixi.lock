@@ -288,8 +288,8 @@ packages:
   requires_python: '>=3.10'
 - pypi: .
   name: cv-mcp-server
-  version: 0.0.2
-  sha256: cc9e7918a740834d0b4b158d45ba9f2f2e6c59f9341c82c1cb9265b6ace9ee43
+  version: 0.0.3
+  sha256: 0083f95ad4414bc2bad430ac089048ebde2b3eab21a57aaa9ceae281e6994798
   requires_dist:
   - pymupdf4llm>=0.0.24,<0.0.25
   - mcp[cli]>=1.9.2,<2
