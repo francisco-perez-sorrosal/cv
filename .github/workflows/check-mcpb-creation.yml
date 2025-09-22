@@ -7,7 +7,6 @@ on:
       - 'src/**'
       - 'pyproject.toml'
       - 'manifest.json'
-      - 'start_mcpb.sh'
       - '.github/workflows/check-mcpb-creation.yml'
   push:
     branches: [ mcp ]
@@ -15,7 +14,6 @@ on:
       - 'src/**'
       - 'pyproject.toml'
       - 'manifest.json'
-      - 'start_mcpb.sh'
       - '.github/workflows/check-mcpb-creation.yml'
 
 jobs:
@@ -133,7 +131,7 @@ jobs:
         unzip "../$BUNDLE_PATH" > /dev/null
         
         # Verify key files exist
-        if [ -f "start_mcpb.sh" ] && [ -f "src/cv_mcp_server/main.py" ] && [ -d "lib" ] && [ -f "manifest.json" ]; then
+        if [ -f "src/cv_mcp_server/main.py" ] && [ -d "lib" ] && [ -f "manifest.json" ]; then
           echo "✅ Bundle contains all required files"
         else
           echo "❌ Bundle missing required files"
