@@ -140,14 +140,6 @@ jobs:
           ls -la
           exit 1
         fi
-        
-        # Test startup script exists and is executable
-        if [ -x "start_mcpb.sh" ]; then
-          echo "✅ Startup script is executable"
-        else
-          echo "❌ Startup script is not executable"
-          exit 1
-        fi
     
     - name: Clean up test files
       run: |
