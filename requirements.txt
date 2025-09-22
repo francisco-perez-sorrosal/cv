@@ -63,6 +63,8 @@ python-dotenv==1.1.0
     #   pydantic-settings
 python-multipart==0.0.20
     # via mcp
+pyyaml==6.0.2
+    # via cv-mcp-server
 rich==14.0.0
     # via typer
 shellingham==1.5.4
@@ -77,7 +79,6 @@ typer==0.16.0
     # via mcp
 typing-extensions==4.14.0
     # via
-    #   anyio
     #   pydantic
     #   pydantic-core
     #   typer
