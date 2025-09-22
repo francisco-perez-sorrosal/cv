@@ -51,6 +51,18 @@
     {
       "name": "summarize_cv",
       "description": "Generate a customizable summary of Francisco Perez-Sorrosal's CV with configurable parameters for depth, context, emphasis, format, audience, length, and tone"
+    },
+    {
+      "name": "summarize_cv_for_quick_hiring_screen",
+      "description": "Generate a brief summary of Francisco Perez-Sorrosal's CV optimized for quick hiring screens with technical-first emphasis and professional tone"
+    },
+    {
+      "name": "summarize_cv_for_executive_briefing_for_startup",
+      "description": "Generate a moderate-depth summary for startup executive briefings with leadership-oriented emphasis and enthusiastic tone in executive summary format"
+    },
+    {
+      "name": "summarize_cv_for_executive_briefing_for_big_company",
+      "description": "Generate a comprehensive summary for big company executive briefings with leadership-oriented emphasis and professional tone in full-page format"
     }
   ],
   "prompts": [
