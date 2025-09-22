@@ -246,8 +246,7 @@ This creates `fps-cv-mcp-0.0.1.mcpb` ready for distribution.
 The MCPB bundle includes:
 - `src/` - Python source code
 - `lib/` - Bundled Python dependencies (built for target Python version)
-- `start_mcpb.sh` - Startup script with proper PYTHONPATH configuration
-- `manifest.json` - Bundle metadata and configuration
+- `manifest.json` - Bundle metadata and configuration (includes server startup configuration)
 - `requirements.txt` - Python dependencies list
 - `2025_FranciscoPerezSorrosal_CV_English.pdf` - CV PDF (if available)
 
@@ -275,8 +274,8 @@ Before distribution, test the bundle locally:
 unzip fps-cv-mcp-0.0.1.mcpb -d test-bundle/
 cd test-bundle/
 
-# Test server startup using the startup script
-./start_mcpb.sh
+# Test server startup using the MCP configuration from manifest.json
+python3 src/cv_mcp_server/main.py
 
 # Test with MCP inspector
 DANGEROUSLY_OMIT_AUTH=true npx @modelcontextprotocol/inspector
@@ -368,9 +367,9 @@ The output is a json file `server.json` with content similar to this:
   "version": "0.0.1",
   "packages": [
     {
-      "registry_type": "mcpb",
+      "registryType": "mcpb",
       "identifier": "https://github.com/francisco-perez-sorrosal/cv/releases/download/v0.0.1/fps-cv-mcp-0.0.1.mcpb",
-      "file_sha256": "d01ccdbbea56702215a8015ad19c12f5681b61c1fdaeaa258c88f657a6f02bd6"
+      "fileSha256": "d01ccdbbea56702215a8015ad19c12f5681b61c1fdaeaa258c88f657a6f02bd6"
     }
   ]
 }
