@@ -1,6 +1,6 @@
 [project]
 name = "cv-mcp-server"
-version = "0.0.1"
+version = "0.0.2"
 description = "MCP server using Anthropic library to expose a PDF CV as a resource."
 license = {text = "MIT"}
 authors = [
