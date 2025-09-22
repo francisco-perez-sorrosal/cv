@@ -2,7 +2,7 @@
   "manifest_version": "0.1",
   "name": "fps-cv-mcp",
   "display_name": "Francisco Perez-Sorrosal CV MCP Server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "MCP server that serves Francisco Perez-Sorrosal's CV as a resource for AI systems with comprehensive analysis and summarization tools",
   "long_description": "A comprehensive MCP Bundle that exposes Francisco Perez-Sorrosal's curriculum vitae through multiple MCP tools and resources. This server provides access to the CV in markdown format, PDF links, Google Scholar profile, and includes sophisticated summarization capabilities with configurable parameters for different audiences and contexts. The server supports both local (stdio) and remote (streamable-http) deployment modes, making it suitable for various integration scenarios.",
   "author": {
