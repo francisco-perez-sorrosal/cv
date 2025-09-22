@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-16/server.schema.json",
   "name": "io.github.francisco-perez-sorrosal/cv",
-  "version": "0.0.2",
+  "version": "{{VERSION}}",
   "description": "An MCP server that provides access to Francisco Perez-Sorrosal's CV",
   "status": "active",
   "repository": {
@@ -12,9 +12,9 @@
     {
       "registryType": "mcpb",
       "registryBaseUrl": "https://github.com",
-      "identifier": "https://github.com/francisco-perez-sorrosal/cv/releases/download/v0.0.2/fps-cv-mcp-0.0.2.mcpb",
-      "version": "0.0.2",
-      "fileSha256": "46ae6a058377b3dc44c5db478333c68a1aefb246186eba82b8682c3aed37c905",
+      "identifier": "https://github.com/francisco-perez-sorrosal/cv/releases/download/v{{VERSION}}/fps-cv-mcp-{{VERSION}}.mcpb",
+      "version": "{{VERSION}}",
+      "fileSha256": "{{FILE_SHA256}}",
       "transport": {
         "type": "stdio"
       }
