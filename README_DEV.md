@@ -340,10 +340,62 @@ The release workflow automatically:
 
 #### Publish to Github's MCP Server Registry
 
-Install tool
+**Install tool**
+
 ```sh
 brew install mcp-publisher
+```
 
+**Create `server.json`**
+
+```sh
+# In the project dir
+mcp-publisher init
+```
+
+The output is a json file `server.json` with content similar to this:
+
+```json
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.francisco-perez-sorrosal/cv",
+  "description": "An MCP server that provides Francisco Perez-Sorrosal's CV",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/francisco-perez-sorrosal/cv",
+    "source": "github"
+  },
+  "version": "0.0.1",
+  "packages": [
+    {
+      "registry_type": "mcpb",
+      "identifier": "https://github.com/francisco-perez-sorrosal/cv/releases/download/v0.0.1/fps-cv-mcp-0.0.1.mcpb",
+      "file_sha256": "d01ccdbbea56702215a8015ad19c12f5681b61c1fdaeaa258c88f657a6f02bd6"
+    }
+  ]
+}
+```
+
+As depicted above, for a bundle that is going to be stored as a release in github you have to generate its sha256:
+
+```sh
+openssl dgst -sha256 fps-cv-mcp-0.0.1.mcpb
+```
+
+**Publish**
+
+```sh
+# Login to github
+mcp-publisher login github  # for io.github.* or other method ([see doc](https://github.com/modelcontextprotocol/registry/blob/main/docs/guides/publishing/publish-server.md))
+# Publish to github
+mcp-publisher publish
+```
+
+**Check Published Package**
+
+```sh
+curl "https://registry.modelcontextprotocol.io/v0/servers?search=fps-cv-mcp"
+```
 
 ## Development Workflow
 

@@ -1,13 +1,13 @@
 """Main module for the CV MCP server with Anthropic integration."""
 
 import os
+import sys
 
 from pathlib import Path
 from typing import Literal, Optional, cast
 from pydantic import BaseModel, Field
 # from argparse import ArgumentParser, Namespace
 
-import mcpcat
 import pymupdf4llm
 from mcp.server.fastmcp import FastMCP, Context
 
@@ -47,7 +47,9 @@ port = int(os.environ.get("PORT", 10000))  # render.com has '10000' as default p
 mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host=host, port=port)
 
 # Track usage to understand how users interact with the MCP server
-mcpcat.track(server=mcp, project_id="proj_2yl2y3eRvzgT2fUTQAUok0J6i6T")
+# NOTE:
+# import mcpcat
+# mcpcat.track(server=mcp, project_id="proj_2yl2y3eRvzgT2fUTQAUok0J6i6T")
 
 # NOTE: We have to wrap the resources to be accessible to the LLMs from the prompts
 
@@ -367,6 +369,7 @@ Finally, get use the resource to get the link to the CV in pdf format, and inclu
 
 def main():
     """Main entry point: initialize and run the server with the specified transport."""
+    logger.info(f"Python version: {sys.version}")
     logger.info(f"Starting CV MCP server with {trspt} transport ({host}:{port}) and stateless_http={stateless_http}...")
     transport_as_literal = cast(Literal['stdio', 'streamable-http'], trspt)
     mcp.run(transport=transport_as_literal) #, mount_path="/cv")
