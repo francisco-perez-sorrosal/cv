@@ -23,7 +23,11 @@
       "Bash(/usr/bin/python3 -m build:*)",
       "Bash(pixi build:*)",
       "Bash(pixi list:*)",
-      "Bash(pixi add:*)"
+      "Bash(pixi add:*)",
+      "Bash(curl:*)",
+      "Bash(nslookup:*)",
+      "Bash(openssl s_client:*)",
+      "Bash(pixi install:*)"
     ],
     "deny": [],
     "ask": [],
