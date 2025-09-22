@@ -21,13 +21,14 @@
   "icon": "icon.png",
   "server": {
     "type": "python",
-    "entry_point": "start_mcpb.sh",
+    "entry_point": "src/cv_mcp_server/main.py",
     "mcp_config": {
-      "command": "bash",
+      "command": "python3",
       "args": [
-        "${__dirname}/start_mcpb.sh"
+        "${__dirname}/src/cv_mcp_server/main.py"
       ],
       "env": {
+        "PYTHONPATH": "${__dirname}/lib:${__dirname}/src:${__dirname}",
         "TRANSPORT": "stdio",
         "HOST": "0.0.0.0",
         "PORT": "10000"
@@ -50,18 +51,6 @@
     {
       "name": "summarize_cv",
       "description": "Generate a customizable summary of Francisco Perez-Sorrosal's CV with configurable parameters for depth, context, emphasis, format, audience, length, and tone"
-    },
-    {
-      "name": "summarize_cv_for_quick_hiring_screen",
-      "description": "Generate a brief, technical-first summary optimized for quick hiring screens by technical managers"
-    },
-    {
-      "name": "summarize_cv_for_executive_briefing_for_startup",
-      "description": "Generate a leadership-oriented executive summary tailored for startup environments with an enthusiastic tone"
-    },
-    {
-      "name": "summarize_cv_for_executive_briefing_for_big_company",
-      "description": "Generate a comprehensive executive summary appropriate for large company technical leadership evaluations"
     }
   ],
   "prompts": [
