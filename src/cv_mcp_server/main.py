@@ -4,14 +4,14 @@ import os
 import sys
 
 from pathlib import Path
-from typing import Literal, Optional, cast
-from pydantic import BaseModel, Field
-# from argparse import ArgumentParser, Namespace
+from typing import Literal, cast
+from pydantic import Field
 
 import pymupdf4llm
-from mcp.server.fastmcp import FastMCP, Context
+from mcp.server.fastmcp import FastMCP
 
 from loguru import logger
+from cv_mcp_server.utils import load_prompt
 
 # Configure transport and statelessness
 trspt = "stdio"
@@ -149,9 +149,13 @@ def summarize_cv(
         default="technical-first",
         description="Where to place emphasis in the summary. Examples: 'equal weight', 'research-heavy', 'industry-focused', 'technical-first', 'leadership-oriented'"
     ),
-    output_format: str = Field(
+    style: str = Field(
         default="structured paragraphs",
-        description="Format of the output. Examples: 'structured paragraphs', 'bullet points', 'executive summary', 'technical brief', 'comparison table'"
+        description="Style of the output. Examples: 'structured paragraphs', 'bullet points', 'executive summary', 'technical brief', 'comparison table'"
+    ),
+    output_format: str = Field(
+        default="markdown",
+        description="Output format for the summary. Examples: 'markdown' (default), 'raw_text'"
     ),
     target_audience: str = Field(
         default="technical hiring manager",
@@ -186,6 +190,7 @@ def summarize_cv(
         depth_level=depth_level,
         context=context,
         emphasis_distribution=emphasis_distribution,
+        style=style,
         output_format=output_format,
         target_audience=target_audience,
         length_constraint=length_constraint,
@@ -201,7 +206,8 @@ def summarize_cv_for_quick_hiring_screen() -> str:
         depth_level="brief",
         context="industry R&D role",
         emphasis_distribution="technical-first",
-        output_format="structured paragraphs",
+        style="structured paragraphs",
+        output_format="markdown",
         target_audience="technical hiring manager",
         length_constraint="half-page summary",
         tone="professional and objective",
@@ -216,12 +222,13 @@ def summarize_cv_for_executive_briefing_for_startup() -> str:
         depth_level="moderate",
         context="startup technical leadership",
         emphasis_distribution="leadership-oriented",
-        output_format="executive summary",
+        style="executive summary",
+        output_format="markdown",
         target_audience="executive leadership",
         length_constraint="1-2 paragraphs",
         tone="enthusiastic and promotional",
         additional_instructions="",
-        include_citations= False
+        include_citations=False
     )
 
 @mcp.tool()
@@ -231,7 +238,8 @@ def summarize_cv_for_executive_briefing_for_big_company() -> str:
         depth_level="moderate",
         context="big company technical leadership",
         emphasis_distribution="leadership-oriented",
-        output_format="executive summary",
+        style="executive summary",
+        output_format="markdown",
         target_audience="executive leadership",
         length_constraint="full-page overview",
         tone="professional and objective",
@@ -239,21 +247,21 @@ def summarize_cv_for_executive_briefing_for_big_company() -> str:
         include_citations=False
     )
 
-@mcp.resource("cvfps://google_scholar_link")
+@mcp.resource("fps-cv://google_scholar_link")
 def google_scholar_link() -> str:
     """
     Return the link to the Google Scholar profile of Francisco Perez-Sorrosal.
     """
     return "https://scholar.google.com/citations?user=nemqgScAAAAJ&hl=en"
 
-@mcp.resource("cvfps://cv_pdf_link")
+@mcp.resource("fps-cv://cv_pdf_link")
 def cv_pdf_link() -> str:
     """
     Return the link to the CV in pdf format.
     """
     return "https://github.com/francisco-perez-sorrosal/cv/blob/main/2025_FranciscoPerezSorrosal_CV_English.pdf"
 
-@mcp.resource("cvfps://full")
+@mcp.resource("fps-cv://cv")
 def cv() -> str:
     """
     Return the full CV of Francisco Perez Sorrosal as a markdown file.
@@ -269,7 +277,8 @@ def summary(
     depth_level: str = "comprehensive",
     context: str = "industry R&D role",
     emphasis_distribution: str = "technical-first",
-    output_format: str = "structured paragraphs",
+    style: str = "structured paragraphs",
+    output_format: str = "markdown",
     target_audience: str = "technical hiring manager",
     length_constraint: str = "half-page summary",
     tone: str = "professional and objective",
@@ -303,13 +312,18 @@ def summary(
                           - "technical-first": Prioritize technical skills
                           - "leadership-oriented": Emphasize management experience
                           
-        output_format: Format of the output.
+        style: Style of the output.
                      Examples:
                      - "structured paragraphs": Narrative format with clear sections
                      - "bullet points": Concise, scannable format
                      - "executive summary": Business-oriented overview
                      - "technical brief": Engineering-focused summary
                      - "comparison table": Strengths/areas matrix
+                     
+        output_format: Output format for the summary.
+                      Examples:
+                      - "markdown": Markdown formatted text (default)
+                      - "raw_text": Plain text without formatting
                      
         target_audience: Intended audience for the summary.
                          Examples:
@@ -345,26 +359,25 @@ def summary(
     Returns:
         str: A prompt for generating the CV summary
     """
-    return f"""Please provide a {depth_level} summary of the CV of Francisco Perez-Sorrosal for a candidate with AI/ML expertise in {context}.
+    # Load the prompt data from YAML
+    prompt_data = load_prompt("summary")
 
-Focus on the following aspects with {emphasis_distribution} emphasis:
-- Technical skills and expertise areas
-- Research contributions and publications
-- Industry experience and impact
-- Academic background and achievements
-- Leadership and collaboration experience
+    # Get citations instructions if needed
+    citations_text = prompt_data.get('citation_instructions', '') if include_citations else ''
 
-Format: {output_format}
-Target audience: {target_audience}
-Length: {length_constraint}
-Tone: {tone}
-
-{additional_instructions}
-
-{'Please, use the resource to get his citations from the content of his Google Scholar profile url, analyze them,and generate a table of his publications with citations and impacts.' if include_citations else ''}
-
-Finally, get use the resource to get the link to the CV in pdf format, and include it at the end of the summary.
-"""
+    # Format the prompt with provided parameters
+    return prompt_data['prompt'].format(
+        depth_level=depth_level,
+        context=context,
+        emphasis_distribution=emphasis_distribution,
+        style=style,
+        output_format=output_format,
+        target_audience=target_audience,
+        length_constraint=length_constraint,
+        tone=tone,
+        additional_instructions=additional_instructions,
+        citation_instructions=citations_text
+    )
 
 
 def main():
