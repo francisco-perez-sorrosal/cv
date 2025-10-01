@@ -8,52 +8,79 @@
 % A modern LaTeX CV template config links:
 % https://www.baeldung.com/cs/latex-moderncv-resume
 
-\documentclass[10pt,a4paper,english]{moderncv}      % a4paper, a5paper, b5paper, letterpaper, legalpaper, executivepaper, landscape
+%------------- PACKAGES --------------------------------------------
+
+\documentclass[11pt,a4paper,english, sans]{moderncv}      % a4paper, a5paper, b5paper, letterpaper, legalpaper, executivepaper, landscape
                                                     % 10pt, 11pt, 12pt
 % moderncv themes
 %\moderncvtheme[green]{casual}              % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
                                             % casual (default), classic, banking, oldstyle, fancy
 \moderncvtheme[green]{classic}
 
-% character encoding
-\usepackage[utf8]{inputenc}                   % replace by the encoding you are using
-
 % adjust the page margins
-\usepackage[scale=0.75]{geometry}
-% \usepackage[scale=0.88]{geometry}
+\usepackage[scale=0.8]{geometry}
+% \usepackage[scale=0.75]{geometry}
+
+% Font encoding and family
+% \usepackage[utf8]{inputenc}                   % character encoding: replace by the encoding you are using
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 
 % language
 \usepackage[english]{babel}
 
-% Page numbering (yes/no)
-\nopagenumbers{}
+% symbols
+\usepackage{amssymb}
 
+% additional packages for safety
+%\usepackage{hyperref}
+\usepackage{enumitem}
+
+%------------- PACKAGES --------------------------------------------
+
+
+%------------- PERSONAL DATA --------------------------------------------
+% personal data
+\firstname{\Huge Francisco}
+\familyname{\Huge Perez-Sorrosal}
+\title{Princ. Research Engineer (Yahoo Inc.)}            % optional, remove the line if not wanted
+\address{N/A}{94123 San Francisco, CA (U.S.)}            % optional, remove the line if not wanted
+% \address{N/A}{N/A}
+\mobile{Ask through LinkedIn}                            % optional, remove the line if not wanted
+\email{Ask through LinkedIn}                             % optional, remove the line if not wanted
+\social[linkedin]{fperezsorrosal}
+\homepage{http://francisco-perez-sorrosal.github.io/}    % optional, remove the line if not wanted
+%\extrainfo{\homepagesymbol~\href{http://xxxx}{xxx}}      % optional, remove the line if not wanted
+%\phone{phone (optional)}                                % optional, remove the line if not wanted
+%\fax{fax (optional)}                                    % optional, remove the line if not wanted
+%\homepage{ch.linkedin.com/in/juanperezsorrosal}         % optional, remove the line if not wanted
+%\photo[44pt]{fotoFranGuayV2.jpg}                        % '64pt' is the height the picture must be resized to and 'picture' is the name of the picture file; optional, remove the line if not wanted
+%------------- PERSONAL DATA --------------------------------------------
+
+%------------- QUOTE --------------------------------------------
 % Quote (optional)
-% \quote{“Success is not final, failure is not fatal: It is the courage to continue that counts.” - Winston Churchill}
-% \quote{“Integrity is doing the right thing, even when no one is watching.” — C. S. Lewis}
-\quote{“Strive not to be a success, but rather to be of value.”\\— Albert Einstein}
-\vspace{0.5cm}
+%\quote{“Success is not final, failure is not fatal: It is the courage to continue that counts.” - Winston Churchill}
+%\quote{“Integrity is doing the right thing, even when no one is watching.” — C. S. Lewis}
+%\quote{“Strive not to be a success, but rather to be of value.” — Albert Einstein}
+%\quote{Computers are useless. They can only give you answers. - Pablo Picasso}
+\quote{\textit{"Any man could, if he were so inclined, be the sculptor of his own brain." -- Santiago Ram\'on y Cajal}}
+%------------- QUOTE --------------------------------------------
+
+
+%\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page
+%------------- CONTENT SETUP --------------------------------------------
+
+% Page numbering (yes/no)
+%\nopagenumbers{}
 
 %\setlength{\hintscolumnwidth}{3cm}						% if you want to change the width of the column with the dates
 %\AtBeginDocument{\setlength{\maketitlenamewidth}{8.3cm}}  % only for the classic theme, if you want to change the width of your name placeholder (to leave more space for your address details
 \AtBeginDocument{\recomputelengths}                     % required when changes are made to page layout lengths
 
-% personal data
-\firstname{\Huge Francisco}
-\familyname{\Huge Perez-Sorrosal}
-\title{Princ. Research Engineer (Yahoo Inc.)}               % optional, remove the line if not wanted
-\address{N/A}{94123 San Francisco, CA (U.S.)}    % optional, remove the line if not wanted
-% \address{N/A}{N/A}
-\mobile{Ask through LinkedIn}                    % optional, remove the line if not wanted
-\email{Ask through LinkedIn}                     % optional, remove the line if not wanted
-\homepage{www.linkedin.com/in/fperezsorrosal}                % optional, remove the line if not wanted
-\extrainfo{\homepagesymbol~\href{http://francisco-perez-sorrosal.github.io/}{francisco-perez-sorrosal.github.io}} % optional, remove the line if not wanted
-%\phone{phone (optional)}                      % optional, remove the line if not wanted
-%\fax{fax (optional)}                          % optional, remove the line if not wanted
-%\homepage{ch.linkedin.com/in/juanperezsorrosal}                % optional, remove the line if not wanted
-%\photo[44pt]{fotoFranGuayV2.jpg}                         % '64pt' is the height the picture must be resized to and 'picture' is the name of the picture file; optional, remove the line if not wanted
-%\quote{Computers are useless. They can only give you answers.\\Pablo Picasso}                 % optional, remove the line if not wanted
+% Compact itemize globally with smaller bullets
+\setlist[itemize]{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt,label={\tiny$\bullet$}}
 
+%------------- BIBLIOGRAPHY --------------------------------------------
 % to show numerical labels in the bibliography; only useful if you make citations in your resume
 \makeatletter
 \renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}
@@ -62,28 +89,37 @@
 % bibliography with mutiple entries
 %\usepackage{multibib}
 
-
 %\newcites{book,misc}{{Books},{Others}}
 
-%\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page
-%----------------------------------------------------------------------------------
-%            content
-%----------------------------------------------------------------------------------
+%------------- BIBLIOGRAPHY --------------------------------------------
+
+%------------- BEGIN DOCUMENT --------------------------------------------
+
 \begin{document}
 
 \maketitle
 \vspace{0.1cm}
 
-%------------- PROFILE AND OBJECTIVES --------------------------------------------
-\section{Profile and Objectives}
+%------------- PROFILE AND GOALS --------------------------------------------
+\section{Profile and Goals}
 
 \small I am a reliable, goal-oriented, and detail-focused professional with extensive experience in research and software engineering across both academic and industry settings, specializing in machine learning, artificial intelligence, and distributed systems. As a Research Engineer, I am curious and love exploring and implementing with cutting-edge technologies, particularly in AI/ML, to tackle complex challenges and foster innovation. As a Software Engineer, I can design, develop, and ensure the maintainability of robust and scalable big data applications, whether on-prem or cloud, always prioritizing high availability, scalability, performance, and reliability. I am adaptable, capable of taking initiative and leading efforts with a strategic approach when needed, or collaborating as a communicative, supportive, and empathetic team player to achieve shared goals. I thrive in open, dynamic, and multidisciplinary environments, integrating visionary and practical insights to deliver impactful results while empowering others and fostering collaboration.
-%------------- PROFILE AND OBJECTIVES --------------------------------------------
+%------------- PROFILE AND GOALS --------------------------------------------
 \vspace{0.2cm}
 %------------- PROFESSIONAL EXPERIENCE --------------------------------------------
 \section{Professional Experience}
 
-\cventry{2023--Now}{\large Principal Research Engineer}{Knowledge Graph Science @ Yahoo Inc.}{}{Sunnyvale}{}
+% When possible follow this\cventry syntax: \cventry{{period/year(s)}}{{job position}}{{company}}{{team role(s)}}{{location (optional)}}{{description using LaTeXitemized lists}}
+
+\cventry{2025--Now}{\large Independent AI Research \& Strategic Advisor}{\textcolor{black}{Focus: Agentic AI \& LLM Apps}}{}{}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{Agentic AI}: Deep-dive research of multi-agent systems, \textit{LLM orchestration}, and autonomous reasoning frameworks; evaluated cutting-edge frameworks including \textit{AutoGen}, \textit{CrewAI}, \textit{OpenAI} and custom agentic workflows.
+\item \textbf{Strategic Advisory}: Provided technical guidance to early-stage startups (\textit{Eni6ma}, \href{https://wasmer.io/}{\textit{Wasmer}}) on AI strategy, model selection, and production requirements; advised on \textit{Agentic AI} integration patterns and AI architecture design.
+\item \textbf{Continuous Learning}: maintained cutting-edge expertise in rapidly evolving field.
+\end{itemize}
+}
+
+\cventry{2023--2024}{\large Principal Research Engineer}{Knowledge Graph Science @ Yahoo Inc.}{}{Sunnyvale}{}
 
 \cventry{}{\small YKG}{Dataset Quality Improvement}{2024}{\textbf{Roles}: ML/AI Expert}{
 \textbf{Goal} Since the labels of most entity pairs were generated in a semi-supervised manner, I developed an LLM-based solution to validate and enhance the labeling accuracy of the dev and test datasets \\
