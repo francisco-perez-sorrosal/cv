@@ -109,7 +109,7 @@
 %------------- PROFESSIONAL EXPERIENCE --------------------------------------------
 \section{Professional Experience}
 
-% When possible follow this\cventry syntax: \cventry{{period/year(s)}}{{job position}}{{company}}{{team role(s)}}{{location (optional)}}{{description using LaTeXitemized lists}}
+% When possible follow this \cventry syntax: \cventry{{period/year(s)}}{{job position}}{{company}}{{role(s)}}{{location (optional)}}{{description using LaTeXitemized lists}}
 
 \cventry{2025--Now}{\large Independent AI Research \& Strategic Advisor}{\textcolor{black}{Focus: Agentic AI \& LLM Apps}}{}{}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
@@ -119,35 +119,13 @@
 \end{itemize}
 }
 
-\cventry{2023--2024}{\large Principal Research Engineer}{Knowledge Graph Science @ Yahoo Inc.}{}{Sunnyvale}{}
-
-\cventry{}{\small YKG}{Dataset Quality Improvement}{2024}{\textbf{Roles}: ML/AI Expert}{
-\textbf{Goal} Since the labels of most entity pairs were generated in a semi-supervised manner, I developed an LLM-based solution to validate and enhance the labeling accuracy of the dev and test datasets \\
-\textbf{Achievement} I implemented a generative Entity Matching solution with Llama 2 to identify and fix (by re-labeling) misclassified examples in the dev/test sets \\
-}
-
-\cventry{}{\small YKG}{Entity Reconciliation Model Training}{2023-2024}{\textbf{Roles}: Machine Learning/AI Expert}{
-Fine-tuned transformer-based language models (LMs) on heterogeneously labeled datasets, integrating editorially curated data with automatically labeled data through entity linking via common identifiers. This approach aimed to deduplicate and reconcile meta-entities related to People and Creative Works. \\
-\textbf{Goal} Improve current production metrics on both categories \\
-\textbf{Achievements} \\
-- I trained and optimized a unified, type-agnostic LM model for entity matching/reconciliation, replacing tens of type-specific production models and simplifying the maintenance of the reconciliation stage in the Knowledge Graph \\
-- Metric improvements: \\
-1) Overall increases of 22.23\% and 16.11\% in precision and recall for Person \\
-2) Overall increases of 5\% and 4\% in precision and recall for Creative Works \\
-- Reduced model size by 33\%, lowering the model's storage requirements and improving efficiency without compromising its entity matching accuracy \\
-}
-
-\cventry{}{\small YKG}{Entity Reconciliation Pipeline}{2023}{\textbf{Roles}: Machine Learning/AI Expert, MLOps}{
-- Built pipelines for distributed sampling, preprocessing, and transformation of large-scale entity data extracted from various complementary sources that accurately reflect user search behavior. \\
-- Developed an automated pipeline for training entity reconciliation models for YK, from data curation to inference testing \\
-\textbf{Goal/Achievements} \\
-- We devised a solution to reduce the current number of models maintained in production from \~30 heterogeneous (heuristic-based, SVMs, Tree-based...) to just 4, which encompass the main 4 meta-entity types in YK \\
-- We expanded entity type coverage to 20 new types of people entities (e.g., directors, producers, composers, writers, politicians\ldots{}) and 32 new types of creative works (e.g., visual works, theatrical works, critic’s reviews, periodicals, poems\ldots{}) \\
-}
-
-\cventry{}{\small YKG}{Entity Reconciliation Inference}{2023}{\textbf{Roles}: MLOps}{
-\textbf{Goal} Designed and architected a PoC solution for cloud-based inference \\
-\textbf{Achievement} I implemented a Ray Serve-based solution to deploy new YK models in the cloud, optimizing for cost efficiency by evaluating CPU and GPU-based approaches \\
+\cventry{2023--2024}{\large Principal Research Engineer}{Knowledge Graph Science @ Yahoo Inc.}{\textbf{Roles}: ML/AI Expert, MLOps}{Sunnyvale}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{Dataset Quality Improvement (2024)}: \textbf{Goal} -- Since the labels of most entity pairs were generated in a semi-supervised manner, develop an LLM-based solution to validate and enhance the labeling accuracy of the dev and test datasets. \textbf{Achievement} -- Implemented a generative Entity Matching solution with Llama 2 to identify and fix (by re-labeling) misclassified examples in the dev/test sets.
+\item \textbf{Entity Reconciliation Model Training (2023-2024)}: Fine-tuned transformer-based language models on heterogeneously labeled datasets, integrating editorially curated data with automatically labeled data through entity linking via common identifiers. This approach aimed to deduplicate and reconcile meta-entities related to People and Creative Works. \textbf{Goal} -- Improve current production metrics on both categories. \textbf{Achievements} -- (1) Trained and optimized a unified, type-agnostic LM model for entity matching/reconciliation, replacing tens of type-specific production models and simplifying the maintenance of the reconciliation stage in the Knowledge Graph; (2) Metric improvements: overall increases of 22.23\% and 16.11\% in precision and recall for Person, and 5\% and 4\% for Creative Works; (3) Reduced model size by 33\%, lowering storage requirements and improving efficiency without compromising accuracy.
+\item \textbf{Entity Reconciliation Pipeline (2023)}: Built pipelines for distributed sampling, preprocessing, and transformation of large-scale entity data extracted from various complementary sources that accurately reflect user search behavior. Developed an automated pipeline for training entity reconciliation models for YK, from data curation to inference testing. \textbf{Achievements} -- (1) Devised a solution to reduce the number of models maintained in production from $\sim$30 heterogeneous (heuristic-based, SVMs, Tree-based) to just 4, which encompass the main 4 meta-entity types in YK; (2) Expanded entity type coverage to 20 new types of people entities (e.g., directors, producers, composers, writers, politicians) and 32 new types of creative works (e.g., visual works, theatrical works, critic's reviews, periodicals, poems).
+\item \textbf{Entity Reconciliation Inference (2023)}: \textbf{Goal} -- Design and architect a PoC solution for cloud-based inference. \textbf{Achievement} -- Implemented a Ray Serve-based solution to deploy new YK models in the cloud, optimizing for cost efficiency by evaluating CPU and GPU-based approaches.
+\end{itemize}
 }
 
 \cventry{Jun--Dec 2022}{\large Principal Research Engineer}{Yahoo Mail}{}{Sunnyvale}{}
