@@ -15,7 +15,7 @@
 % moderncv themes
 %\moderncvtheme[green]{casual}              % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
                                             % casual (default), classic, banking, oldstyle, fancy
-\moderncvtheme[green]{classic}
+\moderncvtheme[blue]{classic}
 
 % adjust the page margins
 \usepackage[scale=0.8]{geometry}
@@ -86,6 +86,9 @@
 % Reduce spacing between sections
 \renewcommand{\sectionfont}{\Large\mdseries\upshape\bfseries}
 \setlength{\hintscolumnwidth}{1.6cm}
+% Change subsection style
+\renewcommand{\subsectionfont}{\large\upshape\bfseries}
+\renewcommand*{\subsectionstyle}[1]{{\subsectionfont\textcolor{color1!90}{#1}}}
 
 % Customize section to make it larger and in color1
 \makeatletter % to allow for customizing the section command
@@ -101,7 +104,7 @@
 
 % Customize cventry to make job position (third parameter) default to color1
 % and company (fourth parameter) in color1 and italics
-\renewcommand*{\cventry}[7][.8em]{%
+\renewcommand*{\cventry}[7][.5em]{%
   \cvitem[#1]{#2}{%
     {\textcolor{color1}{\textbf{#3}}}%
     \ifthenelse{\equal{#4}{}}{}{, \textcolor{gray}{\textit{\textbf{#4}}}}%
@@ -177,7 +180,7 @@
 \end{itemize}
 }
 
-\cventry{2018--2022}{\large Principal Research Engineer}{Science @ Content Platform @ Verizon Media/Oath}{\textbf{Roles}: ML/DL Engineer, Research Engineer}{Sunnyvale}{%
+\cventry{2018--2022}{\large Principal Research Engineer}{Science and Content Platform @ Verizon Media/Oath}{\textbf{Roles}: ML/DL Engineer, Research Engineer}{Sunnyvale}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{Deep Learning-based Multi-label Classification (2020-2021)}: \textbf{Goal} -- Modernize the production models and infrastructure using new deep learning models. \textbf{Achievements} -- (1) Developed a modern pipeline based on HuggingFace Transformers to train/evaluate multi-label, multi-class and binary classification problems; (2) Built a tool for plugin taxonomies for the multi-label configurations; (3) Trained new models obtaining significantly better metrics over the ones in production (+10\% over baseline); (4) Developed a serving pipeline based on NVIDIA's Triton Server to deploy in production.
 \item \textbf{Scalable Few-shot Classification with Parallel Prefix Conditioning (2021)}: \textbf{Goal} -- Modify a transformer architecture (e.g. BERT) to achieve fast and effective few-shot classification by prefixing multiple category labels to the input. \textbf{Method} -- Class representations are encoded in parallel but produce independent binary labels for each input through a shared classification output layer. \textbf{Achievements} -- (1) Conducted experiments on the DBPedia dataset demonstrating improved few-shot performance over standard multi-class classifiers and a speedup over binarized formulations; (2) Further analysis showed that the approach could be scaled to a large number of categories and may hold promise for zero-shot learning of unseen categories.
@@ -257,12 +260,12 @@ I participated in European and national research projects that included the anal
 %---------------------------------- PATENTS --------------------------------------------
 \section{Patents}
 
-% For Patents, use the \cventry syntax: \cventry{{pat. number}}{year}}{{title}}{{Status: App. (application)or Pat. (patent)}}{}{}
+% For Patents, use the \cventry syntax: \cventry{{year}}{pat. number}}{{title}}{{Status: App. (application)or Pat. (patent)}}{}{}
 
-\cventry{18/512,871}{2025}{Systems and methods for automatically adding text content to generated images}{App.}{}{}
-\cventry{18/365,941}{2024}{Method and system for webpage classification and content delivery}{App.}{}{}
+\cventry{2025}{18/512,871}{Systems and methods for automatically adding text content to generated images}{App}{}{}
+\cventry{2024}{18/365,941}{Method and system for webpage classification and content delivery}{App}{}{}
 
-%---------------------------------- PATENTS ----------------------------------------------------------------------------------------
+%---------------------------------- PATENTS --------------------------------------------
 
 %------------- ACADEMIC RESEARCH EXPERIENCE --------------------------------------------
 
@@ -299,8 +302,8 @@ I participated in European and national research projects that included the anal
 \cvitem{BigData}{Distributed Processing, Highly Available and Scalable System Design, Perf. Tuning.}
 
 \subsection{Architecture, Design \& Processes}
-\cvitem{Processes}{\small Architecture and Software Design, Design patterns, RESTful APIs, UML, Agile}
-%\cvline{Enterprise}{\small  Economy and business management basics}
+\cvitem{Processes}{Architecture and Software Design, Design patterns, RESTful APIs, UML, Agile}
+%\cvline{Enterprise}{Economy and business management basics}
 
 %------------- SKILLS --------------------------------------------
 
@@ -353,92 +356,108 @@ I participated in European and national research projects that included the anal
 
 %------------- EDUCATION --------------------------------------------
 
-%------------- COMMUNICATION SKILLS --------------------------------------------
+%------------- LEADERSHIP AND COMMUNICATION SKILLS --------------------------------------------
 
-\section{Communication Skills}
+\section{Leadership \& Communication}
 
-\cvline{}{\small Presented research findings at both international and national conferences, 
-effectively communicating complex ideas to diverse audiences. Delivered project updates in internal meetings within corporate environments. Additionally, I demonstrated teaching and mentoring skills by conducting undergraduate and Ph.D.-level courses at the university, fostering 
-understanding and engagement among students. }
+\subsection{Mentoring \& Team Leadership}
+\cvitem{Research}{Mentored junior researchers across multiple teams; led cross-functional product, engineering, and strategy discussions; enabled knowledge transfer from research to production engineering.}
+\cvitem{Academia}{Taught undergraduate courses in [specific subject/area], developing curriculum and guiding students through core concepts and practical applications.}
 
-%------------- COMMUNICATION SKILLS --------------------------------------------
+\subsection{Technical Communication}
+\cvitem{Misc.}{Presented research findings at both international and national conferences, 
+effectively communicating complex ideas to diverse audiences. Delivered project updates in internal meetings within corporate environments. Authored 10+ peer-reviewed publications with extensive citations.}
+
+\subsection{Professional Service}
+\cvitem{Apache}{Committer and maintainer for \textit{Apache Omid}; conference reviewer; active open-source maintainer of \textit{\href{https://crates.io/crates/mdbook-bib}{mdbook-bib}} (Bibliography management tool).}
+
+%------------- LEADERSHIP AND COMMUNICATION SKILLS --------------------------------------------
 
 %------------- LANGUAGES --------------------------------------------
 
 \section{Languages}
 
-\cvcomputer{Spanish}{\small \textit{Mother tongue}}{English}{\small \textit{Fluent}} % (written and spoken)
-\cvcomputer{French}{\small \textit{Intermediate proficiency}}{Catalan}{\small \textit{Intermediate proficiency}} % (listening, reading, \& speaking)
+\cvcomputer{Spanish}{\textit{Mother tongue}}{English}{\textit{Professional proficiency}} % (written and spoken)
+\cvcomputer{French}{\textit{Intermediate proficiency}}{Catalan}{\textit{Intermediate proficiency}} % (listening, reading, \& speaking)
 
 %------------- LANGUAGES --------------------------------------------
 
 %------------- OTHER ACTIVITIES RELATED TO CS --------------------------------------------
 \section{Other Activities Related to Computer Science}
 \cventry{}{Open Source Project Maintainer}{}{}{}{
-- \textit{mdbook-bib}: Rust-based bibliography management plugin for mdBook (official Rust documentation system). Active maintenance and community engagement with significant adoption.\href{Crates Info}{https://crates.io/crates/mdbook-bib}
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textit{mdbook-bib}: Rust-based bibliography management plugin for mdBook (official Rust documentation system). Active maintenance and community engagement with significant adoption. \href{https://crates.io/crates/mdbook-bib}{Crates Info}
+\end{itemize}
 }
 \cventry{}{Committer in the Apache Software Foundation}{}{}{}{
-- \textit{Apache Omid project, a high-performant and scalable Transaction Manager for HBase}
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textit{Apache Omid project, a high-performant and scalable Transaction Manager for HBase}
+\end{itemize}
 }
 \cventry{}{Reviewer in International Academic Conferences}{}{}{}{
-- \textit{IEEE International Symposium on Reliable Distributed Systems (SRDS)}, 2008 and 2009\newline
-- \textit{IEEE International conference in Distributed Computing Systems (ICDCS)}, 2009\newline
-- \textit{International Conference on Parallel and Distributed Computing (Europar)}, 2007 and 2010\newline
-- \textit{ACM Symposium on Applied Computing (SAC)}, 2008 and 2010\newline
-- \textit{International Conference on Service-Oriented Computing (ICSOC)}, 2009\newline
-- \textit{EDBTs International Workshop on Data Management in Peer-to-peer Systems (DAMAP)}, 2009\newline
-- \textit{International Workshop on Assurance in Distributed Systems and Networks (ADSN)}, 2010
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textit{IEEE International Symposium on Reliable Distributed Systems (SRDS)}, 2008 and 2009
+\item \textit{IEEE International conference in Distributed Computing Systems (ICDCS)}, 2009
+\item \textit{International Conference on Parallel and Distributed Computing (Europar)}, 2007 and 2010
+\item \textit{ACM Symposium on Applied Computing (SAC)}, 2008 and 2010
+\item \textit{International Conference on Service-Oriented Computing (ICSOC)}, 2009
+\item \textit{EDBTs International Workshop on Data Management in Peer-to-peer Systems (DAMAP)}, 2009
+\item \textit{International Workshop on Assurance in Distributed Systems and Networks (ADSN)}, 2010
+\end{itemize}
 }
 \cventry{}{Speaker/Attendee in Academic/Technical Conferences}{}{}{}{
-- \textit{Agentic AI Summit}, Aug 2nd, 2025, Berkeley, CA (USA)\newline
-- \textit{AI Engineer World's Fair}, Jun 3rd-5th, 2025, San Francisco, CA (USA)\newline
-- \textit{MLSys 2025 conference}, May 11th-15th, 2025, Santa Clara, CA (USA)\newline    
-- \textit{Neurips 2024 conference}, Dec 10th-15th, 2024, Vancouver, BC (Canada)\newline
-- \textit{ICML 2024 conference}, Jul 21st-27th, 2024, Vienna (Austria)\newline
-- \textit{AI Engineer World's Fair}, Jun 25th-27th, 2024, San Francisco, CA (USA)\newline
-- \textit{MLSys 2024 conference}, May 13th-16th, 2024, Santa Clara, CA (USA)\newline
-- \textit{W\&B Fully Connected Conference 2024, The Era of Generative AI}, Apr 17th-18th, 2024, San Francisco, CA (USA)\newline
-- \textit{Neurips 2023 conference}, Dec 10th, 2023, New Orleans, LA (USA)\newline
-- \textit{Amazon Re:Invent 2023}, Nov 27th-30th, 2023, Las Vegas, NV (USA)\newline
-- \textit{Ray Summit 2023}, Sep 18th-20th, 2023, San Francisco, CA (USA)\newline
-- \textit{ICML 2023 conference}, Jul 23rd-29th, 2023, Honolulu, Hawaii (USA)\newline
-- \textit{MLSys 2023 conference}, Jun 4th-8th, 2023, Miami, FL (USA)\newline
-- \textit{Ray Summit 2022}, Aug 23rd-24th, 2022, San Francisco, CA (USA)\newline
-- \textit{MLSys 2022 conference}, Aug 31st-Sept 3rd, 2022, Santa Clara, CA (USA)\newline
-- \textit{ACL 2019 conference (Speaker)}, Jul 28th-Aug 2nd, 2019, Florence (Italy)\newline
-- \textit{@Scale conference}, Aug 31st, 2016, San Jose, CA (USA)\newline
-- \textit{Hadoop Summit (Speaker)}, Jun 28th-30th, 2016, San Jose, CA (USA)\newline
-- \textit{@Scale conference}, Sep 14th, 2015, San Jose, CA (USA)\newline
-- \textit{Hadoop Summit Europe}, Apr 15th-16th, 2015, Brussels (Belgium)\newline
-- \textit{Hadoop Summit Europe}, Apr 2nd-3rd, 2014, Amsterdam (Netherlands)\newline
-- \textit{NoSQL Matters Conf.}, Nov 21st-22nd, 2014, Barcelona (Spain)\newline
-- \textit{NoSQL Matters Conf.}, Nov 29th-30th, 2013, Barcelona (Spain)\newline
-- \textit{NoSQL Matters Conf.}, Oct 6th, 2012, Barcelona (Spain)\newline
-- \textit{IEEE International Symposium on Reliable Distributed Systems (SRDS)}, Oct 4th-7th, 2011, Madrid (Spain)\newline
-- \textit{World Wide Web Conference}, Apr 20th-24th, 2009, Madrid (Spain)\newline
-- \textit{Spanish Conference on Concurrency and Distributed Systems}, Sep 13th-16th, 2005, Granada (Spain)\newline
-- \textit{ObjectWebCon'05}, Jan 17th-20th, 2005, Lyon (France)\newline
-- \textit{ObjectWeb's Workshop on Transactions}, Feb 23rd-24th, 2004, Grenoble (France)\newline
-- \textit{ObjectWeb's Architecture Meeting}, Jan 13th-15th, 2004, Sevilla (Spain)
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textit{Agentic AI Summit}, Aug 2nd, 2025, Berkeley, CA (USA)
+\item \textit{AI Engineer World's Fair}, Jun 3rd-5th, 2025, San Francisco, CA (USA)
+\item \textit{MLSys 2025 conference}, May 11th-15th, 2025, Santa Clara, CA (USA)
+\item \textit{Neurips 2024 conference}, Dec 10th-15th, 2024, Vancouver, BC (Canada)
+\item \textit{ICML 2024 conference}, Jul 21st-27th, 2024, Vienna (Austria)
+\item \textit{AI Engineer World's Fair}, Jun 25th-27th, 2024, San Francisco, CA (USA)
+\item \textit{MLSys 2024 conference}, May 13th-16th, 2024, Santa Clara, CA (USA)
+\item \textit{W\&B Fully Connected Conference 2024, The Era of Generative AI}, Apr 17th-18th, 2024, San Francisco, CA (USA)
+\item \textit{Neurips 2023 conference}, Dec 10th, 2023, New Orleans, LA (USA)
+\item \textit{Amazon Re:Invent 2023}, Nov 27th-30th, 2023, Las Vegas, NV (USA)
+\item \textit{Ray Summit 2023}, Sep 18th-20th, 2023, San Francisco, CA (USA)
+\item \textit{ICML 2023 conference}, Jul 23rd-29th, 2023, Honolulu, Hawaii (USA)
+\item \textit{MLSys 2023 conference}, Jun 4th-8th, 2023, Miami, FL (USA)
+\item \textit{Ray Summit 2022}, Aug 23rd-24th, 2022, San Francisco, CA (USA)
+\item \textit{MLSys 2022 conference}, Aug 31st-Sept 3rd, 2022, Santa Clara, CA (USA)
+\item \textit{ACL 2019 conference (Speaker)}, Jul 28th-Aug 2nd, 2019, Florence (Italy)
+\item \textit{@Scale conference}, Aug 31st, 2016, San Jose, CA (USA)
+\item \textit{Hadoop Summit (Speaker)}, Jun 28th-30th, 2016, San Jose, CA (USA)
+\item \textit{@Scale conference}, Sep 14th, 2015, San Jose, CA (USA)
+\item \textit{Hadoop Summit Europe}, Apr 15th-16th, 2015, Brussels (Belgium)
+\item \textit{Hadoop Summit Europe}, Apr 2nd-3rd, 2014, Amsterdam (Netherlands)
+\item \textit{NoSQL Matters Conf.}, Nov 21st-22nd, 2014, Barcelona (Spain)
+\item \textit{NoSQL Matters Conf.}, Nov 29th-30th, 2013, Barcelona (Spain)
+\item \textit{NoSQL Matters Conf.}, Oct 6th, 2012, Barcelona (Spain)
+\item \textit{IEEE International Symposium on Reliable Distributed Systems (SRDS)}, Oct 4th-7th, 2011, Madrid (Spain)
+\item \textit{World Wide Web Conference}, Apr 20th-24th, 2009, Madrid (Spain)
+\item \textit{Spanish Conference on Concurrency and Distributed Systems}, Sep 13th-16th, 2005, Granada (Spain)
+\item \textit{ObjectWebCon'05}, Jan 17th-20th, 2005, Lyon (France)
+\item \textit{ObjectWeb's Workshop on Transactions}, Feb 23rd-24th, 2004, Grenoble (France)
+\item \textit{ObjectWeb's Architecture Meeting}, Jan 13th-15th, 2004, Sevilla (Spain)
+\end{itemize}
 }
 \cventry{}{Member}{}{}{}{
-- \textit{Apache Software Foundation (ASF)}, https://www.apache.org/\newline
-- \textit{ObjectWeb Consortium}, http://www.ow2.org\newline
-- \textit{Java Community Process program (JCP)}, http://jcp.org
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textit{Apache Software Foundation (ASF)}, \href{https://www.apache.org/}{https://www.apache.org/}
+\item \textit{ObjectWeb Consortium}, \href{http://www.ow2.org}{http://www.ow2.org}
+\item \textit{Java Community Process program (JCP)}, \href{http://jcp.org}{http://jcp.org}
+\end{itemize}
 }
 
 %------------- OTHER ACTIVITIES RELATED TO CS --------------------------------------------
 
 %------------- HOBBIES AND INTERESTS --------------------------------------------
 \section{Hobbies and Interests}
-\cvline{}{\small Beyond my core professional focus, but some way related to it, I have a strong interest in the 
+\cvline{}{Beyond my core professional focus, but some way related to it, I have a strong interest in the 
 intersection of fields such as neuroscience, psychology, decision-making, cognitive sciences, learning techniques, 
 behavioral economics, and philosophy, as they offer valuable insights into human behavior, intelligence, and how 
 the brain works (and why!) I am deeply fascinated by the mechanisms of human thought, learning, and behavior, and
 how these insights can inform and inspire advancements in AI and our daily lives and wellbeing in general.
 }
-\cvline{}{\small In my personal life, I enjoy staying active through activities like running, mountain biking, yoga, cold-plunging, 
-and playing tennis, which not only keep me physically fit but also provide a sense of balance and focus.
+\cvline{}{In my personal life, I enjoy staying active through activities like running, mountain biking, yoga, cold-plunging, and playing tennis, which not only keep me physically fit but also provide a sense of balance and focus.
 }
 %------------- HOBBIES AND INTERESTS --------------------------------------------
 
