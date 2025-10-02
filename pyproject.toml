@@ -53,7 +53,7 @@ start="python src/cv_mcp_server/main.py"
 
 # MCPB (MCP Bundle) tasks - updated to use lib directory approach
 python-bundle="mkdir -p python-dist && pixi run -e dev python -m build --wheel --outdir python-dist && echo 'Wheel built and ready for MCPB bundle'"
-update-mcpb-deps="pixi run -e dev uv sync && pixi run -e dev uv lock && pixi run -e dev uv export --no-hashes --format requirements-txt > requirements.txt"
+update-mcpb-deps="rm -rf uv.lock && pixi run -e dev uv sync && pixi run -e dev uv lock && pixi run -e dev uv export --no-hashes --format requirements-txt > requirements.txt"
 mcp-bundle="rm -rf lib/ && mkdir -p lib && pixi run -e dev python -m pip install -r requirements.txt --target lib --upgrade --force-reinstall"
 pack="BUNDLE_NAME=$(python3 -c \"import json; print(f\\\"{json.load(open('manifest.json'))['name']}-{json.load(open('manifest.json'))['version']}.mcpb\\\")\") && npx @anthropic-ai/mcpb pack . mcpb-package/$BUNDLE_NAME"
 clean-bundles="rm -rf python-dist/ mcpb-package/ lib/"
