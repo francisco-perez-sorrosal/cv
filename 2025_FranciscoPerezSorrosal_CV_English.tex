@@ -80,6 +80,37 @@
 % Compact itemize globally with smaller bullets
 \setlist[itemize]{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt,label={\tiny$\bullet$}}
 
+% Reduce interlining space
+\renewcommand{\baselinestretch}{1}
+
+% Reduce spacing between sections
+\renewcommand{\sectionfont}{\Large\mdseries\upshape\bfseries}
+\setlength{\hintscolumnwidth}{1.6cm}
+
+% Customize section to make it larger and in color1
+\makeatletter % to allow for customizing the section command
+\renewcommand*{\section}[1]{%
+  \par\addvspace{.6cm}%
+  \phantomsection{}%
+  \addcontentsline{toc}{section}{#1}%
+  \parbox[t]{\hintscolumnwidth}{\strut\raggedleft\raisebox{\baseletterheight}{\color{color1}\rule{\hintscolumnwidth}{0.5ex}}}%
+  \hspace{\separatorcolumnwidth}%
+  \parbox[t]{\maincolumnwidth}{\strut\sectionstyle{#1}}%
+  \par\nobreak\addvspace{0.9ex}\@afterheading}
+\makeatother
+
+% Customize cventry to make job position (third parameter) default to color1
+% and company (fourth parameter) in color1 and italics
+\renewcommand*{\cventry}[7][.8em]{%
+  \cvitem[#1]{#2}{%
+    {\textcolor{color1}{\textbf{#3}}}%
+    \ifthenelse{\equal{#4}{}}{}{, \textcolor{gray}{\textit{\textbf{#4}}}}%
+    \ifthenelse{\equal{#5}{}}{}{, #5}%
+    \ifthenelse{\equal{#6}{}}{}{, #6}%
+    .\strut%
+    \ifx&#7&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\vspace{-5pt}#7\end{minipage}}\fi}}
+
 %------------- BIBLIOGRAPHY STYLE --------------------------------------------
 % to show numerical labels in the bibliography; only useful if you make citations in your resume
 \makeatletter
@@ -111,7 +142,7 @@
 
 % For Professional Experience, use the \cventry syntax: \cventry{{period/year(s)}}{{job position}}{{company}}{{role(s)}}{{location (optional)}}{{description using LaTeXitemized lists}}
 
-\cventry{2025--Now}{\large Strategic Advisor on AI}{Independent}{Focus: Agentic AI \& LLM Apps}{}{%
+\cventry{2025--Now}{\large Strategic Advisor on AI}{Independent}{\textbf{Focus}: Agentic AI \& LLM Apps}{}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{Agentic AI}: Deep-dive research of multi-agent systems, \textit{LLM orchestration}, and autonomous reasoning frameworks; evaluated cutting-edge frameworks including \textit{AutoGen}, \textit{CrewAI}, \textit{OpenAI} and custom agentic workflows.
 \item \textbf{Strategic Advisory}: Provided technical guidance to early-stage startups (\textit{Eni6ma}, \href{https://wasmer.io/}{\textit{Wasmer}}) on AI strategy, model selection, and production requirements; advised on \textit{Agentic AI} integration patterns and AI architecture design.
@@ -155,7 +186,7 @@
 \end{itemize}
 }
 
-\cventry{2015--2018}{\large Senior Research Engineer}{Content Ingestion Platform (CAP) @ Yahoo Inc.}{\textbf{Roles}: ML/DL Engineer}{Sunnyvale}{%
+\cventry{2017--2018}{\large Senior Research Engineer}{Content Ingestion Platform (CAP) @ Yahoo Inc.}{\textbf{Roles}: ML/DL Engineer}{Sunnyvale}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{DL-based Multi-class Classification for Content Ingestion (2018)}: Experimented with LSTM/GRU-based models for multi-class classification using TF/Keras. Explored transfer learning techniques for multi-label text classification.
 \item \textbf{Machine Learning Content Classification Pipeline (2017)}: Built a pipeline for easy data ingestion, model training and evaluation based on SVMs for the Sieve platform.
