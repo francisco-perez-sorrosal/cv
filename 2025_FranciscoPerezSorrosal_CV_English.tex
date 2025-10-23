@@ -11,15 +11,14 @@
 %------------- PACKAGES --------------------------------------------
 
 \documentclass[11pt,a4paper,english, sans]{moderncv}      % a4paper, a5paper, b5paper, letterpaper, legalpaper, executivepaper, landscape
-                                                    % 10pt, 11pt, 12pt
-% moderncv themes
-%\moderncvtheme[green]{casual}              % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
-                                            % casual (default), classic, banking, oldstyle, fancy
-\moderncvtheme[blue]{classic}
+                                                          % 10pt, 11pt, 12pt, english, sans
+
+% moderncv setup
+\moderncvcolor{blue} % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
+\moderncvstyle{classic} % casual (default), classic, banking, oldstyle, fancy
 
 % adjust the page margins
 \usepackage[scale=0.8]{geometry}
-% \usepackage[scale=0.75]{geometry}
 
 % Font encoding and family
 % \usepackage[utf8]{inputenc}                   % character encoding: replace by the encoding you are using
@@ -33,42 +32,38 @@
 \usepackage{amssymb}
 
 % additional packages for safety
-%\usepackage{hyperref}
 \usepackage{enumitem}
+\usepackage{ifthen}
 
 %------------- PACKAGES --------------------------------------------
 
 
-%------------- PERSONAL DATA --------------------------------------------
+%------------- PERSONAL DATA ---------------------------------------
 % personal data
-\firstname{\Huge Francisco}
-\familyname{\Huge Perez-Sorrosal}
-\title{Principal Research Engineer}            % optional, remove the line if not wanted
-\address{N/A}{94123 San Francisco, CA (U.S.)}            % optional, remove the line if not wanted
+\name{\Huge Francisco}{\Huge Perez-Sorrosal}
+\title{Principal Research Engineer}
+\address{N/A}{94123 San Francisco, CA (U.S.)}
 % \address{N/A}{N/A}
-\mobile{Ask through LinkedIn}                            % optional, remove the line if not wanted
-\email{Ask through LinkedIn}                             % optional, remove the line if not wanted
-\extrainfo{\homepagesymbol ~\href{https://github.com/francisco-perez-sorrosal/cv/blob/master/2025_FranciscoPerezSorrosal_CV_English.pdf}{Full CV}}      % optional, remove the line if not wanted
+\phone[mobile]{Ask through LinkedIn}
+\email{Ask through LinkedIn}
 \social[linkedin]{fperezsorrosal}
 \social[github]{francisco-perez-sorrosal}
-% \homepage{http://francisco-perez-sorrosal.github.io/}    % optional, remove the line if not wanted
-%\extrainfo{\homepagesymbol~\href{http://xxxx}{xxx}}      % optional, remove the line if not wanted
-%\phone{phone (optional)}                                % optional, remove the line if not wanted
+\homepage{http://francisco-perez-sorrosal.github.io/}
+\extrainfo{\homepagesymbol ~\href{https://github.com/francisco-perez-sorrosal/cv/blob/master/2025_FranciscoPerezSorrosal_CV_English.pdf}{Full CV}}      % optional, remove the line if not wanted
 %\fax{fax (optional)}                                    % optional, remove the line if not wanted
-%\homepage{ch.linkedin.com/in/juanperezsorrosal}         % optional, remove the line if not wanted
 %\photo[44pt]{fotoFranGuayV2.jpg}                        % '64pt' is the height the picture must be resized to and 'picture' is the name of the picture file; optional, remove the line if not wanted
-%------------- PERSONAL DATA --------------------------------------------
+%------------- PERSONAL DATA ---------------------------------------
 
-%------------- QUOTE --------------------------------------------
+%------------- QUOTE -----------------------------------------------
 % Quote (optional)
 %\quote{“Success is not final, failure is not fatal: It is the courage to continue that counts.” - Winston Churchill}
 %\quote{“Integrity is doing the right thing, even when no one is watching.” — C. S. Lewis}
 %\quote{“Strive not to be a success, but rather to be of value.” — Albert Einstein}
 %\quote{Computers are useless. They can only give you answers. - Pablo Picasso}
 \quote{\textit{"Any man could, if he were so inclined, be the sculptor of his own brain." -- Santiago Ram\'on y Cajal}}
-%------------- QUOTE --------------------------------------------
+%------------- QUOTE -----------------------------------------------
 
-%------------- CONTENT SETUP --------------------------------------------
+%------------- CONTENT SETUP ---------------------------------------
 
 % Page numbering (yes/no)
 %\nopagenumbers{}
@@ -143,17 +138,19 @@
 %------------- PROFESSIONAL EXPERIENCE --------------------------------------------
 \section{Professional Experience}
 
-% For Professional Experience, use the \cventry syntax: \cventry{{period/year(s)}}{{job position}}{{company}}{{role(s)}}{{location (optional)}}{{description using LaTeXitemized lists}}
+% For Professional Experience, use the \cventry syntax: \cventry{{period/year(s)}}{{job position}}{{company}}{{location (optional)}}{{role(s)}}{{description using LaTeXitemized lists}}
 
-\cventry{2025--Now}{\large Strategic Advisor on AI}{Independent}{\textbf{Focus}: Agentic AI \& LLM Apps}{}{%
-\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\cventry{2025--Now}{\large Strategic Advisor on AI}{Independent}{}{\textbf{Focus}: Agentic AI \& LLM Apps}{%
+\begin{minipage}[c]{\textwidth}
+\begin{itemize}%[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{Agentic AI}: Deep-dive research of multi-agent systems, \textit{LLM orchestration}, and autonomous reasoning frameworks; evaluated cutting-edge frameworks including \textit{AutoGen}, \textit{CrewAI}, \textit{OpenAI} and custom agentic workflows.
 \item \textbf{Strategic Advisory}: Provided technical guidance to early-stage startups (\textit{Eni6ma}, \href{https://wasmer.io/}{\textit{Wasmer}}) on AI strategy, model selection, and production requirements; advised on \textit{Agentic AI} integration patterns and AI architecture design.
 \item \textbf{Continuous Learning}: maintained cutting-edge expertise in rapidly evolving field.
 \end{itemize}
+\end{minipage}
 }
 
-\cventry{2023--2024}{\large Principal Research Engineer}{Knowledge Graph Science @ Yahoo Inc.}{\textbf{Roles}: ML/AI Expert, MLOps}{Sunnyvale}{%
+\cventry{2023--2024}{\large Principal Research Engineer}{Knowledge Graph Science @ Yahoo Inc.}{Sunnyvale}{\textbf{Roles}: ML/AI Expert, MLOps}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{Dataset Quality Improvement (2024)}: \textbf{Goal} -- Since the labels of most entity pairs were generated in a semi-supervised manner, develop an LLM-based solution to validate and enhance the labeling accuracy of the dev and test datasets. \textbf{Achievement} -- Implemented a generative Entity Matching solution with Llama 2 to identify and fix (by re-labeling) misclassified examples in the dev/test sets.
 \item \textbf{Entity Reconciliation Model Training (2023-2024)}: Fine-tuned transformer-based language models on heterogeneously labeled datasets, integrating editorially curated data with automatically labeled data through entity linking via common identifiers. This approach aimed to deduplicate and reconcile meta-entities related to People and Creative Works. \textbf{Goal} -- Improve current production metrics on both categories. \textbf{Achievements} -- (1) Trained and optimized a unified, type-agnostic LM model for entity matching/reconciliation, replacing tens of type-specific production models and simplifying the maintenance of the reconciliation stage in the Knowledge Graph; (2) Metric improvements: overall increases of 22.23\% and 16.11\% in precision and recall for Person, and 5\% and 4\% for Creative Works; (3) Reduced model size by 33\%, lowering storage requirements and improving efficiency without compromising accuracy.
@@ -162,25 +159,25 @@
 \end{itemize}
 }
 
-\cventry{Jun--Dec 2022}{\large Principal Research Engineer}{Mail @ Yahoo}{\textbf{Roles}: ML/AI Expert}{Sunnyvale}{%
+\cventry{Jun--Dec 2022}{\large Principal Research Engineer}{Mail @ Yahoo}{Sunnyvale}{\textbf{Roles}: ML/AI Expert}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{Kamino Project - Mail Classification System}: \textbf{Goal} -- Upgrade legacy production models to a new generation of deep learning-based, small distilled models optimized for large-scale deployment. These models were designed to classify incoming mail using a newly developed multilabel taxonomy tailored to the mail team's specific use cases. \textbf{Approach} -- Developed a deep learning pipeline using Hugging Face to train/evaluate models based on the Teacher/Student knowledge distillation framework. Starting with limited human-labeled training data, a large and complex teacher model was created to achieve high accuracy. This model was then used to generate teacher-labeled data for training lightweight student models optimized for deployment. Two types of student models were produced: (1) online models, optimized for speed and suitable for real-time classification tasks, and (2) offline models, designed to include richer information for improved accuracy in non-real-time applications. \textbf{Achievements} -- The resulting student models for an expanded taxonomy, more than doubling the number of deployable categories in the taxonomy while improving performance on existing categories in production by 3.1-5.9\%.
 \end{itemize}
 }
 
-\cventry{Apr--Dec 2022}{\large Technical Advisor}{Digital Transformation Office @ Yahoo}{\textbf{Roles}: ML/AI Expert, Strategy}{Sunnyvale}{%
+\cventry{Apr--Dec 2022}{\large Technical Advisor}{Digital Transformation Office @ Yahoo}{Sunnyvale}{\textbf{Roles}: ML/AI Expert, Strategy}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{AI/ML Working Group - AI/ML Future Strategy Definition in the Cloud}: As Yahoo transitioned its infrastructure from on-premises data centers to a fully cloud-based environment, scientists and research engineers required modern tools to streamline their workflows. These tools needed to facilitate dataset and model sharing, ensure reproducibility of experiments, enable rapid experimentation and iteration on new models, and support seamless publishing and deployment into pre-production/production environments. \textbf{Goal} -- Specifically, the Model Development subgroup was dedicated to establishing the requirements, standards, tools, and frameworks needed to scale ML/DL applications effectively across the company. \textbf{Achievements} -- (1) Led the discussions on the Model Development subgroup, although participated actively in the remaining three (Data Management, Model Management, and Model Serving); (2) Delivered a set of recommendations (prioritized and categorized in topics) and tasks to do (internal processes, external relations, tools, etc.) to guarantee that ML/DL practitioners could work with less friction in the new cloud environments.
 \end{itemize}
 }
 
-\cventry{2021--2022}{\large Principal Research Engineer}{Ads @ Yahoo}{\textbf{Roles}: ML/AI Expert, Strategy}{Sunnyvale}{%
+\cventry{2021--2022}{\large Principal Research Engineer}{Ads @ Yahoo}{Sunnyvale}{\textbf{Roles}: ML/AI Expert, Strategy}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{Contextual Targeting Solution}: In the Ads platform, as we were moving towards a cookie-less world, the ability to track users' online signals for behavioral targeting would be drastically reduced, making contextual targeting an appealing alternative for advertising platforms. Using our experience in hierarchical multilabel classification in other contexts, we helped the Ads team to use it in category-based contextual targeting at Yahoo. We proposed and implemented a multilingual model that can accurately classify web pages into a hierarchical taxonomy (specifically, the Yahoo Interest Categories taxonomy) without crawling their content. \textbf{Goal} -- Transfer the knowledge and experience in taxonomy-based multi-label classification to the Ads team and build a platform for training/evaluating the models. \textbf{Achievements} -- (1) Helped the Ads team to develop a pipeline for training models for the task at hand; (2) \textit{Multilingual taxonomic web page classification for contextual targeting at Yahoo} paper (ACM SIGKDD 2022) \textbf{7 Citations}.
 \end{itemize}
 }
 
-\cventry{2018--2022}{\large Principal Research Engineer}{Science and Content Platform @ Verizon Media/Oath}{\textbf{Roles}: ML/DL Engineer, Research Engineer}{Sunnyvale}{%
+\cventry{2018--2022}{\large Principal Research Engineer}{Science and Content Platform @ Verizon Media/Oath}{Sunnyvale}{\textbf{Roles}: ML/DL Engineer, Research Engineer}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{Deep Learning-based Multi-label Classification (2020-2021)}: \textbf{Goal} -- Modernize the production models and infrastructure using new deep learning models. \textbf{Achievements} -- (1) Developed a modern pipeline based on HuggingFace Transformers to train/evaluate multi-label, multi-class and binary classification problems; (2) Built a tool for plugin taxonomies for the multi-label configurations; (3) Trained new models obtaining significantly better metrics over the ones in production (+10\% over baseline); (4) Developed a serving pipeline based on NVIDIA's Triton Server to deploy in production.
 \item \textbf{Scalable Few-shot Classification with Parallel Prefix Conditioning (2021)}: \textbf{Goal} -- Modify a transformer architecture (e.g. BERT) to achieve fast and effective few-shot classification by prefixing multiple category labels to the input. \textbf{Method} -- Class representations are encoded in parallel but produce independent binary labels for each input through a shared classification output layer. \textbf{Achievements} -- (1) Conducted experiments on the DBPedia dataset demonstrating improved few-shot performance over standard multi-class classifiers and a speedup over binarized formulations; (2) Further analysis showed that the approach could be scaled to a large number of categories and may hold promise for zero-shot learning of unseen categories.
@@ -189,7 +186,7 @@
 \end{itemize}
 }
 
-\cventry{2017--2018}{\large Senior Research Engineer}{Content Ingestion Platform (CAP) @ Yahoo Inc.}{\textbf{Roles}: ML/DL Engineer}{Sunnyvale}{%
+\cventry{2017--2018}{\large Senior Research Engineer}{Content Ingestion Platform (CAP) @ Yahoo Inc.}{Sunnyvale}{\textbf{Roles}: ML/DL Engineer}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{DL-based Multi-class Classification for Content Ingestion (2018)}: Experimented with LSTM/GRU-based models for multi-class classification using TF/Keras. Explored transfer learning techniques for multi-label text classification.
 \item \textbf{Machine Learning Content Classification Pipeline (2017)}: Built a pipeline for easy data ingestion, model training and evaluation based on SVMs for the Sieve platform.
@@ -197,7 +194,7 @@
 \end{itemize}
 }
 
-\cventry{2015--2017}{\large Senior Research Engineer}{Sieve @ Yahoo Inc.}{\textbf{Roles}: Distributed Systems Expert, Research Engineer}{Sunnyvale}{%
+\cventry{2015--2017}{\large Senior Research Engineer}{Sieve @ Yahoo Inc.}{Sunnyvale}{\textbf{Roles}: Distributed Systems Expert, Research Engineer}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{Twitter Firehose: At-scale Ingestion Streaming System for Tweets (2017)}: Reimplemented the new Twitter API (v2.0) in the firehose. Re-architected previous solution to be more performant yet keeping backwards compatibility. Collaborated with the Sports team for the productization of the new firehose.
 \item \textbf{Scalable Content Ingestion Platform (2016)}: Transferred Omid as full open-source project into the \href{https://github.com/apache/incubator-omid}{Apache Software Foundation (ASF)}. Continued supporting the Omid transaction manager project in production. \textit{Omid} presented at Hadoop Summit, 2016, San Jose, CA (USA). \textit{Omid, reloaded: scalable and Highly-Available transaction processing} paper. In USENIX FAST, 2017 \textbf{20 Citations}.
@@ -205,7 +202,7 @@
 \end{itemize}
 }
 
-\cventry{2012--2015}{\large Research Engineer}{Scalable Computing Group @ Yahoo Labs.}{\textbf{Roles}: Distributed Systems Expert, Research Software Engineer}{Spain}{%
+\cventry{2012--2015}{\large Research Engineer}{Scalable Computing Group @ Yahoo Labs.}{Spain}{\textbf{Roles}: Distributed Systems Expert, Research Software Engineer}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{Omid - Transaction Manager for Big Datastores (2014)}: Re-architected the original codebase and implemented new features. Supported the Omid integration in Sieve project (Yahoo's large scale Internet content ingestion platform). Presented Omid and its poster at Yahoo's internal technical conference (Techpulse Conf. 2014).
 \item \textbf{Edentity/Pachiderm - Ubiquitous Content Access and Management (2014)}: Ubiquitous content access and management of personal data (images, video) held on 3rd party services (Flickr, GDrive, Dropbox). Designed and implemented a scalable synchronization data module. Defined and implemented a RESTful API for each module defined (User Registration, Search, Content Fetching).
@@ -214,19 +211,19 @@
 \end{itemize}
 }
 
-\cventry{2011--2012}{\large Software Architect}{Lumata}{\textbf{Roles}: Distributed Systems Expert, Architect}{Spain}{%
+\cventry{2011--2012}{\large Software Architect}{Lumata}{Spain}{\textbf{Roles}: Distributed Systems Expert, Architect}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{Giddra Project - SONY Socialife Application (2012)}: High Scalable Big-Data Backend Platform for web and social content ingestion and aggregation. Contributed to the architectural definition of the platform. Did coordination over multiple teams. Defined the REST API for allowing clients to access/use the backend.
 \end{itemize}
 }
 
-\cventry{2010--2011}{\large Software Architect/Engineer}{Freelance, Greenhouse Cooperative}{}{Spain}{%
+\cventry{2010--2011}{\large Software Architect/Engineer}{Freelance, Greenhouse Cooperative}{Spain}{}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item Analysis, design and Ruby/Rails implementation of a web application to manage the different domains of a greenhouse farm. LoC $\simeq$ 20,000.
 \end{itemize}
 }
 
-\cventry{2003--2010}{\large Software Architect/Research Engineer}{School of CS at Univ. Politécnica de Madrid (UPM)}{\textbf{Roles}: Distributed Systems Expert, Software Architect, Software Engineer}{Spain}{%
+\cventry{2003--2010}{\large Software Architect/Research Engineer}{School of CS at Univ. Politécnica de Madrid (UPM)}{Spain}{\textbf{Roles}: Distributed Systems Expert, Software Architect, Software Engineer}{%
 I participated in European and national research projects that included the analysis, design, implementation and testing of different kinds of middleware architectures and applications.
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{NEXOF-RA: NESSI Open Framework - Reference Architecture (2008--2010)}: 7th European Framework Programme (FP7-216446). Contributed to a reference architecture (RA) for a European service platform. Built the specification of a set of architectural patterns for non-functional attributes and analysis of how to integrate cloud platforms in the RA.
@@ -239,19 +236,19 @@ I participated in European and national research projects that included the anal
 \end{itemize}
 }
 
-\cventry{2001--2003}{\large Lecturer}{School of CS at Universidad Pontificia de Salamanca (Madrid Campus)}{\textbf{Roles}: Lecturer}{Spain}{%
+\cventry{2001--2003}{\large Lecturer}{School of CS at Universidad Pontificia de Salamanca (Madrid Campus)}{Spain}{\textbf{Roles}: Lecturer}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item Courses on Operating Systems and Programming (C and Pascal).
 \end{itemize}
 }
 
-\cventry{2000--2001}{\large Systems Administrator}{School of CS at Universidad Pontificia de Salamanca (Madrid Campus)}{\textbf{Roles}: Systems Administrator}{Spain}{%
+\cventry{2000--2001}{\large Systems Administrator}{School of CS at Universidad Pontificia de Salamanca (Madrid Campus)}{Spain}{\textbf{Roles}: Systems Administrator}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item Managed and maintained UNIX/Linux servers and Windows workstations: task automation, security.
 \end{itemize}
 }
 
-\cventry{1999}{\large Quality Analyst}{Meta 4 S.A. (now Cegid)}{\textbf{Roles}: Quality Analyst}{Madrid, Spain}{%
+\cventry{1999}{\large Quality Analyst}{Meta 4 S.A. (now Cegid)}{Madrid, Spain}{\textbf{Roles}: Quality Analyst}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item Tested the database connection modules of Meta4's ERP suite (now Cegid), gaining hands-on experience with multiple DBMSs, including Oracle, Microsoft SQL Server, Informix, and Sybase, as well as JDBC (Java Database Connectivity). My responsibilities included configuring database connections via JDBC, planning and executing tests, analyzing results, and reporting bugs to ensure system reliability and performance.
 \end{itemize}
@@ -271,7 +268,7 @@ I participated in European and national research projects that included the anal
 
 \section{Academic Research Experience}
 
-\cventry{2003--2011}{\large Researcher}{School of CS at Universidad Politécnica de Madrid (UPM)}{\textbf{Roles}: PhD. Candidate/Researcher}{Spain}{%
+\cventry{2003--2011}{\large Researcher}{School of CS at Universidad Politécnica de Madrid (UPM)}{Spain}{\textbf{Roles}: PhD. Candidate/Researcher}{%
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
 \item \textbf{Ph.D. Thesis: Middleware for High Available and Scalable Multi-Tier and Service-Oriented Architectures (2003--2009)}: Advisors: Prof. Marta Patiño-Martínez and Prof. Ricardo Jiménez-Péris (UPM). \textbf{Specialization} -- \textit{Distributed Systems, Transactional Systems, Scalability, High Availability, SOAs}. Developed a brand-new approach to provide high availability and scalability to multi-tier architectures by combining snapshot-isolation and an innovative vertical replication approach.
 \item \textbf{Research Internship at SARDES Research Group at INRIA Grenoble, France (2007)}: Advisor: Prof. Sara Bouchenak. Integration of self-configuration and self-repair properties of autonomic computing in the core of a cloud platform.
@@ -284,6 +281,12 @@ I participated in European and national research projects that included the anal
 %------------- SKILLS --------------------------------------------
 
 \section{Skills}
+
+% \setcvskillcolumns[][0.85][]
+% %\cvskillhead[<post -padding >][<level>][<skill>][<years of experience>][<comment>]
+% \cvskillhead[0em][Level][Skill][Years][Desc]
+% %\cvskillentry*[<post -padding >]{< skill category >}{<0-5>}{<skill name >}{< years of experience >}{< comment >}
+% \cvskillentry*[1em]{AI/ML \& DS}{5}{Agentic AI Fmwks (OpenAI, CrewAI, etc.)\linebreak HF Transformers, PyTorch, Scikit-learn.}{8}{}
 
 \subsection{AI/ML \& Data Science}
 \cvitem{AI/ML}{Agentic AI Fmwks (OpenAI, CrewAI, etc.), HF Transformers, PyTorch, Scikit-learn.}
@@ -311,6 +314,7 @@ I participated in European and national research projects that included the anal
 
 \section{Courses}
 
+\cventry{2025}{Claude with Amazon Bedrock}{Anthropic Education}{}{\href{https://verify.skilljar.com/c/swok3v3uo84t}{Certificate}}{}
 \cventry{2025}{Claude Code: A Highly Agentic Coding Assistant}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/8a8a3b69-c549-4f9e-a301-8105436e4ff4?usp=sharing}{Certificate}}{}
 \cventry{2025}{Model Context Protocol: Advanced Topics}{Anthropic Education}{}{\href{http://verify.skilljar.com/c/d7e2d2xp2hu9}{Certificate}}{}
 \cventry{2025}{Introduction to Model Context Protocol}{Anthropic Education}{}{\href{http://verify.skilljar.com/c/aaofdzhtwit2}{Certificate}}{}

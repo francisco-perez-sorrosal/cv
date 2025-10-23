@@ -285,8 +285,7 @@ TSWLatexianTemp*
 # Python code for MCP server
 .mcpregistry_github_token
 .mcpregistry_registry_token
-fps-cv-mcp-0.0.2.mcpb
-fps-cv-mcp-0.0.3.mcpb
+*.mcpb
 lib/
 mcpb-package/
 python-dist/
