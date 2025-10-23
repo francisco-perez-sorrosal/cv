@@ -28,7 +28,8 @@
       "Bash(nslookup:*)",
       "Bash(openssl s_client:*)",
       "Bash(pixi install:*)",
-      "WebFetch(domain:pixi.sh)"
+      "WebFetch(domain:pixi.sh)",
+      "mcp__fps_cv_mcp__get_cv"
     ],
     "deny": [],
     "ask": [],
