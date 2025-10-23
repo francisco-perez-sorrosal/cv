@@ -1,20 +1,19 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-16/server.schema.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
   "name": "io.github.francisco-perez-sorrosal/cv",
   "version": "0.0.3",
   "description": "An MCP server that provides access to Francisco Perez-Sorrosal's CV",
   "status": "active",
   "repository": {
-    "url": "https://github.com/francisco-perez-sorrosal/cv",
+    "url": "https://github.com/francisco-perez-sorrosal/cv.git",
     "source": "github"
   },
   "packages": [
     {
       "registryType": "mcpb",
-      "registryBaseUrl": "https://github.com",
       "identifier": "https://github.com/francisco-perez-sorrosal/cv/releases/download/v0.0.3/fps-cv-mcp-0.0.3.mcpb",
       "version": "0.0.3",
-      "fileSha256": "2b8398d621808961f914ead834e8dd657e016bcd1c3748c890a647e8a9636755",
+      "fileSha256": "d9835e29ee1a95759219f23bb988f71cb9d419b631754fc0ad8ab43b5ff0042e",
       "transport": {
         "type": "stdio"
       }
