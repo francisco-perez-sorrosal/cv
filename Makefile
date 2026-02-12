@@ -5,15 +5,10 @@ DIST_MCPB   = $(DIST_DIR)/mcpb
 DIST_WHEEL  = $(DIST_DIR)/wheel
 DIST_SKILL  = $(DIST_DIR)/skill
 
-# Skills API (beta) — requires ANTHROPIC_API_KEY env var
-SKILLS_API_URL     = https://api.anthropic.com/v1/skills
-SKILLS_API_VERSION = 2023-06-01
-SKILLS_API_BETA    = skills-2025-10-02
-SKILL_NAME         = cv-analyst
-SKILL_TITLE        = CV Analyst
+SKILL_NAME  = cv-analyst
 
 .PHONY: all build-mcpb build-wheel build-skill \
-        install-claude-desktop install-mcp-desktop install-skill-api \
+        install-claude-desktop install-claude-code install-skills \
         clean
 
 all: build-wheel build-mcpb
@@ -37,29 +32,32 @@ build-skill:
 
 # --- Install targets ---
 
-# Install MCP server locally + upload skill to API workspace
-install-claude-desktop: install-mcp-desktop install-skill-api
+# Build both packages and show manual install instructions for Claude Desktop
+install-claude-desktop: build-mcpb build-skill
+	@echo ""
+	@echo "Packages built. Install manually in Claude Desktop:"
+	@echo ""
+	@echo "  MCP Server:  Open Settings > Extensions > Add, install $(DIST_MCPB)/*.mcpb"
+	@echo "  Skill:       Open Settings > Features > Add Skill, upload $(DIST_SKILL)/$(SKILL_NAME).zip"
+	@echo ""
 
-# Register the MCP server in Claude Desktop config
-install-mcp-desktop:
-	./install_claude_mcp.sh desktop
-
-# Upload the skill zip via the Anthropic Skills API (workspace-wide)
-# Requires: ANTHROPIC_API_KEY environment variable
-install-skill-api: build-skill
-ifndef ANTHROPIC_API_KEY
-	$(error ANTHROPIC_API_KEY is not set. Export it before running this target)
+# Install Claude Code plugin
+# Usage: make install-claude-code                       # dev (default): local plugin + local MCP
+#        make install-claude-code PLUGIN_SOURCE=remote   # marketplace plugin (remote MCP built-in)
+PLUGIN_SOURCE ?= dev
+install-claude-code:
+ifeq ($(PLUGIN_SOURCE),dev)
+	@jq --argjson cfg "$$(jq '.mcpServers.fps_cv_mcp' .claude-plugin/mcp-local.json)" \
+		'.mcpServers.fps_cv_mcp = $$cfg' .mcp.json > .mcp.json.tmp \
+		&& mv .mcp.json.tmp .mcp.json
+	@echo "MCP server: local (stdio via pixi) -> .mcp.json"
+	claude plugin install --scope user .
+	@echo "Plugin: installed from local directory"
+else ifeq ($(PLUGIN_SOURCE),remote)
+	claude plugin marketplace add francisco-perez-sorrosal/bit-agora
+	claude plugin install --scope user cv
+	@echo "Plugin: cv installed from bit-agora marketplace"
 endif
-	@echo "Uploading skill '$(SKILL_TITLE)' via Skills API..."
-	@curl -sf -X POST "$(SKILLS_API_URL)" \
-		-H "x-api-key: $(ANTHROPIC_API_KEY)" \
-		-H "anthropic-version: $(SKILLS_API_VERSION)" \
-		-H "anthropic-beta: $(SKILLS_API_BETA)" \
-		-F "display_title=$(SKILL_TITLE)" \
-		-F "files[]=@$(DIST_SKILL)/$(SKILL_NAME).zip;filename=skill.zip" \
-	| jq '{ id: .id, title: .display_title, version: .latest_version }'
-	@echo "Skill uploaded to API workspace. Use skill_id in Messages API container.skills."
-	@echo "Note: For claude.ai web UI, upload $(DIST_SKILL)/$(SKILL_NAME).zip manually via Settings > Features."
 
 # --- Clean ---
 

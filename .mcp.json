@@ -14,13 +14,6 @@
         "mcp-remote",
         "https://linkedin-mcp.wasmer.app/mcp"
       ]
-    },
-    "fps_cv_mcp": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://fps-cv.onrender.com/mcp"
-      ]
     }
   }
 }
