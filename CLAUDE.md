@@ -70,6 +70,11 @@ src/cv_mcp_server/
   utils.py                # Utility functions
   prompts/
     summary.yaml          # Configurable CV summary prompt
+skills/
+  cv-analyst/
+    SKILL.md              # Agent Skill: CV summarization for different audiences
+    references/
+      summary-presets.md  # Pre-configured profiles (hiring screen, exec briefings)
 config/
   claude.json             # Claude Desktop/Code MCP configuration
 scripts/
@@ -94,9 +99,13 @@ RELEASE_PROCESS.md        # Release workflow documentation
 ```
 
 ### MCP Server Tools
-- `get_cv` - Full CV in markdown format
+
+Data tools (fetch CV content):
+- `get_cv` - Full CV in markdown format (via pymupdf4llm)
 - `get_cv_pdf_link` - Direct PDF link
 - `get_google_scholar_link` - Google Scholar profile
+
+Prompt-wrapping tools (legacy, kept for non-skill clients):
 - `summarize_cv` - Configurable CV summary (depth, context, audience, tone, format)
 - `summarize_cv_for_quick_hiring_screen` - Brief hiring screen summary
 - `summarize_cv_for_executive_briefing_for_startup` - Startup executive briefing
@@ -127,10 +136,11 @@ RELEASE_PROCESS.md        # Release workflow documentation
 ### When Working with MCP Server (mcp branch)
 - Python >=3.13, `src/` layout, hatch build system
 - pixi for dependency management and task execution
-- MCP resources use custom URI scheme `cvfps://`
+- MCP resources use custom URI scheme `fps-cv://`
 - Server supports stdio, SSE, and streamable-http transports
 - MCPB bundles vendor dependencies in `lib/` directory
 - `manifest.json` defines the MCPB package metadata and tool declarations
+- The `cv-analyst` skill in `skills/` handles CV summarization for skill-compatible clients; MCP prompt-wrapping tools serve as fallback for other clients
 
 ## Important Notes
 
