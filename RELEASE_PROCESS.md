@@ -87,7 +87,7 @@ Before creating a release, test the bundle locally:
 make build-mcpb
 
 # Test the bundle
-cd mcpb-package
+cd dist/mcpb
 unzip fps-cv-mcp-0.0.1.mcpb -d test/
 cd test/
 python3 src/cv_mcp_server/main.py  # Should start without errors

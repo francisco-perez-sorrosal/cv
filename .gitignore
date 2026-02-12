@@ -287,23 +287,13 @@ uv.lock
 .mcpregistry_registry_token
 *.mcpb
 lib/
-mcpb-package/
-python-dist/
+dist/
 __pycache__/
 .wheel/
-dist-bundle/
-dist/
-python-dist/
-
-# MCPB package
-mcpb-package/
-*.mcpb
 test-*/
 test-extract/
 test-lib/
-# Dependencies for the bundle
 src/cv_mcp_server/lib/
-lib/
 
 # MCP Servers
 .playwright-mcp/

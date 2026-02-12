@@ -89,7 +89,7 @@ if ! make; then
 fi
 
 # Calculate SHA256 of the built package
-MCPB_FILE="./mcpb-package/fps-cv-mcp-${VERSION}.mcpb"
+MCPB_FILE="./dist/mcpb/fps-cv-mcp-${VERSION}.mcpb"
 if [ ! -f "$MCPB_FILE" ]; then
     error "MCPB file not found at $MCPB_FILE after build. Build may have failed."
 fi
