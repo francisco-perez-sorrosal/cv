@@ -1,74 +1,71 @@
-# CV MCP Server
+# CV Agent Toolkit
 
-A Model Context Protocol (MCP) server that provides access to Francisco Perez-Sorrosal's CV and professional information for AI systems like Claude Desktop/Code.
+A suite of agent utilities for working with Francisco Perez-Sorrosal's CV and professional information. Combines an MCP server, an analysis skill, and a Claude Code plugin into a single installable package.
 
-## What is this?
+## Components
 
-This MCP server allows AI assistants to access and analyze Francisco's CV data, including:
-
-- Complete CV content in markdown format
-- CV summarization tools for different contexts (hiring screens, executive briefings)
-- Direct links to CV PDF and Google Scholar profile
-- Professional background analysis
+- **MCP Server** — serves CV content, PDF links, and Google Scholar profile as tools for any MCP-compatible client
+- **`cv-analyst` Skill** — structured CV summarization for different audiences (hiring screens, executive briefings, technical reviews)
+- **Claude Code Plugin** — bundles the MCP server and skill for one-step installation
 
 ## Installation
 
-### For Claude Users
+### Claude Code
 
-You can use the script `install_claude_mcp.sh` to add it automatically to your Claude Desktop or Code configuration. This will add the configuration in the `config/claude.json` file to your Claude Desktop or Code instances.
+Install the plugin from the marketplace:
 
-**Installation script usage:**
 ```bash
-# For Claude Desktop
-./install_claude_mcp.sh desktop
-
-# For Claude Code (current directory)
-./install_claude_mcp.sh code
-
-# For Claude Code (custom project directory)
-./install_claude_mcp.sh code /path/to/your/project
+./install.sh
+# or
+curl -sSL https://raw.githubusercontent.com/francisco-perez-sorrosal/cv/mcp/install.sh | bash
 ```
 
-#### Claude Desktop Details
+The plugin bundles the MCP server (remote, via render.com) and the `cv-analyst` skill.
 
-The script above adds the following configuration to your Claude Desktop settings file:
-
-**Location of MCP settings file:**
-
-- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-
-**Added configuration:**
+To add complementary MCP servers (e.g. Playwright, LinkedIn), configure them in your project's `.mcp.json`:
 
 ```json
 {
   "mcpServers": {
-    ...
-    # The entry below is added by the install script
-    "fps_cv_mcp": {
+    "playwright": {
+      "type": "stdio",
       "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://fps-cv.onrender.com/mcp""
-      ]
+      "args": ["@playwright/mcp@latest"]
+    },
+    "linkedin_mcp_fps": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://linkedin-mcp.wasmer.app/mcp"]
     }
   }
 }
 ```
 
-**Note:** SSE transport has been DEPRECATED. The server now uses `streamable-http` transport instead.
+### Claude Desktop
 
-#### Claude Code
+Install the MCP server and skill as separate packages:
 
-**Location of MCP settings file:**
+1. **MCP Server** — Open Settings > Extensions > Add, then choose one:
+   - **Local**: Install the `.mcpb` package from `dist/mcpb/` (build with `make build-mcpb`)
+   - **Remote**: Add manually to `claude_desktop_config.json`:
 
-- `${YOUR_PROJECT_DIR}/.mcp.json`
+     ```json
+     {
+       "mcpServers": {
+         "fps_cv_mcp": {
+           "command": "npx",
+           "args": ["mcp-remote", "https://fps-cv.onrender.com/mcp"]
+         }
+       }
+     }
+     ```
 
-In the same way, the script adds the same mcp server configuration above to your Claude Code project's `.mcp.json` file. This will make the MCP's functionality accessible to your Claude Code project.
+     Config file location:
+     - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+     - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
-### Restart Claude Desktop/Code
+2. **Skill** — Open Settings > Features > Add Skill, upload `dist/skill/cv-analyst.zip` (build with `make build-skill`)
 
-After adding the configuration, restart Claude Desktop/Code instance for the changes to take effect.
+Restart Claude Desktop after installation.
 
 ## Usage
 
@@ -87,48 +84,8 @@ Example prompts:
 
 ## Local Development
 
-For developers working with the MCP server locally:
-
-### Available Commands
-
-```bash
-# Main command to run the MCP server
-pixi run cv-mcp-server
-
-# Alternative aliases
-pixi run start           # Generic start alias
-pixi run mcps            # Short alias
-
-# Run with specific transport (SSE deprecated)
-TRANSPORT=stdio pixi run cv-mcp-server              # Default: stdio
-TRANSPORT=streamable-http pixi run cv-mcp-server    # For HTTP/web clients
-```
-
-### Transport Options
-
-- **`stdio`** (default): Standard input/output transport for local development
-- **`streamable-http`**: HTTP-based transport for web clients and remote access
-- **`sse`**: ⚠️ **DEPRECATED** - No longer supported, use `streamable-http` instead
-
-### Development Workflow
-
-1. Clone the repository and switch to the `mcp` branch:
-   ```bash
-   git clone https://github.com/francisco-perez-sorrosal/cv.git
-   cd cv
-   git checkout mcp
-   ```
-
-2. Install dependencies:
-   ```bash
-   pixi install
-   ```
-
-3. Run the server:
-   ```bash
-   pixi run cv-mcp-server
-   ```
+For developers working with the MCP server locally, see [README_DEV.md](README_DEV.md).
 
 ## Support
 
-This is a personal CV serving system. For technical issues or questions, please refer to the main project repository.
+For technical issues or questions, please refer to the main project repository.

@@ -152,9 +152,7 @@ Currently I'm using `render.com` to host the MCP server. The configuration for C
 There's a script to install the Claude Desktop or Code config files in the root directory:
 
 ```sh
-install_claude_mcp.sh desktop
-# or
-install_claude_mcp.sh code
+./install.sh code   # install plugin from local dir + local MCP via pixi
 ```
 
 This will make the MCP server accessible at `https://fps-cv.onrender.com/mcp". You can check it also with the MCP inspector:

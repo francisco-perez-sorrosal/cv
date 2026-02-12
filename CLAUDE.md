@@ -25,8 +25,16 @@ pixi run mcps --transport stdio             # run locally (stdio)
 pixi run mcps --transport sse               # run locally (SSE)
 pixi run mcps --transport streamable-http   # run locally (streamable HTTP)
 
-./install_claude_mcp.sh desktop             # install for Claude Desktop
-./install_claude_mcp.sh code [project_path] # install for Claude Code
+./install.sh                     # remote install from bit-agora marketplace (curl-friendly)
+./install.sh desktop             # build packages + Claude Desktop install instructions
+./install.sh code                # dev: local plugin + local MCP
+./install.sh code remote         # marketplace plugin (remote MCP built-in)
+```
+
+### Claude Code Plugin
+```bash
+make install-claude-code                        # dev (default): local plugin + local MCP override
+make install-claude-code PLUGIN_SOURCE=remote   # marketplace plugin (remote MCP built-in)
 ```
 
 ### MCPB Bundle Build
@@ -62,6 +70,9 @@ src/cv_mcp_server/
   utils.py                # Utility functions
   prompts/
     summary.yaml          # Configurable CV summary prompt
+.claude-plugin/
+  plugin.json             # Claude Code plugin manifest (skills, remote MCP config)
+  mcp-local.json          # MCP override: stdio via pixi (dev mode)
 commands/
   create-mcpb.md          # MCPB bundle build guidance
   get-job-desc.md         # LinkedIn job description fetcher
@@ -88,7 +99,7 @@ pyproject.toml            # Project config (pixi + hatch build system)
 Makefile                  # Build orchestration for MCPB bundles
 Dockerfile                # Container deployment (render.com)
 start_mcpb.sh             # MCPB startup script
-install_claude_mcp.sh     # Installer for Claude Desktop/Code
+install.sh                # Marketplace plugin installer (curl-friendly)
 README_USER.md            # Main README (displayed on GitHub via symlink)
 README_DEV.md             # Developer documentation
 README_CICD.md            # CI/CD documentation
@@ -118,6 +129,7 @@ The skill is the preferred mechanism for CV summarization. The MCP prompt-wrappi
 - **render.com**: Dockerfile-based, env vars `TRANSPORT`, `PORT`, `HOST`
 - **Wasmer**: MCPB bundle at `https://fps-cv.wasmer.app/mcp` (see `.mcp.json`)
 - **MCPB Registry**: Published via `server.json` with SHA256 verification
+- **Claude Code Plugin**: `.claude-plugin/` with local/remote MCP templates, skill auto-discovery via `plugin.json` (plugin name: `cv`)
 - **Local**: stdio transport via `pixi run mcps` or `start_mcpb.sh`
 - Remote access via `npx mcp-remote` (configured in `.mcp.json`)
 
@@ -138,6 +150,10 @@ The skill is the preferred mechanism for CV summarization. The MCP prompt-wrappi
 - MCPB bundles vendor dependencies in `lib/` directory
 - `manifest.json` defines the MCPB package metadata and tool declarations
 - The `cv-analyst` skill in `skills/` handles CV summarization for skill-compatible clients; MCP prompt-wrapping tools serve as fallback for other clients
+
+## Plugins
+
+When the `i-am` plugin is installed, use its agents, skills, rules, and hooks for all applicable work (planning, research, implementation, verification, code review, memory, etc.).
 
 ## Important Notes
 
