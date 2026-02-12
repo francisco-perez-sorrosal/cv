@@ -62,6 +62,9 @@ src/cv_mcp_server/
   utils.py                # Utility functions
   prompts/
     summary.yaml          # Configurable CV summary prompt
+commands/
+  create-mcpb.md          # MCPB bundle build guidance
+  get-job-desc.md         # LinkedIn job description fetcher
 skills/
   cv-analyst/
     SKILL.md              # Agent Skill: CV summarization for different audiences
