@@ -4,128 +4,123 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This repository contains Francisco Perez-Sorrosal's CV in multiple formats and implementations:
+Francisco Perez-Sorrosal's CV repository. Two branches serve different purposes:
 
-- **Main branch (`main`)**: Contains the LaTeX source CV (`2025_FranciscoPerezSorrosal_CV_English.tex`) and generated PDF
-- **MCP branch (`mcp`)**: Contains a Python-based MCP (Model Context Protocol) server that serves the CV as a resource for AI systems
-
-The repository serves as both a personal CV management system and a reference implementation of an MCP server for document serving.
+- **`main`**: LaTeX source CV (`2025_FranciscoPerezSorrosal_CV_English.tex`) and generated PDF
+- **`mcp`**: Python MCP server (v0.0.3) that serves the CV as a resource for AI systems, packaged as an MCPB bundle
 
 ## Common Commands
 
 ### LaTeX CV Management (main branch)
 ```bash
-# Compile the CV to PDF using pdflatex
 pdflatex 2025_FranciscoPerezSorrosal_CV_English.tex
-
-# Or using latexmk (recommended for handling dependencies)
-latexmk -pdf 2025_FranciscoPerezSorrosal_CV_English.tex
-
-# Clean auxiliary files
-latexmk -c 2025_FranciscoPerezSorrosal_CV_English.tex
+latexmk -pdf 2025_FranciscoPerezSorrosal_CV_English.tex   # recommended
+latexmk -c 2025_FranciscoPerezSorrosal_CV_English.tex     # clean aux files
 ```
 
 ### MCP Server Development (mcp branch)
 ```bash
-# Switch to mcp branch
-git checkout mcp
+pixi install                                # install dependencies
+pixi run mcps --transport stdio             # run locally (stdio)
+pixi run mcps --transport sse               # run locally (SSE)
+pixi run mcps --transport streamable-http   # run locally (streamable HTTP)
 
-# Install dependencies using pixi (recommended)
-pixi install
-
-# Run MCP server locally
-pixi run mcps --transport stdio
-
-# Run with different transport types
-pixi run mcps --transport sse
-pixi run mcps --transport streamable-http
-
-# Install MCP server for Claude Desktop
-./install_claude_desktop_mcp.sh
-
-# Development tasks
-pixi run test      # Run tests
-pixi run lint      # Check code quality
-pixi run format    # Format code
-pixi run build     # Build package
+./install_claude_mcp.sh desktop             # install for Claude Desktop
+./install_claude_mcp.sh code [project_path] # install for Claude Code
 ```
 
-### Git Workflow
+### MCPB Bundle Build
 ```bash
-# List all branches
-git branch -a
+make build-mcpb    # full bundle: deps -> lib/ -> .mcpb package
+make build-wheel   # Python wheel only
+make clean         # remove python-dist/, mcpb-package/, lib/
+```
 
-# Check current status
-git status
+Individual pixi tasks:
+```bash
+pixi run -e dev update-mcpb-deps   # sync and export requirements.txt
+pixi run -e dev mcp-bundle         # install deps to lib/
+pixi run pack                      # create .mcpb bundle in mcpb-package/
+```
 
-# View recent commits
-git log --oneline -10
+### Release
+```bash
+./scripts/release.sh               # release process (see RELEASE_PROCESS.md)
 ```
 
 ## Architecture and Structure
 
-### Main Branch Structure
-- `2025_FranciscoPerezSorrosal_CV_English.tex` - LaTeX source file containing the complete CV
-- `2025_FranciscoPerezSorrosal_CV_English.pdf` - Generated PDF output
-- `.gitignore` - Ignores LaTeX auxiliary files and common editor artifacts
+### Main Branch
+- `2025_FranciscoPerezSorrosal_CV_English.tex` - LaTeX source (moderncv, classic green theme)
+- `2025_FranciscoPerezSorrosal_CV_English.pdf` - Generated PDF
 
-### MCP Branch Structure (Python Project)
+### MCP Branch (Python Project, v0.0.3)
 ```
 src/cv_mcp_server/
-├── __init__.py
-└── main.py              # FastAPI-based MCP server implementation
+  __init__.py
+  main.py                 # MCP server implementation (mcp library + pymupdf4llm)
+  utils.py                # Utility functions
+  prompts/
+    summary.yaml          # Configurable CV summary prompt
 config/
-└── claude.json          # Claude Desktop MCP configuration
-pyproject.toml           # Python project configuration with pixi tasks
-requirements.txt         # Python dependencies for deployment
-runtime.txt             # Python version specification
-Dockerfile              # Container configuration
-README.md               # Detailed MCP server documentation
+  claude.json             # Claude Desktop/Code MCP configuration
+scripts/
+  release.sh              # Release automation
+mcpb-package/             # Built .mcpb bundles (fps-cv-mcp-*.mcpb)
+python-dist/              # Built Python wheels
+lib/                      # Vendored dependencies for MCPB bundles
+.github/
+  README.md -> ../README_USER.md   # Symlink for GitHub display
+  workflows/              # CI/CD (rebase, auth check, mcpb creation, release, code review, CV improver)
+manifest.json             # MCPB manifest (name: fps-cv-mcp)
+server.json               # MCP server registry entry
+pyproject.toml            # Project config (pixi + hatch build system)
+Makefile                  # Build orchestration for MCPB bundles
+Dockerfile                # Container deployment (render.com)
+start_mcpb.sh             # MCPB startup script
+install_claude_mcp.sh     # Installer for Claude Desktop/Code
+README_USER.md            # Main README (displayed on GitHub via symlink)
+README_DEV.md             # Developer documentation
+README_CICD.md            # CI/CD documentation
+RELEASE_PROCESS.md        # Release workflow documentation
 ```
 
-### Key Components
+### MCP Server Tools
+- `get_cv` - Full CV in markdown format
+- `get_cv_pdf_link` - Direct PDF link
+- `get_google_scholar_link` - Google Scholar profile
+- `summarize_cv` - Configurable CV summary (depth, context, audience, tone, format)
+- `summarize_cv_for_quick_hiring_screen` - Brief hiring screen summary
+- `summarize_cv_for_executive_briefing_for_startup` - Startup executive briefing
+- `summarize_cv_for_executive_briefing_for_big_company` - Big company executive briefing
 
-#### LaTeX CV (`2025_FranciscoPerezSorrosal_CV_English.tex`)
-- Uses `moderncv` document class with classic green theme
-- Structured sections: Profile, Experience, Patents, Education, Skills, Languages
-- Extensive professional experience spanning academic research and industry R&D
-- Focus on AI/ML, distributed systems, and scalable architectures
-
-#### MCP Server (`src/cv_mcp_server/main.py`)
-- FastAPI-based server using the `mcp` library
-- Serves CV as markdown via `pymupdf4llm` for AI consumption
-- Provides tools for CV analysis and summarization
-- Supports multiple transport protocols (stdio, sse, streamable-http)
-- Includes comprehensive prompts for different use cases (hiring screens, executive briefings)
+### Deployment
+- **render.com**: Dockerfile-based, env vars `TRANSPORT`, `PORT`, `HOST`
+- **Wasmer**: MCPB bundle at `https://fps-cv.wasmer.app/mcp` (see `.mcp.json`)
+- **MCPB Registry**: Published via `server.json` with SHA256 verification
+- **Local**: stdio transport via `pixi run mcps` or `start_mcpb.sh`
+- Remote access via `npx mcp-remote` (configured in `.mcp.json`)
 
 ## Development Guidelines
 
 ### When Working with LaTeX (main branch)
-- You are an expert editor in latex format, with a background of computer science, research, and software engineering.
-- The CV is comprehensive and serves as the authoritative source
+- You are an expert editor in LaTeX format, with a background of computer science, research, and software engineering
+- The CV is the authoritative source of professional information
 - Auxiliary files (.aux, .log, .out, etc.) are gitignored
-- The instructions to use the `moderncv` package can be found in the document @.claude/docs/moderncv_userguide.txt
-- Extract and Read the content of the `moderncv` pdf
-- After you read the `moderncv` instructions, you are an expert, so use the package conventions for formatting
+- `moderncv` package docs: `.claude/docs/moderncv_userguide.txt` - read before editing
 - Maintain chronological order in experience sections, with recent years first
 
 ### When Working with MCP Server (mcp branch)
-- Follow Python packaging best practices with src/ layout
-- Use pixi for dependency management and task execution
-- The server stateless_http mode is configurable via environment variables
+- Python >=3.13, `src/` layout, hatch build system
+- pixi for dependency management and task execution
 - MCP resources use custom URI scheme `cvfps://`
-- Tool functions provide different levels of CV analysis
-
-### Deployment Considerations
-- MCP server configured for render.com deployment
-- Environment variables: `TRANSPORT`, `PORT`, `HOST`
-- Remote MCP configuration uses `npx mcp-remote`
-- Local development supports multiple transport protocols
+- Server supports stdio, SSE, and streamable-http transports
+- MCPB bundles vendor dependencies in `lib/` directory
+- `manifest.json` defines the MCPB package metadata and tool declarations
 
 ## Important Notes
 
-- The CV contains real professional information and should be handled appropriately
+- The CV contains real professional information - handle appropriately
+- GitHub display README is `README_USER.md` (symlinked from `.github/README.md`)
 - MCP server includes usage tracking via mcpcat
-- Both branches serve different purposes but reference the same CV content
-- The repository demonstrates both traditional document management and modern AI integration patterns
-- The main README.md file in the mcp branch is README_USER.md. To make this possible in github, a symlink in the @.github/ directory named README.md points to the file README_USER.md in the project root
+- CI/CD workflows handle auto-rebasing, MCPB creation checks, releases, and Claude-powered code review
