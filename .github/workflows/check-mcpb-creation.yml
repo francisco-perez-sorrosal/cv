@@ -99,7 +99,7 @@ jobs:
     - name: Verify bundle
       run: |
         BUNDLE_NAME=$(python3 -c "import json; print(f\"{json.load(open('manifest.json'))['name']}-{json.load(open('manifest.json'))['version']}.mcpb\")")
-        BUNDLE_PATH="mcpb-package/$BUNDLE_NAME"
+        BUNDLE_PATH="dist/mcpb/$BUNDLE_NAME"
         
         if [ -f "$BUNDLE_PATH" ]; then
           echo "✅ Bundle created: $BUNDLE_PATH"
@@ -123,7 +123,7 @@ jobs:
     - name: Test bundle extraction
       run: |
         BUNDLE_NAME=$(python3 -c "import json; print(f\"{json.load(open('manifest.json'))['name']}-{json.load(open('manifest.json'))['version']}.mcpb\")")
-        BUNDLE_PATH="mcpb-package/$BUNDLE_NAME"
+        BUNDLE_PATH="dist/mcpb/$BUNDLE_NAME"
         
         # Extract bundle to test directory
         mkdir -p test-extract

@@ -61,7 +61,7 @@ pixi run mcps            # Direct Python module execution
 pixi run start           # Alias for mcps
 
 # MCPB (MCP Bundle) tasks
-pixi run python-bundle   # Build Python wheel package to python-dist/
+pixi run python-bundle   # Build Python wheel package to dist/wheel/
 pixi run update-mcpb-deps # Update dependencies and export requirements.txt
 pixi run mcp-bundle      # Install dependencies to lib/ directory
 pixi run pack            # Package bundle into .mcpb file
@@ -236,7 +236,7 @@ Or use the Makefile for convenience:
 ```bash
 make build-wheel     # Build Python wheel package
 make build-mcpb      # Runs: pixi install && pixi run update-mcpb-deps && pixi run mcp-bundle && pixi run pack
-make clean           # Removes generated .mcpb files, python-dist/, and lib/ directories
+make clean           # Removes dist/ and lib/ directories
 ```
 
 This creates `fps-cv-mcp-0.0.1.mcpb` ready for distribution.
@@ -284,7 +284,7 @@ DANGEROUSLY_OMIT_AUTH=true npx @modelcontextprotocol/inspector
 ##### Available MCPB Tasks
 
 ```bash
-pixi run python-bundle    # Build Python wheel package to python-dist/
+pixi run python-bundle    # Build Python wheel package to dist/wheel/
 pixi run update-mcpb-deps # Update dependencies and export requirements.txt
 pixi run mcp-bundle       # Install dependencies to lib/ directory (uses Python 3.13)
 pixi run pack             # Package bundle into .mcpb file

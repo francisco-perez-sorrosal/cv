@@ -40,14 +40,14 @@ pixi run mcps --transport streamable-http   # run locally (streamable HTTP)
 ```bash
 make build-mcpb    # full bundle: deps -> lib/ -> .mcpb package
 make build-wheel   # Python wheel only
-make clean         # remove python-dist/, mcpb-package/, lib/
+make clean         # remove dist/, lib/
 ```
 
 Individual pixi tasks:
 ```bash
 pixi run -e dev update-mcpb-deps   # sync and export requirements.txt
 pixi run -e dev mcp-bundle         # install deps to lib/
-pixi run pack                      # create .mcpb bundle in mcpb-package/
+pixi run pack                      # create .mcpb bundle in dist/mcpb/
 ```
 
 ### Release
@@ -82,8 +82,10 @@ config/
   claude.json             # Claude Desktop/Code MCP configuration
 scripts/
   release.sh              # Release automation
-mcpb-package/             # Built .mcpb bundles (fps-cv-mcp-*.mcpb)
-python-dist/              # Built Python wheels
+dist/
+  mcpb/                   # Built .mcpb bundles (fps-cv-mcp-*.mcpb)
+  wheel/                  # Built Python wheels
+  skill/                  # Packaged skills (cv-analyst.zip)
 lib/                      # Vendored dependencies for MCPB bundles
 .github/
   README.md -> ../README_USER.md   # Symlink for GitHub display
