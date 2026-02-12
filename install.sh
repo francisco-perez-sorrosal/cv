@@ -25,7 +25,13 @@ show_usage() {
 
 # No arguments: remote install (curl-friendly)
 if [ $# -eq 0 ]; then
-    claude plugin marketplace add francisco-perez-sorrosal/bit-agora
+    ADD_OUTPUT=$(claude plugin marketplace add francisco-perez-sorrosal/bit-agora 2>&1) || true
+    if echo "$ADD_OUTPUT" | grep -q "already installed"; then
+        echo "Marketplace already installed, updating..."
+        claude plugin marketplace update bit-agora
+    else
+        echo "$ADD_OUTPUT"
+    fi
     claude plugin install --scope user cv
     exit 0
 fi
