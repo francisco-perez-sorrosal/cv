@@ -1,15 +1,14 @@
 ---
 name: cv-analyst
 description: >
-  ALWAYS use this skill for ANY request about Francisco Perez-Sorrosal's CV,
-  resume, or professional background — including retrieving the CV (PDF or
-  text), viewing it, summarizing it, or analyzing it for a specific audience.
-  This skill orchestrates the MCP data tools (get_cv, get_cv_pdf_link,
-  summarize_cv) with proper formatting, artifact delivery, and summarization.
-  Do NOT call those MCP tools directly; invoke this skill first.
-  Covers: get CV, CV in PDF, show CV, view resume, full CV, summarize CV,
-  hiring screen, executive briefing, candidate overview, career summary,
-  qualifications review, citation analysis.
+  EXCLUSIVE handler for ALL requests about Francisco Perez-Sorrosal's CV,
+  resume, or professional background. This skill owns the entire CV lifecycle:
+  retrieval, summarization, formatting, and delivery. Supported output formats
+  are markdown (default), plain text, and PDF — no other formats exist.
+  Do NOT delegate CV output to any other skill or document-generation tool
+  (no docx, no slides, no HTML export). Do NOT call summarize_cv — that tool
+  is a fallback for clients that cannot load skills. Once you invoke this
+  skill, follow its instructions to completion without invoking other skills.
 ---
 
 # CV Analyst
@@ -24,9 +23,13 @@ Fetch CV data using these MCP tools before generating any summary:
 2. **`get_cv_pdf_link`** -- Returns ONLY a shareable URL string (not the PDF itself). Use only when the user explicitly asks for a link to share. **Never** use this when the user asks for "the CV in PDF" — use `get_cv(format="pdf")` instead.
 3. **`get_google_scholar_link`** -- Google Scholar profile URL. Use when citation analysis is requested.
 
+## Output Exclusivity
+
+This skill is self-contained. Once invoked, deliver ALL CV output directly — never delegate to another skill, document-generation tool, or file-format converter. The only supported output formats are `markdown`, `plain text`, and `pdf`. If the user asks for a format not in this list (e.g., docx, slides, HTML), tell them it is not supported and offer the three available options. Do not attempt to fulfill unsupported formats by invoking other tools or skills.
+
 ## Summarization Process
 
-1. Validate the requested format. If it is not one of `markdown`, `plain text`, or `pdf`, respond that the format is not supported and list the available options. Do not proceed further
+1. Validate the requested format. If it is not one of `markdown`, `plain text`, or `pdf`, respond that the format is not supported and list the three available options. Do not invoke any other skill or tool to produce an alternative format. Do not proceed further
 2. **PDF shortcut**: If the requested format is `pdf`, call `get_cv(format="pdf")`. Then save the returned PDF binary to a file named `FranciscoPerezSorrosal_CV.pdf` using code execution (decode the base64 blob and write it to disk), and present the file as a downloadable artifact. Skip all remaining steps
 3. Call `get_cv()` (defaults to markdown) to retrieve the full CV content
 4. Determine the target profile: match the user's request to a [preset](references/summary-presets.md) or build custom parameters
