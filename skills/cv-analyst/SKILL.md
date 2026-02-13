@@ -4,11 +4,11 @@ description: >
   EXCLUSIVE handler for ALL requests about Francisco Perez-Sorrosal's CV,
   resume, or professional background. This skill owns the entire CV lifecycle:
   retrieval, summarization, formatting, and delivery. Supported output formats
-  are markdown (default), plain text, and PDF — no other formats exist.
+  are markdown (default), plain text, PDF, and HTML — no other formats exist.
   Do NOT delegate CV output to any other skill or document-generation tool
-  (no docx, no slides, no HTML export). Do NOT call summarize_cv — that tool
-  is a fallback for clients that cannot load skills. Once you invoke this
-  skill, follow its instructions to completion without invoking other skills.
+  (no docx, no slides). Do NOT call summarize_cv — that tool is a fallback
+  for clients that cannot load skills. Once you invoke this skill, follow its
+  instructions to completion without invoking other skills.
 ---
 
 # CV Analyst
@@ -25,17 +25,36 @@ Fetch CV data using these MCP tools before generating any summary:
 
 ## Output Exclusivity
 
-This skill is self-contained. Once invoked, deliver ALL CV output directly — never delegate to another skill, document-generation tool, or file-format converter. The only supported output formats are `markdown`, `plain text`, and `pdf`. If the user asks for a format not in this list (e.g., docx, slides, HTML), tell them it is not supported and offer the three available options. Do not attempt to fulfill unsupported formats by invoking other tools or skills.
+This skill is self-contained. Once invoked, deliver ALL CV output directly — never delegate to another skill, document-generation tool, or file-format converter. The only supported output formats are `markdown`, `plain text`, `pdf`, and `html`. If the user asks for a format not in this list (e.g., docx, slides), tell them it is not supported and offer the four available options. Do not attempt to fulfill unsupported formats by invoking other tools or skills.
 
 ## Summarization Process
 
-1. Validate the requested format. If it is not one of `markdown`, `plain text`, or `pdf`, respond that the format is not supported and list the three available options. Do not invoke any other skill or tool to produce an alternative format. Do not proceed further
+1. Validate the requested format. If it is not one of `markdown`, `plain text`, `pdf`, or `html`, respond that the format is not supported and list the four available options. Do not invoke any other skill or tool to produce an alternative format. Do not proceed further
 2. **PDF shortcut**: If the requested format is `pdf`, call `get_cv(format="pdf")`. Then save the returned PDF binary to a file named `FranciscoPerezSorrosal_CV.pdf` using code execution (decode the base64 blob and write it to disk), and present the file as a downloadable artifact. Skip all remaining steps. **Failover**: If `get_cv(format="pdf")` returns an error or the response indicates that `application/pdf` objects are not supported, fall back to: (a) call `get_cv_pdf_link` to obtain the PDF URL, (b) download the PDF from that URL, (c) save it as `FranciscoPerezSorrosal_CV.pdf`, and (d) present the file as a downloadable artifact. Skip all remaining steps
-3. Call `get_cv()` (defaults to markdown) to retrieve the full CV content
-4. Determine the target profile: match the user's request to a [preset](references/summary-presets.md) or build custom parameters
-5. If depth is **full**: return the CV content as-is (skip summarization and restructuring). Otherwise: generate the summary following the summarization parameters below
-6. Append the PDF link (from `get_cv_pdf_link`) at the end of the output
-7. If citation analysis is requested, fetch the Google Scholar profile via `get_google_scholar_link`, analyze publications, and include a table of publications with citation counts and impact metrics
+3. **HTML generation**: If the requested format is `html`:
+   a. Call `get_cv()` to retrieve the full CV markdown
+   b. If the user also requested summarization (any depth other than `full`), apply steps 5-6 to the markdown first to produce a summary. Otherwise use the full markdown
+   c. Read the [HTML template](references/cv-template.html) and the [CSS stylesheet](references/cv-template.css)
+   d. Replace `<!-- CSS_CONTENT -->` in the template's `<style>` tag with the CSS file contents (this produces a self-contained HTML file)
+   e. Set the `.hero-label` text to match the output type: "Full CV" for depth full, "Candidate Summary" for general summaries, or the preset name (e.g., "Hiring Screen", "Executive Briefing")
+   f. Convert the CV/summary content into rich HTML using the template's component classes. Map CV sections to visual components:
+      - Profile/summary paragraph → `.profile-text`, key facts → `.tags > .tag`
+      - Quantitative highlights (years, papers, citations, patents) → `.stats-row > .stat > .stat-number + .stat-label`
+      - Skill categories → `.skills-grid > .skill-card > h3 + p`
+      - Experience/achievements → `.achievements-list > .achievement > .achievement-meta + .achievement-title + p`
+      - Education entries → `.edu-grid > .edu-card > .degree + .school + .year`
+      - Wrap each group in `<section data-label="Name"><div class="container"><div class="section-label">NN — Label</div><h2 class="section-title">Title</h2>...</div></section>`
+      - Make cards interactive: add class `expandable` to any stat, skill-card, achievement, or edu-card that has additional detail. Put the detail inside `<div class="expand-content">` and add `<span class="expand-indicator"></span>`. The component shows a + icon and expands on click to reveal the full content. Use rich formatting inside: `<strong>` for titles and names (papers, patents, projects), `<em>` for venues and the CV owner's name in author lists, `<small>` for metadata lines (authors, dates, citation counts)
+   g. Replace everything inside `<main>` (`<!-- BODY_CONTENT -->`) with the generated section HTML
+   h. Call `get_cv_pdf_link()` and replace `<!-- PDF_LINK -->` with the URL (all occurrences)
+   i. Write the completed HTML to `tmp/FranciscoPerezSorrosal_CV.html` (full CV) or `tmp/FranciscoPerezSorrosal_CV_Summary.html` (summary)
+   j. Open the file in the default browser: `open tmp/<filename>.html`
+   k. Skip all remaining steps
+4. Call `get_cv()` (defaults to markdown) to retrieve the full CV content
+5. Determine the target profile: match the user's request to a [preset](references/summary-presets.md) or build custom parameters
+6. If depth is **full**: return the CV content as-is (skip summarization and restructuring). Otherwise: generate the summary following the summarization parameters below
+7. Append the PDF link (from `get_cv_pdf_link`) at the end of the output
+8. If citation analysis is requested, fetch the Google Scholar profile via `get_google_scholar_link`, analyze publications, and include a table of publications with citation counts and impact metrics
 
 ## Summary Parameters
 
@@ -46,7 +65,7 @@ Select values for each parameter based on the user's request. When not specified
 | Parameter | Description | Options | Default |
 |-----------|-------------|---------|---------|
 | **Depth** | Level of detail | full (complete CV, no summarization), brief (100-200 words), moderate (200-400), comprehensive (400-600), deep-dive (600+) | full |
-| **Format** | Output encoding | markdown, plain text, pdf (downloadable artifact via `get_cv`) | markdown |
+| **Format** | Output encoding | markdown, plain text, pdf, html | markdown |
 
 **Summarization parameters** (apply only when depth is not `full` -- ignored otherwise):
 
@@ -92,5 +111,8 @@ When the user's request does not match a preset, map their requirements to the p
 - "For an academic position" -> context: academic research, audience: academic committee, tone: formal and academic
 - "Bullet point summary" -> style: bullet points
 - "How would this person fit at a startup?" -> use Startup Executive Briefing preset
+- "Give me the CV as HTML" / "HTML version" -> format: html, depth: full
+- "Quick Hiring Screen in HTML" -> apply Quick Hiring Screen preset, format: html
+- "Summarize for hiring managers as an HTML page" -> depth: brief, audience: technical hiring manager, format: html
 
 When the user provides additional instructions (e.g., "focus on AI/ML healthcare experience", "highlight open-source contributions"), incorporate them as supplementary guidance applied on top of the selected parameters.
