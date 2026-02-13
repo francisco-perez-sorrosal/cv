@@ -4,7 +4,6 @@ import base64
 import os
 import sys
 
-from enum import Enum
 from pathlib import Path
 from typing import Literal, cast
 
@@ -17,11 +16,6 @@ from mcp.types import BlobResourceContents, EmbeddedResource
 from loguru import logger
 from cv_mcp_server.utils import load_prompt
 
-
-class CvFormat(str, Enum):
-    """Output format for the CV content."""
-    markdown = "markdown"
-    pdf = "pdf"
 
 # Configure transport and statelessness
 trspt = "stdio"
@@ -65,9 +59,9 @@ mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host
 
 @mcp.tool()
 def get_cv(
-    format: CvFormat = Field(
-        default=CvFormat.markdown,
-        description="Output format: 'markdown' for LLM-readable text (default), 'pdf' for the original binary document rendered inline (Claude Desktop)"
+    format: Literal["markdown", "pdf"] = Field(
+        default="markdown",
+        description="'markdown' returns LLM-readable text (default). 'pdf' returns the original binary PDF document for inline rendering."
     )
 ) -> str | list[EmbeddedResource]:
     """Retrieve Francisco Perez-Sorrosal's full CV.
@@ -76,7 +70,7 @@ def get_cv(
     or as the original PDF binary for inline rendering in compatible clients.
     Use get_cv_pdf_link() instead when the user needs a shareable URL.
     """
-    if format == CvFormat.pdf:
+    if format == "pdf":
         logger.debug("Returning the CV as PDF binary...")
         pdf_data = cv_pdf()
         return [EmbeddedResource(
