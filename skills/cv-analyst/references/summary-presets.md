@@ -2,6 +2,17 @@
 
 Pre-configured parameter profiles for common CV summarization scenarios. Each preset maps directly to the parameters defined in the [SKILL.md](../SKILL.md).
 
+## Full CV
+
+Returns the complete CV content as extracted from the PDF, without any summarization or restructuring. Appends the PDF link at the end.
+
+| Parameter | Value |
+|-----------|-------|
+| Depth | full (no summarization) |
+| Format | markdown |
+
+All other parameters are not applicable -- the CV content is returned as-is.
+
 ## Quick Hiring Screen
 
 A brief summary for a technical hiring manager evaluating the candidate for an industry R&D role. Prioritizes technical skills and relevant experience.
