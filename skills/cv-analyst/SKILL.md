@@ -6,9 +6,11 @@ description: >
   retrieval, summarization, formatting, and delivery. Supported output formats
   are markdown (default), plain text, PDF, and HTML — no other formats exist.
   Do NOT delegate CV output to any other skill or document-generation tool
-  (no docx, no slides). Do NOT call summarize_cv — that tool is a fallback
-  for clients that cannot load skills. Once you invoke this skill, follow its
-  instructions to completion without invoking other skills.
+  (no docx, no slides). HTML output uses built-in templates bundled with this
+  skill — do NOT read or invoke any frontend, design, or HTML skill.
+  Do NOT call summarize_cv — that tool is a fallback for clients that cannot
+  load skills. Once you invoke this skill, follow its instructions to
+  completion without reading or invoking other skills.
 ---
 
 # CV Analyst
@@ -25,13 +27,13 @@ Fetch CV data using these MCP tools before generating any summary:
 
 ## Output Exclusivity
 
-This skill is self-contained. Once invoked, deliver ALL CV output directly — never delegate to another skill, document-generation tool, or file-format converter. The only supported output formats are `markdown`, `plain text`, `pdf`, and `html`. If the user asks for a format not in this list (e.g., docx, slides), tell them it is not supported and offer the four available options. Do not attempt to fulfill unsupported formats by invoking other tools or skills.
+This skill is self-contained. Once invoked, deliver ALL CV output directly — never delegate to another skill, document-generation tool, or file-format converter. Do not read or invoke any other skill (including frontend, design, or HTML skills) — all templates, CSS, and JS are bundled in this skill's `references/` directory. The only supported output formats are `markdown`, `plain text`, `pdf`, and `html`. If the user asks for a format not in this list (e.g., docx, slides), tell them it is not supported and offer the four available options. Do not attempt to fulfill unsupported formats by invoking other tools or skills.
 
 ## Summarization Process
 
 1. Validate the requested format. If it is not one of `markdown`, `plain text`, `pdf`, or `html`, respond that the format is not supported and list the four available options. Do not invoke any other skill or tool to produce an alternative format. Do not proceed further
 2. **PDF shortcut**: If the requested format is `pdf`, call `get_cv(format="pdf")`. Then save the returned PDF binary to a file named `FranciscoPerezSorrosal_CV.pdf` using code execution (decode the base64 blob and write it to disk), and present the file as a downloadable artifact. Skip all remaining steps. **Failover**: If `get_cv(format="pdf")` returns an error or the response indicates that `application/pdf` objects are not supported, fall back to: (a) call `get_cv_pdf_link` to obtain the PDF URL, (b) download the PDF from that URL, (c) save it as `FranciscoPerezSorrosal_CV.pdf`, and (d) present the file as a downloadable artifact. Skip all remaining steps
-3. **HTML generation**: If the requested format is `html`:
+3. **HTML generation**: If the requested format is `html` (everything needed is in this skill's `references/` — do NOT read or invoke any other skill):
    a. Call `get_cv()` to retrieve the full CV markdown
    b. If the user also requested summarization (any depth other than `full`), apply steps 5-6 to the markdown first to produce a summary. Otherwise use the full markdown
    c. Read the [HTML template](references/cv-template.html)
