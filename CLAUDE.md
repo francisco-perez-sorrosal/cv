@@ -74,8 +74,12 @@ pixi run pack                      # create .mcpb bundle in dist/mcpb/
 ```
 src/cv_mcp_server/
   __init__.py
-  main.py                 # MCP server implementation (mcp library + pymupdf4llm)
-  utils.py                # Utility functions
+  main.py                 # MCP server: tools, resources, prompt
+  models.py               # Domain models (Candidate, Links)
+  sections.py             # CV section parsing and eager cache (init at startup)
+  utils.py                # Utility functions (YAML loading)
+  data/
+    candidate.yaml        # Candidate identity and links (single source of truth)
   prompts/
     summary.yaml          # Configurable CV summary prompt
 .claude-plugin/
@@ -112,13 +116,24 @@ RELEASE_PROCESS.md        # Release workflow documentation
 
 ### MCP Server Tools
 
-Data tools (fetch CV content):
-- `get_cv` - Full CV in markdown format (via pymupdf4llm)
-- `get_cv_pdf_link` - Direct PDF link
-- `get_google_scholar_link` - Google Scholar profile
+- `get_cv` - Full CV in markdown or PDF binary
+- `refresh_cv` - Download latest PDF from GitHub main branch and rebuild cache
+- `get_link(name)` - Profile/document link by name
+- `list_links` - All available links with URLs
+- `list_cv_sections` - Available section names with line counts
+- `get_cv_section(section_name)` - Any section by name (case-insensitive)
+- `summarize_cv` - Configurable CV summary (fallback for non-skill clients)
 
-Prompt-wrapping tool (fallback for non-skill clients):
-- `summarize_cv` - Configurable CV summary (depth, context, emphasis, audience, tone, format, length). Preset scenarios (hiring screen, exec briefings) are handled by the `cv-analyst` skill.
+### MCP Resources (`fps-cv://` URI scheme)
+
+Content:
+- `fps-cv://pdf` - CV as PDF binary
+- `fps-cv://md` - CV as full markdown
+- `fps-cv://md/sections` - Section index (names + line counts)
+- `fps-cv://md/sections/{name}` - Individual section by name
+
+Links:
+- `fps-cv://links/{name}` - Profile/document link (pdf, scholar, linkedin, github, twitter)
 
 #### LaTeX CV (`FranciscoPerezSorrosal_CV_English.tex`)
 - Uses `moderncv` document class with classic green theme
@@ -145,8 +160,10 @@ Prompt-wrapping tool (fallback for non-skill clients):
 ### When Working with MCP Server (mcp branch)
 - Python >=3.13, `src/` layout, hatch build system
 - pixi for dependency management and task execution
-- MCP resources use custom URI scheme `fps-cv://`
-- Server supports stdio, SSE, and streamable-http transports
+- CV is parsed once at startup (`sections.init()`); `cv_md()` and section tools serve from cache
+- Candidate identity and links loaded from `data/candidate.yaml` (package data, authoritative source)
+- MCP resources use hierarchical `fps-cv://` URI scheme (content under `pdf`/`md`, external links under `links/`)
+- Server supports stdio and streamable-http transports
 - MCPB bundles vendor dependencies in `lib/` directory
 - `manifest.json` defines the MCPB package metadata and tool declarations
 - The `cv-analyst` skill in `skills/` handles CV summarization for skill-compatible clients; `summarize_cv` tool serves as fallback for other clients

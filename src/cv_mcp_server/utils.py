@@ -1,8 +1,13 @@
 """Utility functions for the CV MCP server."""
 
 import os
+
 import yaml
 from loguru import logger
+
+from cv_mcp_server.models import Candidate, Links
+
+_PACKAGE_DIR = os.path.dirname(__file__)
 
 
 def load_prompt(prompt_name: str) -> dict:
@@ -18,7 +23,7 @@ def load_prompt(prompt_name: str) -> dict:
         FileNotFoundError: If the prompt file is not found
         yaml.YAMLError: If the YAML file is malformed
     """
-    prompts_dir = os.path.join(os.path.dirname(__file__), "prompts")
+    prompts_dir = os.path.join(_PACKAGE_DIR, "prompts")
     prompt_file = os.path.join(prompts_dir, f"{prompt_name}.yaml")
 
     if not os.path.exists(prompt_file):
@@ -31,3 +36,17 @@ def load_prompt(prompt_name: str) -> dict:
     except yaml.YAMLError as e:
         logger.error(f"Failed to parse YAML in '{prompt_file}': {e}")
         raise
+
+
+def load_candidate() -> Candidate:
+    """Load candidate identity from package data (data/candidate.yaml)."""
+    config_path = os.path.join(_PACKAGE_DIR, "data", "candidate.yaml")
+
+    if not os.path.exists(config_path):
+        raise FileNotFoundError(f"Candidate config not found: {config_path}")
+
+    with open(config_path, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+
+    links_data = data.pop("links", {})
+    return Candidate(**data, links=Links(urls=links_data))

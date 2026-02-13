@@ -19,11 +19,17 @@ Analyze and summarize Francisco Perez-Sorrosal's CV, tailoring output to specifi
 
 ## Data Sources
 
-Fetch CV data using these MCP tools before generating any summary:
+Fetch CV data using these MCP tools before generating any summary. For targeted questions, prefer section-specific tools over `get_cv` to save tokens.
 
-1. **`get_cv`** -- Full CV content. Accepts a `format` parameter: `"markdown"` (default, for analysis) or `"pdf"` (returns the original PDF binary). This is the tool for getting the CV in any format.
-2. **`get_cv_pdf_link`** -- Returns a shareable PDF URL (not the PDF itself). Primary use: when the user explicitly asks for a link to share. Secondary use: failover for PDF delivery when `get_cv(format="pdf")` fails (e.g., `application/pdf` not supported) — download from this URL, save locally, and present as artifact.
-3. **`get_google_scholar_link`** -- Google Scholar profile URL. Use when citation analysis is requested.
+### Full CV tools
+
+1. **`get_cv`** -- Full CV content. Accepts a `format` parameter: `"markdown"` (default, for analysis) or `"pdf"` (returns the original PDF binary). Use when the full CV is needed or when the question spans multiple sections.
+2. **`get_link(name)`** -- Returns a profile or document link by name. Available: `pdf` (shareable CV URL), `scholar` (Google Scholar), `linkedin`, `github`, `twitter`. Primary use for `pdf`: when the user explicitly asks for a link to share. Secondary use: failover for PDF delivery when `get_cv(format="pdf")` fails — call `get_link("pdf")`, download from that URL, save locally, and present as artifact.
+
+### Section tools (preferred for targeted queries)
+
+1. **`list_cv_sections`** -- Lists available section names with line counts. Call first when unsure which section contains the answer.
+2. **`get_cv_section(section_name)`** -- Retrieve any section by name (case-insensitive, `&` ignored). Lists available sections in the error message if the name doesn't match. Section names adapt automatically when the CV is updated.
 
 ## Output Exclusivity
 
@@ -32,7 +38,7 @@ This skill is self-contained. Once invoked, deliver ALL CV output directly — n
 ## Summarization Process
 
 1. Validate the requested format. If it is not one of `markdown`, `plain text`, `pdf`, or `html`, respond that the format is not supported and list the four available options. Do not invoke any other skill or tool to produce an alternative format. Do not proceed further
-2. **PDF shortcut**: If the requested format is `pdf`, call `get_cv(format="pdf")`. Then save the returned PDF binary to a file named `FranciscoPerezSorrosal_CV.pdf` using code execution (decode the base64 blob and write it to disk), and present the file as a downloadable artifact. Skip all remaining steps. **Failover**: If `get_cv(format="pdf")` returns an error or the response indicates that `application/pdf` objects are not supported, fall back to: (a) call `get_cv_pdf_link` to obtain the PDF URL, (b) download the PDF from that URL, (c) save it as `FranciscoPerezSorrosal_CV.pdf`, and (d) present the file as a downloadable artifact. Skip all remaining steps
+2. **PDF shortcut**: If the requested format is `pdf`, call `get_cv(format="pdf")`. Then save the returned PDF binary to a file named `FranciscoPerezSorrosal_CV.pdf` using code execution (decode the base64 blob and write it to disk), and present the file as a downloadable artifact. Skip all remaining steps. **Failover**: If `get_cv(format="pdf")` returns an error or the response indicates that `application/pdf` objects are not supported, fall back to: (a) call `get_link("pdf")` to obtain the PDF URL, (b) download the PDF from that URL, (c) save it as `FranciscoPerezSorrosal_CV.pdf`, and (d) present the file as a downloadable artifact. Skip all remaining steps
 3. **HTML generation**: If the requested format is `html` (everything needed is in this skill's `references/` — do NOT read or invoke any other skill):
    a. Call `get_cv()` to retrieve the full CV markdown
    b. If the user also requested summarization (any depth other than `full`), apply steps 5-6 to the markdown first to produce a summary. Otherwise use the full markdown
@@ -49,7 +55,7 @@ This skill is self-contained. Once invoked, deliver ALL CV output directly — n
       - Education entries → `.edu-grid > .edu-card > .degree + .school + .year`
       - Wrap each group in `<section data-label="Name"><div class="container"><div class="section-label">NN — Label</div><h2 class="section-title">Title</h2>...</div></section>`
       - Make cards interactive: add class `expandable` to any stat, skill-card, achievement, or edu-card that has additional detail. Put the detail inside `<div class="expand-content">` and add `<span class="expand-indicator"></span>`. The component shows a + icon and expands on click to reveal the full content. Use rich formatting inside: `<strong>` for titles and names (papers, patents, projects), `<em>` for venues and the CV owner's name in author lists, `<small>` for metadata lines (authors, dates, citation counts)
-      - **Data sourcing for expandable lists**: call `get_google_scholar_link()` and visit the profile page to obtain real publication data. Use this data to populate the expandable bullet-point lists in the generated HTML:
+      - **Data sourcing for expandable lists**: call `get_link("scholar")` and visit the profile page to obtain real publication data. Use this data to populate the expandable bullet-point lists in the generated HTML:
         - **Publications stat**: one `<li>` per paper — wrap title in `<a>` linking to its Google Scholar citation page, show venue, year, and citation count in `<small>`. Omit author lists for cleanliness
         - **Citations stat**: top-cited papers as bullet points — `<strong>` citation count + `<a>` linked short title in `<em>` + venue in `<small>`. Include h-index and a link to the full Google Scholar profile at the bottom
         - **Patents stat**: one `<li>` per patent — wrap title in `<a>` linking to its Google Scholar page, show patent app number and year in `<small>`
@@ -62,8 +68,8 @@ This skill is self-contained. Once invoked, deliver ALL CV output directly — n
 4. Call `get_cv()` (defaults to markdown) to retrieve the full CV content
 5. Determine the target profile: match the user's request to a [preset](references/summary-presets.md) or build custom parameters
 6. If depth is **full**: return the CV content as-is (skip summarization and restructuring). Otherwise: generate the summary following the summarization parameters below
-7. Append the PDF link (from `get_cv_pdf_link`) at the end of the output
-8. If citation analysis is requested, fetch the Google Scholar profile via `get_google_scholar_link`, analyze publications, and include a table of publications with citation counts and impact metrics
+7. Append the PDF link (from `get_link("pdf")`) at the end of the output
+8. If citation analysis is requested, fetch the Google Scholar profile via `get_link("scholar")`, analyze publications, and include a table of publications with citation counts and impact metrics
 
 ## Summary Parameters
 

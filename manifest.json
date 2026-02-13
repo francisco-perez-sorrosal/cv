@@ -41,12 +41,24 @@
       "description": "Retrieve Francisco Perez-Sorrosal's full CV. Supports 'markdown' (default, LLM-readable) and 'pdf' (original binary document) output formats."
     },
     {
-      "name": "get_cv_pdf_link",
-      "description": "Get the direct link to Francisco Perez-Sorrosal's CV in PDF format for download, viewing, or sharing"
+      "name": "refresh_cv",
+      "description": "Download the latest CV PDF from the main branch on GitHub and rebuild the markdown/section cache without redeploying."
     },
     {
-      "name": "get_google_scholar_link",
-      "description": "Get the link to Francisco Perez-Sorrosal's Google Scholar profile with academic publications, citation metrics, and research areas"
+      "name": "get_link",
+      "description": "Return a profile or document link by name. Use list_links() to see available names."
+    },
+    {
+      "name": "list_links",
+      "description": "List all available profile and document links with their URLs."
+    },
+    {
+      "name": "list_cv_sections",
+      "description": "List available CV section names with approximate line counts. Helps pick the right section for targeted queries."
+    },
+    {
+      "name": "get_cv_section",
+      "description": "Retrieve a single named section from the CV by name (case-insensitive). Saves tokens vs fetching the full CV. Lists available sections if the name doesn't match."
     },
     {
       "name": "summarize_cv",
