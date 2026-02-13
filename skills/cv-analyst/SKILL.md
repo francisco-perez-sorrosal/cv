@@ -20,7 +20,7 @@ Analyze and summarize Francisco Perez-Sorrosal's CV, tailoring output to specifi
 Fetch CV data using these MCP tools before generating any summary:
 
 1. **`get_cv`** -- Full CV content. Accepts a `format` parameter: `"markdown"` (default, for analysis) or `"pdf"` (returns the original PDF binary). This is the tool for getting the CV in any format.
-2. **`get_cv_pdf_link`** -- Returns ONLY a shareable URL string (not the PDF itself). Use only when the user explicitly asks for a link to share. **Never** use this when the user asks for "the CV in PDF" — use `get_cv(format="pdf")` instead.
+2. **`get_cv_pdf_link`** -- Returns a shareable PDF URL (not the PDF itself). Primary use: when the user explicitly asks for a link to share. Secondary use: failover for PDF delivery when `get_cv(format="pdf")` fails (e.g., `application/pdf` not supported) — download from this URL, save locally, and present as artifact.
 3. **`get_google_scholar_link`** -- Google Scholar profile URL. Use when citation analysis is requested.
 
 ## Output Exclusivity
@@ -30,7 +30,7 @@ This skill is self-contained. Once invoked, deliver ALL CV output directly — n
 ## Summarization Process
 
 1. Validate the requested format. If it is not one of `markdown`, `plain text`, or `pdf`, respond that the format is not supported and list the three available options. Do not invoke any other skill or tool to produce an alternative format. Do not proceed further
-2. **PDF shortcut**: If the requested format is `pdf`, call `get_cv(format="pdf")`. Then save the returned PDF binary to a file named `FranciscoPerezSorrosal_CV.pdf` using code execution (decode the base64 blob and write it to disk), and present the file as a downloadable artifact. Skip all remaining steps
+2. **PDF shortcut**: If the requested format is `pdf`, call `get_cv(format="pdf")`. Then save the returned PDF binary to a file named `FranciscoPerezSorrosal_CV.pdf` using code execution (decode the base64 blob and write it to disk), and present the file as a downloadable artifact. Skip all remaining steps. **Failover**: If `get_cv(format="pdf")` returns an error or the response indicates that `application/pdf` objects are not supported, fall back to: (a) call `get_cv_pdf_link` to obtain the PDF URL, (b) download the PDF from that URL, (c) save it as `FranciscoPerezSorrosal_CV.pdf`, and (d) present the file as a downloadable artifact. Skip all remaining steps
 3. Call `get_cv()` (defaults to markdown) to retrieve the full CV content
 4. Determine the target profile: match the user's request to a [preset](references/summary-presets.md) or build custom parameters
 5. If depth is **full**: return the CV content as-is (skip summarization and restructuring). Otherwise: generate the summary following the summarization parameters below
