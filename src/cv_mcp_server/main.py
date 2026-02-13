@@ -3,18 +3,19 @@
 import base64
 import os
 import sys
+import urllib.request
 
 from pathlib import Path
 from typing import Literal, cast
 
 from pydantic import AnyUrl, Field
 
-import pymupdf4llm
 from mcp.server.fastmcp import FastMCP
 from mcp.types import BlobResourceContents, EmbeddedResource
 
 from loguru import logger
-from cv_mcp_server.utils import load_prompt
+from cv_mcp_server.utils import load_candidate, load_prompt
+from cv_mcp_server.sections import CvContent
 
 
 # Configure transport and statelessness
@@ -43,7 +44,11 @@ def find_project_root():
     return current
 
 PROJECT_ROOT = find_project_root()
+CV_PATH = PROJECT_ROOT / "2025_FranciscoPerezSorrosal_CV_English.pdf"
 
+# Eager initialization: parse CV and load candidate config at import time
+cv = CvContent.from_pdf(CV_PATH)
+candidate = load_candidate()
 
 # Initialize FastMCP server
 host = os.environ.get("HOST", "0.0.0.0")  # render.com needs '0.0.0.0' specified as host when deploying the service
@@ -79,29 +84,85 @@ def get_cv(
         return [EmbeddedResource(
             type="resource",
             resource=BlobResourceContents(
-                uri=AnyUrl("fps-cv://cv_pdf"),
+                uri=AnyUrl("fps-cv://pdf"),
                 blob=base64.b64encode(pdf_data).decode("ascii"),
                 mimeType="application/pdf",
             ),
         )]
     logger.debug("Returning the CV in markdown format...")
-    return cv_md()
+    return cv.markdown
 
 
 @mcp.tool()
-def get_cv_pdf_link() -> str:
-    """Returns a shareable GitHub URL pointing to the CV PDF (not the PDF itself).
+def refresh_cv() -> str:
+    """Download the latest CV PDF from the main branch and rebuild the cache.
 
-    When the cv-analyst skill is available, prefer invoking that skill — it
-    appends this link automatically when appropriate.
+    Use when the CV has been updated on GitHub but the MCP server hasn't been redeployed.
     """
-    return cv_pdf_link()
+    pdf_link = candidate.links.get("pdf")
+    if pdf_link is None:
+        return "No 'pdf' link configured in candidate profile."
+
+    raw_url = pdf_link.replace("/blob/", "/raw/")
+    logger.info(f"Downloading CV from {raw_url}...")
+    try:
+        urllib.request.urlretrieve(raw_url, CV_PATH)
+    except Exception as e:
+        return f"Download failed: {e}"
+
+    global cv  # Rebind: CvContent is immutable, so refresh = new instance
+    cv = CvContent.from_pdf(CV_PATH)
+    return f"CV refreshed: downloaded from main branch, parsed {len(cv.sections)} sections."
 
 
 @mcp.tool()
-def get_google_scholar_link() -> str:
-    """Get the link to Francisco Perez-Sorrosal's Google Scholar profile for publications and citations."""
-    return google_scholar_link()
+def get_link(
+    name: str = Field(
+        description="Link name (e.g. 'pdf', 'scholar', 'linkedin', 'github', 'twitter'). Use list_links() to see all available."
+    )
+) -> str:
+    """Return a profile or document link by name."""
+    url = candidate.links.get(name)
+    if url is not None:
+        return url
+    available = ", ".join(candidate.links.names())
+    return f"Link '{name}' not found. Available: {available}"
+
+
+@mcp.tool()
+def list_links() -> str:
+    """List all available profile and document links."""
+    return "\n".join(f"- {name}: {url}" for name, url in candidate.links.urls.items())
+
+
+@mcp.tool()
+def get_cv_section(
+    section_name: str = Field(
+        description="Section name to retrieve (case-insensitive, '&' ignored). Use list_cv_sections() to see available names."
+    )
+) -> str:
+    """Retrieve a single named section from the CV. Saves tokens vs fetching the full CV.
+
+    Returns the section content or an error listing available sections.
+    """
+    content = cv.get_section(section_name)
+    if content is not None:
+        return content
+    available = ", ".join(cv.section_names())
+    return f"Section '{section_name}' not found. Available sections: {available}"
+
+
+@mcp.tool()
+def list_cv_sections() -> str:
+    """List available CV section names with approximate line counts.
+
+    Helps AI assistants pick the right section for targeted queries.
+    """
+    lines = []
+    for name, content in cv.sections.items():
+        line_count = content.count("\n") + 1
+        lines.append(f"- {name} (~{line_count} lines)")
+    return "\n".join(lines)
 
 
 @mcp.tool()
@@ -166,36 +227,52 @@ def summarize_cv(
         include_citations=include_citations
     )
 
-@mcp.resource("fps-cv://google_scholar_link")
-def google_scholar_link() -> str:
-    """
-    Return the link to the Google Scholar profile of Francisco Perez-Sorrosal.
-    """
-    return "https://scholar.google.com/citations?user=nemqgScAAAAJ&hl=en"
+# --- Resources ---
+# Content: fps-cv://pdf, fps-cv://md, fps-cv://md/sections, fps-cv://md/sections/{name}
+# Links:   fps-cv://links/{name}
 
-@mcp.resource("fps-cv://cv_pdf_link")
-def cv_pdf_link() -> str:
-    """
-    Return the link to the CV in pdf format.
-    """
-    return "https://github.com/francisco-perez-sorrosal/cv/blob/main/2025_FranciscoPerezSorrosal_CV_English.pdf"
-
-@mcp.resource("fps-cv://cv_md")
-def cv_md() -> str:
-    """Return the full CV of Francisco Perez-Sorrosal as markdown."""
-    cv_path = PROJECT_ROOT / "2025_FranciscoPerezSorrosal_CV_English.pdf"
-    if not cv_path.exists():
-        return "There's no CV found!"
-    return pymupdf4llm.to_markdown(str(cv_path))
-
-
-@mcp.resource("fps-cv://cv_pdf")
+@mcp.resource("fps-cv://pdf")
 def cv_pdf() -> bytes:
-    """Return the full CV of Francisco Perez-Sorrosal as the original PDF binary."""
-    cv_path = PROJECT_ROOT / "2025_FranciscoPerezSorrosal_CV_English.pdf"
-    if not cv_path.exists():
+    """Return the full CV as the original PDF binary."""
+    if not CV_PATH.exists():
         return b""
-    return cv_path.read_bytes()
+    return CV_PATH.read_bytes()
+
+
+@mcp.resource("fps-cv://md")
+def cv_md() -> str:
+    """Return the full CV as markdown."""
+    return cv.markdown
+
+
+@mcp.resource("fps-cv://md/sections")
+def cv_sections_index() -> str:
+    """Return available CV section names with approximate line counts."""
+    lines = []
+    for name, content in cv.sections.items():
+        line_count = content.count("\n") + 1
+        lines.append(f"- {name} (~{line_count} lines)")
+    return "\n".join(lines)
+
+
+@mcp.resource("fps-cv://md/sections/{name}")
+def cv_section(name: str) -> str:
+    """Return a single CV section by name."""
+    content = cv.get_section(name)
+    if content is not None:
+        return content
+    available = ", ".join(cv.section_names())
+    return f"Section '{name}' not found. Available sections: {available}"
+
+
+@mcp.resource("fps-cv://links/{name}")
+def link(name: str) -> str:
+    """Return a profile or document link by name."""
+    url = candidate.links.get(name)
+    if url is not None:
+        return url
+    available = ", ".join(candidate.links.names())
+    return f"Link '{name}' not found. Available: {available}"
 
 @mcp.prompt()
 def summary(
