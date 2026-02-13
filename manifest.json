@@ -38,7 +38,7 @@
   "tools": [
     {
       "name": "get_cv",
-      "description": "Retrieve the full CV of Francisco Perez-Sorrosal in markdown format, including educational background, research experience, industry experience, technical skills, and professional achievements"
+      "description": "Retrieve Francisco Perez-Sorrosal's full CV. Supports 'markdown' (default, LLM-readable) and 'pdf' (original binary document) output formats."
     },
     {
       "name": "get_cv_pdf_link",

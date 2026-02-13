@@ -1,17 +1,27 @@
 """Main module for the CV MCP server with Anthropic integration."""
 
+import base64
 import os
 import sys
 
+from enum import Enum
 from pathlib import Path
 from typing import Literal, cast
-from pydantic import Field
+
+from pydantic import AnyUrl, Field
 
 import pymupdf4llm
 from mcp.server.fastmcp import FastMCP
+from mcp.types import BlobResourceContents, EmbeddedResource
 
 from loguru import logger
 from cv_mcp_server.utils import load_prompt
+
+
+class CvFormat(str, Enum):
+    """Output format for the CV content."""
+    markdown = "markdown"
+    pdf = "pdf"
 
 # Configure transport and statelessness
 trspt = "stdio"
@@ -54,84 +64,40 @@ mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host
 # NOTE: We have to wrap the resources to be accessible to the LLMs from the prompts
 
 @mcp.tool()
-def get_cv() -> str:
-    """Retrieve the full CV of Francisco Perez-Sorrosal in markdown format.
-    
-    Extracts and converts Francisco's CV from PDF format to markdown,
-    making it easily readable and processable by AI systems.
-    
-    Includes, among other things:
-    - Educational background and academic credentials
-    - Research experience and publications
-    - Industry experience and technical roles
-    - Technical skills and expertise areas
-    - Professional achievements and awards
-    - Leadership and collaboration experience
-    
-    Returns:
-        str: The CV content in markdown format
-        
-    Example:
-        >>> get_cv()
-        "# Francisco Perez-Sorrosal\n\n## Education\nPhD in Computer Science..."
+def get_cv(
+    format: CvFormat = Field(
+        default=CvFormat.markdown,
+        description="Output format: 'markdown' for LLM-readable text (default), 'pdf' for the original binary document"
+    )
+) -> str | list[EmbeddedResource]:
+    """Retrieve Francisco Perez-Sorrosal's full CV.
+
+    Returns the CV as markdown text (default) or as the original PDF binary.
     """
-    logger.debug(f"Returning the CV in markdown format...")
-    return cv()
+    if format == CvFormat.pdf:
+        logger.debug("Returning the CV as PDF binary...")
+        pdf_data = cv_pdf()
+        return [EmbeddedResource(
+            type="resource",
+            resource=BlobResourceContents(
+                uri=AnyUrl("fps-cv://cv_pdf"),
+                blob=base64.b64encode(pdf_data).decode("ascii"),
+                mimeType="application/pdf",
+            ),
+        )]
+    logger.debug("Returning the CV in markdown format...")
+    return cv_md()
 
 
 @mcp.tool()
 def get_cv_pdf_link() -> str:
-    """Get the direct link to Francisco Perez-Sorrosal's CV in PDF format.
-    
-    Use cases:
-    - Direct access to the original PDF for download or viewing
-    - Sharing the CV link with others
-    - Integration with systems that require PDF format
-    - Professional document management and archiving
-    
-    Returns:
-        str: Direct URL to the CV PDF file on GitHub
-        
-    Example:
-        >>> get_cv_pdf_link()
-        "https://github.com/francisco-perez-sorrosal/cv/blob/main/2025_FranciscoPerezSorrosal_CV_English.pdf"
-        
-    Note:
-        The PDF is hosted on GitHub and is publicly accessible.
-        This is the authoritative source for Francisco's CV in PDF format.
-    """
+    """Get the direct GitHub link to Francisco Perez-Sorrosal's CV PDF for download or sharing."""
     return cv_pdf_link()
 
 
 @mcp.tool()
 def get_google_scholar_link() -> str:
-    """Get the link to Francisco Perez-Sorrosal's Google Scholar profile.
-    
-    Profile contents include:
-    - Academic publications and research papers
-    - Citation counts and h-index metrics
-    - Research areas and expertise
-    - Co-authors and collaboration network
-    - Publication timeline and research evolution
-    
-    Use cases:
-    - Academic evaluation and research assessment
-    - Citation analysis and impact measurement
-    - Research collaboration opportunities
-    - Academic networking and discovery
-    - Publication verification and reference
-    
-    Returns:
-        str: Direct URL to Francisco's Google Scholar profile
-        
-    Example:
-        >>> get_google_scholar_link()
-        "https://scholar.google.com/citations?user=nemqgScAAAAJ&hl=en"
-        
-    Note:
-        The Google Scholar profile provides real-time citation metrics and
-        is regularly updated with new publications and citations.
-    """
+    """Get the link to Francisco Perez-Sorrosal's Google Scholar profile for publications and citations."""
     return google_scholar_link()
 
 
@@ -178,13 +144,11 @@ def summarize_cv(
         description="Whether to include citations and publication analysis from Google Scholar profile"
     )
 ) -> str:
-    """Generate a summary/overview of Francisco Perez-Sorrosal's CV based on the specified parameters.
-    
-    This is a convenience wrapper around the summary() tool function that exposes the same parameters.
-    See the summary() function returning the prompt, for detailed parameter documentation.
-    
-    Returns:
-        str: The generated CV summary
+    """Generate a configurable CV summary for Francisco Perez-Sorrosal.
+
+    Fallback for MCP clients without Agent Skills support. Wraps the summary() prompt
+    as a callable tool so remote and API consumers get the same summarization capability
+    that skill-compatible clients receive via the cv-analyst skill.
     """
     return summary(
         depth_level=depth_level,
@@ -213,16 +177,22 @@ def cv_pdf_link() -> str:
     """
     return "https://github.com/francisco-perez-sorrosal/cv/blob/main/2025_FranciscoPerezSorrosal_CV_English.pdf"
 
-@mcp.resource("fps-cv://cv")
-def cv() -> str:
-    """
-    Return the full CV of Francisco Perez Sorrosal as a markdown file.
-    """
-    content = "There's no CV found!"
-    if os.path.exists(PROJECT_ROOT):
-        cv_path = os.path.join(PROJECT_ROOT, "2025_FranciscoPerezSorrosal_CV_English.pdf")
-        content: str = pymupdf4llm.to_markdown(cv_path)
-    return content
+@mcp.resource("fps-cv://cv_md")
+def cv_md() -> str:
+    """Return the full CV of Francisco Perez-Sorrosal as markdown."""
+    cv_path = PROJECT_ROOT / "2025_FranciscoPerezSorrosal_CV_English.pdf"
+    if not cv_path.exists():
+        return "There's no CV found!"
+    return pymupdf4llm.to_markdown(str(cv_path))
+
+
+@mcp.resource("fps-cv://cv_pdf")
+def cv_pdf() -> bytes:
+    """Return the full CV of Francisco Perez-Sorrosal as the original PDF binary."""
+    cv_path = PROJECT_ROOT / "2025_FranciscoPerezSorrosal_CV_English.pdf"
+    if not cv_path.exists():
+        return b""
+    return cv_path.read_bytes()
 
 @mcp.prompt()
 def summary(
@@ -237,79 +207,19 @@ def summary(
     additional_instructions: str = "",
     include_citations: bool = False
 ) -> str:
-    """Prompt for generating a summary of Francisco Perez-Sorrosal's CV based on the specified parameters.
-    
+    """Configurable prompt for generating a summary of Francisco Perez-Sorrosal's CV.
+
     Args:
-        depth_level: Level of detail for the summary. 
-                   Examples: 
-                   - "brief": High-level overview, key highlights only (100-200 words)
-                   - "moderate": Balanced detail across all sections (200-400 words)
-                   - "comprehensive": Detailed analysis with specific examples (400-600 words)
-                   - "deep-dive": Thorough examination with context and implications (600+ words)
-                   
-        context: The context for the summary.
-               Examples:
-               - "academic research position"
-               - "industry R&D role"
-               - "startup technical leadership"
-               - "consulting engagement"
-               - "investment evaluation"
-               - "collaboration assessment"
-               
-        emphasis_distribution: Where to place emphasis in the summary.
-                          Examples:
-                          - "equal weight": Balanced coverage of all sections
-                          - "research-heavy": 60% research, 40% other content
-                          - "industry-focused": 60% industry experience
-                          - "technical-first": Prioritize technical skills
-                          - "leadership-oriented": Emphasize management experience
-                          
-        style: Style of the output.
-                     Examples:
-                     - "structured paragraphs": Narrative format with clear sections
-                     - "bullet points": Concise, scannable format
-                     - "executive summary": Business-oriented overview
-                     - "technical brief": Engineering-focused summary
-                     - "comparison table": Strengths/areas matrix
-                     
-        output_format: Output format for the summary.
-                      Examples:
-                      - "markdown": Markdown formatted text (default)
-                      - "raw_text": Plain text without formatting
-                     
-        target_audience: Intended audience for the summary.
-                         Examples:
-                         - "technical hiring manager"
-                         - "academic search committee"
-                         - "executive leadership"
-                         - "peer researchers"
-                         - "investment team"
-                         - "collaboration partners"
-                         
-        length_constraint: Desired length of the summary.
-                        Examples:
-                        - "1-2 paragraphs" (100-200 words)
-                        - "half-page summary" (200-400 words)
-                        - "full-page overview" (400-600 words)
-                        - "detailed report" (600+ words)
-                        - "presentation slide content" (50-100 words)
-                        
-        tone: Tone of the summary.
-             Examples:
-             - "professional and objective"
-             - "enthusiastic and promotional"
-             - "analytical and critical"
-             - "conversational and accessible"
-             - "formal and academic"
-             
-        additional_instructions: Any specific instructions for the summary.
-                            Example:
-                            - "Focus on AI/ML experience in healthcare applications"
-                            - "Highlight open-source contributions and community engagement"
-                            - "Compare with industry benchmarks for similar roles"
-    
-    Returns:
-        str: A prompt for generating the CV summary
+        depth_level: Detail level — "brief" (100-200w), "comprehensive" (400-600w), "deep-dive" (600+w).
+        context: Evaluation context — e.g. "industry R&D role", "academic research position".
+        emphasis_distribution: Weight distribution — e.g. "technical-first", "research-heavy", "equal weight".
+        style: Output style — e.g. "structured paragraphs", "bullet points", "executive summary".
+        output_format: "markdown" (default) or "raw_text".
+        target_audience: Intended reader — e.g. "technical hiring manager", "executive leadership".
+        length_constraint: Target length — e.g. "half-page summary", "1-2 paragraphs", "detailed report".
+        tone: Writing tone — e.g. "professional and objective", "conversational and accessible".
+        additional_instructions: Free-form guidance — e.g. "Focus on AI/ML experience in healthcare".
+        include_citations: Whether to include Google Scholar publication analysis.
     """
     # Load the prompt data from YAML
     prompt_data = load_prompt("summary")
