@@ -64,11 +64,14 @@ def get_cv(
         description="'markdown' returns LLM-readable text (default). 'pdf' returns the original binary PDF document for inline rendering."
     )
 ) -> str | list[EmbeddedResource]:
-    """Retrieve Francisco Perez-Sorrosal's full CV.
+    """Retrieve Francisco Perez-Sorrosal's full CV content.
 
-    Returns the CV as markdown text (default, best for analysis and summarization)
-    or as the original PDF binary for inline rendering in compatible clients.
-    Use get_cv_pdf_link() instead when the user needs a shareable URL.
+    This is the primary tool for getting the CV. Use format='pdf' when the user
+    asks for the CV in PDF format, wants to see/view the PDF, or requests the
+    PDF document. Use format='markdown' (default) for analysis and summarization.
+
+    Do NOT use get_cv_pdf_link when the user asks for the CV in PDF — that tool
+    only returns a URL, not the document itself.
     """
     if format == "pdf":
         logger.debug("Returning the CV as PDF binary...")
@@ -87,10 +90,13 @@ def get_cv(
 
 @mcp.tool()
 def get_cv_pdf_link() -> str:
-    """Get a shareable GitHub URL to Francisco Perez-Sorrosal's CV PDF.
+    """Get a shareable GitHub URL pointing to the CV PDF.
 
-    Returns a link for downloading or sharing — not the PDF content itself.
-    Use get_cv(format='pdf') instead when the client can render the document inline.
+    Returns ONLY a URL string — not the PDF content. Use this when the user
+    explicitly asks for a link or URL to share.
+
+    If the user asks to "see the CV in PDF", "get the CV in PDF", or "show the
+    PDF", use get_cv(format='pdf') instead — that returns the actual document.
     """
     return cv_pdf_link()
 
