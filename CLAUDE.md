@@ -113,17 +113,14 @@ Data tools (fetch CV content):
 - `get_cv_pdf_link` - Direct PDF link
 - `get_google_scholar_link` - Google Scholar profile
 
-Prompt-wrapping tools (legacy, kept for non-skill clients):
-- `summarize_cv` - Configurable CV summary (depth, context, audience, tone, format)
-- `summarize_cv_for_quick_hiring_screen` - Brief hiring screen summary
-- `summarize_cv_for_executive_briefing_for_startup` - Startup executive briefing
-- `summarize_cv_for_executive_briefing_for_big_company` - Big company executive briefing
+Prompt-wrapping tool (fallback for non-skill clients):
+- `summarize_cv` - Configurable CV summary (depth, context, emphasis, audience, tone, format, length). Preset scenarios (hiring screen, exec briefings) are handled by the `cv-analyst` skill.
 
 ### Agent Skill: `cv-analyst`
 
 The `skills/cv-analyst/` skill ([Agent Skills open format](https://agentskills.io)) provides CV summarization for any skill-compatible client (Claude Code, Claude Desktop, Cursor, Gemini CLI, VS Code, and others). It composes with the MCP data tools to fetch CV content and applies structured summarization instructions.
 
-The skill is the preferred mechanism for CV summarization. The MCP prompt-wrapping tools above remain as a fallback for clients that do not support skills.
+The skill is the preferred mechanism for CV summarization. The `summarize_cv` tool remains as a fallback for clients that do not support skills.
 
 ### Deployment
 - **render.com**: Dockerfile-based, env vars `TRANSPORT`, `PORT`, `HOST`
@@ -149,7 +146,7 @@ The skill is the preferred mechanism for CV summarization. The MCP prompt-wrappi
 - Server supports stdio, SSE, and streamable-http transports
 - MCPB bundles vendor dependencies in `lib/` directory
 - `manifest.json` defines the MCPB package metadata and tool declarations
-- The `cv-analyst` skill in `skills/` handles CV summarization for skill-compatible clients; MCP prompt-wrapping tools serve as fallback for other clients
+- The `cv-analyst` skill in `skills/` handles CV summarization for skill-compatible clients; `summarize_cv` tool serves as fallback for other clients
 
 ## Plugins
 

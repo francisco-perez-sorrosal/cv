@@ -198,54 +198,6 @@ def summarize_cv(
         additional_instructions=additional_instructions,
         include_citations=include_citations
     )
-    
-@mcp.tool()
-def summarize_cv_for_quick_hiring_screen() -> str:
-    """Generate a brief summary/overview of Francisco Perez-Sorrosal's CV for a quick hiring screen."""
-    return summary(
-        depth_level="brief",
-        context="industry R&D role",
-        emphasis_distribution="technical-first",
-        style="structured paragraphs",
-        output_format="markdown",
-        target_audience="technical hiring manager",
-        length_constraint="half-page summary",
-        tone="professional and objective",
-        additional_instructions="",
-        include_citations=False
-    )
-    
-@mcp.tool()
-def summarize_cv_for_executive_briefing_for_startup() -> str:
-    """Generate a summary/overview of Francisco Perez-Sorrosal's CV for an executive briefing for a startup."""
-    return summary(
-        depth_level="moderate",
-        context="startup technical leadership",
-        emphasis_distribution="leadership-oriented",
-        style="executive summary",
-        output_format="markdown",
-        target_audience="executive leadership",
-        length_constraint="1-2 paragraphs",
-        tone="enthusiastic and promotional",
-        additional_instructions="",
-        include_citations=False
-    )
-
-@mcp.tool()
-def summarize_cv_for_executive_briefing_for_big_company() -> str:
-    """Generate a summary/overview of Francisco Perez-Sorrosal's CV for an executive briefing for a big company."""
-    return summary(
-        depth_level="moderate",
-        context="big company technical leadership",
-        emphasis_distribution="leadership-oriented",
-        style="executive summary",
-        output_format="markdown",
-        target_audience="executive leadership",
-        length_constraint="full-page overview",
-        tone="professional and objective",
-        additional_instructions="",
-        include_citations=False
-    )
 
 @mcp.resource("fps-cv://google_scholar_link")
 def google_scholar_link() -> str:
