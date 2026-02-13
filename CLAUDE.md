@@ -73,9 +73,6 @@ src/cv_mcp_server/
 .claude-plugin/
   plugin.json             # Claude Code plugin manifest (skills, remote MCP config)
   mcp-local.json          # MCP override: stdio via pixi (dev mode)
-commands/
-  create-mcpb.md          # MCPB bundle build guidance
-  get-job-desc.md         # LinkedIn job description fetcher
 skills/
   cv-analyst/
     SKILL.md              # Agent Skill: CV summarization for different audiences

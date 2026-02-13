@@ -81,6 +81,7 @@ Example prompts:
 - "Get Francisco's CV"
 - "Summarize Francisco's CV for a startup executive briefing"
 - "What is Francisco's Google Scholar profile link?"
+- "Give me a 3 page summary of my CV for a hiring manager oriented towards an ai engineer position in html"
 
 ## Local Development
 
