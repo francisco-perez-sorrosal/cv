@@ -34,8 +34,8 @@ This skill is self-contained. Once invoked, deliver ALL CV output directly — n
 3. **HTML generation**: If the requested format is `html`:
    a. Call `get_cv()` to retrieve the full CV markdown
    b. If the user also requested summarization (any depth other than `full`), apply steps 5-6 to the markdown first to produce a summary. Otherwise use the full markdown
-   c. Read the [HTML template](references/cv-template.html) and the [CSS stylesheet](references/cv-template.css)
-   d. Replace `<!-- CSS_CONTENT -->` in the template's `<style>` tag with the CSS file contents (this produces a self-contained HTML file)
+   c. Read the [HTML template](references/cv-template.html)
+   d. Copy the static assets ([CSS](references/cv-template.css) and [JS](references/cv-template.js)) to `tmp/` so the HTML can reference them as sibling files. These files are never modified — only copied
    e. Set the `.hero-label` text to match the output type: "Full CV" for depth full, "Candidate Summary" for general summaries, or the preset name (e.g., "Hiring Screen", "Executive Briefing")
    f. Convert the CV/summary content into rich HTML using the template's component classes. Map CV sections to visual components:
       - Profile/summary paragraph → `.profile-text`, key facts → `.tags > .tag`
