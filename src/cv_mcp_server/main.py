@@ -67,12 +67,14 @@ mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host
 def get_cv(
     format: CvFormat = Field(
         default=CvFormat.markdown,
-        description="Output format: 'markdown' for LLM-readable text (default), 'pdf' for the original binary document"
+        description="Output format: 'markdown' for LLM-readable text (default), 'pdf' for the original binary document rendered inline (Claude Desktop)"
     )
 ) -> str | list[EmbeddedResource]:
     """Retrieve Francisco Perez-Sorrosal's full CV.
 
-    Returns the CV as markdown text (default) or as the original PDF binary.
+    Returns the CV as markdown text (default, best for analysis and summarization)
+    or as the original PDF binary for inline rendering in compatible clients.
+    Use get_cv_pdf_link() instead when the user needs a shareable URL.
     """
     if format == CvFormat.pdf:
         logger.debug("Returning the CV as PDF binary...")
@@ -91,7 +93,11 @@ def get_cv(
 
 @mcp.tool()
 def get_cv_pdf_link() -> str:
-    """Get the direct GitHub link to Francisco Perez-Sorrosal's CV PDF for download or sharing."""
+    """Get a shareable GitHub URL to Francisco Perez-Sorrosal's CV PDF.
+
+    Returns a link for downloading or sharing — not the PDF content itself.
+    Use get_cv(format='pdf') instead when the client can render the document inline.
+    """
     return cv_pdf_link()
 
 
