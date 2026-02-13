@@ -105,7 +105,6 @@ manifest.json             # MCPB manifest (name: fps-cv-mcp)
 server.json               # MCP server registry entry
 pyproject.toml            # Project config (pixi + hatch build system)
 Makefile                  # Build orchestration for MCPB bundles
-Dockerfile                # Container deployment (render.com)
 start_mcpb.sh             # MCPB startup script
 install.sh                # Marketplace plugin installer (curl-friendly)
 README_USER.md            # Main README (displayed on GitHub via symlink)
