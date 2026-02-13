@@ -314,6 +314,10 @@ section.in-view { opacity: 1; transform: none; }
 .expand-content p strong { font-weight: 600; color: var(--ink); }
 .expand-content p em { font-style: italic; color: var(--accent); font-size: 0.95em; }
 .expand-content .tags { margin-top: 12px; }
+.expand-content a { color: var(--accent); text-decoration: none; }
+.expand-content a:hover { text-decoration: underline; }
+.expand-content li a strong { color: var(--accent); }
+.expand-content small { display: block; font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
 
 /* Stat-specific: centered card, detail panel below number */
 .stat.expandable .expand-content {

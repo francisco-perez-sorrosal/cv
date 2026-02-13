@@ -49,6 +49,11 @@ This skill is self-contained. Once invoked, deliver ALL CV output directly — n
       - Education entries → `.edu-grid > .edu-card > .degree + .school + .year`
       - Wrap each group in `<section data-label="Name"><div class="container"><div class="section-label">NN — Label</div><h2 class="section-title">Title</h2>...</div></section>`
       - Make cards interactive: add class `expandable` to any stat, skill-card, achievement, or edu-card that has additional detail. Put the detail inside `<div class="expand-content">` and add `<span class="expand-indicator"></span>`. The component shows a + icon and expands on click to reveal the full content. Use rich formatting inside: `<strong>` for titles and names (papers, patents, projects), `<em>` for venues and the CV owner's name in author lists, `<small>` for metadata lines (authors, dates, citation counts)
+      - **Data sourcing for expandable lists**: call `get_google_scholar_link()` and visit the profile page to obtain real publication data. Use this data to populate the expandable bullet-point lists in the generated HTML:
+        - **Publications stat**: one `<li>` per paper — wrap title in `<a>` linking to its Google Scholar citation page, show venue, year, and citation count in `<small>`. Omit author lists for cleanliness
+        - **Citations stat**: top-cited papers as bullet points — `<strong>` citation count + `<a>` linked short title in `<em>` + venue in `<small>`. Include h-index and a link to the full Google Scholar profile at the bottom
+        - **Patents stat**: one `<li>` per patent — wrap title in `<a>` linking to its Google Scholar page, show patent app number and year in `<small>`
+        - The template shows the HTML pattern for each list item type; populate with real data from the profile
    g. Replace everything inside `<main>` (`<!-- BODY_CONTENT -->`) with the generated section HTML
    h. Call `get_cv_pdf_link()` and replace `<!-- PDF_LINK -->` with the URL (all occurrences)
    i. Write the completed HTML to `tmp/FranciscoPerezSorrosal_CV.html` (full CV) or `tmp/FranciscoPerezSorrosal_CV_Summary.html` (summary)
