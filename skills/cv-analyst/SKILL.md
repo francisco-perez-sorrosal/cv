@@ -20,8 +20,8 @@ Analyze and summarize Francisco Perez-Sorrosal's CV, tailoring output to specifi
 
 Fetch CV data using these MCP tools before generating any summary:
 
-1. **`get_cv`** -- Full CV content. Accepts a `format` parameter: `"markdown"` (default, for analysis) or `"pdf"` (original binary document). Always call this first.
-2. **`get_cv_pdf_link`** -- Direct URL to the CV PDF on GitHub. Append to every summary.
+1. **`get_cv`** -- Full CV content. Accepts a `format` parameter: `"markdown"` (default, for analysis) or `"pdf"` (returns the actual PDF binary document). This is the tool for getting the CV in any format.
+2. **`get_cv_pdf_link`** -- Returns ONLY a shareable URL string (not the PDF itself). Use only when the user explicitly asks for a link to share. **Never** use this when the user asks for "the CV in PDF" — use `get_cv(format="pdf")` instead.
 3. **`get_google_scholar_link`** -- Google Scholar profile URL. Use when citation analysis is requested.
 
 ## Summarization Process
@@ -83,6 +83,7 @@ Four pre-configured profiles cover common use cases. See [references/summary-pre
 When the user's request does not match a preset, map their requirements to the parameter table:
 
 - "Give me the full CV" -> use Full CV preset
+- "Give me the CV in PDF" / "Show me the PDF" -> call `get_cv(format="pdf")`, return the binary PDF directly
 - "Give me a quick overview" -> depth: brief, length: 1-2 paragraphs
 - "Detailed technical analysis" -> depth: deep-dive, emphasis: technical-first, style: technical brief
 - "For an academic position" -> context: academic research, audience: academic committee, tone: formal and academic
