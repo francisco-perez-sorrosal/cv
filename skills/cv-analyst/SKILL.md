@@ -20,18 +20,19 @@ Analyze and summarize Francisco Perez-Sorrosal's CV, tailoring output to specifi
 
 Fetch CV data using these MCP tools before generating any summary:
 
-1. **`get_cv`** -- Full CV in markdown format (extracted from PDF). Always call this first.
+1. **`get_cv`** -- Full CV content. Accepts a `format` parameter: `"markdown"` (default, for analysis) or `"pdf"` (original binary document). Always call this first.
 2. **`get_cv_pdf_link`** -- Direct URL to the CV PDF on GitHub. Append to every summary.
 3. **`get_google_scholar_link`** -- Google Scholar profile URL. Use when citation analysis is requested.
 
 ## Summarization Process
 
 1. Validate the requested format. If it is not one of `markdown`, `plain text`, or `pdf`, respond that the format is not supported and list the available options. Do not proceed further
-2. Call `get_cv` to retrieve the full CV content. If format is **pdf**, call `get_cv` with `format: "pdf"` to get the binary PDF directly and return it -- skip all remaining steps
-3. Determine the target profile: match the user's request to a [preset](references/summary-presets.md) or build custom parameters
-4. If depth is **full**: return the CV content as-is (skip summarization and restructuring). Otherwise: generate the summary following the summarization parameters below
-5. If format is not **pdf**, append the PDF link (from `get_cv_pdf_link`) at the end of the output
-6. If citation analysis is requested, fetch the Google Scholar profile via `get_google_scholar_link`, analyze publications, and include a table of publications with citation counts and impact metrics
+2. **PDF shortcut**: If the requested format is `pdf`, call `get_cv(format="pdf")` and return the binary result directly — skip all remaining steps
+3. Call `get_cv()` (defaults to markdown) to retrieve the full CV content
+4. Determine the target profile: match the user's request to a [preset](references/summary-presets.md) or build custom parameters
+5. If depth is **full**: return the CV content as-is (skip summarization and restructuring). Otherwise: generate the summary following the summarization parameters below
+6. Append the PDF link (from `get_cv_pdf_link`) at the end of the output
+7. If citation analysis is requested, fetch the Google Scholar profile via `get_google_scholar_link`, analyze publications, and include a table of publications with citation counts and impact metrics
 
 ## Summary Parameters
 
