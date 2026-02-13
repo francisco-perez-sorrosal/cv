@@ -155,6 +155,8 @@ Prompt-wrapping tool (fallback for non-skill clients):
 
 When the `i-am` plugin is installed, use its agents, skills, rules, and hooks for all applicable work (planning, research, implementation, verification, code review, memory, etc.).
 
+Prefer delegating to specialized agents (researcher, context-engineer, implementer, etc.) over doing multi-step work directly.
+
 ## Important Notes
 
 - The CV contains real professional information - handle appropriately
