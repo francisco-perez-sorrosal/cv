@@ -97,7 +97,6 @@ manifest.json             # MCPB manifest (name: fps-cv-mcp)
 server.json               # MCP server registry entry
 pyproject.toml            # Project config (pixi + hatch build system)
 Makefile                  # Build orchestration for MCPB bundles
-Dockerfile                # Container deployment (render.com)
 start_mcpb.sh             # MCPB startup script
 install.sh                # Marketplace plugin installer (curl-friendly)
 README_USER.md            # Main README (displayed on GitHub via symlink)
@@ -123,7 +122,7 @@ The `skills/cv-analyst/` skill ([Agent Skills open format](https://agentskills.i
 The skill is the preferred mechanism for CV summarization. The `summarize_cv` tool remains as a fallback for clients that do not support skills.
 
 ### Deployment
-- **render.com**: Dockerfile-based, env vars `TRANSPORT`, `PORT`, `HOST`
+- **render.com**: env vars `TRANSPORT`, `PORT`, `HOST`
 - **Wasmer**: MCPB bundle at `https://fps-cv.wasmer.app/mcp` (see `.mcp.json`)
 - **MCPB Registry**: Published via `server.json` with SHA256 verification
 - **Claude Code Plugin**: `.claude-plugin/` with local/remote MCP templates, skill auto-discovery via `plugin.json` (plugin name: `cv`)
