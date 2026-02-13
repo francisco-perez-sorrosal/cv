@@ -64,14 +64,14 @@ def get_cv(
         description="'markdown' returns LLM-readable text (default). 'pdf' returns the original binary PDF document for inline rendering."
     )
 ) -> str | list[EmbeddedResource]:
-    """Retrieve Francisco Perez-Sorrosal's full CV content.
+    """Data-layer tool: retrieves raw CV content in markdown or PDF binary.
 
-    This is the primary tool for getting the CV. Use format='pdf' when the user
-    asks for the CV in PDF format, wants to see/view the PDF, or requests the
-    PDF document. Use format='markdown' (default) for analysis and summarization.
+    When the cv-analyst skill is available, prefer invoking that skill instead
+    of calling this tool directly — the skill orchestrates retrieval with proper
+    formatting, artifact delivery, and summarization.
 
-    Do NOT use get_cv_pdf_link when the user asks for the CV in PDF — that tool
-    only returns a URL, not the document itself.
+    format='markdown' (default): LLM-readable text for analysis.
+    format='pdf': original PDF binary for inline rendering.
     """
     if format == "pdf":
         logger.debug("Returning the CV as PDF binary...")
@@ -90,13 +90,10 @@ def get_cv(
 
 @mcp.tool()
 def get_cv_pdf_link() -> str:
-    """Get a shareable GitHub URL pointing to the CV PDF.
+    """Returns a shareable GitHub URL pointing to the CV PDF (not the PDF itself).
 
-    Returns ONLY a URL string — not the PDF content. Use this when the user
-    explicitly asks for a link or URL to share.
-
-    If the user asks to "see the CV in PDF", "get the CV in PDF", or "show the
-    PDF", use get_cv(format='pdf') instead — that returns the actual document.
+    When the cv-analyst skill is available, prefer invoking that skill — it
+    appends this link automatically when appropriate.
     """
     return cv_pdf_link()
 
@@ -150,11 +147,11 @@ def summarize_cv(
         description="Whether to include citations and publication analysis from Google Scholar profile"
     )
 ) -> str:
-    """Generate a configurable CV summary for Francisco Perez-Sorrosal.
+    """Fallback CV summarization for clients without Agent Skills support.
 
-    Fallback for MCP clients without Agent Skills support. Wraps the summary() prompt
-    as a callable tool so remote and API consumers get the same summarization capability
-    that skill-compatible clients receive via the cv-analyst skill.
+    When the cv-analyst skill is available, prefer invoking that skill instead —
+    it provides richer orchestration, preset profiles, and artifact delivery.
+    This tool exists for MCP clients that cannot load skills.
     """
     return summary(
         depth_level=depth_level,

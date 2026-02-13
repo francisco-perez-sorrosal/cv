@@ -1,15 +1,15 @@
 ---
 name: cv-analyst
 description: >
-  Analyzes and summarizes Francisco Perez-Sorrosal's CV for different audiences,
-  contexts, and formats. Can also return the full CV without summarization.
-  Fetches CV data via MCP tools and applies structured summarization with
-  configurable depth, emphasis, audience, tone, and style. Includes preset
-  profiles for common scenarios: full CV, quick hiring screen, startup executive
-  briefing, big company executive briefing. Supports citation analysis via Google
-  Scholar when requested. Trigger terms: summarize CV, CV summary, full CV,
-  get CV, hiring screen, executive briefing, CV analysis, professional background,
-  candidate overview, career summary, qualifications review.
+  ALWAYS use this skill for ANY request about Francisco Perez-Sorrosal's CV,
+  resume, or professional background — including retrieving the CV (PDF or
+  text), viewing it, summarizing it, or analyzing it for a specific audience.
+  This skill orchestrates the MCP data tools (get_cv, get_cv_pdf_link,
+  summarize_cv) with proper formatting, artifact delivery, and summarization.
+  Do NOT call those MCP tools directly; invoke this skill first.
+  Covers: get CV, CV in PDF, show CV, view resume, full CV, summarize CV,
+  hiring screen, executive briefing, candidate overview, career summary,
+  qualifications review, citation analysis.
 ---
 
 # CV Analyst
