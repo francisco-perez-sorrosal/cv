@@ -4,7 +4,7 @@ Pre-configured parameter profiles for common CV summarization scenarios. Each pr
 
 ## Full CV
 
-Returns the complete CV content as extracted from the PDF, without any summarization or restructuring. Appends the PDF link at the end.
+Returns the complete CV content rendered from the structured YAML data layer, without any summarization or restructuring. Appends the PDF link at the end.
 
 | Parameter | Value |
 |-----------|-------|
