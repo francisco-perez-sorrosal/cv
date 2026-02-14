@@ -1,0 +1,195 @@
+<!-- SECTION: header -->
+# {{ resume.personal_info.name }}
+{% if resume.personal_info.label %}
+**{{ resume.personal_info.label }}**
+{% endif %}
+{% if contact_parts %}
+{{ contact_parts | join(" | ") }}
+{% endif %}
+{% if profile_links %}
+{{ profile_links | join(" | ") }}
+{% endif %}
+<!-- END_SECTION: header -->
+
+{% if resume.quote %}
+<!-- SECTION: quote -->
+> *{{ resume.quote }}*
+<!-- END_SECTION: quote -->
+{% endif %}
+
+{% if resume.personal_info.summary %}
+<!-- SECTION: Profile and Goals -->
+## Profile and Goals
+
+{{ resume.personal_info.summary }}
+<!-- END_SECTION: Profile and Goals -->
+{% endif %}
+
+{% if industry_work %}
+<!-- SECTION: Professional Experience -->
+## Professional Experience
+{% for w in industry_work %}
+
+{% include '_work_entry.md.j2' %}
+{% endfor %}
+<!-- END_SECTION: Professional Experience -->
+{% endif %}
+
+{% if resume.patents %}
+<!-- SECTION: Patents -->
+## Patents
+{% for p in resume.patents %}
+{% set status = (" (" ~ p.status.value ~ ")") if p.status else "" %}
+- **{{ p.title }}** — No. {{ p.number }}, {{ p.date }}{{ status }}
+{% endfor %}
+<!-- END_SECTION: Patents -->
+{% endif %}
+
+{% if academic_work or sorted_publications %}
+<!-- SECTION: Academic Research Experience -->
+## Academic Research Experience
+{% for w in academic_work %}
+
+{% include '_work_entry.md.j2' %}
+{% endfor %}
+{% if sorted_publications %}
+
+### Publications ({{ total_citations }} total citations)
+{% for p in sorted_publications %}
+{% set pub_has_year = p.release_date and p.publisher.endswith(p.release_date) %}
+{% set cite = (" — **" ~ p.citations ~ " citations**") if p.citations else "" %}
+- {{ p.publisher }}{% if not pub_has_year %}, {{ p.release_date }}{% endif %}{{ cite }}: *{{ p.name }}*
+{% endfor %}
+{% endif %}
+<!-- END_SECTION: Academic Research Experience -->
+{% endif %}
+
+{% if resume.skills %}
+<!-- SECTION: Skills -->
+## Skills
+{% for sg in resume.skills %}
+
+### {{ sg.name }}
+{% for skill in sg.skills %}
+{% set level = skill_levels.get(skill.name | lower, "") %}
+{% set level_tag = (" [" ~ level ~ "]") if level else "" %}
+- **{{ skill.name }}**{{ level_tag }}: {{ skill.keywords | join(", ") }}
+{% endfor %}
+{% endfor %}
+<!-- END_SECTION: Skills -->
+{% endif %}
+
+{% if resume.certificates %}
+<!-- SECTION: Courses and Certifications -->
+## Courses and Certifications
+{% for c in resume.certificates %}
+{% set inst = c.institution_id | inst_name %}
+{% set url_part = (" — [link](" ~ c.url ~ ")") if c.url else "" %}
+{% set loc_part = (", " ~ c.location) if c.location else "" %}
+{% set fmt_part = (" [" ~ c.format ~ "]") if c.format else "" %}
+- {{ c.name }} ({{ inst }}, {{ c.date }}{{ loc_part }}){{ fmt_part }}{{ url_part }}
+{% endfor %}
+<!-- END_SECTION: Courses and Certifications -->
+{% endif %}
+
+{% if resume.education %}
+<!-- SECTION: Education -->
+## Education
+{% for e in resume.education %}
+{% set inst = e.institution_id | inst_name %}
+{% set period = (e.start_date ~ "–" ~ e.end_date) if e.end_date else e.start_date %}
+{% set loc = (", " ~ e.location) if e.location else "" %}
+- **{{ e.study_type }}**, {{ e.area }} — {{ (e.department ~ " at ") if e.department else "" }}{{ inst }}{{ loc }} ({{ period }})
+{% endfor %}
+<!-- END_SECTION: Education -->
+{% endif %}
+
+{% if resume.leadership %}
+<!-- SECTION: Leadership & Communication -->
+## Leadership & Communication
+{% for cat in resume.leadership %}
+
+### {{ cat.name }}
+{% for item in cat.items %}
+- **{{ item.label }}**: {{ item.description }}
+{% endfor %}
+{% endfor %}
+<!-- END_SECTION: Leadership & Communication -->
+{% endif %}
+
+{% if resume.languages %}
+<!-- SECTION: Languages -->
+## Languages
+{% for lang in resume.languages %}
+{% set fluency = (" (" ~ lang.fluency ~ ")") if lang.fluency else "" %}
+- {{ lang.language }}{{ fluency }}
+{% endfor %}
+<!-- END_SECTION: Languages -->
+{% endif %}
+
+{% if resume.projects or resume.memberships or resume.conferences %}
+<!-- SECTION: Other Activities Related to CS -->
+## Other Activities Related to Computer Science
+{% if resume.projects %}
+
+### Open Source Project Maintainer
+{% for p in resume.projects %}
+{% set url_part = (" — [" ~ p.url ~ "](" ~ p.url ~ ")") if p.url else "" %}
+- **{{ p.name }}**{{ url_part }}
+{% if p.description %}
+  {{ p.description }}
+{% endif %}
+{% if p.keywords %}
+  Keywords: {{ p.keywords | join(", ") }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if committers %}
+
+### Committer in Open Source Foundations
+{% for m in committers %}
+{% set org = ("[" ~ m.organization ~ "](" ~ m.url ~ ")") if m.url else m.organization %}
+- {{ org }} — {{ m.role }}
+{% endfor %}
+{% endif %}
+{% if reviewer_groups %}
+
+### Reviewer in International Academic Conferences
+{% for r in reviewer_groups %}
+- *{{ r.name }}*, {{ r.years }}
+{% endfor %}
+{% endif %}
+{% if conference_list %}
+
+### Speaker/Attendee in Academic/Technical Conferences
+{% for c in conference_list %}
+{% set loc = (", " ~ c.location) if c.location else "" %}
+{% set speaker_tag = " **(Speaker)**" if c.role == "speaker" else "" %}
+- *{{ c.name }}*{{ loc }} ({{ c.date }}){{ speaker_tag }}
+{% endfor %}
+{% endif %}
+{% if members %}
+
+### Memberships
+{% for m in members %}
+{% set org = ("[" ~ m.organization ~ "](" ~ m.url ~ ")") if m.url else m.organization %}
+- {{ org }}
+{% endfor %}
+{% endif %}
+<!-- END_SECTION: Other Activities Related to CS -->
+{% endif %}
+
+{% if resume.interests %}
+<!-- SECTION: Hobbies and Interests -->
+## Hobbies and Interests
+{% for i in resume.interests %}
+- **{{ i.name }}**
+{% if i.description %}
+  {{ i.description }}
+{% endif %}
+{% if i.keywords %}
+  Keywords: {{ i.keywords | join(", ") }}
+{% endif %}
+{% endfor %}
+<!-- END_SECTION: Hobbies and Interests -->
+{% endif %}

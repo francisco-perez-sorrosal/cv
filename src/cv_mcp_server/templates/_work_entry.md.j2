@@ -1,0 +1,60 @@
+{% set dept = ", " ~ w.department if w.department else "" %}
+{% set loc = " (" ~ w.location ~ ")" if w.location else "" %}
+### {{ w.position }} — {{ w.institution_id | inst_name }}{{ dept }}{{ loc }}
+*{{ w | period }}*
+{% if w.roles %}
+Roles: {{ w.roles | join(", ") }}
+{% endif %}
+{% if w.summary %}
+
+{{ w.summary }}
+{% endif %}
+{% if w.highlights %}
+
+{% for h in w.highlights %}
+- {{ h }}
+{% endfor %}
+{% endif %}
+{% for p in w.projects %}
+{% set p_period = (" (" ~ (p | period) ~ ")") if p.start_date else "" %}
+
+**{{ p.name }}**{{ p_period }}
+{% if p.goal %}
+
+{{ p.goal }}
+{% elif p.description %}
+
+{{ p.description }}
+{% endif %}
+{% if p.highlights %}
+
+{% for h in p.highlights %}
+- {{ h }}
+{% endfor %}
+{% endif %}
+{% if p.achievements %}
+
+Achievements:
+{% for a in p.achievements %}
+- {{ a }}
+{% endfor %}
+{% endif %}
+{% if p.keywords %}
+
+Keywords: {{ p.keywords | join(", ") }}
+{% endif %}
+{% if project_links and project_links.get(p.id) %}
+
+{% for link in project_links[p.id] %}
+{% if link.type == "published-as" %}
+{% set cite = (" — " ~ link.target.citations ~ " citations") if link.target.citations else "" %}
+- Published: *{{ link.label }}* ({{ link.target.publisher }}, {{ link.target.release_date }}{{ cite }})
+{% elif link.type == "patented-as" %}
+{% set status = (" — " ~ link.target.status.value) if link.target.status else "" %}
+- Patent: *{{ link.label }}* (No. {{ link.target.number }}, {{ link.target.date }}{{ status }})
+{% elif link.type == "presented-at" %}
+- Presented at *{{ link.label }}* ({{ link.target.date }})
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}

@@ -2,9 +2,9 @@
   "manifest_version": "0.1",
   "name": "fps-cv-mcp",
   "display_name": "Francisco Perez-Sorrosal CV MCP Server",
-  "version": "0.0.3",
-  "description": "MCP server that serves Francisco Perez-Sorrosal's CV as a resource for AI systems with comprehensive analysis and summarization tools",
-  "long_description": "A comprehensive MCP Bundle that exposes Francisco Perez-Sorrosal's curriculum vitae through multiple MCP tools and resources. This server provides access to the CV in markdown format, PDF links, Google Scholar profile, and includes sophisticated summarization capabilities with configurable parameters for different audiences and contexts. The server supports both local (stdio) and remote (streamable-http) deployment modes, making it suitable for various integration scenarios.",
+  "version": "0.0.5",
+  "description": "MCP server serving Francisco Perez-Sorrosal's CV with structured data layer, semantic annotations, and comprehensive query tools",
+  "long_description": "A comprehensive MCP Bundle that exposes Francisco Perez-Sorrosal's curriculum vitae through structured YAML data, a semantic overlay with topic taxonomy, and 15+ MCP tools. Features include: full CV in markdown/PDF, per-section retrieval, structured work/entry queries, semantic topic queries, skill proficiency profiles, cross-entry relationship graphs, leadership/communication section, and configurable summarization. The server supports both local (stdio) and remote (streamable-http) deployment modes.",
   "author": {
     "name": "Francisco Perez-Sorrosal",
     "email": "fperezsorrosal@gmail.com",
@@ -38,31 +38,63 @@
   "tools": [
     {
       "name": "get_cv",
-      "description": "Retrieve Francisco Perez-Sorrosal's full CV. Supports 'markdown' (default, LLM-readable) and 'pdf' (original binary document) output formats."
-    },
-    {
-      "name": "refresh_cv",
-      "description": "Download the latest CV PDF from the main branch on GitHub and rebuild the markdown/section cache without redeploying."
+      "description": "Retrieve full CV in markdown (default) or PDF binary format."
     },
     {
       "name": "get_link",
-      "description": "Return a profile or document link by name. Use list_links() to see available names."
+      "description": "Return a profile or document link by network name."
     },
     {
       "name": "list_links",
-      "description": "List all available profile and document links with their URLs."
+      "description": "List all available profile and document links."
     },
     {
       "name": "list_cv_sections",
-      "description": "List available CV section names with approximate line counts. Helps pick the right section for targeted queries."
+      "description": "List available CV section names with approximate line counts."
     },
     {
       "name": "get_cv_section",
-      "description": "Retrieve a single named section from the CV by name (case-insensitive). Saves tokens vs fetching the full CV. Lists available sections if the name doesn't match."
+      "description": "Retrieve a single named section from the CV (case-insensitive)."
+    },
+    {
+      "name": "get_cv_pdf_link",
+      "description": "Return the direct link to the PDF version of the CV."
+    },
+    {
+      "name": "get_google_scholar_link",
+      "description": "Return the Google Scholar profile link."
     },
     {
       "name": "summarize_cv",
-      "description": "Generate a customizable summary of Francisco Perez-Sorrosal's CV with configurable parameters for depth, context, emphasis, format, audience, length, and tone. Fallback for clients that do not support Agent Skills; prefer the cv-analyst skill when available."
+      "description": "Generate a customizable CV summary with configurable depth, context, emphasis, format, audience, length, and tone."
+    },
+    {
+      "name": "query_work",
+      "description": "Filter work entries by company, date range, or topic. Returns matching entries as markdown."
+    },
+    {
+      "name": "get_entry",
+      "description": "Retrieve a specific resume entry by its stable ID as JSON."
+    },
+    {
+      "name": "list_entry_ids",
+      "description": "List all entry IDs with labels, optionally filtered by section type."
+    },
+    {
+      "name": "query_by_topic",
+      "description": "Find resume entries annotated with a semantic topic."
+    },
+    {
+      "name": "get_relationships",
+      "description": "Get cross-references and relationships for a resume entry."
+    },
+    {
+      "name": "get_skill_profile",
+      "description": "Get skill proficiency levels across the career."
+    },
+    {
+      "name": "get_entry_context",
+      "description": "Get full semantic context for an entry: topics, relationships, summaries, impact."
     }
   ],
   "prompts": [
@@ -82,7 +114,10 @@
     "technical leadership",
     "academic",
     "publications",
-    "citations"
+    "citations",
+    "semantic",
+    "structured data",
+    "knowledge graph"
   ],
   "compatibility": {
     "python": ">=3.13"

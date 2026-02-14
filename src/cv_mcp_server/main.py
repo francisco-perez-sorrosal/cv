@@ -1,21 +1,28 @@
-"""Main module for the CV MCP server with Anthropic integration."""
+"""Main module for the CV MCP server with structured data layer."""
 
 import base64
+import json
 import os
 import sys
-import urllib.request
 
 from pathlib import Path
 from typing import Literal, cast
 
-from pydantic import AnyUrl, Field
+from pydantic import AnyUrl, BaseModel, Field
 
 from mcp.server.fastmcp import FastMCP
 from mcp.types import BlobResourceContents, EmbeddedResource
 
 from loguru import logger
-from cv_mcp_server.utils import load_candidate, load_prompt
-from cv_mcp_server.sections import CvContent
+from cv_mcp_server.store import ResumeStore
+from cv_mcp_server.renderers import (
+    render_markdown,
+    render_sections,
+    render_work_entry,
+    get_section,
+    section_names as list_section_names,
+)
+from cv_mcp_server.utils import load_prompt
 
 
 # Configure transport and statelessness
@@ -43,31 +50,32 @@ def find_project_root():
         current = current.parent
     return current
 
+
 PROJECT_ROOT = find_project_root()
+DATA_DIR = Path(__file__).parent / "data"
 CV_PATH = PROJECT_ROOT / "2025_FranciscoPerezSorrosal_CV_English.pdf"
 
-# Eager initialization: parse CV and load candidate config at import time
-cv = CvContent.from_pdf(CV_PATH)
-candidate = load_candidate()
+# Eager initialization: load structured data at import time
+store = ResumeStore.load(DATA_DIR)
 
 # Initialize FastMCP server
-host = os.environ.get("HOST", "0.0.0.0")  # render.com needs '0.0.0.0' specified as host when deploying the service
-port = int(os.environ.get("PORT", 10000))  # render.com has '10000' as default port
+host = os.environ.get("HOST", "0.0.0.0")
+port = int(os.environ.get("PORT", 10000))
 mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host=host, port=port)
 
-# Track usage to understand how users interact with the MCP server
-# NOTE:
-# import mcpcat
-# mcpcat.track(server=mcp, project_id="proj_2yl2y3eRvzgT2fUTQAUok0J6i6T")
 
-# NOTE: We have to wrap the resources to be accessible to the LLMs from the prompts
+# --- Data tools ---
 
 @mcp.tool()
 def get_cv(
     format: Literal["markdown", "pdf"] = Field(
         default="markdown",
         description="'markdown' returns LLM-readable text (default). 'pdf' returns the original binary PDF document for inline rendering."
-    )
+    ),
+    enrich: bool = Field(
+        default=True,
+        description="Include semantic enrichments (cross-references, skill levels)"
+    ),
 ) -> str | list[EmbeddedResource]:
     """Data-layer tool: retrieves raw CV content in markdown or PDF binary.
 
@@ -90,66 +98,61 @@ def get_cv(
             ),
         )]
     logger.debug("Returning the CV in markdown format...")
-    return cv.markdown
-
-
-@mcp.tool()
-def refresh_cv() -> str:
-    """Download the latest CV PDF from the main branch and rebuild the cache.
-
-    Use when the CV has been updated on GitHub but the MCP server hasn't been redeployed.
-    """
-    pdf_link = candidate.links.get("pdf")
-    if pdf_link is None:
-        return "No 'pdf' link configured in candidate profile."
-
-    raw_url = pdf_link.replace("/blob/", "/raw/")
-    logger.info(f"Downloading CV from {raw_url}...")
-    try:
-        urllib.request.urlretrieve(raw_url, CV_PATH)
-    except Exception as e:
-        return f"Download failed: {e}"
-
-    global cv  # Rebind: CvContent is immutable, so refresh = new instance
-    cv = CvContent.from_pdf(CV_PATH)
-    return f"CV refreshed: downloaded from main branch, parsed {len(cv.sections)} sections."
+    return render_markdown(store, enrich=enrich)
 
 
 @mcp.tool()
 def get_link(
     name: str = Field(
-        description="Link name (e.g. 'pdf', 'scholar', 'linkedin', 'github', 'twitter'). Use list_links() to see all available."
+        description="Network name (e.g. 'LinkedIn', 'GitHub', 'Google Scholar', 'Twitter', 'CV PDF'). Use list_links() to see all available."
     )
 ) -> str:
-    """Return a profile or document link by name."""
-    url = candidate.links.get(name)
-    if url is not None:
-        return url
-    available = ", ".join(candidate.links.names())
+    """Return a profile or document link by network name."""
+    name_lower = name.lower()
+    for profile in store.resume.personal_info.profiles:
+        if profile.network.lower() == name_lower:
+            return profile.url
+    available = ", ".join(p.network for p in store.resume.personal_info.profiles)
     return f"Link '{name}' not found. Available: {available}"
 
 
 @mcp.tool()
 def list_links() -> str:
     """List all available profile and document links."""
-    return "\n".join(f"- {name}: {url}" for name, url in candidate.links.urls.items())
+    return "\n".join(
+        f"- {p.network}: {p.url}" for p in store.resume.personal_info.profiles if p.url
+    )
 
 
 @mcp.tool()
-def get_cv_section(
-    section_name: str = Field(
-        description="Section name to retrieve (case-insensitive, '&' ignored). Use list_cv_sections() to see available names."
-    )
+def get_cv_sections(
+    section_names: list[str] = Field(
+        description="One or more section names to retrieve (case-insensitive, '&' ignored). "
+        "Use list_cv_sections() to see available names."
+    ),
+    enrich: bool = Field(
+        default=True,
+        description="Include semantic enrichments (cross-references, skill levels)"
+    ),
 ) -> str:
-    """Retrieve a single named section from the CV. Saves tokens vs fetching the full CV.
+    """Retrieve one or more CV sections in a single call.
 
-    Returns the section content or an error listing available sections.
+    Accepts a list of section names. Returns all matched sections separated by blank lines.
+    Reports any unrecognized names with the list of available sections.
     """
-    content = cv.get_section(section_name)
-    if content is not None:
-        return content
-    available = ", ".join(cv.section_names())
-    return f"Section '{section_name}' not found. Available sections: {available}"
+    results = []
+    missing = []
+    for name in section_names:
+        content = get_section(store, name, enrich=enrich)
+        if content is not None:
+            results.append(content)
+        else:
+            missing.append(name)
+    output = "\n\n".join(results)
+    if missing:
+        available = ", ".join(list_section_names(store))
+        output += f"\n\nSections not found: {', '.join(missing)}. Available: {available}"
+    return output
 
 
 @mcp.tool()
@@ -159,10 +162,28 @@ def list_cv_sections() -> str:
     Helps AI assistants pick the right section for targeted queries.
     """
     lines = []
-    for name, content in cv.sections.items():
+    for name, content in render_sections(store).items():
         line_count = content.count("\n") + 1
         lines.append(f"- {name} (~{line_count} lines)")
     return "\n".join(lines)
+
+
+@mcp.tool()
+def get_cv_pdf_link() -> str:
+    """Return the direct link to the PDF version of the CV."""
+    for p in store.resume.personal_info.profiles:
+        if p.network.lower() == "cv pdf":
+            return p.url
+    return store.resume.meta.canonical or "PDF link not available."
+
+
+@mcp.tool()
+def get_google_scholar_link() -> str:
+    """Return the Google Scholar profile link."""
+    for p in store.resume.personal_info.profiles:
+        if p.network.lower() == "google scholar":
+            return p.url
+    return "Google Scholar link not available."
 
 
 @mcp.tool()
@@ -227,9 +248,188 @@ def summarize_cv(
         include_citations=include_citations
     )
 
+
+# --- Structured query tools ---
+
+@mcp.tool(
+    description="Filter work entries by company, date range, or topic. Returns matching entries as markdown."
+)
+def query_work(
+    company: str = "",
+    start_year: str = "",
+    end_year: str = "",
+    topic: str = "",
+    enrich: bool = Field(
+        default=True,
+        description="Include semantic enrichments (cross-references to publications/patents)"
+    ),
+) -> str:
+    """Filter work entries by company, date range, or topic. Returns matching entries as markdown."""
+    results = list(store.resume.work)
+
+    if company:
+        company_lower = company.lower()
+        filtered = []
+        for w in results:
+            inst = store.institution_by_id(w.institution_id)
+            if inst is None:
+                continue
+            names = [inst.name.lower()] + [a.lower() for a in inst.aliases]
+            if any(company_lower in n for n in names):
+                filtered.append(w)
+        results = filtered
+
+    if start_year and end_year:
+        results = [
+            w for w in results
+            if w.start_date <= end_year and (w.end_date >= start_year or w.end_date == "")
+        ]
+
+    if topic:
+        topic_entry_ids = {e["id"] for e in store.entries_by_topic(topic)}
+        results = [
+            w for w in results
+            if w.id in topic_entry_ids or any(p.id in topic_entry_ids for p in w.projects)
+        ]
+
+    if not results:
+        return "No matching work entries found."
+
+    return "\n\n".join(render_work_entry(w, store, enrich=enrich) for w in results)
+
+
+@mcp.tool(description="Retrieve a specific resume entry by its stable ID. Returns JSON representation.")
+def get_entry(entry_id: str) -> str:
+    entry = store.entry_by_id(entry_id)
+    if entry is None:
+        return f"Entry '{entry_id}' not found."
+    if isinstance(entry, BaseModel):
+        return json.dumps(entry.model_dump(by_alias=True), indent=2, default=str)
+    return str(entry)
+
+
+@mcp.tool(
+    description="List all entry IDs with labels, optionally filtered by section type (work, patents, publications, education, certificates, conferences, memberships, skills)."
+)
+def list_entry_ids(section: str = "") -> str:
+    lines = []
+    r = store.resume
+
+    section_map = {
+        "work": [(w.id, f"{w.position} at {store.institution_name(w.institution_id)}") for w in r.work]
+                + [(p.id, f"  Project: {p.name}") for w in r.work for p in w.projects],
+        "institutions": [(i.id, f"{i.name} ({i.type.value})") for i in r.institutions],
+        "patents": [(p.id, p.title) for p in r.patents],
+        "publications": [(p.id, p.name) for p in r.publications],
+        "education": [(e.id, f"{e.study_type} at {store.institution_name(e.institution_id)}") for e in r.education],
+        "certificates": [(c.id, c.name) for c in r.certificates],
+        "conferences": [(c.id, c.name) for c in r.conferences],
+        "memberships": [(m.id, m.organization) for m in r.memberships],
+        "skills": [(s.id, s.name) for s in r.skills],
+    }
+
+    if section:
+        section_lower = section.lower()
+        if section_lower not in section_map:
+            return f"Unknown section '{section}'. Available: {', '.join(section_map.keys())}"
+        entries = section_map[section_lower]
+        for eid, label in entries:
+            lines.append(f"- {eid}: {label}")
+    else:
+        for sec_name, entries in section_map.items():
+            if entries:
+                lines.append(f"\n## {sec_name}")
+                for eid, label in entries:
+                    lines.append(f"- {eid}: {label}")
+
+    return "\n".join(lines) if lines else "No entries found."
+
+
+# --- Semantic query tools ---
+
+@mcp.tool(description="Find resume entries annotated with a topic. Returns entry IDs with labels.")
+def query_by_topic(topic: str, include_subtopics: bool = True) -> str:
+    results = store.entries_by_topic(topic) if include_subtopics else [
+        {"id": eid, "entry": store.entry_by_id(eid)}
+        for eid in store.semantics.entries_by_topic(topic, include_descendants=False)
+    ]
+    if not results:
+        return f"No entries annotated with topic '{topic}'."
+    lines = []
+    for r in results:
+        entry = r.get("entry") or r.get("entry")
+        label = getattr(entry, "name", None) or getattr(entry, "title", None) or getattr(entry, "position", None) or str(r["id"])
+        lines.append(f"- {r['id']}: {label}")
+    return "\n".join(lines)
+
+
+@mcp.tool(description="Get cross-references and relationships for a resume entry.")
+def get_relationships(entry_id: str) -> str:
+    rels = store.relationships_for(entry_id)
+    if not rels:
+        return f"No relationships found for '{entry_id}'."
+    lines = []
+    for r in rels:
+        direction = "→" if r.source_id == entry_id else "←"
+        other = r.target_id if r.source_id == entry_id else r.source_id
+        lines.append(f"- {direction} {r.type.value} {other}: {r.description}")
+    return "\n".join(lines)
+
+
+@mcp.tool(description="Get skill proficiency levels across the career, optionally filtered by topic.")
+def get_skill_profile(topic: str = "") -> str:
+    profs = store.semantics.skill_proficiency
+    if topic:
+        match_ids = set(store.semantics.taxonomy.descendants(topic))
+        profs = [p for p in profs if p.topic_id in match_ids]
+    if not profs:
+        return f"No skill proficiency data{' for topic ' + topic if topic else ''}."
+    lines = []
+    for p in profs:
+        t = store.semantics.taxonomy.topic_by_id(p.topic_id)
+        label = t.label if t else p.topic_id
+        lines.append(f"- **{label}**: {p.level.value} — {p.evidence}")
+    return "\n".join(lines)
+
+
+@mcp.tool(description="Get full semantic context for an entry: topics, relationships, summaries, impact.")
+def get_entry_context(entry_id: str) -> str:
+    entry = store.entry_by_id(entry_id)
+    if entry is None:
+        return f"Entry '{entry_id}' not found."
+
+    parts = [f"## Context for {entry_id}"]
+
+    ann = store.semantics.annotations_for(entry_id)
+    if ann:
+        if ann.topics:
+            parts.append("\n### Topics")
+            for t in ann.topics:
+                topic = store.semantics.taxonomy.topic_by_id(t.topic_id)
+                label = topic.label if topic else t.topic_id
+                primary = " (primary)" if t.primary else ""
+                parts.append(f"- {label}{primary} — confidence: {t.confidence}, {t.rationale}")
+        if ann.impact:
+            parts.append("\n### Impact")
+            for i in ann.impact:
+                parts.append(f"- {i.metric}: {i.value} ({i.scope})")
+        if ann.summaries:
+            parts.append("\n### Summaries")
+            for s in ann.summaries:
+                parts.append(f"- [{s.audience}] {s.summary}")
+
+    rels = store.relationships_for(entry_id)
+    if rels:
+        parts.append("\n### Relationships")
+        for r in rels:
+            direction = "→" if r.source_id == entry_id else "←"
+            other = r.target_id if r.source_id == entry_id else r.source_id
+            parts.append(f"- {direction} {r.type.value} {other}: {r.description}")
+
+    return "\n".join(parts)
+
+
 # --- Resources ---
-# Content: fps-cv://pdf, fps-cv://md, fps-cv://md/sections, fps-cv://md/sections/{name}
-# Links:   fps-cv://links/{name}
 
 @mcp.resource("fps-cv://pdf")
 def cv_pdf() -> bytes:
@@ -242,14 +442,14 @@ def cv_pdf() -> bytes:
 @mcp.resource("fps-cv://md")
 def cv_md() -> str:
     """Return the full CV as markdown."""
-    return cv.markdown
+    return render_markdown(store)
 
 
 @mcp.resource("fps-cv://md/sections")
 def cv_sections_index() -> str:
     """Return available CV section names with approximate line counts."""
     lines = []
-    for name, content in cv.sections.items():
+    for name, content in render_sections(store).items():
         line_count = content.count("\n") + 1
         lines.append(f"- {name} (~{line_count} lines)")
     return "\n".join(lines)
@@ -258,21 +458,65 @@ def cv_sections_index() -> str:
 @mcp.resource("fps-cv://md/sections/{name}")
 def cv_section(name: str) -> str:
     """Return a single CV section by name."""
-    content = cv.get_section(name)
+    content = get_section(store, name)
     if content is not None:
         return content
-    available = ", ".join(cv.section_names())
+    available = ", ".join(list_section_names(store))
     return f"Section '{name}' not found. Available sections: {available}"
 
 
 @mcp.resource("fps-cv://links/{name}")
-def link(name: str) -> str:
-    """Return a profile or document link by name."""
-    url = candidate.links.get(name)
-    if url is not None:
-        return url
-    available = ", ".join(candidate.links.names())
+def cv_link(name: str) -> str:
+    """Return a profile or document link by network name."""
+    name_lower = name.lower()
+    for profile in store.resume.personal_info.profiles:
+        if profile.network.lower() == name_lower:
+            return profile.url
+    available = ", ".join(p.network for p in store.resume.personal_info.profiles)
     return f"Link '{name}' not found. Available: {available}"
+
+
+# --- JSON resources ---
+
+@mcp.resource("fps-cv://resume")
+def resume_json() -> str:
+    """Return the full resume as JSON."""
+    return json.dumps(store.resume.model_dump(by_alias=True), indent=2, default=str)
+
+
+@mcp.resource("fps-cv://semantics")
+def semantics_json() -> str:
+    """Return the full semantic overlay as JSON."""
+    return json.dumps(store.semantics.model_dump(by_alias=True), indent=2, default=str)
+
+
+@mcp.resource("fps-cv://taxonomy")
+def taxonomy_json() -> str:
+    """Return the topic taxonomy as JSON."""
+    return json.dumps(store.semantics.taxonomy.model_dump(by_alias=True), indent=2, default=str)
+
+
+@mcp.resource("fps-cv://resume/entry/{entry_id}")
+def entry_json(entry_id: str) -> str:
+    """Return a specific resume entry as JSON."""
+    entry = store.entry_by_id(entry_id)
+    if entry is None:
+        return json.dumps({"error": f"Entry '{entry_id}' not found"})
+    if isinstance(entry, BaseModel):
+        return json.dumps(entry.model_dump(by_alias=True), indent=2, default=str)
+    return str(entry)
+
+
+@mcp.resource("fps-cv://semantics/{entry_id}")
+def entry_semantics_json(entry_id: str) -> str:
+    """Return semantic annotations for a specific entry as JSON."""
+    ann = store.semantics.annotations_for(entry_id)
+    if ann is None:
+        return json.dumps({"error": f"No annotations for '{entry_id}'"})
+    return json.dumps(ann.model_dump(by_alias=True), indent=2, default=str)
+
+
+# --- Prompt ---
 
 @mcp.prompt()
 def summary(
@@ -287,27 +531,9 @@ def summary(
     additional_instructions: str = "",
     include_citations: bool = False
 ) -> str:
-    """Configurable prompt for generating a summary of Francisco Perez-Sorrosal's CV.
-
-    Args:
-        depth_level: Detail level — "brief" (100-200w), "comprehensive" (400-600w), "deep-dive" (600+w).
-        context: Evaluation context — e.g. "industry R&D role", "academic research position".
-        emphasis_distribution: Weight distribution — e.g. "technical-first", "research-heavy", "equal weight".
-        style: Output style — e.g. "structured paragraphs", "bullet points", "executive summary".
-        output_format: "markdown" (default) or "raw_text".
-        target_audience: Intended reader — e.g. "technical hiring manager", "executive leadership".
-        length_constraint: Target length — e.g. "half-page summary", "1-2 paragraphs", "detailed report".
-        tone: Writing tone — e.g. "professional and objective", "conversational and accessible".
-        additional_instructions: Free-form guidance — e.g. "Focus on AI/ML experience in healthcare".
-        include_citations: Whether to include Google Scholar publication analysis.
-    """
-    # Load the prompt data from YAML
+    """Configurable prompt for generating a summary of Francisco Perez-Sorrosal's CV."""
     prompt_data = load_prompt("summary")
-
-    # Get citations instructions if needed
     citations_text = prompt_data.get('citation_instructions', '') if include_citations else ''
-
-    # Format the prompt with provided parameters
     return prompt_data['prompt'].format(
         depth_level=depth_level,
         context=context,
@@ -327,7 +553,7 @@ def main():
     logger.info(f"Python version: {sys.version}")
     logger.info(f"Starting CV MCP server with {trspt} transport ({host}:{port}) and stateless_http={stateless_http}...")
     transport_as_literal = cast(Literal['stdio', 'streamable-http'], trspt)
-    mcp.run(transport=transport_as_literal) #, mount_path="/cv")
+    mcp.run(transport=transport_as_literal)
 
 
 if __name__ == "__main__":

@@ -302,3 +302,6 @@ src/cv_mcp_server/lib/
 .mcpregistry_github_token
 .mcpregistry_registry_token
 server.json
+
+# Agents related
+.ai-work/
