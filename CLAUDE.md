@@ -70,18 +70,23 @@ pixi run pack                      # create .mcpb bundle in dist/mcpb/
 - `FranciscoPerezSorrosal_CV_English.pdf` - Generated PDF output
 - `.gitignore` - Ignores LaTeX auxiliary files and common editor artifacts
 
-### MCP Branch (Python Project, v0.0.3)
+### MCP Branch (Python Project, v0.0.5)
 ```
 src/cv_mcp_server/
   __init__.py
-  main.py                 # MCP server: tools, resources, prompt
-  models.py               # Domain models (Candidate, Links)
-  sections.py             # CV section parsing and eager cache (init at startup)
-  utils.py                # Utility functions (YAML loading)
+  main.py                 # MCP server: 15 tools, 10 resources, 1 prompt
+  store.py                # ResumeStore: load, validate, query, write
+  renderers.py            # Markdown renderer (full CV and per-section, 15 sections)
+  utils.py                # Utility functions (YAML prompt loading)
+  models/
+    __init__.py            # Re-exports Resume, SemanticOverlay
+    resume.py              # Pydantic models: Resume, WorkEntry, Project (with cross-refs), etc.
+    semantics.py           # Pydantic models: SemanticOverlay, Topic, Relationship, etc.
   data/
-    candidate.yaml        # Candidate identity and links (single source of truth)
+    resume.yaml            # Structured CV data (source of truth, 149 entry IDs)
+    resume-semantics.yaml  # Semantic overlay (33 topics, 63 annotations, 22 relationships)
   prompts/
-    summary.yaml          # Configurable CV summary prompt
+    summary.yaml           # Configurable CV summary prompt
 .claude-plugin/
   plugin.json             # Claude Code plugin manifest (skills, remote MCP config)
   mcp-local.json          # MCP override: stdio via pixi (dev mode)
@@ -116,24 +121,46 @@ RELEASE_PROCESS.md        # Release workflow documentation
 
 ### MCP Server Tools
 
+Data tools (fetch CV content):
 - `get_cv` - Full CV in markdown or PDF binary
-- `refresh_cv` - Download latest PDF from GitHub main branch and rebuild cache
-- `get_link(name)` - Profile/document link by name
-- `list_links` - All available links with URLs
-- `list_cv_sections` - Available section names with line counts
 - `get_cv_section(section_name)` - Any section by name (case-insensitive)
-- `summarize_cv` - Configurable CV summary (fallback for non-skill clients)
+- `list_cv_sections` - Available section names with line counts
+- `get_link(name)` - Profile/document link by network name
+- `list_links` - All available links with URLs
+- `get_cv_pdf_link` - Direct PDF link
+- `get_google_scholar_link` - Google Scholar profile
+
+Structured query tools:
+- `query_work(company?, start_year?, end_year?, topic?)` - Filter work entries
+- `get_entry(entry_id)` - Retrieve any entry by stable ID as JSON
+- `list_entry_ids(section?)` - List all entry IDs with labels
+
+Semantic query tools:
+- `query_by_topic(topic)` - Find entries annotated with a topic
+- `get_relationships(entry_id)` - Cross-references for an entry
+- `get_skill_profile(topic?)` - Skill proficiency levels
+- `get_entry_context(entry_id)` - Full semantic context (topics, relationships, impact)
+
+Prompt-wrapping tool (fallback for non-skill clients):
+- `summarize_cv` - Configurable CV summary (depth, context, emphasis, audience, tone, format, length)
 
 ### MCP Resources (`fps-cv://` URI scheme)
 
-Content:
+Markdown:
 - `fps-cv://pdf` - CV as PDF binary
 - `fps-cv://md` - CV as full markdown
 - `fps-cv://md/sections` - Section index (names + line counts)
 - `fps-cv://md/sections/{name}` - Individual section by name
 
+JSON:
+- `fps-cv://resume` - Full resume as JSON
+- `fps-cv://resume/entry/{id}` - Single entry as JSON
+- `fps-cv://semantics` - Full semantic overlay as JSON
+- `fps-cv://semantics/{entry_id}` - Annotations for an entry
+- `fps-cv://taxonomy` - Topic taxonomy as JSON
+
 Links:
-- `fps-cv://links/{name}` - Profile/document link (pdf, scholar, linkedin, github, twitter)
+- `fps-cv://links/{name}` - Profile/document link by network name
 
 #### LaTeX CV (`FranciscoPerezSorrosal_CV_English.tex`)
 - Uses `moderncv` document class with classic green theme
@@ -160,9 +187,12 @@ Links:
 ### When Working with MCP Server (mcp branch)
 - Python >=3.13, `src/` layout, hatch build system
 - pixi for dependency management and task execution
-- CV is parsed once at startup (`sections.init()`); `cv_md()` and section tools serve from cache
-- Candidate identity and links loaded from `data/candidate.yaml` (package data, authoritative source)
-- MCP resources use hierarchical `fps-cv://` URI scheme (content under `pdf`/`md`, external links under `links/`)
+- **Data layer**: `resume.yaml` (structured CV, source of truth) + `resume-semantics.yaml` (semantic overlay with topic taxonomy)
+- **Pydantic models**: `models/resume.py` (Resume hierarchy) and `models/semantics.py` (SemanticOverlay hierarchy)
+- **ResumeStore** (`store.py`): loads both YAML files, validates cross-references, provides query and write methods
+- **Renderer** (`renderers.py`): generates markdown from Resume model (full doc + per-section)
+- Entry IDs follow `<type>-<slug>` convention (e.g., `work-yahoo-kgs-2023`, `pub-htl-acl-2019`)
+- MCP resources use hierarchical `fps-cv://` URI scheme
 - Server supports stdio and streamable-http transports
 - MCPB bundles vendor dependencies in `lib/` directory
 - `manifest.json` defines the MCPB package metadata and tool declarations
