@@ -22,6 +22,7 @@ dependencies = [
     "mcp[cli]>=1.9.2,<2",
     "loguru>=0.7.3,<0.8",
     "pyyaml>=6.0,<7.0",
+    "jinja2>=3.1,<4",
 ]
 
 [project.urls]
@@ -43,6 +44,7 @@ cv_mcp_server = { path = ".", editable = true }
 build = ">=1.3.0,<2"
 pip = ">=25.2,<26"
 uv = "*"
+pytest = ">=8.0,<9"
 
 [tool.pixi.environments]
 dev = { features = ["dev"], solve-group = "default" }
@@ -50,6 +52,9 @@ dev = { features = ["dev"], solve-group = "default" }
 [tool.pixi.tasks]
 mcps="python src/cv_mcp_server/main.py"
 start="python src/cv_mcp_server/main.py"
+test = "pytest tests/ -v"
+test-unit = "pytest tests/ -v -m 'not integration'"
+test-integration = "pytest tests/ -v -m integration"
 
 # MCPB (MCP Bundle) tasks - updated to use lib directory approach
 python-bundle="mkdir -p ${DIST_WHEEL:-dist/wheel} && pixi run -e dev python -m build --wheel --outdir ${DIST_WHEEL:-dist/wheel} && echo 'Wheel built and ready for MCPB bundle'"
@@ -70,6 +75,10 @@ cv-mcp-server = "cv_mcp_server.main:main"
 [tool.setuptools]
 packages = ["cv_mcp_server"]
 package-dir = {"" = "src"}
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["integration: tests that load real YAML data files"]
 
 [tool.black]
 line-length = 88
