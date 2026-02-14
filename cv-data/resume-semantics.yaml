@@ -1,0 +1,1439 @@
+version: "1.0.0"
+
+taxonomy:
+  version: "1.0.0"
+  topics:
+    # --- AI & Machine Learning ---
+    - id: ai
+      label: Artificial Intelligence
+      description: Broad AI domain including ML, DL, NLP, and agentic systems
+      aliases: [AI, artificial intelligence]
+
+    - id: ai.ml
+      label: Machine Learning
+      description: Statistical and neural approaches to learning from data
+      aliases: [ML, machine learning]
+
+    - id: ai.ml.classification
+      label: Text Classification
+      description: Multi-label, multi-class, and binary text classification
+      aliases: [text classification, multi-label classification, multilabel]
+
+    - id: ai.ml.entity-matching
+      label: Entity Matching & Resolution
+      description: Matching and reconciling entities across data sources
+      aliases: [entity matching, entity resolution, entity reconciliation, record linkage]
+
+    - id: ai.ml.few-shot
+      label: Few-shot & Zero-shot Learning
+      description: Learning from minimal examples
+      aliases: [few-shot learning, zero-shot, low-resource]
+
+    - id: ai.ml.knowledge-distillation
+      label: Knowledge Distillation
+      description: Compressing large models into smaller, deployable ones
+      aliases: [knowledge distillation, teacher-student, model compression]
+
+    - id: ai.ml.transfer-learning
+      label: Transfer Learning
+      description: Reusing learned representations across tasks or domains
+      aliases: [transfer learning, fine-tuning, domain adaptation]
+
+    - id: ai.nlp
+      label: Natural Language Processing
+      description: Processing and understanding human language
+      aliases: [NLP, natural language processing, text processing]
+
+    - id: ai.deep-learning
+      label: Deep Learning
+      description: Neural network architectures including transformers, LSTMs, CNNs
+      aliases: [DL, deep learning, neural networks]
+
+    - id: ai.llm
+      label: Large Language Models
+      description: Foundation models, generative AI, prompt engineering
+      aliases: [LLM, large language models, generative AI, foundation models]
+
+    - id: ai.agentic
+      label: Agentic AI
+      description: Multi-agent systems, autonomous reasoning, LLM orchestration
+      aliases: [agentic AI, multi-agent systems, AI agents]
+
+    - id: ai.knowledge-graphs
+      label: Knowledge Graphs
+      description: Structured knowledge representation and graph-based reasoning
+      aliases: [KG, knowledge graphs, knowledge graph science]
+
+    # --- Distributed Systems ---
+    - id: systems
+      label: Distributed Systems
+      description: Design and implementation of distributed computing systems
+      aliases: [distributed systems, distributed computing]
+
+    - id: systems.transactions
+      label: Transaction Processing
+      description: ACID transactions, snapshot isolation, distributed transactions
+      aliases: [transactions, ACID, snapshot isolation, transactional systems]
+
+    - id: systems.replication
+      label: Replication & Consistency
+      description: Data replication, consistency models, consensus protocols
+      aliases: [replication, consistency, fault tolerance]
+
+    - id: systems.streaming
+      label: Stream Processing
+      description: Real-time data ingestion and processing pipelines
+      aliases: [streaming, stream processing, real-time processing]
+
+    - id: systems.storage
+      label: Storage Systems
+      description: Databases, key-value stores, HBase, NoSQL
+      aliases: [storage, databases, HBase, NoSQL]
+
+    - id: systems.high-availability
+      label: High Availability
+      description: Fault-tolerant system design with minimal downtime
+      aliases: [HA, high availability, fault tolerance]
+
+    - id: systems.scalability
+      label: Scalability
+      description: Horizontal and vertical scaling of distributed systems
+      aliases: [scalability, scaling, horizontal scaling]
+
+    - id: systems.middleware
+      label: Middleware
+      description: Application servers, J2EE, service-oriented architectures
+      aliases: [middleware, J2EE, application servers, SOA]
+
+    # --- Software Engineering ---
+    - id: engineering
+      label: Software Engineering
+      description: Software design, development practices, and tooling
+      aliases: [software engineering, SWE]
+
+    - id: engineering.mlops
+      label: MLOps
+      description: ML model deployment, serving, monitoring, and lifecycle
+      aliases: [MLOps, ML engineering, model serving, ML infrastructure]
+
+    - id: engineering.cloud
+      label: Cloud Computing
+      description: AWS, GCP, cloud migration, containerization
+      aliases: [cloud, AWS, GCP, cloud computing, Docker, Kubernetes]
+
+    - id: engineering.architecture
+      label: Software Architecture
+      description: System design, architectural patterns, API design
+      aliases: [architecture, system design, software architecture]
+
+    - id: engineering.data-pipelines
+      label: Data Pipelines
+      description: ETL, data processing, distributed data workflows
+      aliases: [data pipelines, ETL, data processing, data engineering]
+
+    - id: engineering.open-source
+      label: Open Source
+      description: Contributing to and maintaining open-source projects
+      aliases: [open source, OSS, Apache]
+
+    # --- Research & Academia ---
+    - id: research
+      label: Research & Academia
+      description: Academic research, publications, teaching
+      aliases: [research, academia, academic]
+
+    - id: research.publications
+      label: Publications
+      description: Peer-reviewed papers at top venues
+      aliases: [publications, papers, peer-reviewed]
+
+    - id: research.patents
+      label: Patents
+      description: Intellectual property and patent applications
+      aliases: [patents, IP, intellectual property]
+
+    - id: research.teaching
+      label: Teaching & Education
+      description: Academic teaching and mentoring
+      aliases: [teaching, education, lecturer]
+
+    # --- Leadership & Strategy ---
+    - id: leadership
+      label: Leadership & Strategy
+      description: Technical leadership, strategic advisory, team management
+      aliases: [leadership, strategy, management]
+
+    - id: leadership.strategy
+      label: Strategic Advisory
+      description: AI strategy, technology roadmaps, organizational guidance
+      aliases: [strategy, advisory, technology strategy]
+
+    - id: leadership.mentoring
+      label: Mentoring & Collaboration
+      description: Cross-team collaboration, knowledge transfer, mentoring
+      aliases: [mentoring, collaboration, knowledge transfer]
+
+annotations:
+  # --- Independent Advisor ---
+  - entryId: work-independent-advisor-2025
+    topics:
+      - topicId: ai.agentic
+        confidence: 0.95
+        provenance: llm
+        rationale: Primary focus on multi-agent systems and autonomous reasoning frameworks
+        primary: true
+      - topicId: ai.llm
+        confidence: 0.90
+        provenance: llm
+        rationale: LLM orchestration and evaluation of LLM-based frameworks
+      - topicId: leadership.strategy
+        confidence: 0.85
+        provenance: llm
+        rationale: Strategic advisory to startups on AI architecture
+
+  # --- Yahoo KGS ---
+  - entryId: work-yahoo-kgs-2023
+    topics:
+      - topicId: ai.ml.entity-matching
+        confidence: 0.95
+        provenance: llm
+        rationale: Core work on entity reconciliation for knowledge graphs
+        primary: true
+      - topicId: ai.knowledge-graphs
+        confidence: 0.90
+        provenance: llm
+        rationale: Knowledge Graph Science department
+      - topicId: ai.llm
+        confidence: 0.80
+        provenance: llm
+        rationale: Used Llama 2 for generative entity matching
+      - topicId: engineering.mlops
+        confidence: 0.75
+        provenance: llm
+        rationale: Ray Serve inference deployment, cloud-based serving
+
+  - entryId: proj-dataset-quality-2024
+    topics:
+      - topicId: ai.llm
+        confidence: 0.90
+        provenance: llm
+        rationale: LLM-based solution using Llama 2 for data quality
+        primary: true
+      - topicId: ai.ml.entity-matching
+        confidence: 0.85
+        provenance: llm
+        rationale: Entity matching applied to dataset validation
+
+  - entryId: proj-entity-reconciliation-training-2023
+    topics:
+      - topicId: ai.ml.entity-matching
+        confidence: 0.95
+        provenance: llm
+        rationale: Core entity reconciliation model training
+        primary: true
+      - topicId: ai.ml.transfer-learning
+        confidence: 0.80
+        provenance: llm
+        rationale: Fine-tuning transformer models on domain data
+      - topicId: ai.deep-learning
+        confidence: 0.75
+        provenance: llm
+        rationale: Transformer-based language model training
+
+  - entryId: proj-entity-reconciliation-pipeline-2023
+    topics:
+      - topicId: engineering.data-pipelines
+        confidence: 0.90
+        provenance: llm
+        rationale: Distributed sampling, preprocessing, transformation pipelines
+        primary: true
+      - topicId: ai.ml.entity-matching
+        confidence: 0.85
+        provenance: llm
+        rationale: Entity resolution pipeline design
+
+  - entryId: proj-entity-reconciliation-inference-2023
+    topics:
+      - topicId: engineering.mlops
+        confidence: 0.95
+        provenance: llm
+        rationale: Ray Serve cloud inference deployment
+        primary: true
+      - topicId: engineering.cloud
+        confidence: 0.80
+        provenance: llm
+        rationale: Cloud-based CPU/GPU inference optimization
+
+  # --- Yahoo Mail ---
+  - entryId: work-yahoo-mail-2022
+    topics:
+      - topicId: ai.ml.knowledge-distillation
+        confidence: 0.95
+        provenance: llm
+        rationale: Teacher/Student knowledge distillation framework
+        primary: true
+      - topicId: ai.ml.classification
+        confidence: 0.90
+        provenance: llm
+        rationale: Multilabel mail classification system
+
+  - entryId: proj-kamino-mail-classification-2022
+    topics:
+      - topicId: ai.ml.knowledge-distillation
+        confidence: 0.95
+        provenance: llm
+        rationale: Teacher/Student distillation for mail classification
+        primary: true
+      - topicId: ai.ml.classification
+        confidence: 0.90
+        provenance: llm
+        rationale: Multi-label classification with deep learning
+      - topicId: ai.deep-learning
+        confidence: 0.85
+        provenance: llm
+        rationale: HuggingFace deep learning pipeline
+
+  # --- Yahoo DTO ---
+  - entryId: work-yahoo-dto-2022
+    topics:
+      - topicId: leadership.strategy
+        confidence: 0.95
+        provenance: llm
+        rationale: AI/ML strategy definition for cloud migration
+        primary: true
+      - topicId: engineering.cloud
+        confidence: 0.85
+        provenance: llm
+        rationale: On-prem to cloud infrastructure transition
+      - topicId: engineering.mlops
+        confidence: 0.80
+        provenance: llm
+        rationale: ML/DL practitioner tooling and frameworks strategy
+
+  # --- Yahoo Ads ---
+  - entryId: work-yahoo-ads-2021
+    topics:
+      - topicId: ai.ml.classification
+        confidence: 0.95
+        provenance: llm
+        rationale: Multilingual taxonomic web page classification
+        primary: true
+      - topicId: ai.nlp
+        confidence: 0.80
+        provenance: llm
+        rationale: Multilingual NLP for contextual ad targeting
+      - topicId: leadership.mentoring
+        confidence: 0.70
+        provenance: llm
+        rationale: Knowledge transfer to Ads team
+
+  # --- Verizon Media SCP ---
+  - entryId: work-verizon-scp-2018
+    topics:
+      - topicId: ai.ml.classification
+        confidence: 0.95
+        provenance: llm
+        rationale: Multi-label, multi-class content classification
+        primary: true
+      - topicId: ai.deep-learning
+        confidence: 0.90
+        provenance: llm
+        rationale: Transformer-based models, BERT, T5
+      - topicId: research.publications
+        confidence: 0.70
+        provenance: llm
+        rationale: ACL 2019 publication on hierarchical transfer learning
+
+  - entryId: proj-dl-multilabel-2020
+    topics:
+      - topicId: ai.ml.classification
+        confidence: 0.95
+        provenance: llm
+        rationale: Multi-label classification with HuggingFace Transformers
+        primary: true
+      - topicId: engineering.mlops
+        confidence: 0.80
+        provenance: llm
+        rationale: NVIDIA Triton Server production deployment
+
+  - entryId: proj-few-shot-classification-2021
+    topics:
+      - topicId: ai.ml.few-shot
+        confidence: 0.95
+        provenance: llm
+        rationale: Few-shot classification with parallel prefix conditioning
+        primary: true
+      - topicId: ai.deep-learning
+        confidence: 0.85
+        provenance: llm
+        rationale: Modified transformer architecture
+
+  - entryId: proj-clickbait-classifier-2019
+    topics:
+      - topicId: ai.nlp
+        confidence: 0.90
+        provenance: llm
+        rationale: BERT-based text classification for clickbait detection
+        primary: true
+      - topicId: ai.deep-learning
+        confidence: 0.85
+        provenance: llm
+        rationale: BERT and T5 models
+
+  - entryId: proj-hierarchical-transfer-learning-2018
+    topics:
+      - topicId: ai.ml.transfer-learning
+        confidence: 0.95
+        provenance: llm
+        rationale: Novel hierarchical transfer learning strategy
+        primary: true
+      - topicId: ai.ml.classification
+        confidence: 0.90
+        provenance: llm
+        rationale: Multi-label text classification application
+
+  # --- Yahoo CAP ---
+  - entryId: work-yahoo-cap-2017
+    topics:
+      - topicId: ai.ml.classification
+        confidence: 0.85
+        provenance: llm
+        rationale: ML content classification pipelines
+        primary: true
+      - topicId: ai.deep-learning
+        confidence: 0.75
+        provenance: llm
+        rationale: LSTM/GRU experiments in TensorFlow/Keras
+      - topicId: engineering.cloud
+        confidence: 0.70
+        provenance: llm
+        rationale: k8s-make for Kubernetes-based distributed training
+
+  # --- Yahoo Sieve ---
+  - entryId: work-yahoo-sieve-2015
+    topics:
+      - topicId: systems.streaming
+        confidence: 0.90
+        provenance: llm
+        rationale: Twitter Firehose streaming ingestion
+        primary: true
+      - topicId: systems.transactions
+        confidence: 0.85
+        provenance: llm
+        rationale: Omid transaction manager support and Apache transfer
+      - topicId: engineering.open-source
+        confidence: 0.80
+        provenance: llm
+        rationale: Omid transfer to Apache Software Foundation
+
+  - entryId: proj-omid-apache-2016
+    topics:
+      - topicId: engineering.open-source
+        confidence: 0.95
+        provenance: llm
+        rationale: Transfer of Omid to Apache Software Foundation
+        primary: true
+      - topicId: systems.transactions
+        confidence: 0.90
+        provenance: llm
+        rationale: Core transaction manager project
+
+  - entryId: proj-omid-ha-2015
+    topics:
+      - topicId: systems.high-availability
+        confidence: 0.95
+        provenance: llm
+        rationale: High Availability added to Omid
+        primary: true
+      - topicId: systems.transactions
+        confidence: 0.90
+        provenance: llm
+        rationale: Transaction manager for HBase
+      - topicId: systems.scalability
+        confidence: 0.80
+        provenance: llm
+        rationale: Multi-core architecture scaling
+
+  # --- Yahoo Labs ---
+  - entryId: work-yahoo-labs-2012
+    topics:
+      - topicId: systems.transactions
+        confidence: 0.95
+        provenance: llm
+        rationale: Omid transaction manager development
+        primary: true
+      - topicId: systems.storage
+        confidence: 0.80
+        provenance: llm
+        rationale: HBase, Big Datastores
+      - topicId: research
+        confidence: 0.75
+        provenance: llm
+        rationale: Research lab setting with publications
+
+  - entryId: proj-omid-txn-manager-2014
+    topics:
+      - topicId: systems.transactions
+        confidence: 0.95
+        provenance: llm
+        rationale: Re-architected Omid transaction manager
+        primary: true
+
+  - entryId: proj-cumulonimbo-2012
+    topics:
+      - topicId: systems.storage
+        confidence: 0.90
+        provenance: llm
+        rationale: HBase durability with BookKeeper
+        primary: true
+      - topicId: systems.transactions
+        confidence: 0.80
+        provenance: llm
+        rationale: Incremental processing for transactional datastores
+
+  # --- Lumata ---
+  - entryId: work-lumata-2011
+    topics:
+      - topicId: engineering.architecture
+        confidence: 0.90
+        provenance: llm
+        rationale: Architecture definition for SONY Socialife
+        primary: true
+      - topicId: systems.scalability
+        confidence: 0.85
+        provenance: llm
+        rationale: High scalable big-data backend platform
+
+  # --- UPM Research ---
+  - entryId: work-upm-research-2003
+    topics:
+      - topicId: systems.middleware
+        confidence: 0.95
+        provenance: llm
+        rationale: Middleware architectures for European research projects
+        primary: true
+      - topicId: systems.high-availability
+        confidence: 0.85
+        provenance: llm
+        rationale: HA services for JOnAS and J2EE
+      - topicId: systems.transactions
+        confidence: 0.80
+        provenance: llm
+        rationale: WS-CAF transactions, Activity Service
+
+  - entryId: proj-phd-thesis-2003
+    topics:
+      - topicId: systems.high-availability
+        confidence: 0.95
+        provenance: llm
+        rationale: PhD focused on HA and scalability for multi-tier architectures
+        primary: true
+      - topicId: systems.replication
+        confidence: 0.90
+        provenance: llm
+        rationale: Innovative vertical replication approach
+      - topicId: systems.transactions
+        confidence: 0.85
+        provenance: llm
+        rationale: Snapshot isolation for transactional guarantees
+
+  # --- UPM Researcher (Academic) ---
+  - entryId: work-upm-researcher-2003
+    topics:
+      - topicId: research
+        confidence: 0.95
+        provenance: llm
+        rationale: PhD candidate and academic researcher
+        primary: true
+      - topicId: systems.middleware
+        confidence: 0.85
+        provenance: llm
+        rationale: Middleware research in distributed systems
+
+  # --- Publications ---
+  - entryId: pub-multilingual-taxonomic-2022
+    topics:
+      - topicId: ai.ml.classification
+        confidence: 0.95
+        provenance: llm
+        rationale: Multilingual taxonomic classification paper
+        primary: true
+      - topicId: ai.nlp
+        confidence: 0.85
+        provenance: llm
+        rationale: Multilingual NLP for web content
+
+  - entryId: pub-htl-acl-2019
+    topics:
+      - topicId: ai.ml.transfer-learning
+        confidence: 0.95
+        provenance: llm
+        rationale: Hierarchical transfer learning paper
+        primary: true
+      - topicId: ai.ml.classification
+        confidence: 0.90
+        provenance: llm
+        rationale: Multi-label text classification
+
+  - entryId: pub-omid-reloaded-2017
+    topics:
+      - topicId: systems.transactions
+        confidence: 0.95
+        provenance: llm
+        rationale: Omid transaction processing system paper
+        primary: true
+      - topicId: systems.high-availability
+        confidence: 0.85
+        provenance: llm
+        rationale: Scalable and highly-available design
+
+  - entryId: pub-elastic-si-cache-2011
+    topics:
+      - topicId: systems.replication
+        confidence: 0.90
+        provenance: llm
+        rationale: Cache replication and consistency
+        primary: true
+      - topicId: systems.scalability
+        confidence: 0.85
+        provenance: llm
+        rationale: Elastic scalable caching
+
+  - entryId: pub-ws-replication-2006
+    topics:
+      - topicId: systems.replication
+        confidence: 0.95
+        provenance: llm
+        rationale: Web service replication framework
+        primary: true
+      - topicId: systems.high-availability
+        confidence: 0.90
+        provenance: llm
+        rationale: Highly available web services
+
+  - entryId: pub-cache-replication-2007
+    topics:
+      - topicId: systems.replication
+        confidence: 0.95
+        provenance: llm
+        rationale: Cache replication for J2EE applications
+        primary: true
+      - topicId: systems.middleware
+        confidence: 0.80
+        provenance: llm
+        rationale: Multi-tier J2EE context
+
+  - entryId: pub-zenflow-2005
+    topics:
+      - topicId: systems.middleware
+        confidence: 0.85
+        provenance: llm
+        rationale: Web service composition tool
+        primary: true
+      - topicId: engineering.architecture
+        confidence: 0.75
+        provenance: llm
+        rationale: Visual composition and workflow design
+
+  # --- Patents ---
+  - entryId: patent-text-content-images-2025
+    topics:
+      - topicId: ai.llm
+        confidence: 0.85
+        provenance: llm
+        rationale: Text generation for images implies generative AI
+        primary: true
+      - topicId: research.patents
+        confidence: 1.0
+        provenance: llm
+        rationale: Patent application
+
+  - entryId: patent-webpage-classification-2024
+    topics:
+      - topicId: ai.ml.classification
+        confidence: 0.90
+        provenance: llm
+        rationale: Webpage classification method
+        primary: true
+      - topicId: research.patents
+        confidence: 1.0
+        provenance: llm
+        rationale: Patent application
+
+  # --- Education ---
+  - entryId: edu-upm-phd
+    topics:
+      - topicId: research
+        confidence: 0.95
+        provenance: llm
+        rationale: PhD in Computer Science
+        primary: true
+      - topicId: systems
+        confidence: 0.85
+        provenance: llm
+        rationale: Distributed systems focus
+
+  - entryId: edu-ucm-pgce
+    topics:
+      - topicId: research.teaching
+        confidence: 0.90
+        provenance: llm
+        rationale: Postgraduate Certificate in Education
+        primary: true
+
+  - entryId: edu-upsa-beng
+    topics:
+      - topicId: research
+        confidence: 0.75
+        provenance: llm
+        rationale: B.Eng & M.Sc. in Computer Science
+        primary: true
+
+  # --- Teaching ---
+  - entryId: work-upsa-lecturer-2001
+    topics:
+      - topicId: research.teaching
+        confidence: 0.95
+        provenance: llm
+        rationale: Taught Operating Systems and Programming courses
+        primary: true
+
+  - entryId: work-upsa-sysadmin-2000
+    topics:
+      - topicId: engineering
+        confidence: 0.75
+        provenance: llm
+        rationale: Systems administration of UNIX/Linux servers
+        primary: true
+
+  - entryId: work-meta4-1999
+    topics:
+      - topicId: systems.storage
+        confidence: 0.75
+        provenance: llm
+        rationale: Database connection testing across multiple DBMSs
+        primary: true
+
+  - entryId: work-freelance-2010
+    topics:
+      - topicId: engineering
+        confidence: 0.80
+        provenance: llm
+        rationale: Full-stack Ruby/Rails web application development
+        primary: true
+
+  # --- Unannotated projects ---
+  - entryId: proj-twitter-firehose-2017
+    topics:
+      - topicId: systems.streaming
+        confidence: 0.95
+        provenance: llm
+        rationale: At-scale streaming ingestion system for Twitter API v2.0
+        primary: true
+
+  - entryId: proj-edentity-2014
+    topics:
+      - topicId: engineering.architecture
+        confidence: 0.85
+        provenance: llm
+        rationale: RESTful API design and scalable content access
+        primary: true
+
+  - entryId: proj-riddlr-2013
+    topics:
+      - topicId: systems.streaming
+        confidence: 0.85
+        provenance: llm
+        rationale: Percolator-like incremental processing system
+        primary: true
+
+  - entryId: proj-giddra-sony-2012
+    topics:
+      - topicId: engineering.architecture
+        confidence: 0.90
+        provenance: llm
+        rationale: Scalable big-data backend architecture for content aggregation
+        primary: true
+      - topicId: systems.scalability
+        confidence: 0.80
+        provenance: llm
+        rationale: High scalability backend platform
+
+  - entryId: proj-dl-multiclass-2018
+    topics:
+      - topicId: ai.deep-learning
+        confidence: 0.85
+        provenance: llm
+        rationale: LSTM/GRU experiments for content classification
+        primary: true
+      - topicId: ai.ml.classification
+        confidence: 0.80
+        provenance: llm
+        rationale: Multi-class classification with deep learning
+
+  - entryId: proj-ml-classification-pipeline-2017
+    topics:
+      - topicId: ai.ml.classification
+        confidence: 0.85
+        provenance: llm
+        rationale: SVM-based content classification pipeline
+        primary: true
+      - topicId: engineering.data-pipelines
+        confidence: 0.75
+        provenance: llm
+        rationale: Data ingestion and model training pipeline
+
+  - entryId: proj-k8s-make-2017
+    topics:
+      - topicId: engineering.cloud
+        confidence: 0.90
+        provenance: llm
+        rationale: Kubernetes-based distributed training framework
+        primary: true
+
+  - entryId: proj-inria-internship-2007
+    topics:
+      - topicId: systems.high-availability
+        confidence: 0.80
+        provenance: llm
+        rationale: Self-configuration and self-repair for cloud platforms
+        primary: true
+
+  - entryId: proj-nexof-ra-2008
+    topics:
+      - topicId: engineering.architecture
+        confidence: 0.90
+        provenance: llm
+        rationale: European reference architecture for service platforms
+        primary: true
+      - topicId: systems.middleware
+        confidence: 0.80
+        provenance: llm
+        rationale: SOA and cloud platform integration patterns
+
+  - entryId: proj-scalable-platform-2007
+    topics:
+      - topicId: systems.replication
+        confidence: 0.85
+        provenance: llm
+        rationale: Cache consistency analysis with persistence mechanisms
+        primary: true
+
+  - entryId: proj-automan-2006
+    topics:
+      - topicId: systems.high-availability
+        confidence: 0.85
+        provenance: llm
+        rationale: Autonomic computing with self-configuration properties
+        primary: true
+
+  - entryId: proj-high-perf-distributed-2006
+    topics:
+      - topicId: systems.high-availability
+        confidence: 0.95
+        provenance: llm
+        rationale: HA and scalable service for JOnAS application server
+        primary: true
+      - topicId: systems.middleware
+        confidence: 0.85
+        provenance: llm
+        rationale: J2EE application server enhancement
+
+  - entryId: proj-s4all-2005
+    topics:
+      - topicId: systems.high-availability
+        confidence: 0.90
+        provenance: llm
+        rationale: HA service for JOnAS, included in Bull SAS commercial version
+        primary: true
+      - topicId: systems.middleware
+        confidence: 0.85
+        provenance: llm
+        rationale: EU Framework Programme middleware project
+
+  - entryId: proj-autonomic-2004
+    topics:
+      - topicId: systems.transactions
+        confidence: 0.90
+        provenance: llm
+        rationale: WS-CAF implementation for SOAP Web Service transactions
+        primary: true
+      - topicId: systems.middleware
+        confidence: 0.80
+        provenance: llm
+        rationale: Web services middleware
+
+  - entryId: proj-adapt-2002
+    topics:
+      - topicId: systems.replication
+        confidence: 0.90
+        provenance: llm
+        rationale: Transactional-aware replication for stateful EJBs
+        primary: true
+      - topicId: systems.transactions
+        confidence: 0.85
+        provenance: llm
+        rationale: Activity Service for advanced transaction models
+
+  # --- Missing publication annotations ---
+  - entryId: pub-scalability-jonas-2010
+    topics:
+      - topicId: systems.scalability
+        confidence: 0.90
+        provenance: llm
+        rationale: Scalability evaluation of JOnAS replication
+        primary: true
+      - topicId: systems.middleware
+        confidence: 0.85
+        provenance: llm
+        rationale: J2EE application server context
+
+  - entryId: pub-architectural-patterns-2009
+    topics:
+      - topicId: engineering.architecture
+        confidence: 0.90
+        provenance: llm
+        rationale: Architectural patterns for multi-tier SOI
+        primary: true
+      - topicId: systems.high-availability
+        confidence: 0.85
+        provenance: llm
+        rationale: Scalable, consistent, HA infrastructure patterns
+
+  - entryId: pub-ha-long-running-2006
+    topics:
+      - topicId: systems.transactions
+        confidence: 0.90
+        provenance: llm
+        rationale: Long-running transactions and activities for J2EE
+        primary: true
+      - topicId: systems.high-availability
+        confidence: 0.85
+        provenance: llm
+        rationale: Highly available transaction activities
+
+  # --- Standalone projects ---
+  - entryId: proj-mdbook-bib
+    topics:
+      - topicId: engineering.open-source
+        confidence: 0.95
+        provenance: llm
+        rationale: Open-source Rust plugin for mdBook bibliography management
+        primary: true
+
+  # --- Memberships ---
+  - entryId: membership-asf
+    topics:
+      - topicId: engineering.open-source
+        confidence: 0.95
+        provenance: llm
+        rationale: Apache Software Foundation committer
+        primary: true
+
+  - entryId: membership-objectweb
+    topics:
+      - topicId: engineering.open-source
+        confidence: 0.80
+        provenance: llm
+        rationale: ObjectWeb/OW2 Consortium member
+        primary: true
+      - topicId: systems.middleware
+        confidence: 0.75
+        provenance: llm
+        rationale: Middleware-focused open source consortium
+
+relationships:
+  # Work -> Publication links
+  - sourceId: proj-contextual-targeting-2021
+    targetId: pub-multilingual-taxonomic-2022
+    type: published-as
+    description: Contextual targeting work resulted in SIGKDD 2022 paper
+    provenance: llm
+    confidence: 0.95
+
+  - sourceId: proj-hierarchical-transfer-learning-2018
+    targetId: pub-htl-acl-2019
+    type: published-as
+    description: Hierarchical transfer learning work produced ACL 2019 paper (127 citations)
+    provenance: llm
+    confidence: 0.95
+
+  - sourceId: proj-omid-apache-2016
+    targetId: pub-omid-reloaded-2017
+    type: published-as
+    description: Omid Apache work documented in USENIX FAST 2017 paper
+    provenance: llm
+    confidence: 0.90
+
+  - sourceId: proj-phd-thesis-2003
+    targetId: pub-elastic-si-cache-2011
+    type: published-as
+    description: PhD research on SI-cache published in VLDB Journal
+    provenance: llm
+    confidence: 0.85
+
+  - sourceId: proj-phd-thesis-2003
+    targetId: pub-cache-replication-2007
+    type: published-as
+    description: PhD research on cache replication published at Middleware 2007
+    provenance: llm
+    confidence: 0.85
+
+  - sourceId: proj-phd-thesis-2003
+    targetId: pub-ws-replication-2006
+    type: published-as
+    description: PhD research on WS replication published at WWW 2006 (230 citations)
+    provenance: llm
+    confidence: 0.85
+
+  # Work -> Patent links
+  - sourceId: proj-contextual-targeting-2021
+    targetId: patent-webpage-classification-2024
+    type: patented-as
+    description: Contextual targeting work led to webpage classification patent
+    provenance: llm
+    confidence: 0.85
+
+  # Continuation chains
+  - sourceId: proj-omid-apache-2016
+    targetId: proj-omid-ha-2015
+    type: continuation-of
+    description: Apache transfer continued the HA work on Omid
+    provenance: llm
+    confidence: 0.95
+
+  - sourceId: proj-omid-ha-2015
+    targetId: proj-omid-txn-manager-2014
+    type: continuation-of
+    description: HA addition continued the Omid re-architecture work
+    provenance: llm
+    confidence: 0.95
+
+  - sourceId: proj-dl-multilabel-2020
+    targetId: proj-hierarchical-transfer-learning-2018
+    type: continuation-of
+    description: DL multi-label classification built on prior transfer learning research
+    provenance: llm
+    confidence: 0.80
+
+  - sourceId: proj-kamino-mail-classification-2022
+    targetId: proj-dl-multilabel-2020
+    type: continuation-of
+    description: Kamino distillation approach extended the DL classification pipeline
+    provenance: llm
+    confidence: 0.75
+
+  - sourceId: proj-entity-reconciliation-training-2023
+    targetId: proj-kamino-mail-classification-2022
+    type: relates-to
+    description: Both leverage transformer fine-tuning for classification tasks
+    provenance: llm
+    confidence: 0.70
+
+  # Conference presentations
+  - sourceId: proj-omid-apache-2016
+    targetId: conf-hadoop-summit-2016
+    type: presented-at
+    description: Omid presented at Hadoop Summit 2016
+    provenance: llm
+    confidence: 0.95
+
+  - sourceId: pub-htl-acl-2019
+    targetId: conf-acl-2019
+    type: presented-at
+    description: HTL paper presented at ACL 2019 in Florence
+    provenance: llm
+    confidence: 0.95
+
+  # PhD -> additional publications
+  - sourceId: proj-phd-thesis-2003
+    targetId: pub-ha-long-running-2006
+    type: published-as
+    description: PhD research on HA long-running transactions published at IEEE ICDCS 2006 (28 citations)
+    provenance: llm
+    confidence: 0.85
+
+  - sourceId: proj-phd-thesis-2003
+    targetId: pub-scalability-jonas-2010
+    type: published-as
+    description: PhD research on JOnAS scalability published at EDCC 2010 (10 citations)
+    provenance: llm
+    confidence: 0.85
+
+  - sourceId: proj-phd-thesis-2003
+    targetId: pub-architectural-patterns-2009
+    type: published-as
+    description: PhD research on architectural patterns published in Springer 2009 (13 citations)
+    provenance: llm
+    confidence: 0.85
+
+  - sourceId: proj-phd-thesis-2003
+    targetId: pub-zenflow-2005
+    type: published-as
+    description: PhD research on web service composition published at IEEE VL/HCC 2005 (53 citations)
+    provenance: llm
+    confidence: 0.80
+
+  # Related project links
+  - sourceId: proj-inria-internship-2007
+    targetId: proj-automan-2006
+    type: relates-to
+    description: INRIA internship continued the autonomic computing work from AUTOMAN project
+    provenance: llm
+    confidence: 0.90
+
+  - sourceId: proj-high-perf-distributed-2006
+    targetId: proj-s4all-2005
+    type: continuation-of
+    description: Both projects developed HA services for the JOnAS application server
+    provenance: llm
+    confidence: 0.85
+
+  - sourceId: proj-dl-multiclass-2018
+    targetId: proj-ml-classification-pipeline-2017
+    type: continuation-of
+    description: DL-based classification extended the SVM-based ML pipeline
+    provenance: llm
+    confidence: 0.80
+
+  # PhD supervision
+  - sourceId: proj-phd-thesis-2003
+    targetId: edu-upm-phd
+    type: supervised-by
+    description: PhD thesis conducted at UPM under Prof. Patino-Martinez and Prof. Jimenez-Peris
+    provenance: llm
+    confidence: 1.0
+
+  # Education -> career position links
+  - sourceId: edu-upm-phd
+    targetId: work-upm-researcher-2003
+    type: relates-to
+    description: PhD program and academic researcher position at UPM were concurrent and inseparable
+    provenance: llm
+    confidence: 0.95
+
+  - sourceId: work-upm-research-2003
+    targetId: work-upm-researcher-2003
+    type: relates-to
+    description: Concurrent industry (EU/national projects) and academic (PhD) positions at UPM — projects funded the research
+    provenance: llm
+    confidence: 0.95
+
+  - sourceId: edu-upsa-beng
+    targetId: work-upsa-sysadmin-2000
+    type: relates-to
+    description: B.Eng. studies at UPSA (1994-2001) overlapped with sysadmin role at same institution (2000-2001)
+    provenance: llm
+    confidence: 0.85
+
+  - sourceId: edu-upsa-beng
+    targetId: work-upsa-lecturer-2001
+    type: relates-to
+    description: B.Eng. completion at UPSA transitioned to lecturer position at same institution's School of CS
+    provenance: llm
+    confidence: 0.80
+
+  - sourceId: work-upsa-lecturer-2001
+    targetId: edu-ucm-pgce
+    type: relates-to
+    description: Teaching experience at UPSA (2001-2003) was formalized through the PGCE at UCM (2004)
+    provenance: llm
+    confidence: 0.75
+
+  # INRIA internship as part of PhD
+  - sourceId: proj-inria-internship-2007
+    targetId: proj-phd-thesis-2003
+    type: relates-to
+    description: INRIA internship was conducted as part of the PhD program, contributing autonomic computing research
+    provenance: llm
+    confidence: 0.85
+
+  # Cross-team knowledge transfer (SCP -> Ads)
+  - sourceId: work-verizon-scp-2018
+    targetId: work-yahoo-ads-2021
+    type: relates-to
+    description: Multilabel classification expertise developed at SCP was explicitly transferred to the Ads team for contextual targeting
+    provenance: llm
+    confidence: 0.90
+
+  - sourceId: proj-hierarchical-transfer-learning-2018
+    targetId: proj-contextual-targeting-2021
+    type: relates-to
+    description: HTL strategy for multi-label classification was the foundational technique adapted for Ads contextual targeting
+    provenance: llm
+    confidence: 0.90
+
+  - sourceId: proj-dl-multilabel-2020
+    targetId: proj-contextual-targeting-2021
+    type: relates-to
+    description: DL multi-label classification pipeline expertise directly informed the contextual targeting solution
+    provenance: llm
+    confidence: 0.85
+
+  # ML evolution chain gaps
+  - sourceId: proj-dl-multilabel-2020
+    targetId: proj-dl-multiclass-2018
+    type: continuation-of
+    description: DL multi-label classification (HuggingFace Transformers) evolved from DL multi-class experiments (LSTM/GRU)
+    provenance: llm
+    confidence: 0.85
+
+  - sourceId: proj-clickbait-classifier-2019
+    targetId: proj-dl-multiclass-2018
+    type: continuation-of
+    description: Clickbait classifier (BERT) continued the DL progression from LSTM/GRU experiments
+    provenance: llm
+    confidence: 0.75
+
+  - sourceId: proj-few-shot-classification-2021
+    targetId: proj-dl-multilabel-2020
+    type: relates-to
+    description: Alternative approach to the same multi-label classification problem at SCP
+    provenance: llm
+    confidence: 0.70
+
+  # Entity reconciliation internal project chain
+  - sourceId: proj-entity-reconciliation-training-2023
+    targetId: proj-entity-reconciliation-pipeline-2023
+    type: relates-to
+    description: Model training consumed curated data produced by the entity reconciliation pipeline
+    provenance: llm
+    confidence: 0.90
+
+  - sourceId: proj-entity-reconciliation-inference-2023
+    targetId: proj-entity-reconciliation-training-2023
+    type: relates-to
+    description: Ray Serve inference deployment served models trained by the entity reconciliation training effort
+    provenance: llm
+    confidence: 0.90
+
+  - sourceId: proj-dataset-quality-2024
+    targetId: proj-entity-reconciliation-training-2023
+    type: relates-to
+    description: LLM-based dataset quality improvement validated and enhanced labeling accuracy of training datasets
+    provenance: llm
+    confidence: 0.90
+
+  # Patent -> publication
+  - sourceId: patent-webpage-classification-2024
+    targetId: pub-multilingual-taxonomic-2022
+    type: relates-to
+    description: Webpage classification patent covers the method described in the SIGKDD 2022 paper
+    provenance: llm
+    confidence: 0.90
+
+  # Project -> membership links
+  - sourceId: proj-omid-apache-2016
+    targetId: membership-asf
+    type: resulted-in
+    description: Transfer of Omid to the Apache Software Foundation led to ASF committer status
+    provenance: llm
+    confidence: 0.95
+
+  - sourceId: proj-s4all-2005
+    targetId: membership-objectweb
+    type: relates-to
+    description: S4ALL EU project involved JOnAS maintained by Bull SAS within the ObjectWeb/OW2 consortium
+    provenance: llm
+    confidence: 0.85
+
+  - sourceId: proj-adapt-2002
+    targetId: membership-objectweb
+    type: relates-to
+    description: ADAPT project implemented transactional-aware replication for JBoss within the ObjectWeb ecosystem
+    provenance: llm
+    confidence: 0.75
+
+  # Yahoo Labs project chains
+  - sourceId: proj-riddlr-2013
+    targetId: proj-cumulonimbo-2012
+    type: continuation-of
+    description: RiddlR incremental processing (2013) evolved from CumuloNimbo EU project research (2012-2013) at Yahoo Labs
+    provenance: llm
+    confidence: 0.80
+
+  - sourceId: proj-omid-txn-manager-2014
+    targetId: proj-cumulonimbo-2012
+    type: continuation-of
+    description: Omid transaction manager re-architecture built on HBase durability research from CumuloNimbo
+    provenance: llm
+    confidence: 0.75
+
+  # Conference reviewer -> publication expertise
+  - sourceId: review-icdcs-2009
+    targetId: pub-ha-long-running-2006
+    type: relates-to
+    description: Reviewed for ICDCS 2009 having previously published at ICDCS 2006 on HA long-running transactions
+    provenance: llm
+    confidence: 0.80
+
+temporalRelevance:
+  # Career phase: Distributed Systems era
+  - topicId: systems.transactions
+    period: "2003-2017"
+    weight: 0.95
+    note: Core focus during UPM research and Yahoo Labs/Sieve years
+
+  - topicId: systems.replication
+    period: "2003-2012"
+    weight: 0.90
+    note: Primary research area during PhD and early career
+
+  - topicId: systems.middleware
+    period: "2003-2010"
+    weight: 0.90
+    note: J2EE middleware research at UPM
+
+  - topicId: systems.high-availability
+    period: "2003-2017"
+    weight: 0.85
+    note: Continuous thread from PhD through Omid
+
+  # Career phase: ML/AI transition
+  - topicId: ai.ml.classification
+    period: "2017-present"
+    weight: 0.95
+    note: Primary focus after transition to ML/AI
+
+  - topicId: ai.deep-learning
+    period: "2018-present"
+    weight: 0.90
+    note: Transformer-based work began in 2018
+
+  - topicId: ai.ml.transfer-learning
+    period: "2018-2022"
+    weight: 0.85
+    note: Key research theme during SCP years
+
+  - topicId: ai.ml.entity-matching
+    period: "2023-2024"
+    weight: 0.95
+    note: Primary focus during KGS years
+
+  - topicId: ai.ml.knowledge-distillation
+    period: "2020-2022"
+    weight: 0.85
+    note: Applied during SCP and Mail roles
+
+  - topicId: engineering.mlops
+    period: "2020-present"
+    weight: 0.80
+    note: Growing focus on model deployment and serving
+
+  # Career phase: Current/Future
+  - topicId: ai.agentic
+    period: "2025-present"
+    weight: 1.0
+    note: Current primary focus as independent advisor
+
+  - topicId: ai.llm
+    period: "2023-present"
+    weight: 0.90
+    note: LLM usage in entity matching and agentic AI
+
+  - topicId: leadership.strategy
+    period: "2022-present"
+    weight: 0.75
+    note: Strategic advisory roles at Yahoo DTO and independent
+
+skillProficiency:
+  # AI/ML Skills
+  - topicId: ai.ml.classification
+    level: expert
+    provenance: llm
+    evidence: >-
+      7+ years of multi-label classification across SVM, LSTM, BERT, T5.
+      Published at ACL 2019 (127 citations) and SIGKDD 2022. Patent filed.
+
+  - topicId: ai.ml.entity-matching
+    level: expert
+    provenance: llm
+    evidence: >-
+      Led entity reconciliation across 52+ entity types. Unified type-agnostic
+      model replacing 30+ production models. 22% precision improvement.
+
+  - topicId: ai.deep-learning
+    level: expert
+    provenance: llm
+    evidence: >-
+      Extensive work with HuggingFace Transformers, BERT, T5, Llama 2.
+      Built production DL pipelines with NVIDIA Triton and Ray Serve.
+
+  - topicId: ai.ml.knowledge-distillation
+    level: advanced
+    provenance: llm
+    evidence: >-
+      Teacher/Student framework for Kamino project. Student models doubled
+      deployable categories while improving performance 3-5%.
+
+  - topicId: ai.ml.transfer-learning
+    level: expert
+    provenance: llm
+    evidence: >-
+      Novel hierarchical transfer learning strategy published at ACL 2019
+      (127 citations). Applied across multiple production systems.
+
+  - topicId: ai.nlp
+    level: advanced
+    provenance: llm
+    evidence: >-
+      Multilingual NLP for classification. Clickbait detection with BERT/T5.
+      Entity matching with language models.
+
+  - topicId: ai.llm
+    level: advanced
+    provenance: llm
+    evidence: >-
+      Llama 2 for generative entity matching. Extensive coursework and
+      certifications in LLM fundamentals and applications.
+
+  - topicId: ai.agentic
+    level: advanced
+    provenance: llm
+    evidence: >-
+      Deep-dive research of multi-agent systems. Evaluated AutoGen, CrewAI,
+      OpenAI frameworks. Active advisor to startups on agentic AI.
+
+  # Systems Skills
+  - topicId: systems.transactions
+    level: expert
+    provenance: llm
+    evidence: >-
+      PhD thesis on transactional systems. Core developer of Apache Omid.
+      Published at USENIX FAST 2017. 10+ years in distributed transactions.
+
+  - topicId: systems.replication
+    level: expert
+    provenance: llm
+    evidence: >-
+      PhD research on vertical replication. Publications at WWW 2006 (230 citations),
+      Middleware 2007 (43 citations), VLDB Journal (44 citations).
+
+  - topicId: systems.high-availability
+    level: expert
+    provenance: llm
+    evidence: >-
+      HA for Omid, JOnAS application server, and multi-tier architectures.
+      Commercial agreement with Bull SAS based on HA work.
+
+  # Engineering Skills
+  - topicId: engineering.mlops
+    level: advanced
+    provenance: llm
+    evidence: >-
+      Ray Serve deployment, NVIDIA Triton production serving, cloud migration
+      strategy at Yahoo DTO. MLOps pipeline development.
+
+  - topicId: engineering.cloud
+    level: advanced
+    provenance: llm
+    evidence: >-
+      Led AI/ML cloud migration strategy at Yahoo. Kubernetes-based training
+      with k8s-make. AWS and GCP experience.
+
+  - topicId: engineering.architecture
+    level: expert
+    provenance: llm
+    evidence: >-
+      20+ years of software architecture from J2EE middleware to modern
+      ML systems. SONY Socialife backend architecture. REST API design.

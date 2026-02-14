@@ -1,0 +1,1563 @@
+personal_info:
+  name: Francisco Perez-Sorrosal
+  label: Principal Research Engineer
+  email: fperezsorrosal@gmail.com
+  phone: ""
+  url: http://francisco-perez-sorrosal.github.io/
+  summary: >-
+    Reliable, goal-oriented, and detail-focused professional with extensive
+    experience in research and software engineering across both academic and
+    industry settings, specializing in machine learning, artificial
+    intelligence, and distributed systems. As a Research Engineer, curious and
+    passionate about exploring and implementing cutting-edge technologies,
+    particularly in AI/ML, to tackle complex challenges and foster innovation.
+    As a Software Engineer, capable of designing, developing, and ensuring the
+    maintainability of robust and scalable big data applications, whether
+    on-prem or cloud, always prioritizing high availability, scalability,
+    performance, and reliability. Adaptable, capable of taking initiative and
+    leading efforts with a strategic approach when needed, or collaborating as
+    a communicative, supportive, and empathetic team player to achieve shared
+    goals. Thrives in open, dynamic, and multidisciplinary environments,
+    integrating visionary and practical insights to deliver impactful results
+    while empowering others and fostering collaboration.
+  location:
+    address: ""
+    city: San Francisco
+    region: CA
+    country_code: US
+    postal_code: "94123"
+  profiles:
+    - network: LinkedIn
+      url: https://www.linkedin.com/in/fperezsorrosal/
+      username: fperezsorrosal
+    - network: GitHub
+      url: https://github.com/francisco-perez-sorrosal
+      username: francisco-perez-sorrosal
+    - network: Google Scholar
+      url: https://scholar.google.com/citations?user=nemqgScAAAAJ&hl=en
+    - network: Twitter
+      url: https://x.com/fperezsorrosal
+      username: fperezsorrosal
+    - network: CV PDF
+      url: https://github.com/francisco-perez-sorrosal/cv/blob/main/2025_FranciscoPerezSorrosal_CV_English.pdf
+
+quote: "Any man could, if he were so inclined, be the sculptor of his own brain. -- Santiago Ramon y Cajal"
+
+institutions:
+  # Companies
+  - id: inst-yahoo
+    name: Yahoo Inc.
+    type: company
+    location: Sunnyvale
+    aliases:
+      - Yahoo
+      - Oath
+      - Verizon Media
+      - Verizon Media/Oath
+  - id: inst-lumata
+    name: Lumata
+    type: company
+    location: Spain
+  - id: inst-greenhouse-coop
+    name: Greenhouse Cooperative
+    type: cooperative
+    location: Spain
+  - id: inst-meta4
+    name: Meta 4 S.A.
+    type: company
+    location: Madrid, Spain
+    aliases:
+      - Cegid
+  - id: inst-independent
+    name: Independent
+    type: independent
+
+  # Universities
+  - id: inst-upm
+    name: Universidad Politecnica de Madrid
+    type: university
+    location: Spain
+    aliases:
+      - UPM
+  - id: inst-upsa
+    name: Universidad Pontificia de Salamanca (Madrid Campus)
+    type: university
+    location: Spain
+    aliases:
+      - UPSA
+  - id: inst-ucm
+    name: Universidad Complutense de Madrid
+    type: university
+    location: Spain
+    aliases:
+      - UCM
+  - id: inst-inria
+    name: INRIA Grenoble
+    type: research_institution
+    location: France
+
+  # Education platforms (for certificates)
+  - id: inst-anthropic-edu
+    name: Anthropic Education
+    type: education_platform
+  - id: inst-deeplearning-ai
+    name: DeepLearning.AI
+    type: education_platform
+  - id: inst-huggingface
+    name: HuggingFace
+    type: education_platform
+  - id: inst-coursera-dlai-stanford
+    name: Coursera/DeepLearning.AI/Stanford
+    type: education_platform
+  - id: inst-coursera-washington
+    name: Coursera/Univ. Washington
+    type: education_platform
+  - id: inst-coursera-imperial
+    name: Coursera/Imperial College London
+    type: education_platform
+  - id: inst-coursera-dlai
+    name: Coursera/DeepLearning.AI
+    type: education_platform
+  - id: inst-pinecone-anyscale
+    name: Pinecone + Anyscale
+    type: education_platform
+  - id: inst-edx-databricks
+    name: edX/Databricks
+    type: education_platform
+  - id: inst-fsdl
+    name: FSDL
+    type: education_platform
+    description: Full Stack Deep Learning
+  - id: inst-the-forem
+    name: The Forem
+    type: education_platform
+  - id: inst-typesafe
+    name: Typesafe
+    type: education_platform
+    aliases:
+      - Lightbend
+  - id: inst-community-madrid
+    name: Community of Madrid
+    type: government
+    location: Spain
+
+work:
+  - id: work-independent-advisor-2025
+    institution_id: inst-independent
+    location: ""
+    department: ""
+    position: Strategic Advisor on AI
+    start_date: "2025"
+    end_date: ""
+    summary: Deep-dive research of multi-agent systems, LLM orchestration, and autonomous reasoning frameworks.
+    roles:
+      - Agentic AI
+      - LLM Apps
+    highlights:
+      - >-
+        Agentic AI: Deep-dive research of multi-agent systems, LLM orchestration,
+        and autonomous reasoning frameworks; evaluated cutting-edge frameworks
+        including AutoGen, CrewAI, OpenAI and custom agentic workflows.
+      - >-
+        Strategic Advisory: Provided technical guidance to early-stage startups
+        (Eni6ma, Wasmer) on AI strategy, model selection, and production
+        requirements; advised on Agentic AI integration patterns and AI
+        architecture design.
+      - "Continuous Learning: maintained cutting-edge expertise in rapidly evolving field."
+    projects: []
+
+  - id: work-yahoo-kgs-2023
+    institution_id: inst-yahoo
+    location: Sunnyvale
+    department: Knowledge Graph Science
+    position: Principal Research Engineer
+    start_date: "2023"
+    end_date: "2024"
+    summary: ML/AI Expert and MLOps roles in Knowledge Graph team.
+    roles:
+      - ML/AI Expert
+      - MLOps
+    highlights: []
+    projects:
+      - id: proj-dataset-quality-2024
+        name: Dataset Quality Improvement
+        start_date: "2024"
+        end_date: "2024"
+        goal: >-
+          Since the labels of most entity pairs were generated in a
+          semi-supervised manner, develop an LLM-based solution to validate and
+          enhance the labeling accuracy of the dev and test datasets.
+        highlights: []
+        achievements:
+          - >-
+            Implemented a generative Entity Matching solution with Llama 2
+            to identify and fix (by re-labeling) misclassified examples in
+            the dev/test sets.
+        keywords:
+          - LLM
+          - Entity Matching
+          - Llama 2
+          - Data Quality
+        roles:
+          - ML/AI Expert
+
+      - id: proj-entity-reconciliation-training-2023
+        name: Entity Reconciliation Model Training
+        start_date: "2023"
+        end_date: "2024"
+        description: >-
+          Fine-tuned transformer-based language models on heterogeneously
+          labeled datasets, integrating editorially curated data with
+          automatically labeled data through entity linking via common
+          identifiers. This approach aimed to deduplicate and reconcile
+          meta-entities related to People and Creative Works.
+        goal: >-
+          Improve current production metrics on People and Creative Works
+          entity reconciliation by fine-tuning transformer-based language
+          models on heterogeneously labeled datasets.
+        highlights: []
+        achievements:
+          - >-
+            Trained and optimized a unified, type-agnostic LM model for entity
+            matching/reconciliation, replacing tens of type-specific production
+            models and simplifying the maintenance of the reconciliation stage
+            in the Knowledge Graph.
+          - >-
+            Metric improvements: overall increases of 22.23% and 16.11% in
+            precision and recall for Person, and 5% and 4% for Creative Works.
+          - >-
+            Reduced model size by 33%, lowering storage requirements and
+            improving efficiency without compromising accuracy.
+        keywords:
+          - Transformers
+          - Entity Matching
+          - Knowledge Graphs
+          - Fine-tuning
+        roles:
+          - ML/AI Expert
+
+      - id: proj-entity-reconciliation-pipeline-2023
+        name: Entity Reconciliation Pipeline
+        start_date: "2023"
+        end_date: "2023"
+        goal: >-
+          Build pipelines for distributed sampling, preprocessing, and
+          transformation of large-scale entity data extracted from various
+          complementary sources that accurately reflect user search behavior.
+        description: >-
+          Developed an automated pipeline for training entity reconciliation
+          models for YK, from data curation to inference testing.
+        highlights: []
+        achievements:
+          - >-
+            Devised a solution to reduce the number of models maintained in
+            production from ~30 heterogeneous (heuristic-based, SVMs,
+            Tree-based) to just 4, which encompass the main 4 meta-entity
+            types in YK.
+          - >-
+            Expanded entity type coverage to 20 new types of people entities
+            (e.g., directors, producers, composers, writers, politicians) and
+            32 new types of creative works (e.g., visual works, theatrical
+            works, critic's reviews, periodicals, poems).
+        keywords:
+          - Data Pipelines
+          - Entity Resolution
+          - Distributed Processing
+        roles:
+          - ML/AI Expert
+
+      - id: proj-entity-reconciliation-inference-2023
+        name: Entity Reconciliation Inference
+        start_date: "2023"
+        end_date: "2023"
+        goal: Design and architect a PoC solution for cloud-based inference.
+        highlights: []
+        achievements:
+          - >-
+            Implemented a Ray Serve-based solution to deploy new YK models in
+            the cloud, optimizing for cost efficiency by evaluating CPU and
+            GPU-based approaches.
+        keywords:
+          - Ray Serve
+          - Cloud Inference
+          - MLOps
+        roles:
+          - MLOps
+
+  - id: work-yahoo-mail-2022
+    institution_id: inst-yahoo
+    location: Sunnyvale
+    department: Mail
+    position: Principal Research Engineer
+    start_date: "2022-06"
+    end_date: "2022-12"
+    summary: ML/AI Expert for Mail classification system.
+    roles:
+      - ML/AI Expert
+    highlights: []
+    projects:
+      - id: proj-kamino-mail-classification-2022
+        name: Kamino Project - Mail Classification System
+        start_date: "2022-06"
+        end_date: "2022-12"
+        goal: >-
+          Upgrade legacy production models to a new generation of deep
+          learning-based, small distilled models optimized for large-scale
+          deployment. These models were designed to classify incoming mail
+          using a newly developed multilabel taxonomy tailored to the mail
+          team's specific use cases.
+        description: >-
+          Developed a deep learning pipeline using Hugging Face to
+          train/evaluate models based on the Teacher/Student knowledge
+          distillation framework. Starting with limited human-labeled training
+          data, a large and complex teacher model was created to achieve high
+          accuracy. This model was then used to generate teacher-labeled data
+          for training lightweight student models optimized for deployment.
+          Two types of student models were produced: (1) online models,
+          optimized for speed and suitable for real-time classification tasks,
+          and (2) offline models, designed to include richer information for
+          improved accuracy in non-real-time applications.
+        highlights: []
+        achievements:
+          - >-
+            The resulting student models for an expanded taxonomy, more than
+            doubling the number of deployable categories in the taxonomy while
+            improving performance on existing categories in production by
+            3.1-5.9%.
+        keywords:
+          - Knowledge Distillation
+          - HuggingFace Transformers
+          - Multi-label Classification
+          - Deep Learning
+        roles:
+          - ML/AI Expert
+
+  - id: work-yahoo-dto-2022
+    institution_id: inst-yahoo
+    location: Sunnyvale
+    department: Digital Transformation Office
+    position: Technical Advisor
+    start_date: "2022-04"
+    end_date: "2022-12"
+    summary: ML/AI Expert and Strategy roles for AI/ML cloud migration.
+    roles:
+      - ML/AI Expert
+      - Strategy
+    highlights: []
+    projects:
+      - id: proj-aiml-working-group-2022
+        name: AI/ML Working Group - AI/ML Future Strategy Definition in the Cloud
+        start_date: "2022-04"
+        end_date: "2022-12"
+        description: >-
+          As Yahoo transitioned its infrastructure from on-premises data
+          centers to a fully cloud-based environment, scientists and research
+          engineers required modern tools to streamline their workflows. These
+          tools needed to facilitate dataset and model sharing, ensure
+          reproducibility of experiments, enable rapid experimentation and
+          iteration on new models, and support seamless publishing and
+          deployment into pre-production/production environments.
+        goal: >-
+          Specifically, the Model Development subgroup was dedicated to
+          establishing the requirements, standards, tools, and frameworks
+          needed to scale ML/DL applications effectively across the company
+          during the transition from on-premises to cloud-based infrastructure.
+        highlights: []
+        achievements:
+          - >-
+            Led the discussions on the Model Development subgroup, although
+            participated actively in the remaining three (Data Management,
+            Model Management, and Model Serving).
+          - >-
+            Delivered a set of recommendations (prioritized and categorized in
+            topics) and tasks to do (internal processes, external relations,
+            tools, etc.) to guarantee that ML/DL practitioners could work with
+            less friction in the new cloud environments.
+        keywords:
+          - MLOps
+          - Cloud Migration
+          - Strategy
+          - AI Infrastructure
+        roles:
+          - Strategy
+          - ML/AI Expert
+
+  - id: work-yahoo-ads-2021
+    institution_id: inst-yahoo
+    location: Sunnyvale
+    department: Ads
+    position: Principal Research Engineer
+    start_date: "2021"
+    end_date: "2022"
+    summary: ML/AI Expert and Strategy roles in Ads contextual targeting.
+    roles:
+      - ML/AI Expert
+      - Strategy
+    highlights: []
+    projects:
+      - id: proj-contextual-targeting-2021
+        name: Contextual Targeting Solution
+        start_date: "2021"
+        end_date: "2022"
+        description: >-
+          In the Ads platform, as we were moving towards a cookie-less world,
+          the ability to track users' online signals for behavioral targeting
+          would be drastically reduced, making contextual targeting an
+          appealing alternative for advertising platforms. Using our experience
+          in hierarchical multilabel classification in other contexts, we
+          helped the Ads team to use it in category-based contextual targeting
+          at Yahoo. We proposed and implemented a multilingual model that can
+          accurately classify web pages into a hierarchical taxonomy
+          (specifically, the Yahoo Interest Categories taxonomy) without
+          crawling their content.
+        goal: >-
+          Transfer the knowledge and experience in taxonomy-based multi-label
+          classification to the Ads team and build a platform for
+          training/evaluating the models for category-based contextual
+          targeting in a cookie-less world.
+        highlights: []
+        achievements:
+          - >-
+            Helped the Ads team to develop a pipeline for training models for
+            the task at hand.
+          - >-
+            Paper published: 'Multilingual taxonomic web page classification
+            for contextual targeting at Yahoo' (ACM SIGKDD 2022, 7 Citations).
+        keywords:
+          - Contextual Targeting
+          - Multi-label Classification
+          - Multilingual Models
+          - Advertising
+        roles:
+          - ML/AI Expert
+
+  - id: work-verizon-scp-2018
+    institution_id: inst-yahoo
+    location: Sunnyvale
+    department: Science and Content Platform
+    position: Principal Research Engineer
+    start_date: "2018"
+    end_date: "2022"
+    summary: ML/DL Engineer and Research Engineer for content classification.
+    roles:
+      - ML/DL Engineer
+      - Research Engineer
+    highlights: []
+    projects:
+      - id: proj-dl-multilabel-2020
+        name: Deep Learning-based Multi-label Classification
+        start_date: "2020"
+        end_date: "2021"
+        goal: Modernize the production models and infrastructure using new deep learning models.
+        highlights: []
+        achievements:
+          - >-
+            Developed a modern pipeline based on HuggingFace Transformers to
+            train/evaluate multi-label, multi-class and binary classification
+            problems.
+          - Built a tool for plugin taxonomies for the multi-label configurations.
+          - >-
+            Trained new models obtaining significantly better metrics over the
+            ones in production (+10% over baseline).
+          - >-
+            Developed a serving pipeline based on NVIDIA's Triton Server to
+            deploy in production.
+        keywords:
+          - HuggingFace Transformers
+          - Multi-label Classification
+          - NVIDIA Triton
+          - Deep Learning
+        roles:
+          - ML/DL Engineer
+
+      - id: proj-few-shot-classification-2021
+        name: Scalable Few-shot Classification with Parallel Prefix Conditioning
+        start_date: "2021"
+        end_date: "2021"
+        goal: >-
+          Modify a transformer architecture (e.g. BERT) to achieve fast and
+          effective few-shot classification by prefixing multiple category
+          labels to the input.
+        description: >-
+          Class representations are encoded in parallel but produce independent
+          binary labels for each input through a shared classification output
+          layer.
+        highlights: []
+        achievements:
+          - >-
+            Conducted experiments on the DBPedia dataset demonstrating improved
+            few-shot performance over standard multi-class classifiers and a
+            speedup over binarized formulations.
+          - >-
+            Further analysis showed that the approach could be scaled to a
+            large number of categories and may hold promise for zero-shot
+            learning of unseen categories.
+        keywords:
+          - Few-shot Learning
+          - Transformers
+          - BERT
+          - Classification
+        roles:
+          - Research Engineer
+
+      - id: proj-clickbait-classifier-2019
+        name: Clickbait Classifier based on Transformers
+        start_date: "2019"
+        end_date: "2019"
+        goal: Improve the current SVM-based model in production using a BERT-based model.
+        highlights: []
+        achievements:
+          - >-
+            Proposed an integration strategy for serving the model in
+            production using the existing pipeline.
+          - Improved F1 metric over 5% compared to current classifier in production.
+          - PoC of a generative-based clickbait classification approach using Google's T5.
+        keywords:
+          - BERT
+          - Text Classification
+          - NLP
+          - T5
+        roles:
+          - ML/DL Engineer
+
+      - id: proj-hierarchical-transfer-learning-2018
+        name: Hierarchical Transfer Learning for Multi-label Text Classification
+        start_date: "2018"
+        end_date: "2018"
+        goal: >-
+          Propose a novel transfer learning based strategy where binary
+          classifiers at lower levels in a hierarchy of classes are initialized
+          using parameters of the parent classifier and subsequently fine-tuned
+          on the child categories for the classification task.
+        highlights: []
+        achievements:
+          - >-
+            Paper published in ACL 2019: 'Hierarchical transfer learning for
+            multi-label text classification'. 127 Citations.
+        keywords:
+          - Transfer Learning
+          - Multi-label Classification
+          - Hierarchical Classification
+          - NLP
+        roles:
+          - Research Engineer
+
+  - id: work-yahoo-cap-2017
+    institution_id: inst-yahoo
+    location: Sunnyvale
+    department: Content Ingestion Platform (CAP)
+    position: Senior Research Engineer
+    start_date: "2017"
+    end_date: "2018"
+    summary: ML/DL Engineer for content ingestion classification.
+    roles:
+      - ML/DL Engineer
+    highlights: []
+    projects:
+      - id: proj-dl-multiclass-2018
+        name: DL-based Multi-class Classification for Content Ingestion
+        start_date: "2018"
+        end_date: "2018"
+        description: >-
+          Experimented with LSTM/GRU-based models for multi-class classification
+          using TF/Keras. Explored transfer learning techniques for multi-label
+          text classification.
+        keywords:
+          - LSTM
+          - GRU
+          - TensorFlow
+          - Keras
+        roles:
+          - ML/DL Engineer
+
+      - id: proj-ml-classification-pipeline-2017
+        name: Machine Learning Content Classification Pipeline
+        start_date: "2017"
+        end_date: "2017"
+        description: >-
+          Built a pipeline for easy data ingestion, model training and
+          evaluation based on SVMs for the Sieve platform.
+        keywords:
+          - SVM
+          - ML Pipeline
+          - Data Ingestion
+        roles:
+          - ML/DL Engineer
+
+      - id: proj-k8s-make-2017
+        name: ML Pipeline Scalability (k8s-make)
+        start_date: "2017"
+        end_date: "2017"
+        description: >-
+          Built k8s-make, a tool and a workflow-based framework to harness
+          the compute-power in Yahoo's on-prem clusters to deploy a tailor-made
+          Kubernetes cluster to parallelize the training of our SVM-based
+          pipeline in a simple way.
+        keywords:
+          - Kubernetes
+          - Distributed Training
+          - On-premises
+        roles:
+          - ML/DL Engineer
+
+  - id: work-yahoo-sieve-2015
+    institution_id: inst-yahoo
+    location: Sunnyvale
+    department: Sieve
+    position: Senior Research Engineer
+    start_date: "2015"
+    end_date: "2017"
+    summary: Distributed Systems Expert and Research Engineer for content ingestion.
+    roles:
+      - Distributed Systems Expert
+      - Research Engineer
+    highlights: []
+    projects:
+      - id: proj-twitter-firehose-2017
+        name: "Twitter Firehose: At-scale Ingestion Streaming System for Tweets"
+        start_date: "2017"
+        end_date: "2017"
+        description: >-
+          Reimplemented the new Twitter API (v2.0) in the firehose.
+          Re-architected previous solution to be more performant yet keeping
+          backwards compatibility. Collaborated with the Sports team for
+          the productization of the new firehose.
+        keywords:
+          - Streaming
+          - Twitter API
+          - High Performance
+        roles:
+          - Distributed Systems Expert
+
+      - id: proj-omid-apache-2016
+        name: Scalable Content Ingestion Platform (Omid OSS)
+        start_date: "2016"
+        end_date: "2016"
+        goal: Transfer Omid as a full open-source project into the Apache Software Foundation.
+        description: >-
+          Transferred Omid as full open-source project into the Apache
+          Software Foundation (ASF). Continued supporting the Omid
+          transaction manager project in production.
+        highlights:
+          - "Omid presented at Hadoop Summit, 2016, San Jose, CA (USA)."
+          - >-
+            Paper: 'Omid, reloaded: scalable and Highly-Available transaction
+            processing' (USENIX FAST 2017, 20 Citations).
+        keywords:
+          - Apache Omid
+          - Open Source
+          - Transactions
+          - HBase
+        roles:
+          - Distributed Systems Expert
+
+      - id: proj-omid-ha-2015
+        name: Scalable Content Ingestion Platform (Omid HA)
+        start_date: "2015"
+        end_date: "2015"
+        description: >-
+          Worked at the multi-tenant content ingestion platform at Search
+          organization. Added High Availability to the Omid Transaction
+          Manager for HBase. Scaled Omid in multi-core architectures.
+          Supported the Omid transaction manager in the production
+          infrastructure of the content ingestion platform. Started exploring
+          the transfer of Omid as open-source project to the Apache Software
+          Foundation.
+        keywords:
+          - High Availability
+          - HBase
+          - Multi-core
+          - Transactions
+        roles:
+          - Distributed Systems Expert
+
+  - id: work-yahoo-labs-2012
+    institution_id: inst-yahoo
+    location: Spain
+    department: Scalable Computing Group
+    position: Research Engineer
+    start_date: "2012"
+    end_date: "2015"
+    summary: Distributed Systems Expert and Research Software Engineer.
+    roles:
+      - Distributed Systems Expert
+      - Research Software Engineer
+    highlights: []
+    projects:
+      - id: proj-omid-txn-manager-2014
+        name: Omid - Transaction Manager for Big Datastores
+        start_date: "2014"
+        end_date: "2014"
+        description: >-
+          Re-architected the original codebase and implemented new features.
+          Supported the Omid integration in Sieve project (Yahoo's large scale
+          Internet content ingestion platform). Presented Omid and its poster
+          at Yahoo's internal technical conference (Techpulse Conf. 2014).
+        keywords:
+          - Omid
+          - Transactions
+          - Big Data
+          - HBase
+        roles:
+          - Distributed Systems Expert
+
+      - id: proj-edentity-2014
+        name: Edentity/Pachiderm - Ubiquitous Content Access and Management
+        start_date: "2014"
+        end_date: "2014"
+        description: >-
+          Ubiquitous content access and management of personal data (images,
+          video) held on 3rd party services (Flickr, GDrive, Dropbox).
+          Designed and implemented a scalable synchronization data module.
+          Defined and implemented a RESTful API for each module defined (User
+          Registration, Search, Content Fetching).
+        keywords:
+          - Content Management
+          - RESTful APIs
+          - Synchronization
+        roles:
+          - Research Software Engineer
+
+      - id: proj-riddlr-2013
+        name: RiddlR - Percolator-like Incremental Processing System
+        start_date: "2013"
+        end_date: "2013"
+        description: >-
+          Prototyped the framework and built a multi-stage example application
+          on top of it. Presented RiddlR and its poster at Yahoo's Techpulse
+          Conf. 2013.
+        keywords:
+          - Incremental Processing
+          - Distributed Systems
+        roles:
+          - Research Software Engineer
+
+      - id: proj-cumulonimbo-2012
+        name: CumuloNimbo - 7th European Framework Programme (FP7-257993)
+        start_date: "2012"
+        end_date: "2013"
+        description: >-
+          Designed and implemented a prototype of an incremental processing
+          system for Big Datastores. Added durability guarantees to HBase
+          through BookKeeper. Represented Yahoo in project meetings and
+          evaluation sessions.
+        keywords:
+          - EU Framework Programme
+          - BookKeeper
+          - HBase
+          - Durability
+        roles:
+          - Research Software Engineer
+
+  - id: work-lumata-2011
+    institution_id: inst-lumata
+    location: Spain
+    department: ""
+    position: Software Architect
+    start_date: "2011"
+    end_date: "2012"
+    summary: Distributed Systems Expert and Architect for SONY Socialife.
+    roles:
+      - Distributed Systems Expert
+      - Architect
+    highlights: []
+    projects:
+      - id: proj-giddra-sony-2012
+        name: Giddra Project - SONY Socialife Application
+        start_date: "2012"
+        end_date: "2012"
+        description: >-
+          High Scalable Big-Data Backend Platform for web and social content
+          ingestion and aggregation. Contributed to the architectural
+          definition of the platform. Did coordination over multiple teams.
+          Defined the REST API for allowing clients to access/use the backend.
+        keywords:
+          - Big Data
+          - Content Aggregation
+          - REST API
+          - Architecture
+        roles:
+          - Architect
+
+  - id: work-freelance-2010
+    institution_id: inst-greenhouse-coop
+    location: Spain
+    department: ""
+    position: Software Architect/Engineer
+    start_date: "2010"
+    end_date: "2011"
+    summary: >-
+      Analysis, design and Ruby/Rails implementation of a web application
+      to manage the different domains of a greenhouse farm.
+    roles: []
+    highlights:
+      - >-
+        Analysis, design and Ruby/Rails implementation of a web application
+        to manage the different domains of a greenhouse farm. LoC ~20,000.
+    projects: []
+
+  - id: work-upm-research-2003
+    institution_id: inst-upm
+    location: Spain
+    department: School of CS
+    position: Software Architect/Research Engineer
+    start_date: "2003"
+    end_date: "2010"
+    summary: >-
+      Participated in European and national research projects including
+      analysis, design, implementation and testing of different kinds of
+      middleware architectures and applications.
+    roles:
+      - Distributed Systems Expert
+      - Software Architect
+      - Software Engineer
+    highlights: []
+    projects:
+      - id: proj-nexof-ra-2008
+        name: "NEXOF-RA: NESSI Open Framework - Reference Architecture"
+        start_date: "2008"
+        end_date: "2010"
+        description: >-
+          7th European Framework Programme (FP7-216446). Contributed to a
+          reference architecture (RA) for a European service platform. Built
+          the specification of a set of architectural patterns for
+          non-functional attributes and analysis of how to integrate cloud
+          platforms in the RA.
+        keywords:
+          - Reference Architecture
+          - EU Framework Programme
+          - SOA
+        roles:
+          - Software Architect
+
+      - id: proj-scalable-platform-2007
+        name: Highly Scalable Platform for the Construction of Dependable and Ubiquitous Services
+        start_date: "2007"
+        end_date: "2010"
+        description: >-
+          Spanish Ministry of Education and Science (TIN2007-67353-C02).
+          Analysis and tests of consistency problems that arose in end-user
+          applications when second-level caches (e.g. Coherence, JBoss cache)
+          are combined with object persistence mechanisms (e.g. Hibernate).
+        keywords:
+          - Caching
+          - Consistency
+          - Hibernate
+          - JBoss
+        roles:
+          - Research Engineer
+
+      - id: proj-automan-2006
+        name: AUTOMAN - Autonomic Management of Grid-Based Enterprise Services
+        start_date: "2006"
+        end_date: "2007"
+        description: >-
+          Did the integration of self-configuration and self-repair properties of
+          autonomic computing in the core of a cloud platform at INRIA (France).
+        keywords:
+          - Autonomic Computing
+          - Self-configuration
+          - Grid Computing
+        roles:
+          - Research Engineer
+
+      - id: proj-high-perf-distributed-2006
+        name: High Performance Distributed Systems
+        start_date: "2006"
+        end_date: "2009"
+        description: >-
+          Community of Madrid (S-0505/TIC/000285). Developed a high-available
+          and scalable service for the JOnAS J(2)EE application server. It
+          provided high availability for critical applications deployed in
+          application server clusters, scaling-out the cluster when
+          overloaded. UPM & BULL signed a pre-agreement to include it in the
+          commercial version. LoC Java (HA&S Service) ~4,000.
+        keywords:
+          - High Availability
+          - JOnAS
+          - J2EE
+          - Scalability
+        roles:
+          - Distributed Systems Expert
+
+      - id: proj-s4all-2005
+        name: S4ALL (Services for All)
+        start_date: "2005"
+        end_date: "2007"
+        description: >-
+          5th European Framework Programme (IST-2001-37126). Developed a
+          high-available service for the JOnAS application server maintained
+          by Bull SAS (France). Available since v.4.8. LoC Java (JOnAS)
+          ~150,000.
+        keywords:
+          - High Availability
+          - JOnAS
+          - EU Framework Programme
+        roles:
+          - Software Engineer
+
+      - id: proj-autonomic-2004
+        name: "AUTONOMIC: Autonomic, Dependable and Middleware for Scalable, Distributed, Ubiquitous and Highly Available e-Services"
+        start_date: "2004"
+        end_date: "2007"
+        description: >-
+          Spanish Ministry of Education and Science (TIN2004-07474-C02-01).
+          Built an open-source reference implementation of the WS-CAF
+          specification for adding transactions to SOAP Web Services. LoC
+          ~50,000.
+        keywords:
+          - WS-CAF
+          - Web Services
+          - Transactions
+          - SOAP
+        roles:
+          - Software Engineer
+
+      - id: proj-adapt-2002
+        name: "ADAPT: Middleware for Adaptive and Composable Distributed Components"
+        start_date: "2002"
+        end_date: "2005"
+        description: >-
+          EUREKA/ITEA project (Label 04025). Implemented a transactional-aware
+          replication architecture for stateful EJBs for JBoss. LoC Java
+          ~10,600. Open-sourced the implementation of the Activity Service
+          specification to add advanced transactions models to J2EE. LoC Java
+          ~10,000.
+        keywords:
+          - EJB
+          - JBoss
+          - Replication
+          - Transactions
+        roles:
+          - Software Engineer
+
+  - id: work-upsa-lecturer-2001
+    institution_id: inst-upsa
+    location: Spain
+    department: School of CS
+    position: Lecturer
+    start_date: "2001"
+    end_date: "2003"
+    summary: Taught courses on Operating Systems and Programming (C and Pascal).
+    roles:
+      - Lecturer
+    highlights:
+      - Courses on Operating Systems and Programming (C and Pascal).
+    projects: []
+
+  - id: work-upsa-sysadmin-2000
+    institution_id: inst-upsa
+    location: Spain
+    department: School of CS
+    position: Systems Administrator
+    start_date: "2000"
+    end_date: "2001"
+    summary: Managed and maintained UNIX/Linux servers and Windows workstations.
+    roles:
+      - Systems Administrator
+    highlights:
+      - "Managed and maintained UNIX/Linux servers and Windows workstations: task automation, security."
+    projects: []
+
+  - id: work-meta4-1999
+    institution_id: inst-meta4
+    location: Madrid, Spain
+    department: ""
+    position: Quality Analyst
+    start_date: "1999"
+    end_date: "1999"
+    summary: Tested database connection modules of Meta4's ERP suite.
+    roles:
+      - Quality Analyst
+    highlights:
+      - >-
+        Tested the database connection modules of Meta4's ERP suite (now
+        Cegid), gaining hands-on experience with multiple DBMSs, including
+        Oracle, Microsoft SQL Server, Informix, and Sybase, as well as JDBC
+        (Java Database Connectivity). Responsibilities included configuring
+        database connections via JDBC, planning and executing tests, analyzing
+        results, and reporting bugs to ensure system reliability and
+        performance.
+    projects: []
+
+  # Academic Research Experience (separate from industry work at UPM)
+  - id: work-upm-researcher-2003
+    institution_id: inst-upm
+    location: Spain
+    department: School of CS
+    position: Researcher
+    start_date: "2003"
+    end_date: "2011"
+    summary: PhD Candidate and Researcher in distributed systems.
+    roles:
+      - PhD Candidate
+      - Researcher
+    highlights: []
+    projects:
+      - id: proj-phd-thesis-2003
+        name: "PhD Thesis: Middleware for High Available and Scalable Multi-Tier and Service-Oriented Architectures"
+        start_date: "2003"
+        end_date: "2009"
+        goal: >-
+          Develop a brand-new approach to provide high availability and
+          scalability to multi-tier architectures by combining snapshot-isolation
+          and an innovative vertical replication approach.
+        description: >-
+          Advisors: Prof. Marta Patino-Martinez and Prof. Ricardo Jimenez-Peris
+          (UPM). Specialization: Distributed Systems, Transactional Systems,
+          Scalability, High Availability, SOAs.
+        keywords:
+          - Distributed Systems
+          - Transactional Systems
+          - Scalability
+          - High Availability
+          - SOA
+        roles:
+          - PhD Candidate
+
+      - id: proj-inria-internship-2007
+        name: Research Internship at SARDES Research Group, INRIA Grenoble
+        start_date: "2007"
+        end_date: "2007"
+        description: >-
+          Advisor: Prof. Sara Bouchenak. Integration of self-configuration and
+          self-repair properties of autonomic computing in the core of a cloud
+          platform.
+        keywords:
+          - Autonomic Computing
+          - Self-configuration
+          - Cloud Platform
+        roles:
+          - Research Intern
+
+patents:
+  - id: patent-text-content-images-2025
+    number: "18/512,871"
+    title: Systems and methods for automatically adding text content to generated images
+    date: "2025"
+    status: application
+    inventors: []
+
+  - id: patent-webpage-classification-2024
+    number: "18/365,941"
+    title: Method and system for webpage classification and content delivery
+    date: "2024"
+    status: application
+    inventors: []
+
+publications:
+  - id: pub-multilingual-taxonomic-2022
+    name: Multilingual taxonomic web page classification for contextual targeting at Yahoo
+    publisher: ACM SIGKDD 2022
+    release_date: "2022"
+    citations: 7
+    authors: []
+
+  - id: pub-omid-reloaded-2017
+    name: "Omid, reloaded: scalable and Highly-Available transaction processing"
+    publisher: USENIX FAST 2017
+    release_date: "2017"
+    citations: 20
+    authors: []
+
+  - id: pub-elastic-si-cache-2011
+    name: "Elastic SI-Cache: Consistent and Scalable Caching in Multi-Tier Architectures"
+    publisher: VLDB Journal 2011
+    release_date: "2011"
+    citations: 44
+    authors: []
+
+  - id: pub-scalability-jonas-2010
+    name: "Scalability Evaluation of the Replication Support of JOnAS, an Industrial J2EE Application Server"
+    publisher: EDCC Conf. 2010
+    release_date: "2010"
+    citations: 10
+    authors: []
+
+  - id: pub-architectural-patterns-2009
+    name: A System of Architectural Patterns for Scalable, Consistent and Highly Available Multi-tier Service Oriented Infrastructure
+    publisher: Architecting Dependable Systems VI, Springer 2009
+    release_date: "2009"
+    citations: 13
+    authors: []
+
+  - id: pub-cache-replication-2007
+    name: Consistent and Scalable Cache Replication for Multi-tier J2EE Applications
+    publisher: ACM/IFIP/USENIX Middleware Conf. 2007
+    release_date: "2007"
+    citations: 43
+    authors: []
+
+  - id: pub-ws-replication-2006
+    name: "WS-Replication: A Framework for Highly Available Web Services"
+    publisher: ACM WWW Conf. 2006
+    release_date: "2006"
+    citations: 230
+    authors: []
+
+  - id: pub-ha-long-running-2006
+    name: Highly Available Long Running Transactions and Activities for J2EE Applications
+    publisher: IEEE ICDCS Conf. 2006
+    release_date: "2006"
+    citations: 28
+    authors: []
+
+  - id: pub-zenflow-2005
+    name: "ZenFlow: A Visual Tool for Web Service Composition"
+    publisher: IEEE VL/HCC Conf. 2005
+    release_date: "2005"
+    citations: 53
+    authors: []
+
+  - id: pub-htl-acl-2019
+    name: Hierarchical transfer learning for multi-label text classification
+    publisher: ACL 2019
+    release_date: "2019"
+    citations: 127
+    authors: []
+
+education:
+  - id: edu-upm-phd
+    institution_id: inst-upm
+    department: School of CS
+    area: Computer Science
+    study_type: Ph.D.
+    start_date: "2003"
+    end_date: "2009"
+    location: Spain
+
+  - id: edu-ucm-pgce
+    institution_id: inst-ucm
+    department: Educational Sciences Institute
+    area: Education
+    study_type: Postgraduate Certificate in Education
+    start_date: "2004"
+    end_date: "2004"
+    location: Spain
+
+  - id: edu-upsa-beng
+    institution_id: inst-upsa
+    department: School of CS
+    area: Computer Science
+    study_type: B.Eng & M.Sc.
+    start_date: "1994"
+    end_date: "2001"
+    location: Spain
+
+skills:
+  - id: skill-aiml
+    name: AI/ML & Data Science
+    skills:
+      - name: AI/ML
+        keywords:
+          - Agentic AI Frameworks (OpenAI, CrewAI, etc.)
+          - HuggingFace Transformers
+          - PyTorch
+          - Scikit-learn
+      - name: Areas
+        keywords:
+          - Generative AI
+          - NLP
+          - Multi-label Classification
+          - Knowledge Graphs
+      - name: Data
+        keywords:
+          - Pandas
+          - Dask
+          - SQL
+          - Vector Databases
+          - Large-scale Data Pipeline Development
+      - name: MLOps
+        keywords:
+          - Ray
+          - NVIDIA Triton Server
+          - Model Deployment & Monitoring
+
+  - id: skill-programming
+    name: Programming & Engineering
+    skills:
+      - name: Tools
+        keywords:
+          - Agentic Tools (Cursor, Claude Code)
+          - Git
+          - GitHub Actions
+          - GitLab CI
+          - IntelliJ
+          - VSCode
+      - name: Code
+        keywords:
+          - Python
+          - Java
+          - Rust
+          - Go
+      - name: Cloud
+        keywords:
+          - AWS
+          - Google Cloud
+          - Docker
+          - Kubernetes
+      - name: Dev
+        keywords:
+          - RESTful APIs
+          - Distributed Systems
+          - Software Architecture
+          - Unit Testing
+
+  - id: skill-data-infra
+    name: Data & Infrastructure
+    skills:
+      - name: DB
+        keywords:
+          - Relational
+          - NoSQL
+          - Vector Databases
+          - HBase
+      - name: BigData
+        keywords:
+          - Distributed Processing
+          - Highly Available and Scalable System Design
+          - Performance Tuning
+
+  - id: skill-architecture
+    name: Architecture, Design & Processes
+    skills:
+      - name: Processes
+        keywords:
+          - Architecture and Software Design
+          - Design Patterns
+          - RESTful APIs
+          - UML
+          - Agile
+
+certificates:
+  - id: cert-claude-bedrock-2025
+    name: Claude with Amazon Bedrock
+    date: "2025"
+    institution_id: inst-anthropic-edu
+    url: https://verify.skilljar.com/c/swok3v3uo84t
+  - id: cert-claude-code-2025
+    name: "Claude Code: A Highly Agentic Coding Assistant"
+    date: "2025"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/8a8a3b69-c549-4f9e-a301-8105436e4ff4?usp=sharing
+  - id: cert-mcp-advanced-2025
+    name: "Model Context Protocol: Advanced Topics"
+    date: "2025"
+    institution_id: inst-anthropic-edu
+    url: http://verify.skilljar.com/c/d7e2d2xp2hu9
+  - id: cert-mcp-intro-2025
+    name: Introduction to Model Context Protocol
+    date: "2025"
+    institution_id: inst-anthropic-edu
+    url: http://verify.skilljar.com/c/aaofdzhtwit2
+  - id: cert-claude-code-action-2025
+    name: Claude Code in Action
+    date: "2025"
+    institution_id: inst-anthropic-edu
+    url: https://verify.skilljar.com/c/kfpzhosaxa35
+  - id: cert-claude-api-2025
+    name: Claude with the Anthropic API
+    date: "2025"
+    institution_id: inst-anthropic-edu
+    url: https://verify.skilljar.com/c/k3pctnrj4k34
+  - id: cert-agent-memory-letta-2025
+    name: "LLMs as Operating Systems: Agent Memory (Letta)"
+    date: "2025"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/24080236-1809-44a5-af44-31f843eb7168?usp=sharing
+  - id: cert-acp-2025
+    name: "ACP: Agent Communication Protocol"
+    date: "2025"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/da472e4b-b5a2-4d6e-bfbc-78615f32af0d?usp=sharing
+  - id: cert-hf-agents-2025
+    name: Fundamentals of Agents
+    date: "2025"
+    institution_id: inst-huggingface
+  - id: cert-computer-use-2025
+    name: Building toward Computer Use with Anthropic
+    date: "2025"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/e3d34e5d-0865-4e25-8ab5-b1156cff1b82?usp=sharing
+  - id: cert-mcp-rich-context-2025
+    name: "MCP: Build Rich-Context AI Apps with Anthropic"
+    date: "2025"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/e355dfbc-c428-426f-87ae-9473cd837b79?usp=sharing
+  - id: cert-attention-transformers-2025
+    name: "Attention in Transformers: Concepts and Code in PyTorch"
+    date: "2025"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/3ed4ede6-132d-4c48-adac-1929a17a8980?usp=sharing
+  - id: cert-how-transformers-work-2025
+    name: How Transformer LLMs Work
+    date: "2025"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/73a5c102-d10f-4981-9c27-058505464db9?usp=sharing
+  - id: cert-crewai-advanced-2025
+    name: Practical Multi AI Agents and Advanced Use Cases with crewAI
+    date: "2025"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/1ff3a3e1-9cc0-43f7-a0e9-7069fe6a5c33?usp=sharing
+  - id: cert-crewai-2024
+    name: Multi AI Agent Systems with CrewAI
+    date: "2024"
+    institution_id: inst-deeplearning-ai
+    url: https://www.linkedin.com/in/fperezsorrosal/overlay/1733693789455/single-media-viewer/
+  - id: cert-kg-rag-2024
+    name: Knowledge Graphs for RAG
+    date: "2024"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/e9934e71-56c4-4776-b59a-598d58f64a60?usp=sharing
+  - id: cert-autogen-2024
+    name: AI Agentic Design Patterns with AutoGen
+    date: "2024"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/f5763004-1e46-4153-a466-9fede55d2c8c?usp=sharing
+  - id: cert-langchain-tools-2024
+    name: Functions, Tools and Agents with LangChain
+    date: "2024"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/2b4a25d6-3d3c-43b4-9909-29a5594d71a4?usp=sharing
+  - id: cert-llm-accuracy-2024
+    name: Improving Accuracy of LLM Applications
+    date: "2024"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/9ba0d65d-0c9b-4939-b5b9-7e5ac0369167?usp=sharing
+  - id: cert-langchain-dev-2024
+    name: LangChain for LLM Application Development
+    date: "2024"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/f7c4a5b8-4bb9-4363-bf2e-14e475537873?usp=sharing
+  - id: cert-langgraph-2024
+    name: AI Agents in LangGraph
+    date: "2024"
+    institution_id: inst-deeplearning-ai
+    url: https://learn.deeplearning.ai/accomplishments/34f2e69e-04f8-49b9-b402-2cc7331122d5?usp=sharing
+  - id: cert-rag-bootcamp-2024
+    name: RAG Developer Bootcamp
+    date: "2024"
+    institution_id: inst-pinecone-anyscale
+    url: https://www.anyscale.com/events/2024/03/08/rag-developer-bootcamp
+    location: San Francisco
+    format: In-Person
+  - id: cert-llm102x-2023
+    name: "LLM102x: Large Language Models: Foundation Models from the Ground Up"
+    date: "2023"
+    institution_id: inst-edx-databricks
+    url: https://courses.edx.org/certificates/e36174eec12748e7b62afd517060cf2d
+  - id: cert-llm101x-2023
+    name: "LLM101x: Large Language Models: Application through Production"
+    date: "2023"
+    institution_id: inst-edx-databricks
+    url: https://courses.edx.org/certificates/efcc7ec7b2234b538809447c1f37babf
+  - id: cert-llm-bootcamp-2023
+    name: LLM Bootcamp
+    date: "2023"
+    institution_id: inst-fsdl
+    location: South San Francisco, CA
+    format: In-Person
+  - id: cert-yahoo-leadership-2023
+    name: Yahoo Leadership Program
+    date: "2023"
+    institution_id: inst-the-forem
+    format: Remote
+  - id: cert-fsdl-2022
+    name: Full Stack Deep Learning 22'Edition
+    date: "2022"
+    institution_id: inst-fsdl
+    url: https://fullstackdeeplearning.com/course/2022/
+  - id: cert-ml-specialization-2022
+    name: Machine Learning Specialization (3 Courses)
+    date: "2022"
+    institution_id: inst-coursera-dlai-stanford
+    url: https://www.coursera.org/account/accomplishments/specialization/certificate/KREGWAZ87SQN
+  - id: cert-fsdl-2021
+    name: Full Stack Deep Learning 21'Edition
+    date: "2021"
+    institution_id: inst-fsdl
+    url: https://fullstackdeeplearning.com/spring2021/
+  - id: cert-ml-specialization-2019
+    name: Machine Learning Specialization (4 Courses)
+    date: "2019"
+    institution_id: inst-coursera-washington
+    url: https://www.coursera.org/account/accomplishments/specialization/certificate/UY6W586XQMW3
+  - id: cert-math-ml-2018
+    name: Mathematics for Machine Learning Specialization (3 Courses)
+    date: "2018"
+    institution_id: inst-coursera-imperial
+    url: https://www.coursera.org/account/accomplishments/specialization/K7TBGLD4Y6ML
+  - id: cert-deep-learning-2018
+    name: Deep Learning Specialization (5 Courses)
+    date: "2018"
+    institution_id: inst-coursera-dlai
+    url: https://www.coursera.org/account/accomplishments/specialization/YTPXQJ42EUCK
+  - id: cert-advanced-scala-2011
+    name: Certificate of Training, Advanced Scala
+    date: "2011"
+    institution_id: inst-typesafe
+    location: Switzerland
+  - id: cert-scala-2011
+    name: Certificate of Training, Scala
+    date: "2011"
+    institution_id: inst-typesafe
+    location: Switzerland
+  - id: cert-business-admin-2011
+    name: Course in Business Administration and Economics (268 hours)
+    date: "2011"
+    institution_id: inst-community-madrid
+    location: Spain
+
+languages:
+  - id: lang-spanish
+    language: Spanish
+    fluency: native
+  - id: lang-english
+    language: English
+    fluency: professional
+  - id: lang-french
+    language: French
+    fluency: intermediate
+  - id: lang-catalan
+    language: Catalan
+    fluency: intermediate
+
+conferences:
+  - { id: conf-agentic-ai-summit-2025, name: Agentic AI Summit, date: "2025-08", location: "Berkeley, CA", role: attendee }
+  - { id: conf-ai-engineer-2025, name: AI Engineer World's Fair, date: "2025-06", location: "San Francisco, CA", role: attendee }
+  - { id: conf-mlsys-2025, name: MLSys 2025, date: "2025-05", location: "Santa Clara, CA", role: attendee }
+  - { id: conf-neurips-2024, name: NeurIPS 2024, date: "2024-12", location: "Vancouver, BC", role: attendee }
+  - { id: conf-icml-2024, name: ICML 2024, date: "2024-07", location: "Vienna, Austria", role: attendee }
+  - { id: conf-ai-engineer-2024, name: AI Engineer World's Fair, date: "2024-06", location: "San Francisco, CA", role: attendee }
+  - { id: conf-mlsys-2024, name: MLSys 2024, date: "2024-05", location: "Santa Clara, CA", role: attendee }
+  - { id: conf-wandb-2024, name: "W&B Fully Connected Conference 2024, The Era of Generative AI", date: "2024-04", location: "San Francisco, CA", role: attendee }
+  - { id: conf-neurips-2023, name: NeurIPS 2023, date: "2023-12", location: "New Orleans, LA", role: attendee }
+  - { id: conf-reinvent-2023, name: "Amazon Re:Invent 2023", date: "2023-11", location: "Las Vegas, NV", role: attendee }
+  - { id: conf-ray-summit-2023, name: Ray Summit 2023, date: "2023-09", location: "San Francisco, CA", role: attendee }
+  - { id: conf-icml-2023, name: ICML 2023, date: "2023-07", location: "Honolulu, HI", role: attendee }
+  - { id: conf-mlsys-2023, name: MLSys 2023, date: "2023-06", location: "Miami, FL", role: attendee }
+  - { id: conf-ray-summit-2022, name: Ray Summit 2022, date: "2022-08", location: "San Francisco, CA", role: attendee }
+  - { id: conf-mlsys-2022, name: MLSys 2022, date: "2022-08", location: "Santa Clara, CA", role: attendee }
+  - { id: conf-acl-2019, name: ACL 2019, date: "2019-07", location: "Florence, Italy", role: speaker }
+  - { id: conf-atscale-2016, name: "@Scale Conference", date: "2016-08", location: "San Jose, CA", role: attendee }
+  - { id: conf-hadoop-summit-2016, name: Hadoop Summit, date: "2016-06", location: "San Jose, CA", role: speaker }
+  - { id: conf-atscale-2015, name: "@Scale Conference", date: "2015-09", location: "San Jose, CA", role: attendee }
+  - { id: conf-hadoop-europe-2015, name: Hadoop Summit Europe, date: "2015-04", location: "Brussels, Belgium", role: attendee }
+  - { id: conf-hadoop-europe-2014, name: Hadoop Summit Europe, date: "2014-04", location: "Amsterdam, Netherlands", role: attendee }
+  - { id: conf-nosql-2014, name: NoSQL Matters, date: "2014-11", location: "Barcelona, Spain", role: attendee }
+  - { id: conf-nosql-2013, name: NoSQL Matters, date: "2013-11", location: "Barcelona, Spain", role: attendee }
+  - { id: conf-nosql-2012, name: NoSQL Matters, date: "2012-10", location: "Barcelona, Spain", role: attendee }
+  - { id: conf-srds-2011, name: IEEE SRDS, date: "2011-10", location: "Madrid, Spain", role: attendee }
+  - { id: conf-www-2009, name: World Wide Web Conference, date: "2009-04", location: "Madrid, Spain", role: attendee }
+  - { id: conf-spanish-concurrency-2005, name: Spanish Conference on Concurrency and Distributed Systems, date: "2005-09", location: "Granada, Spain", role: attendee }
+  - { id: conf-objectwebcon-2005, name: "ObjectWebCon'05", date: "2005-01", location: "Lyon, France", role: attendee }
+  - { id: conf-objectweb-tx-2004, name: "ObjectWeb's Workshop on Transactions", date: "2004-02", location: "Grenoble, France", role: attendee }
+  - { id: conf-objectweb-arch-2004, name: "ObjectWeb's Architecture Meeting", date: "2004-01", location: "Sevilla, Spain", role: attendee }
+  # Conference reviewer roles
+  - { id: review-srds-2008, name: IEEE International Symposium on Reliable Distributed Systems (SRDS), date: "2008", role: reviewer }
+  - { id: review-srds-2009, name: IEEE International Symposium on Reliable Distributed Systems (SRDS), date: "2009", role: reviewer }
+  - { id: review-icdcs-2009, name: IEEE International Conference in Distributed Computing Systems (ICDCS), date: "2009", role: reviewer }
+  - { id: review-europar-2007, name: International Conference on Parallel and Distributed Computing (Europar), date: "2007", role: reviewer }
+  - { id: review-europar-2010, name: International Conference on Parallel and Distributed Computing (Europar), date: "2010", role: reviewer }
+  - { id: review-sac-2008, name: ACM Symposium on Applied Computing (SAC), date: "2008", role: reviewer }
+  - { id: review-sac-2010, name: ACM Symposium on Applied Computing (SAC), date: "2010", role: reviewer }
+  - { id: review-icsoc-2009, name: International Conference on Service-Oriented Computing (ICSOC), date: "2009", role: reviewer }
+  - { id: review-damap-2009, name: "EDBTs International Workshop on Data Management in Peer-to-peer Systems (DAMAP)", date: "2009", role: reviewer }
+  - { id: review-adsn-2010, name: International Workshop on Assurance in Distributed Systems and Networks (ADSN), date: "2010", role: reviewer }
+
+memberships:
+  - id: membership-asf
+    organization: Apache Software Foundation (ASF)
+    url: https://www.apache.org/
+    role: Committer
+  - id: membership-objectweb
+    organization: ObjectWeb Consortium
+    url: http://www.ow2.org
+    role: Member
+  - id: membership-jcp
+    organization: Java Community Process (JCP)
+    url: http://jcp.org
+    role: Member
+
+projects:
+  - id: proj-mdbook-bib
+    name: mdbook-bib
+    description: >-
+      Rust-based bibliography management plugin for mdBook (official Rust
+      documentation system). Active maintenance and community engagement
+      with significant adoption.
+    url: https://crates.io/crates/mdbook-bib
+    keywords:
+      - Rust
+      - mdBook
+      - Bibliography
+      - Open Source
+    roles:
+      - Maintainer
+
+leadership:
+  - name: Mentoring & Team Leadership
+    items:
+      - label: Research
+        description: >-
+          Mentored junior researchers across multiple teams; led cross-functional
+          product, engineering, and strategy discussions; enabled knowledge
+          transfer from research to production engineering.
+      - label: Academia
+        description: >-
+          Taught undergraduate courses in Operating Systems and Programming,
+          developing curriculum and guiding students through core concepts
+          and practical applications.
+  - name: Technical Communication
+    items:
+      - label: Presentations & Publications
+        description: >-
+          Presented research findings at both international and national
+          conferences, effectively communicating complex ideas to diverse
+          audiences. Delivered project updates in internal meetings within
+          corporate environments. Authored 10+ peer-reviewed publications
+          with extensive citations.
+  - name: Professional Service
+    items:
+      - label: Open Source & Review
+        description: >-
+          Committer and maintainer for Apache Omid, a high-performant and
+          scalable Transaction Manager for HBase; conference reviewer for
+          7+ international academic conferences; active open-source maintainer
+          of mdbook-bib (Rust-based bibliography management tool).
+
+interests:
+  - name: Cognitive Sciences & Interdisciplinary
+    description: >-
+      Beyond the core professional focus, but some way related to it, a strong
+      interest in the intersection of fields such as neuroscience, psychology,
+      decision-making, cognitive sciences, learning techniques, behavioral
+      economics, and philosophy, as they offer valuable insights into human
+      behavior, intelligence, and how the brain works (and why!). Deeply
+      fascinated by the mechanisms of human thought, learning, and behavior,
+      and how these insights can inform and inspire advancements in AI and
+      daily lives and wellbeing in general.
+    keywords:
+      - Neuroscience
+      - Psychology
+      - Decision-making
+      - Cognitive Sciences
+      - Learning Techniques
+      - Behavioral Economics
+      - Philosophy
+  - name: Sports & Wellness
+    description: >-
+      Staying active through activities like running, mountain biking, yoga,
+      cold-plunging, and playing tennis, which not only keep physically fit
+      but also provide a sense of balance and focus.
+    keywords:
+      - Running
+      - Mountain Biking
+      - Yoga
+      - Cold-plunging
+      - Tennis
+
+meta:
+  version: "1.0.0"
+  last_modified: "2026-02-13"
+  canonical: https://github.com/francisco-perez-sorrosal/cv/blob/main/2025_FranciscoPerezSorrosal_CV_English.pdf
