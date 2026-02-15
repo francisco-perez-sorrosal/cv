@@ -146,12 +146,15 @@ And setting up the Transport Type to `Streamable HTTP` and the URL to `http://lo
 
 > **Note**: Update the host and port as needed for your deployment.
 
-Currently I'm using `render.com` to host the MCP server. The configuration for Claude Desktop/Code is in the `config/claude.json` file. It will use `streamable-http` as transport protocol, deprecating finally `sse`.
+Currently I'm using `render.com` to host the MCP server. The remote MCP configuration is in `config/cv_mcp.json`. It uses `streamable-http` as transport protocol, deprecating `sse`.
 
 There's a script to install the Claude Desktop or Code config files in the root directory:
 
 ```sh
-./install.sh code   # install plugin from local dir + local MCP via pixi
+./install.sh code            # local: local plugin + local MCP via pixi (dev mode)
+./install.sh code remote     # remote: marketplace plugin (remote MCP built-in)
+./install.sh desktop         # local: build MCPB + skill, show install instructions
+./install.sh desktop remote  # remote: build skill + inject MCP config into Claude Desktop
 ```
 
 This will make the MCP server accessible at `https://fps-cv.onrender.com/mcp". You can check it also with the MCP inspector:

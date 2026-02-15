@@ -4,9 +4,10 @@
 #
 # Usage:
 #   ./install.sh                       # remote install (default, curl-friendly)
-#   ./install.sh desktop               # build MCPB + skill, show manual install steps
-#   ./install.sh code                  # dev: local plugin + local MCP
-#   ./install.sh code remote           # marketplace plugin (remote MCP built-in)
+#   ./install.sh desktop               # local: build MCPB + skill, show manual install steps
+#   ./install.sh desktop remote        # remote: build skill + inject MCP config into Claude Desktop
+#   ./install.sh code                  # local: local plugin + local MCP (dev mode)
+#   ./install.sh code remote           # remote: marketplace plugin (remote MCP built-in)
 #
 # Remote usage (curl):
 #   curl -sSL https://raw.githubusercontent.com/francisco-perez-sorrosal/cv/mcp/install.sh | bash
@@ -14,12 +15,13 @@
 set -euo pipefail
 
 show_usage() {
-    echo "Usage: $0 [desktop|code] [remote]"
+    echo "Usage: $0 [desktop|code] [local|remote]"
     echo ""
-    echo "  (no args)        Install Claude Code plugin from bit-agora marketplace"
-    echo "  desktop          Build packages and show Claude Desktop install instructions"
-    echo "  code             Install Claude Code plugin from local directory (dev mode)"
-    echo "  code remote      Install Claude Code plugin from bit-agora marketplace"
+    echo "  (no args)          Install Claude Code plugin from bit-agora marketplace"
+    echo "  desktop             Build MCPB + skill, show Claude Desktop install instructions"
+    echo "  desktop remote      Build skill + inject remote MCP config into Claude Desktop"
+    echo "  code                Install Claude Code plugin with local MCP (dev mode)"
+    echo "  code remote         Install Claude Code plugin from bit-agora marketplace"
     exit 1
 }
 
@@ -37,18 +39,22 @@ if [ $# -eq 0 ]; then
 fi
 
 MODE="$1"
+MCP_TARGET="${2:-local}"
 
 case "$MODE" in
     desktop)
-        make install-claude-desktop
-        ;;
-    code)
-        PLUGIN_SOURCE="${2:-dev}"
-        if [ "$PLUGIN_SOURCE" != "dev" ] && [ "$PLUGIN_SOURCE" != "remote" ]; then
-            echo "Error: second argument must be 'dev' or 'remote'"
+        if [ "$MCP_TARGET" != "local" ] && [ "$MCP_TARGET" != "remote" ]; then
+            echo "Error: second argument must be 'local' or 'remote'"
             show_usage
         fi
-        make install-claude-code PLUGIN_SOURCE="$PLUGIN_SOURCE"
+        make install-claude-desktop MCP_TARGET="$MCP_TARGET"
+        ;;
+    code)
+        if [ "$MCP_TARGET" != "local" ] && [ "$MCP_TARGET" != "remote" ]; then
+            echo "Error: second argument must be 'local' or 'remote'"
+            show_usage
+        fi
+        make install-claude-code MCP_TARGET="$MCP_TARGET"
         ;;
     *)
         echo "Error: first argument must be 'desktop' or 'code'"
