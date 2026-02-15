@@ -22,7 +22,6 @@ latexmk -c 2025_FranciscoPerezSorrosal_CV_English.tex     # clean aux files
 ```bash
 pixi install                                # install dependencies
 pixi run mcps --transport stdio             # run locally (stdio)
-pixi run mcps --transport sse               # run locally (SSE)
 pixi run mcps --transport streamable-http   # run locally (streamable HTTP)
 
 ./install.sh                     # remote install from bit-agora marketplace (curl-friendly)
@@ -75,8 +74,8 @@ src/cv_mcp_server/
     resume.py              # Pydantic models: Resume, WorkEntry, Project (with cross-refs), etc.
     semantics.py           # Pydantic models: SemanticOverlay, Topic, Relationship, etc.
   data/
-    resume.yaml            # Structured CV data (source of truth, 149 entry IDs)
-    resume-semantics.yaml  # Semantic overlay (33 topics, 63 annotations, 22 relationships)
+    resume.yaml            # Structured CV data (source of truth)
+    resume-semantics.yaml  # Semantic overlay (topics, annotations, relationships)
   prompts/
     summary.yaml           # Configurable CV summary prompt
 .claude-plugin/
@@ -115,7 +114,7 @@ RELEASE_PROCESS.md        # Release workflow documentation
 
 Data tools (fetch CV content):
 - `get_cv` - Full CV in markdown or PDF binary
-- `get_cv_section(section_name)` - Any section by name (case-insensitive)
+- `get_cv_sections(section_names, enrich)` - One or more sections by name (case-insensitive)
 - `list_cv_sections` - Available section names with line counts
 - `get_link(name)` - Profile/document link by network name
 - `list_links` - All available links with URLs
@@ -186,7 +185,8 @@ The skill is the preferred mechanism for CV summarization. The `summarize_cv` to
 - **Renderer** (`renderers.py`): generates markdown from Resume model (full doc + per-section)
 - Entry IDs follow `<type>-<slug>` convention (e.g., `work-yahoo-kgs-2023`, `pub-htl-acl-2019`)
 - MCP resources use hierarchical `fps-cv://` URI scheme
-- Server supports stdio and streamable-http transports
+- Server supports stdio and streamable-http transports (SSE is deprecated)
+- Run tests: `pixi run test`, `pixi run test-unit`, `pixi run test-integration`
 - MCPB bundles vendor dependencies in `lib/` directory
 - `manifest.json` defines the MCPB package metadata and tool declarations
 - The `cv-analyst` skill in `skills/` handles CV summarization for skill-compatible clients; `summarize_cv` tool serves as fallback for other clients
@@ -201,5 +201,4 @@ Prefer delegating to specialized agents (researcher, context-engineer, implement
 
 - The CV contains real professional information - handle appropriately
 - GitHub display README is `README_USER.md` (symlinked from `.github/README.md`)
-- MCP server includes usage tracking via mcpcat
 - CI/CD workflows handle auto-rebasing, MCPB creation checks, releases, and Claude-powered code review

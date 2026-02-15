@@ -53,8 +53,8 @@
       "description": "List available CV section names with approximate line counts."
     },
     {
-      "name": "get_cv_section",
-      "description": "Retrieve a single named section from the CV (case-insensitive)."
+      "name": "get_cv_sections",
+      "description": "Retrieve one or more CV sections by name (case-insensitive, accepts a list)."
     },
     {
       "name": "get_cv_pdf_link",
