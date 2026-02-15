@@ -1,4 +1,4 @@
-"fps_cv_mcp": {
+{
   "command": "npx",
   "args": [
     "mcp-remote",

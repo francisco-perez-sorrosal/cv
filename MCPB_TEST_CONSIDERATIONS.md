@@ -288,7 +288,7 @@ def test_python_version_compatibility():
 def test_claude_desktop_integration():
     """Test integration with Claude Desktop"""
     # This would test actual Claude Desktop integration
-    # Load configuration from config/claude.json
+    # Load configuration from config/cv_mcp.json
     # Test server startup and communication
     pass
 

@@ -32,15 +32,16 @@ pixi run mcps --transport stdio             # run locally (stdio)
 pixi run mcps --transport streamable-http   # run locally (streamable HTTP)
 
 ./install.sh                     # remote install from bit-agora marketplace (curl-friendly)
-./install.sh desktop             # build packages + Claude Desktop install instructions
-./install.sh code                # dev: local plugin + local MCP
-./install.sh code remote         # marketplace plugin (remote MCP built-in)
+./install.sh desktop             # local: build MCPB + skill, show install instructions
+./install.sh desktop remote      # remote: build skill + inject MCP config into Claude Desktop
+./install.sh code                # local: local plugin + local MCP (dev mode)
+./install.sh code remote         # remote: marketplace plugin (remote MCP built-in)
 ```
 
 ### Claude Code Plugin
 ```bash
-make install-claude-code                        # dev (default): local plugin + local MCP override
-make install-claude-code PLUGIN_SOURCE=remote   # marketplace plugin (remote MCP built-in)
+make install-claude-code                       # local (default): local plugin + local MCP override
+make install-claude-code MCP_TARGET=remote     # marketplace plugin (remote MCP built-in)
 ```
 
 ### MCPB Bundle Build
@@ -95,7 +96,7 @@ skills/
     references/
       summary-presets.md  # Pre-configured profiles (hiring screen, exec briefings)
 config/
-  claude.json             # Claude Desktop/Code MCP configuration
+  cv_mcp.json             # Remote MCP server config (render.com, used for desktop remote injection)
 scripts/
   release.sh              # Release automation
 dist/
