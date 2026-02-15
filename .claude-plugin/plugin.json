@@ -1,6 +1,6 @@
 {
   "name": "cv",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "Francisco Perez-Sorrosal's CV — MCP server and analysis skill",
   "author": {
     "name": "Francisco Perez-Sorrosal",
@@ -10,7 +10,6 @@
   "repository": "https://github.com/francisco-perez-sorrosal/cv",
   "license": "MIT",
   "keywords": ["cv", "mcp", "skill"],
-  "commands": ["./commands/"],
   "skills": ["./skills/"],
   "mcpServers": {
     "fps_cv_mcp": {

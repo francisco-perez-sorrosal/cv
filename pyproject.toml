@@ -1,7 +1,7 @@
 [project]
 name = "cv-mcp-server"
-version = "0.0.3"
-description = "MCP server using Anthropic library to expose a PDF CV as a resource."
+version = "0.0.5"
+description = "MCP server with structured YAML data layer, semantic overlay, and query tools for Francisco Perez-Sorrosal's CV"
 license = {text = "MIT"}
 authors = [
     {name = "Francisco Perez Sorrosal", email = "fperezsorrosal@gmail.com"}
@@ -18,7 +18,6 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "pymupdf4llm>=0.0.24,<0.0.25",
     "mcp[cli]>=1.9.2,<2",
     "loguru>=0.7.3,<0.8",
     "pyyaml>=6.0,<7.0",
@@ -82,14 +81,14 @@ markers = ["integration: tests that load real YAML data files"]
 
 [tool.black]
 line-length = 88
-target-version = ['py311', 'py312']
+target-version = ['py313']
 
 [tool.isort]
 profile = "black"
 line_length = 88
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.13"
 warnings_as_errors = true
 strict = true
 # For FastAPI and Pydantic, if needed:

@@ -101,25 +101,24 @@ This allows running the server via pixi after the package is installed in editab
 
 #### Dev Local Installation for Claude Desktop/Code (without DXT)
 
-Add this to your Claude Desktop (`claude_desktop_config.json`) or Code MCP server configurations:
+The recommended local development setup uses pixi:
 
-TODO: Check Locally with this config.
+```bash
+# Install plugin + local MCP via pixi (stdio transport)
+make install-claude-code
+
+# Or use the install script directly
+./install.sh code
+```
+
+For manual configuration, add this to your Claude Desktop (`claude_desktop_config.json`) or Code MCP server configurations:
 
 ```json
 {
   "fps_cv_mcp": {
-    "command": "uv",
-    "args": [
-      "run",
-      "--with", "mcp[cli]",
-      "--with", "pymupdf4llm",
-      "--with", "httpx",
-      "--with", "mcpcat",
-      "--with", "loguru",
-      "mcp", "run",
-      "src/cv_mcp_server/main.py",
-      "--transport", "streamable-http"
-    ]
+    "command": "pixi",
+    "args": ["run", "mcps", "--transport", "stdio"],
+    "cwd": "/path/to/cv"
   }
 }
 ```
@@ -168,8 +167,6 @@ Render requires `requirements.txt` to be present in the root directory. You can 
 ```bash
 uv pip compile pyproject.toml > requirements.txt
 ```
-
-TODO: Develop an install process from a python package directly (a la DTX/MCP Bundles (MCPB))
 
 Also requires `runtime.txt` to be present in the root directory with the Python version specified:
 
