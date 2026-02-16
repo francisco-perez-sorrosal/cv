@@ -114,7 +114,7 @@ def get_tailored_cv(
     tailoring_config: str = Field(
         description=(
             "JSON string of TailoringSpec. Controls section ordering, "
-            "entry emphasis (weight 0-2, 0=omit), keyword highlighting, "
+            "entry emphasis (weight 0-2, 0=omit), profile override, "
             "and page budget. See TailoringSpec schema for full field definitions."
         )
     ),
@@ -122,7 +122,7 @@ def get_tailored_cv(
     """Render a tailored LaTeX CV from a TailoringSpec.
 
     The tailoring config controls section ordering, entry emphasis,
-    keyword highlighting, and profile override. Returns compilable LaTeX source.
+    and profile override. Returns compilable LaTeX source.
     Use this tool after analyzing a job description to produce a targeted CV.
     """
     try:

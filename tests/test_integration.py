@@ -118,6 +118,21 @@ class TestWorkQueries:
         assert len(results) >= 1
 
 
+class TestGetTailoredCvTool:
+    def test_invalid_json_returns_schema(self):
+        from cv_mcp_server.main import get_tailored_cv
+
+        result = get_tailored_cv('{"not": "a valid spec"}')
+        assert "Invalid TailoringSpec" in result
+        assert "json_schema" in result.lower() or "properties" in result
+
+    def test_empty_string_returns_schema(self):
+        from cv_mcp_server.main import get_tailored_cv
+
+        result = get_tailored_cv("")
+        assert "Invalid TailoringSpec" in result
+
+
 class TestRenderTailoredLatexRealData:
     def test_render_tailored_latex_real_data(self, real_store):
         spec = TailoringSpec(
@@ -136,3 +151,25 @@ class TestRenderTailoredLatexRealData:
         assert r"\section{Skills}" in tailored
         assert r"\section{Education}" in tailored
         assert len(tailored) < len(full)
+
+    def test_section_names_match_list_cv_sections(self, real_store):
+        """Regression test for F-02: section names in tailored template must match
+        the names returned by list_cv_sections (markdown renderer)."""
+        from cv_mcp_server.renderers import section_names
+
+        md_names = section_names(real_store)
+        # These three sections had mismatched names before the fix
+        previously_mismatched = [
+            "Courses and Certifications",
+            "Leadership & Communication",
+            "Other Activities Related to CS",
+        ]
+        for name in previously_mismatched:
+            assert name in md_names, f"'{name}' not in list_cv_sections output"
+            spec = TailoringSpec(
+                job_title="Test",
+                section_order=[SectionDirective(section_name=name, include=True, position=0)],
+            )
+            tailored = render_tailored_latex(real_store, spec)
+            # Each section renders its LaTeX \section{} -- verify it appears
+            assert r"\section{" in tailored, f"Section '{name}' not rendered in tailored output"
