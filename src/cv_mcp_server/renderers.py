@@ -1,7 +1,8 @@
-"""Template-based markdown renderer for the Resume model.
+"""Template-based renderers for the Resume model.
 
-Uses Jinja2 templates to generate markdown matching the LaTeX CV structure.
-Supports both full-document and per-section rendering.
+Uses Jinja2 templates to generate markdown and LaTeX output from structured
+CV data. Supports both full-document and per-section rendering for markdown,
+and full-document rendering for LaTeX.
 """
 
 from __future__ import annotations
@@ -110,6 +111,17 @@ def _template_context(store: ResumeStore, enrich: bool) -> dict:
     )
     total_citations = sum(p.citations for p in resume.publications)
 
+    # Academic publications: those published within academic work date ranges
+    academic_years: set[int] = set()
+    for w in academic:
+        s = int(w.start_date[:4])
+        e = int(w.end_date[:4]) if w.end_date else s
+        academic_years.update(range(s, e + 1))
+    academic_publications = [
+        p for p in sorted_publications
+        if int(p.release_date[:4]) in academic_years
+    ]
+
     b = resume.personal_info
     contact_parts = []
     if b.location.city:
@@ -140,6 +152,7 @@ def _template_context(store: ResumeStore, enrich: bool) -> dict:
         "committers": committers,
         "members": members,
         "sorted_publications": sorted_publications,
+        "academic_publications": academic_publications,
         "total_citations": total_citations,
         "contact_parts": contact_parts,
         "profile_links": profile_links,
@@ -238,3 +251,112 @@ def _period_filter(obj) -> str:
 def _patent_status_filter(status) -> str:
     """Format patent status."""
     return f" ({status.value})" if status else ""
+
+
+# --- LaTeX rendering ---
+
+_LATEX_SPECIAL = re.compile(r"([\\{}$&#%_])")
+_LATEX_TILDE = re.compile(r"~")
+_LATEX_CARET = re.compile(r"\^")
+
+
+def render_latex(store: ResumeStore) -> str:
+    """Render a complete Resume as LaTeX."""
+    env = _create_latex_env(store)
+    template = env.get_template("cv.tex.j2")
+    context = _template_context(store, enrich=False)
+    return template.render(**context)
+
+
+def _create_latex_env(store: ResumeStore) -> Environment:
+    """Create a Jinja2 environment configured for LaTeX output."""
+    env = Environment(
+        loader=FileSystemLoader(TEMPLATES_DIR),
+        trim_blocks=True,
+        lstrip_blocks=True,
+        keep_trailing_newline=True,
+    )
+    env.filters["inst_name"] = _make_inst_name_filter(store.resume)
+    env.filters["latex_period"] = _latex_period_filter
+    env.filters["patent_status"] = _patent_status_filter
+    env.filters["latex_escape"] = _latex_escape_filter
+    env.filters["strip_period"] = _strip_trailing_period
+    env.filters["employer_name"] = _make_employer_name_filter(store.resume)
+    return env
+
+
+def _strip_trailing_period(text: str) -> str:
+    """Strip trailing period from text (for items joined with semicolons)."""
+    return text.rstrip(".")
+
+
+def _latex_escape_filter(text: str) -> str:
+    """Escape LaTeX special characters and convert Unicode symbols."""
+    text = _LATEX_SPECIAL.sub(r"\\\1", text)
+    text = _LATEX_TILDE.sub(r"\\textasciitilde{}", text)
+    text = _LATEX_CARET.sub(r"\\textasciicircum{}", text)
+    text = text.replace("≈", "$\\simeq$")
+    text = text.replace("é", "\\'e")
+    text = text.replace("ó", "\\'o")
+    text = text.replace("í", "\\'i")
+    text = text.replace("ñ", "\\~n")
+    return text
+
+
+_MONTH_NAMES = {
+    "01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr",
+    "05": "May", "06": "Jun", "07": "Jul", "08": "Aug",
+    "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dec",
+}
+
+
+def _latex_period_filter(obj) -> str:
+    """Format a date range with LaTeX en-dash.
+
+    Handles: year-only (2023), year-month (2022-06), same-year ranges,
+    and month-level ranges like 'Jun--Dec 2022'.
+    """
+    start = getattr(obj, "start_date", "")
+    end = getattr(obj, "end_date", "")
+    if not start:
+        return ""
+    if not end:
+        return f"{start}--Now"
+
+    s_year, s_month = _parse_date(start)
+    e_year, e_month = _parse_date(end)
+
+    if s_year == e_year and not s_month and not e_month:
+        return s_year
+    if s_year == e_year and s_month and e_month:
+        return f"{_MONTH_NAMES[s_month]}--{_MONTH_NAMES[e_month]} {s_year}"
+    if s_month:
+        start_fmt = f"{_MONTH_NAMES[s_month]} {s_year}" if s_month else s_year
+    else:
+        start_fmt = s_year
+    if e_month:
+        end_fmt = f"{_MONTH_NAMES[e_month]} {e_year}" if e_month else e_year
+    else:
+        end_fmt = e_year
+    return f"{start_fmt}--{end_fmt}"
+
+
+def _parse_date(date_str: str) -> tuple[str, str]:
+    """Parse 'YYYY' or 'YYYY-MM' into (year, month) tuple."""
+    parts = date_str.split("-")
+    year = parts[0]
+    month = parts[1] if len(parts) > 1 else ""
+    return year, month
+
+
+def _make_employer_name_filter(resume: Resume):
+    """Create an employer_name filter that respects employer_display overrides."""
+    def employer_name(w: WorkEntry) -> str:
+        if w.employer_display:
+            return w.employer_display
+        inst = resume.institution_by_id(w.institution_id)
+        inst_name = inst.name if inst else w.institution_id
+        if w.department:
+            return f"{w.department} @ {inst_name}"
+        return inst_name
+    return employer_name

@@ -1,0 +1,33 @@
+{% set period = w | latex_period %}
+{% set employer = w | employer_name | latex_escape %}
+{% set loc = w.location if w.location else "" %}
+{% if w.roles %}
+{% set roles_str = "\\textbf{Roles}: " ~ (w.roles | join(", ") | latex_escape) %}
+{% else %}
+{% set roles_str = "" %}
+{% endif %}
+\cventry{{ "{" }}{{ period }}{{ "}" }}{{ "{" }}\large {{ w.position | latex_escape }}{{ "}" }}{{ "{" }}{{ employer }}{{ "}" }}{{ "{" }}{{ loc }}{{ "}" }}{{ "{" }}{{ roles_str }}{{ "}" }}{{ "{" }}%
+{% if w.projects %}
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+{% for p in w.projects %}
+{% set p_period = p | latex_period %}
+{% set show_p_period = p_period and p_period != period %}
+{% set p_header %}{% if show_p_period %}{{ p.name | latex_escape }} ({{ p_period }}){% else %}{{ p.name | latex_escape }}{% endif %}{% endset %}
+\item \textbf{{ "{" }}{{ p_header }}{{ "}" }}:
+{%- if p.description and not p.description_label and p.goal %} {{ p.description | latex_escape }}{% endif %}
+{%- if p.goal %} \textbf{{ "{" }}Goal{{ "}" }} -- {{ p.goal | latex_escape }}{% endif %}
+{%- if p.description and p.description_label %} \textbf{{ "{" }}{{ p.description_label }}{{ "}" }} -- {{ p.description | latex_escape }}{% endif %}
+{%- if p.description and not p.description_label and not p.goal %} {{ p.description | latex_escape }}{% endif %}
+{%- if p.achievements %} \textbf{{ "{" }}{{ "Achievement" if p.achievements | length == 1 else "Achievements" }}{{ "}" }} --{% if p.achievements | length == 1 %} {{ p.achievements[0] | latex_escape }}{% else %}{% for a in p.achievements %} ({{ loop.index }}) {{ a | latex_escape | strip_period }}{% if not loop.last %};{% else %}.{% endif %}{% endfor %}{% endif %}{% endif %}
+{%- if p.highlights %}{% for h in p.highlights %} {{ h | latex_escape }}{% endfor %}{% endif %}
+
+{% endfor %}
+\end{itemize}
+{% elif w.highlights %}
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+{% for h in w.highlights %}
+\item {{ h | latex_escape }}
+{% endfor %}
+\end{itemize}
+{% endif %}
+{{ "}" }}

@@ -305,3 +305,6 @@ server.json
 
 # Agents related
 .ai-work/
+
+# Temporal
+tmp/

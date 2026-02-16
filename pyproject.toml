@@ -51,6 +51,7 @@ dev = { features = ["dev"], solve-group = "default" }
 [tool.pixi.tasks]
 mcps="python src/cv_mcp_server/main.py"
 start="python src/cv_mcp_server/main.py"
+generate-tex = { cmd = "python scripts/generate_tex.py", description = "Generate LaTeX CV from YAML data" }
 test = "pytest tests/ -v"
 test-unit = "pytest tests/ -v -m 'not integration'"
 test-integration = "pytest tests/ -v -m integration"
