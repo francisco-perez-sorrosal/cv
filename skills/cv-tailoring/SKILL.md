@@ -26,8 +26,8 @@ Before starting, ensure access to:
 
 One of:
 - **Job description provided directly**: Use the text as-is.
-- **Job ID provided**: Call `get_job_details` (or `get_jobs_raw_metadata` for legacy) with the job ID to retrieve full metadata.
-- **No job context**: Ask the user to either provide a job description, a job ID, or run a job search first (the `linkedin-job-search` skill handles this).
+- **Job search needed**: Call `explore_latest_jobs(location, keywords, distance, limit)` to scrape fresh LinkedIn results, or `query_jobs(...)` to search the cached job database with composable filters.
+- **No job context**: Ask the user to either provide a job description or specify search criteria (keywords, location) to discover relevant postings.
 
 ### Step 2: Retrieve CV Content
 
@@ -99,9 +99,8 @@ Produce six deliverables:
 
 ### LinkedIn MCP Tools (optional)
 
-- `get_url_for_jobs_search` -- construct a job search URL
-- `get_new_job_ids` -- retrieve job IDs from search results
-- `get_jobs_raw_metadata` -- retrieve full job metadata by ID
+- `explore_latest_jobs(location, keywords, distance, limit)` -- scrape fresh LinkedIn job listings directly (no database, for exploration/testing)
+- `query_jobs(company?, location?, keywords?, ...)` -- query cached job database with composable filters and configurable response sections
 
 ### Host Agent Tools
 
