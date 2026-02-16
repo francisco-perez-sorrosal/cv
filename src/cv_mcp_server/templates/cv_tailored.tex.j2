@@ -1,48 +1,55 @@
 {% include '_preamble.tex.j2' %}
 
-%------------- BEGIN DOCUMENT --------------------------------------------
+%------------- TAILORING: HIGHLIGHT COMMAND ------------------------------------
+% Custom command for keyword emphasis in tailored CVs
+{% raw %}
+\newcommand{\highlight}[1]{\textbf{#1}}
+{% endraw %}
+%------------- TAILORING: HIGHLIGHT COMMAND ------------------------------------
+
+%------------- BEGIN DOCUMENT --------------------------------------------------
 
 \begin{document}
 
 \maketitle
 \vspace{-0.5cm}
 
-%------------- PROFILE AND GOALS --------------------------------------------
-{% if resume.personal_info.summary %}
+%------------- DYNAMIC SECTIONS (ordered by TailoringSpec) --------------------
+{% for section_name in included_sections %}
+
+%------------- {{ section_name | upper }} --------------------------------------
+{% if section_name == "Profile and Goals" %}
+{% if tailoring.profile_override %}
+\section{Profile and Goals}
+
+\small {{ tailoring.profile_override | latex_escape }}
+{% elif resume.personal_info.summary %}
 \section{Profile and Goals}
 
 \small {{ resume.personal_info.summary | latex_escape }}
 {% endif %}
-%------------- PROFILE AND GOALS --------------------------------------------
 
-%------------- PROFESSIONAL EXPERIENCE --------------------------------------------
+{% elif section_name == "Professional Experience" %}
 {% if industry_work %}
 \section{Professional Experience}
-
-% For Professional Experience, use the \cventry syntax: \cventry{{ "{" }}{{ "{" }}period/year(s){{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}job position{{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}company{{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}location (optional){{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}role(s){{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}description using LaTeXitemized lists{{ "}" }}{{ "}" }}
 
 {% for w in industry_work %}
 {% include '_work_entry.tex.j2' %}
 
 {% endfor %}
 {% endif %}
-%------------- PROFESSIONAL EXPERIENCE --------------------------------------------
 
-%---------------------------------- PATENTS --------------------------------------------
+{% elif section_name == "Patents" %}
 {% if resume.patents %}
 \section{Patents}
-
-% For Patents, use the \cventry syntax: \cventry{{ "{" }}{{ "{" }}year{{ "}" }}{{ "}" }}{{ "{" }}pat. number{{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}title{{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}Status: App. (application)or Pat. (patent){{ "}" }}{{ "}" }}{}{}
 
 {% for p in resume.patents %}
 \cventry{{ "{" }}{{ p.date }}{{ "}" }}{{ "{" }}{{ p.number }}{{ "}" }}{{ "{" }}{{ p.title | latex_escape }}{{ "}" }}{{ "{" }}{{ "App" if p.status.value == "application" else "Pat" }}{{ "}" }}{}{}
 {% endfor %}
 {% endif %}
-%---------------------------------- PATENTS --------------------------------------------
 
-%------------- ACADEMIC RESEARCH EXPERIENCE --------------------------------------------
+{% elif section_name == "Academic Research Experience" %}
 {% if academic_work %}
-
 \section{Academic Research Experience}
 
 {% for w in academic_work %}
@@ -60,11 +67,9 @@
 }
 {% endif %}
 {% endif %}
-%------------- ACADEMIC RESEARCH EXPERIENCE --------------------------------------------
 
-%------------- SKILLS --------------------------------------------
+{% elif section_name == "Skills" %}
 {% if resume.skills %}
-
 \section{Skills}
 
 {% for sg in resume.skills %}
@@ -75,11 +80,9 @@
 
 {% endfor %}
 {% endif %}
-%------------- SKILLS --------------------------------------------
 
-%------------- EDUCATION --------------------------------------------
+{% elif section_name == "Courses" %}
 {% if resume.certificates %}
-
 \section{Courses}
 
 {% for c in resume.certificates %}
@@ -90,8 +93,9 @@
 \cventry{{ "{" }}{{ c.date }}{{ "}" }}{{ "{" }}{{ c.name | latex_escape }}{{ "}" }}{{ "{" }}{{ inst | latex_escape }}{{ "}" }}{{ "{" }}{{ loc_or_format }}{{ "}" }}{{ "{" }}{% if loc and cert_link %}{{ loc }}{{ "}" }}{{ "{" }}{{ cert_link }}{% elif loc %}{{ loc }}{% elif cert_link %}{{ cert_link }}{% endif %}{{ "}" }}{}
 {% endfor %}
 {% endif %}
-{% if resume.education %}
 
+{% elif section_name == "Education" %}
+{% if resume.education %}
 \section{Education}
 
 {% for e in resume.education %}
@@ -107,11 +111,8 @@
 {% endfor %}
 {% endif %}
 
-%------------- EDUCATION --------------------------------------------
-
-%------------- LEADERSHIP AND COMMUNICATION SKILLS --------------------------------------------
+{% elif section_name == "Leadership and Communication" %}
 {% if resume.leadership %}
-
 \section{Leadership \& Communication}
 
 {% for cat in resume.leadership %}
@@ -122,11 +123,9 @@
 
 {% endfor %}
 {% endif %}
-%------------- LEADERSHIP AND COMMUNICATION SKILLS --------------------------------------------
 
-%------------- LANGUAGES --------------------------------------------
+{% elif section_name == "Languages" %}
 {% if resume.languages %}
-
 \section{Languages}
 
 {% set lang_pairs = [] %}
@@ -143,9 +142,7 @@
 {% endfor %}
 {% endif %}
 
-%------------- LANGUAGES --------------------------------------------
-
-%------------- OTHER ACTIVITIES RELATED TO CS --------------------------------------------
+{% elif section_name == "Other Activities" %}
 {% if resume.projects or resume.memberships or resume.conferences %}
 \section{Other Activities Related to Computer Science}
 {% if resume.projects %}
@@ -199,9 +196,7 @@
 {% endif %}
 {% endif %}
 
-%------------- OTHER ACTIVITIES RELATED TO CS --------------------------------------------
-
-%------------- HOBBIES AND INTERESTS --------------------------------------------
+{% elif section_name == "Hobbies and Interests" %}
 {% if resume.interests %}
 \section{Hobbies and Interests}
 {% for i in resume.interests %}
@@ -209,25 +204,9 @@
 {{ "}" }}
 {% endfor %}
 {% endif %}
-%------------- HOBBIES AND INTERESTS --------------------------------------------
 
-{% raw %}
-% ------------------ PUBLICATIONS --------------------------------------------
-% Publications from a BibTeX file without multibib\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}% for BibTeX numerical labels
-\nocite{*}
-\bibliographystyle{plain}
-%\bibliography{publications}       % 'publications' is the name of a BibTeX file
-
-% Publications from a BibTeX file using the multibib package
-%\section{Publications}
-%\nocitebook{book1,book2}
-%\bibliographystylebook{plain}
-%\bibliographybook{publications}   % 'publications' is the name of a BibTeX file
-%\nocitemisc{misc1,misc2,misc3}
-%\bibliographystylemisc{plain}
-%\bibliographymisc{publications}   % 'publications' is the name of a BibTeX file
-
-% ------------------ END OF DOCUMENT --------------------------------------------
+{% endif %}
+{% endfor %}
+%------------- END DYNAMIC SECTIONS -------------------------------------------
 
 \end{document}
-{% endraw %}

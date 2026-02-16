@@ -75,20 +75,23 @@ pixi run generate-tex              # generate LaTeX CV from YAML data
 ```
 src/cv_mcp_server/
   __init__.py
-  main.py                 # MCP server: 15 tools, 15 resources, 1 prompt
+  main.py                 # MCP server: 16 tools, 15 resources, 1 prompt
   store.py                # ResumeStore: load, validate, query, write
   renderers.py            # Markdown and LaTeX renderers (full CV and per-section, 15 sections)
   utils.py                # Utility functions (YAML prompt loading)
   models/
-    __init__.py            # Re-exports Resume, SemanticOverlay
+    __init__.py            # Re-exports Resume, SemanticOverlay, TailoringSpec
     resume.py              # Pydantic models: Resume, WorkEntry, Project (with cross-refs), etc.
     semantics.py           # Pydantic models: SemanticOverlay, Topic, Relationship, etc.
+    tailoring.py           # Pydantic models: TailoringSpec, SectionDirective, EntryEmphasis, KeywordHighlight
   data/
     resume.yaml            # Structured CV data (source of truth)
     resume-semantics.yaml  # Semantic overlay (topics, annotations, relationships)
   templates/
     cv.md.j2               # Jinja2 template for markdown output
     cv.tex.j2              # Jinja2 template for LaTeX output (moderncv)
+    cv_tailored.tex.j2     # Jinja2 template for tailored LaTeX output
+    _preamble.tex.j2       # Shared LaTeX preamble partial
     _work_entry.md.j2      # Markdown work entry partial
     _work_entry.tex.j2     # LaTeX work entry partial
   prompts/
@@ -101,6 +104,10 @@ skills/
     SKILL.md              # Agent Skill: CV summarization for different audiences
     references/
       summary-presets.md  # Pre-configured profiles (hiring screen, exec briefings)
+  cv-tailoring/
+    SKILL.md              # Agent Skill: Job-targeted CV tailoring with LaTeX/PDF output
+    references/
+      methodology.md      # Tailoring methodology (analysis, optimization, rendering)
 config/
   cv_mcp.json             # Remote MCP server config (render.com, used for desktop remote injection)
 scripts/
@@ -147,6 +154,9 @@ Semantic query tools:
 - `get_relationships(entry_id)` - Cross-references for an entry
 - `get_skill_profile(topic?)` - Skill proficiency levels
 - `get_entry_context(entry_id)` - Full semantic context (topics, relationships, impact)
+
+Rendering tools:
+- `get_tailored_cv(tailoring_config)` - Render a tailored LaTeX CV from a TailoringSpec JSON (section reordering, entry filtering, keyword highlighting)
 
 Prompt-wrapping tool (fallback for non-skill clients):
 - `summarize_cv` - Configurable CV summary (depth, context, emphasis, audience, tone, format, length)
@@ -208,7 +218,7 @@ Links:
 - **Data layer**: `resume.yaml` (structured CV, source of truth) + `resume-semantics.yaml` (semantic overlay with topic taxonomy)
 - **Pydantic models**: `models/resume.py` (Resume hierarchy) and `models/semantics.py` (SemanticOverlay hierarchy)
 - **ResumeStore** (`store.py`): loads both YAML files, validates cross-references, provides query and write methods
-- **Renderer** (`renderers.py`): generates markdown and LaTeX from Resume model using Jinja2 templates (full doc + per-section)
+- **Renderer** (`renderers.py`): generates markdown, LaTeX, and tailored LaTeX from Resume model using Jinja2 templates (full doc + per-section + tailored)
 - Entry IDs follow `<type>-<slug>` convention (e.g., `work-yahoo-kgs-2023`, `pub-htl-acl-2019`)
 - MCP resources use hierarchical `fps-cv://` URI scheme
 - Server supports stdio and streamable-http transports (SSE is deprecated)
@@ -216,6 +226,7 @@ Links:
 - MCPB bundles vendor dependencies in `lib/` directory
 - `manifest.json` defines the MCPB package metadata and tool declarations
 - The `cv-analyst` skill in `skills/` handles CV summarization for skill-compatible clients; `summarize_cv` tool serves as fallback for other clients
+- The `cv-tailoring` skill in `skills/` handles job-targeted CV tailoring with LaTeX/PDF output via the `get_tailored_cv` tool
 
 ## Plugins
 

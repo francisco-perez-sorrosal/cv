@@ -14,6 +14,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 from cv_mcp_server.models.resume import InstitutionType, Resume, WorkEntry
+from cv_mcp_server.models.tailoring import TailoringSpec
 from cv_mcp_server.store import ResumeStore
 
 TEMPLATES_DIR = Path(__file__).parent / "templates"
@@ -266,6 +267,69 @@ def render_latex(store: ResumeStore) -> str:
     template = env.get_template("cv.tex.j2")
     context = _template_context(store, enrich=False)
     return template.render(**context)
+
+
+def render_tailored_latex(store: ResumeStore, spec: TailoringSpec) -> str:
+    """Render a tailored LaTeX CV based on a TailoringSpec.
+
+    Uses cv_tailored.tex.j2 which supports:
+    - Section reordering via spec.section_order
+    - Entry emphasis via spec.entry_emphasis (weight=0 omits entries)
+    - Keyword highlighting via spec.keywords
+    - Profile summary override via spec.profile_override
+    """
+    context = _template_context(store, enrich=False)
+
+    emphasis_map = _build_emphasis_map(spec)
+    keyword_set = _build_keyword_set(spec)
+    included_sections = _build_included_sections(spec)
+
+    context["industry_work"] = _filter_work_entries(context["industry_work"], emphasis_map)
+    context["academic_work"] = _filter_work_entries(context["academic_work"], emphasis_map)
+
+    context["tailoring"] = spec.model_dump()
+    context["emphasis_map"] = emphasis_map
+    context["keyword_set"] = keyword_set
+    context["included_sections"] = included_sections
+
+    env = _create_latex_env(store)
+    template = env.get_template("cv_tailored.tex.j2")
+    return template.render(**context)
+
+
+def _build_emphasis_map(spec: TailoringSpec) -> dict[str, float]:
+    """Map entry_id -> weight from a TailoringSpec's entry_emphasis list."""
+    return {e.entry_id: e.weight for e in spec.entry_emphasis}
+
+
+def _build_keyword_set(spec: TailoringSpec) -> set[str]:
+    """Extract keyword terms with positive weight from a TailoringSpec."""
+    return {kw.term for kw in spec.keywords if kw.weight > 0}
+
+
+def _build_included_sections(spec: TailoringSpec) -> list[str]:
+    """Compute ordered list of included section names from spec directives."""
+    included = [d for d in spec.section_order if d.include]
+    included.sort(key=lambda d: d.position)
+    return [d.section_name for d in included]
+
+
+def _filter_work_entries(
+    entries: list[WorkEntry],
+    emphasis_map: dict[str, float],
+) -> list[WorkEntry]:
+    """Remove work entries and their projects that have emphasis weight=0."""
+    filtered = []
+    for w in entries:
+        if emphasis_map.get(w.id, 1.0) == 0:
+            continue
+        filtered_projects = [
+            p for p in w.projects if emphasis_map.get(p.id, 1.0) != 0
+        ]
+        if filtered_projects != w.projects:
+            w = w.model_copy(update={"projects": filtered_projects})
+        filtered.append(w)
+    return filtered
 
 
 def _create_latex_env(store: ResumeStore) -> Environment:

@@ -1,16 +1,16 @@
 ---
 name: cv-analyst
 description: >
-  EXCLUSIVE handler for ALL requests about Francisco Perez-Sorrosal's CV,
-  resume, or professional background. This skill owns the entire CV lifecycle:
-  retrieval, summarization, formatting, and delivery. Supported output formats
-  are markdown (default), plain text, PDF, HTML, and LaTeX — no other formats
-  exist. Do NOT delegate CV output to any other skill or document-generation
-  tool (no docx, no slides). HTML output uses built-in templates bundled with
-  this skill — do NOT read or invoke any frontend, design, or HTML skill.
-  Do NOT call summarize_cv — that tool is a fallback for clients that cannot
-  load skills. Once you invoke this skill, follow its instructions to
-  completion without reading or invoking other skills.
+  Handler for general CV retrieval, summarization, rendering, and formatting
+  requests about Francisco Perez-Sorrosal's professional background. Supported
+  output formats are markdown (default), plain text, PDF, HTML, and LaTeX.
+  Do NOT use for job-specific tailoring -- use the cv-tailoring skill instead
+  when the user provides a job description or wants to adapt the CV for a
+  specific role. Do NOT delegate CV output to document-generation tools
+  (no docx, no slides). HTML output uses built-in templates bundled with this
+  skill -- do NOT read or invoke any frontend, design, or HTML skill.
+  Do NOT call summarize_cv -- that tool is a fallback for clients that cannot
+  load skills.
   Trigger phrases: "LaTeX", "tex", "moderncv", "typeset CV", "generate .tex".
 ---
 
@@ -51,7 +51,7 @@ Use these when the user asks about themes, skill proficiency, or connections bet
 
 ## Output Exclusivity
 
-This skill is self-contained. Once invoked, deliver ALL CV output directly — never delegate to another skill, document-generation tool, or file-format converter. Do not read or invoke any other skill (including frontend, design, or HTML skills) — all templates, CSS, and JS are bundled in this skill's `references/` directory. The only supported output formats are `markdown`, `plain text`, `pdf`, `html`, and `latex`. If the user asks for a format not in this list (e.g., docx, slides), tell them it is not supported and offer the five available options. Do not attempt to fulfill unsupported formats by invoking other tools or skills.
+This skill handles untailored CV delivery. Once invoked, deliver output directly -- never delegate to another skill except cv-tailoring when the user introduces a job description mid-conversation. Do not read or invoke any other skill (including frontend, design, or HTML skills) -- all templates, CSS, and JS are bundled in this skill's `references/` directory. The only supported output formats are `markdown`, `plain text`, `pdf`, `html`, and `latex`. If the user asks for a format not in this list (e.g., docx, slides), tell them it is not supported and offer the five available options. Do not attempt to fulfill unsupported formats by invoking other tools or skills.
 
 ## Summarization Process
 

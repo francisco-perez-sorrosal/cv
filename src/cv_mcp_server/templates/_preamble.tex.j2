@@ -1,0 +1,129 @@
+{% raw %}
+%% start of file `template.tex'.
+%% Copyright 2006-2010 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+% A modern LaTeX CV template config links:
+% https://www.baeldung.com/cs/latex-moderncv-resume
+
+%------------- PACKAGES --------------------------------------------
+
+\documentclass[11pt,a4paper,english, sans]{moderncv}      % a4paper, a5paper, b5paper, letterpaper, legalpaper, executivepaper, landscape
+                                                          % 10pt, 11pt, 12pt, english, sans
+
+% moderncv setup
+\moderncvcolor{blue} % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
+\moderncvstyle{classic} % casual (default), classic, banking, oldstyle, fancy
+
+% adjust the page margins
+\usepackage[scale=0.8]{geometry}
+
+% Font encoding and family
+% \usepackage[utf8]{inputenc}                   % character encoding: replace by the encoding you are using
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% language
+\usepackage[english]{babel}
+
+% symbols
+\usepackage{amssymb}
+
+% additional packages for safety
+\usepackage{enumitem}
+\usepackage{ifthen}
+
+%------------- PACKAGES --------------------------------------------
+{% endraw %}
+
+
+%------------- PERSONAL DATA ---------------------------------------
+% personal data
+\name{\Huge {{ resume.personal_info.name.split()[0] }}}{\Huge {{ resume.personal_info.name.split()[-1] }}}
+\title{{ "{" }}{{ resume.personal_info.label }}{{ "}" }}
+\address{N/A}{{ "{" }}{{ resume.personal_info.location.postal_code }} {{ resume.personal_info.location.city }}, {{ resume.personal_info.location.region }} (U.S.){{ "}" }}
+\phone[mobile]{Ask through LinkedIn}
+\email{Ask through LinkedIn}
+{% for p in resume.personal_info.profiles %}
+{% if p.network == "LinkedIn" %}
+\social[linkedin]{{ "{" }}{{ p.username }}{{ "}" }}
+{% elif p.network == "GitHub" %}
+\social[github]{{ "{" }}{{ p.username }}{{ "}" }}
+{% endif %}
+{% endfor %}
+\homepage{{ "{" }}{{ resume.personal_info.url }}{{ "}" }}
+{% for p in resume.personal_info.profiles %}
+{% if p.network == "CV PDF" %}
+\extrainfo{\homepagesymbol ~\href{{ "{" }}{{ p.url }}{{ "}" }}{Full CV}}      % optional, remove the line if not wanted
+{% endif %}
+{% endfor %}
+%------------- PERSONAL DATA ---------------------------------------
+
+%------------- QUOTE -----------------------------------------------
+% Quote (optional)
+\quote{\textit{{ "{" }}{{ resume.quote | latex_escape }}{{ "}" }}}
+%------------- QUOTE -----------------------------------------------
+
+{% raw %}
+%------------- CONTENT SETUP ---------------------------------------
+
+% Page numbering (yes/no)
+%\nopagenumbers{}
+
+%\setlength{\hintscolumnwidth}{3cm}						% if you want to change the width of the column with the dates
+%\AtBeginDocument{\setlength{\maketitlenamewidth}{8.3cm}}  % only for the classic theme, if you want to change the width of your name placeholder (to leave more space for your address details
+\AtBeginDocument{\recomputelengths}                     % required when changes are made to page layout lengths
+
+% Compact itemize globally with smaller bullets
+\setlist[itemize]{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt,label={\tiny$\bullet$}}
+
+% Reduce interlining space
+\renewcommand{\baselinestretch}{1}
+
+% Reduce spacing between sections
+\renewcommand{\sectionfont}{\Large\mdseries\upshape\bfseries}
+\setlength{\hintscolumnwidth}{1.6cm}
+% Change subsection style
+\renewcommand{\subsectionfont}{\large\upshape\bfseries}
+\renewcommand*{\subsectionstyle}[1]{{\subsectionfont\textcolor{color1!90}{#1}}}
+
+% Customize section to make it larger and in color1
+\makeatletter % to allow for customizing the section command
+\renewcommand*{\section}[1]{%
+  \par\addvspace{.6cm}%
+  \phantomsection{}%
+  \addcontentsline{toc}{section}{#1}%
+  \parbox[t]{\hintscolumnwidth}{\strut\raggedleft\raisebox{\baseletterheight}{\color{color1}\rule{\hintscolumnwidth}{0.5ex}}}%
+  \hspace{\separatorcolumnwidth}%
+  \parbox[t]{\maincolumnwidth}{\strut\sectionstyle{#1}}%
+  \par\nobreak\addvspace{0.9ex}\@afterheading}
+\makeatother
+
+% Customize cventry to make job position (third parameter) default to color1
+% and company (fourth parameter) in color1 and italics
+\renewcommand*{\cventry}[7][.5em]{%
+  \cvitem[#1]{#2}{%
+    {\textcolor{color1}{\textbf{#3}}}%
+    \ifthenelse{\equal{#4}{}}{}{, \textcolor{gray}{\textit{\textbf{#4}}}}%
+    \ifthenelse{\equal{#5}{}}{}{, #5}%
+    \ifthenelse{\equal{#6}{}}{}{, #6}%
+    .\strut%
+    \ifx&#7&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\vspace{-5pt}#7\end{minipage}}\fi}}
+
+%------------- BIBLIOGRAPHY STYLE --------------------------------------------
+% to show numerical labels in the bibliography; only useful if you make citations in your resume
+\makeatletter
+\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}
+\makeatother
+
+% bibliography with mutiple entries
+%\usepackage{multibib}
+
+%\newcites{book,misc}{{Books},{Others}}
+
+%------------- BIBLIOGRAPHY STYLE --------------------------------------------
+{% endraw %}
