@@ -16,11 +16,18 @@ from cv_mcp_server.renderers import (
     _patent_status_filter,
     _period_filter,
     get_section,
+    render_latex,
     render_markdown,
     render_sections,
+    render_tailored_latex,
     render_work_entry,
 )
 from cv_mcp_server.models.resume import PatentStatus
+from cv_mcp_server.models.tailoring import (
+    EntryEmphasis,
+    SectionDirective,
+    TailoringSpec,
+)
 
 
 # --- render_markdown ---
@@ -38,6 +45,32 @@ class TestRenderMarkdown:
     def test_trailing_newline(self, minimal_store):
         md = render_markdown(minimal_store)
         assert md.endswith("\n")
+
+
+# --- render_latex ---
+
+
+class TestRenderLatex:
+    def test_render_latex_produces_output(self, minimal_store):
+        latex = render_latex(minimal_store)
+        assert len(latex) > 0
+
+    def test_render_latex_has_document_structure(self, minimal_store):
+        latex = render_latex(minimal_store)
+        assert r"\documentclass" in latex
+        assert r"\begin{document}" in latex
+        assert r"\end{document}" in latex
+
+    def test_render_latex_has_candidate_name(self, minimal_store):
+        latex = render_latex(minimal_store)
+        first_name = minimal_store.resume.personal_info.name.split()[0]
+        last_name = minimal_store.resume.personal_info.name.split()[-1]
+        assert first_name in latex
+        assert last_name in latex
+
+    def test_render_latex_has_sections(self, minimal_store):
+        latex = render_latex(minimal_store)
+        assert r"\section{Professional Experience}" in latex
 
 
 # --- render_sections ---
@@ -224,3 +257,64 @@ class TestInstNameFilter:
     def test_unknown(self, minimal_resume):
         filt = _make_inst_name_filter(minimal_resume)
         assert filt("nonexistent") == "nonexistent"
+
+
+# --- render_tailored_latex ---
+
+
+class TestRenderTailoredLatex:
+    def _make_spec(self, **overrides) -> TailoringSpec:
+        """Build a TailoringSpec with sensible defaults, overridable per-test."""
+        defaults = {
+            "job_title": "Test Role",
+            "section_order": [
+                SectionDirective(
+                    section_name="Professional Experience",
+                    include=True,
+                    position=0,
+                ),
+            ],
+        }
+        defaults.update(overrides)
+        return TailoringSpec(**defaults)
+
+    def test_render_tailored_latex_basic(self, minimal_store):
+        spec = self._make_spec()
+        output = render_tailored_latex(minimal_store, spec)
+        assert len(output) > 0
+        assert r"\documentclass" in output
+        assert r"\begin{document}" in output
+        assert r"\section{Professional Experience}" in output
+
+    def test_render_tailored_latex_section_filtering(self, minimal_store):
+        spec = self._make_spec()
+        output = render_tailored_latex(minimal_store, spec)
+        assert r"\section{Skills}" not in output
+        assert r"\section{Education}" not in output
+        assert r"\section{Languages}" not in output
+
+    def test_render_tailored_latex_profile_override(self, minimal_store):
+        spec = self._make_spec(
+            section_order=[
+                SectionDirective(
+                    section_name="Profile and Goals",
+                    include=True,
+                    position=0,
+                ),
+            ],
+            profile_override="Custom profile text for testing",
+        )
+        output = render_tailored_latex(minimal_store, spec)
+        assert "Custom profile text for testing" in output
+
+    def test_render_tailored_latex_entry_omission(self, minimal_store):
+        spec = self._make_spec(
+            entry_emphasis=[
+                EntryEmphasis(entry_id="work-acme-2023", weight=0, reason="Not relevant"),
+            ],
+        )
+        output = render_tailored_latex(minimal_store, spec)
+        # "Acme Corp" is unique to the work entry (not in preamble personal data)
+        assert "Acme Corp" not in output
+        # The work entry's project should also be absent
+        assert "Widget Builder" not in output

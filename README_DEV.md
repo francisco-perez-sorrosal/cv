@@ -37,7 +37,14 @@ pdflatex 2025_FranciscoPerezSorrosal_CV_English.tex
 
 ### MCP Branch - Python MCP Server
 
-The MCP branch contains a Python-based Model Context Protocol server implementation. It serves CV content in markdown, PDF, and LaTeX formats. The LaTeX renderer uses Jinja2 templates (`cv.tex.j2`, `_work_entry.tex.j2` in `src/cv_mcp_server/templates/`) to generate moderncv-compatible `.tex` files from the structured YAML data layer.
+The MCP branch contains a Python-based Model Context Protocol server implementation. It serves CV content in markdown, PDF, and LaTeX formats via 16 tools. The LaTeX renderer uses Jinja2 templates in `src/cv_mcp_server/templates/`:
+
+- `cv.tex.j2` — full CV template (uses `_preamble.tex.j2` and `_work_entry.tex.j2` partials)
+- `cv_tailored.tex.j2` — tailored CV template with dynamic section ordering, entry filtering, and keyword highlighting (uses the same partials)
+
+Two agent skills extend the server:
+- **`cv-analyst`** — general CV retrieval, summarization, and formatting
+- **`cv-tailoring`** — job-targeted CV tailoring that produces page-constrained (2-3 pages) LaTeX/PDF output via the `get_tailored_cv` MCP tool
 
 #### Development Setup
 
@@ -395,6 +402,59 @@ mcp-publisher publish
 
 ```sh
 curl "https://registry.modelcontextprotocol.io/v0/servers?search=fps-cv-mcp"
+```
+
+#### CV Tailoring Architecture
+
+The tailoring pipeline bridges the `cv-tailoring` skill (LLM intelligence) and the MCP server (rendering mechanics) through a `TailoringSpec` data contract.
+
+```
+Job Description
+    |
+    v
+[cv-tailoring skill]
+    |-- Retrieves CV data via MCP tools (get_cv, get_skill_profile, query_by_topic)
+    |-- Analyzes job requirements vs. candidate profile
+    |-- Generates a TailoringSpec JSON
+    |
+    v
+[MCP tool: get_tailored_cv(tailoring_config)]
+    |-- Validates TailoringSpec via Pydantic
+    |-- Calls render_tailored_latex(store, spec)
+    |-- Returns compilable LaTeX source
+    |
+    v
+[cv-tailoring skill: compilation]
+    |-- Writes .tex to tmp/
+    |-- Runs pdflatex (twice for cross-references)
+    |-- Error correction loop (max 2 retries)
+    |-- Presents compiled PDF
+```
+
+Key source files:
+
+| File | Purpose |
+|------|---------|
+| `src/cv_mcp_server/models/tailoring.py` | `TailoringSpec`, `SectionDirective`, `EntryEmphasis`, `KeywordHighlight` Pydantic models |
+| `src/cv_mcp_server/renderers.py` | `render_tailored_latex(store, spec)` — filters entries, reorders sections, renders template |
+| `src/cv_mcp_server/templates/cv_tailored.tex.j2` | LaTeX template with dynamic section iteration from `included_sections` |
+| `src/cv_mcp_server/templates/_preamble.tex.j2` | Shared LaTeX preamble (packages, moderncv setup, custom commands) |
+| `skills/cv-tailoring/SKILL.md` | Skill definition with 6-step workflow |
+| `skills/cv-tailoring/references/methodology.md` | 4-phase methodology (analysis, repositioning, evaluation, rendered output) |
+
+The `TailoringSpec` controls:
+- **Section ordering** — `section_order` with `SectionDirective(section_name, include, position)`
+- **Entry filtering** — `entry_emphasis` with `EntryEmphasis(entry_id, weight, reason)` where `weight=0` omits
+- **Keyword highlighting** — `keywords` with `KeywordHighlight(term, weight)` rendered as `\highlight{}` in LaTeX
+- **Profile override** — `profile_override` replaces the generic summary with a role-targeted one
+- **Page budget** — `max_pages` (1-3, default 2)
+
+#### Testing
+
+```bash
+pixi run -e dev python -m pytest                    # all tests
+pixi run -e dev python -m pytest tests/test_models_tailoring.py  # tailoring model tests
+pixi run -e dev python -m pytest tests/test_renderers.py -k tailored  # tailored rendering tests
 ```
 
 ## Development Workflow

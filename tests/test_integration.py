@@ -4,7 +4,14 @@ from __future__ import annotations
 
 import pytest
 
-from cv_mcp_server.renderers import get_section, render_markdown, render_sections
+from cv_mcp_server.renderers import (
+    get_section,
+    render_latex,
+    render_markdown,
+    render_sections,
+    render_tailored_latex,
+)
+from cv_mcp_server.models.tailoring import SectionDirective, TailoringSpec
 
 pytestmark = pytest.mark.integration
 
@@ -71,6 +78,14 @@ class TestRendering:
         assert s is not None
 
 
+class TestRenderLatexRealData:
+    def test_render_latex_real_data(self, real_store):
+        latex = render_latex(real_store)
+        assert len(latex) > 1000
+        assert r"\section{Professional Experience}" in latex
+        assert "Francisco" in latex
+
+
 class TestEnrichmentToggle:
     def test_enrich_true_contains_published(self, real_store):
         md = render_markdown(real_store, enrich=True)
@@ -101,3 +116,23 @@ class TestWorkQueries:
     def test_work_by_alias_verizon(self, real_store):
         results = real_store.work_by_company("Verizon Media")
         assert len(results) >= 1
+
+
+class TestRenderTailoredLatexRealData:
+    def test_render_tailored_latex_real_data(self, real_store):
+        spec = TailoringSpec(
+            job_title="Senior ML Engineer",
+            company="Test Corp",
+            section_order=[
+                SectionDirective(section_name="Professional Experience", include=True, position=0),
+                SectionDirective(section_name="Skills", include=True, position=1),
+                SectionDirective(section_name="Education", include=True, position=2),
+            ],
+        )
+        tailored = render_tailored_latex(real_store, spec)
+        full = render_latex(real_store)
+
+        assert r"\section{Professional Experience}" in tailored
+        assert r"\section{Skills}" in tailored
+        assert r"\section{Education}" in tailored
+        assert len(tailored) < len(full)

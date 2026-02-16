@@ -18,13 +18,14 @@ from cv_mcp_server.store import ResumeStore
 from cv_mcp_server.renderers import (
     render_markdown,
     render_latex,
+    render_tailored_latex,
     render_sections,
     render_work_entry,
     get_section,
     section_names as list_section_names,
     TEMPLATES_DIR,
 )
-from cv_mcp_server.models import Resume, SemanticOverlay
+from cv_mcp_server.models import Resume, SemanticOverlay, TailoringSpec
 from cv_mcp_server.utils import load_prompt
 
 
@@ -106,6 +107,34 @@ def get_cv(
         return render_latex(store)
     logger.debug("Returning the CV in markdown format...")
     return render_markdown(store, enrich=enrich)
+
+
+@mcp.tool()
+def get_tailored_cv(
+    tailoring_config: str = Field(
+        description=(
+            "JSON string of TailoringSpec. Controls section ordering, "
+            "entry emphasis (weight 0-2, 0=omit), keyword highlighting, "
+            "and page budget. See TailoringSpec schema for full field definitions."
+        )
+    ),
+) -> str:
+    """Render a tailored LaTeX CV from a TailoringSpec.
+
+    The tailoring config controls section ordering, entry emphasis,
+    keyword highlighting, and profile override. Returns compilable LaTeX source.
+    Use this tool after analyzing a job description to produce a targeted CV.
+    """
+    try:
+        spec = TailoringSpec.model_validate_json(tailoring_config)
+    except Exception as exc:
+        schema = json.dumps(TailoringSpec.model_json_schema(), indent=2)
+        return (
+            f"Invalid TailoringSpec: {exc}\n\n"
+            f"Expected JSON schema:\n{schema}"
+        )
+    logger.debug(f"Rendering tailored CV for '{spec.job_title}' at '{spec.company}'...")
+    return render_tailored_latex(store, spec)
 
 
 @mcp.tool()
@@ -562,10 +591,24 @@ _FORMAT_REGISTRY: dict[str, dict] = {
         "description": "LaTeX document using moderncv package for typeset PDF generation",
         "files": [
             {"name": "cv.tex.j2", "role": "main"},
+            {"name": "_preamble.tex.j2", "role": "partial"},
             {"name": "_work_entry.tex.j2", "role": "partial"},
         ],
         "capabilities": {
             "sections": False,
+            "enrichment": False,
+            "summarization": False,
+        },
+    },
+    "tailored-latex": {
+        "description": "Job-tailored LaTeX CV with section reordering, entry filtering, and keyword highlighting. Accessed via get_tailored_cv tool.",
+        "files": [
+            {"name": "cv_tailored.tex.j2", "role": "main"},
+            {"name": "_preamble.tex.j2", "role": "partial"},
+            {"name": "_work_entry.tex.j2", "role": "partial"},
+        ],
+        "capabilities": {
+            "sections": True,
             "enrichment": False,
             "summarization": False,
         },
