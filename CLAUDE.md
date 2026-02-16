@@ -56,6 +56,7 @@ Individual pixi tasks:
 pixi run -e dev update-mcpb-deps   # sync and export requirements.txt
 pixi run -e dev mcp-bundle         # install deps to lib/
 pixi run pack                      # create .mcpb bundle in dist/mcpb/
+pixi run generate-tex              # generate LaTeX CV from YAML data
 ```
 
 ### Release
@@ -85,6 +86,11 @@ src/cv_mcp_server/
   data/
     resume.yaml            # Structured CV data (source of truth)
     resume-semantics.yaml  # Semantic overlay (topics, annotations, relationships)
+  templates/
+    cv.md.j2               # Jinja2 template for markdown output
+    cv.tex.j2              # Jinja2 template for LaTeX output (moderncv)
+    _work_entry.md.j2      # Markdown work entry partial
+    _work_entry.tex.j2     # LaTeX work entry partial
   prompts/
     summary.yaml           # Configurable CV summary prompt
 .claude-plugin/
@@ -99,6 +105,7 @@ config/
   cv_mcp.json             # Remote MCP server config (render.com, used for desktop remote injection)
 scripts/
   release.sh              # Release automation
+  generate_tex.py         # Standalone LaTeX generation from YAML data
 dist/
   mcpb/                   # Built .mcpb bundles (fps-cv-mcp-*.mcpb)
   wheel/                  # Built Python wheels
@@ -201,7 +208,7 @@ Links:
 - **Data layer**: `resume.yaml` (structured CV, source of truth) + `resume-semantics.yaml` (semantic overlay with topic taxonomy)
 - **Pydantic models**: `models/resume.py` (Resume hierarchy) and `models/semantics.py` (SemanticOverlay hierarchy)
 - **ResumeStore** (`store.py`): loads both YAML files, validates cross-references, provides query and write methods
-- **Renderer** (`renderers.py`): generates markdown from Resume model (full doc + per-section)
+- **Renderer** (`renderers.py`): generates markdown and LaTeX from Resume model using Jinja2 templates (full doc + per-section)
 - Entry IDs follow `<type>-<slug>` convention (e.g., `work-yahoo-kgs-2023`, `pub-htl-acl-2019`)
 - MCP resources use hierarchical `fps-cv://` URI scheme
 - Server supports stdio and streamable-http transports (SSE is deprecated)
