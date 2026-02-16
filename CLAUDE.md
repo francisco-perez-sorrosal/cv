@@ -77,7 +77,7 @@ src/cv_mcp_server/
   __init__.py
   main.py                 # MCP server: 16 tools, 15 resources, 1 prompt
   store.py                # ResumeStore: load, validate, query, write
-  renderers.py            # Markdown and LaTeX renderers (full CV and per-section, 15 sections)
+  renderers.py            # Markdown and LaTeX renderers (full CV and per-section, 13 sections)
   utils.py                # Utility functions (YAML prompt loading)
   models/
     __init__.py            # Re-exports Resume, SemanticOverlay, TailoringSpec
