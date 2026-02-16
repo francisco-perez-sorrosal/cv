@@ -1,12 +1,5 @@
 {% include '_preamble.tex.j2' %}
 
-%------------- TAILORING: HIGHLIGHT COMMAND ------------------------------------
-% Custom command for keyword emphasis in tailored CVs
-{% raw %}
-\newcommand{\highlight}[1]{\textbf{#1}}
-{% endraw %}
-%------------- TAILORING: HIGHLIGHT COMMAND ------------------------------------
-
 %------------- BEGIN DOCUMENT --------------------------------------------------
 
 \begin{document}
@@ -81,7 +74,7 @@
 {% endfor %}
 {% endif %}
 
-{% elif section_name == "Courses" %}
+{% elif section_name == "Courses and Certifications" %}
 {% if resume.certificates %}
 \section{Courses}
 
@@ -111,7 +104,7 @@
 {% endfor %}
 {% endif %}
 
-{% elif section_name == "Leadership and Communication" %}
+{% elif section_name == "Leadership & Communication" %}
 {% if resume.leadership %}
 \section{Leadership \& Communication}
 
@@ -142,7 +135,7 @@
 {% endfor %}
 {% endif %}
 
-{% elif section_name == "Other Activities" %}
+{% elif section_name == "Other Activities Related to CS" %}
 {% if resume.projects or resume.memberships or resume.conferences %}
 \section{Other Activities Related to Computer Science}
 {% if resume.projects %}

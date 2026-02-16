@@ -275,13 +275,11 @@ def render_tailored_latex(store: ResumeStore, spec: TailoringSpec) -> str:
     Uses cv_tailored.tex.j2 which supports:
     - Section reordering via spec.section_order
     - Entry emphasis via spec.entry_emphasis (weight=0 omits entries)
-    - Keyword highlighting via spec.keywords
     - Profile summary override via spec.profile_override
     """
     context = _template_context(store, enrich=False)
 
     emphasis_map = _build_emphasis_map(spec)
-    keyword_set = _build_keyword_set(spec)
     included_sections = _build_included_sections(spec)
 
     context["industry_work"] = _filter_work_entries(context["industry_work"], emphasis_map)
@@ -289,7 +287,6 @@ def render_tailored_latex(store: ResumeStore, spec: TailoringSpec) -> str:
 
     context["tailoring"] = spec.model_dump()
     context["emphasis_map"] = emphasis_map
-    context["keyword_set"] = keyword_set
     context["included_sections"] = included_sections
 
     env = _create_latex_env(store)
@@ -300,11 +297,6 @@ def render_tailored_latex(store: ResumeStore, spec: TailoringSpec) -> str:
 def _build_emphasis_map(spec: TailoringSpec) -> dict[str, float]:
     """Map entry_id -> weight from a TailoringSpec's entry_emphasis list."""
     return {e.entry_id: e.weight for e in spec.entry_emphasis}
-
-
-def _build_keyword_set(spec: TailoringSpec) -> set[str]:
-    """Extract keyword terms with positive weight from a TailoringSpec."""
-    return {kw.term for kw in spec.keywords if kw.weight > 0}
 
 
 def _build_included_sections(spec: TailoringSpec) -> list[str]:
