@@ -74,7 +74,7 @@ pixi run pack                      # create .mcpb bundle in dist/mcpb/
 ```
 src/cv_mcp_server/
   __init__.py
-  main.py                 # MCP server: 15 tools, 14 resources, 1 prompt
+  main.py                 # MCP server: 15 tools, 15 resources, 1 prompt
   store.py                # ResumeStore: load, validate, query, write
   renderers.py            # Markdown and LaTeX renderers (full CV and per-section, 15 sections)
   utils.py                # Utility functions (YAML prompt loading)
@@ -167,7 +167,8 @@ Schema:
 - `fps-cv://schema/semantics` - JSON Schema for the SemanticOverlay data model
 
 Templates:
-- `fps-cv://templates` - Available output templates with metadata
+- `fps-cv://templates` - Lightweight catalog of formats and capabilities
+- `fps-cv://templates/{format_id}` - Per-format detail with template source code
 
 Links:
 - `fps-cv://links/{name}` - Profile/document link by network name

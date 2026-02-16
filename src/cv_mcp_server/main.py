@@ -22,6 +22,7 @@ from cv_mcp_server.renderers import (
     render_work_entry,
     get_section,
     section_names as list_section_names,
+    TEMPLATES_DIR,
 )
 from cv_mcp_server.models import Resume, SemanticOverlay
 from cv_mcp_server.utils import load_prompt
@@ -544,30 +545,60 @@ def semantics_schema() -> str:
     return json.dumps(SemanticOverlay.model_json_schema(), indent=2)
 
 
+_FORMAT_REGISTRY: dict[str, dict] = {
+    "markdown": {
+        "description": "LLM-readable markdown for analysis and summarization",
+        "files": [
+            {"name": "cv.md.j2", "role": "main"},
+            {"name": "_work_entry.md.j2", "role": "partial"},
+        ],
+        "capabilities": {
+            "sections": True,
+            "enrichment": True,
+            "summarization": True,
+        },
+    },
+    "latex": {
+        "description": "LaTeX document using moderncv package for typeset PDF generation",
+        "files": [
+            {"name": "cv.tex.j2", "role": "main"},
+            {"name": "_work_entry.tex.j2", "role": "partial"},
+        ],
+        "capabilities": {
+            "sections": False,
+            "enrichment": False,
+            "summarization": False,
+        },
+    },
+}
+
+
 @mcp.resource("fps-cv://templates")
 def template_catalog() -> str:
-    """Available output templates with format metadata and capabilities."""
-    catalog = {
-        "formats": [
-            {
-                "id": "markdown",
-                "description": "LLM-readable markdown for analysis and summarization",
-                "templates": ["cv.md.j2", "_work_entry.md.j2"],
-                "supports_sections": True,
-                "supports_enrichment": True,
-                "supports_summarization": True,
-            },
-            {
-                "id": "latex",
-                "description": "LaTeX document using moderncv package for typeset PDF generation",
-                "templates": ["cv.tex.j2", "_work_entry.tex.j2"],
-                "supports_sections": False,
-                "supports_enrichment": False,
-                "supports_summarization": False,
-            },
-        ],
-    }
+    """Lightweight catalog of available output formats and their capabilities."""
+    catalog = [
+        {"id": fmt_id, "description": meta["description"], **meta["capabilities"]}
+        for fmt_id, meta in _FORMAT_REGISTRY.items()
+    ]
     return json.dumps(catalog, indent=2)
+
+
+@mcp.resource("fps-cv://templates/{format_id}")
+def template_detail(format_id: str) -> str:
+    """Per-format detail: metadata, file roles, and template source code."""
+    meta = _FORMAT_REGISTRY.get(format_id)
+    if not meta:
+        available = ", ".join(_FORMAT_REGISTRY)
+        return f"Format '{format_id}' not found. Available: {available}"
+    files = []
+    for f in meta["files"]:
+        source = (TEMPLATES_DIR / f["name"]).read_text()
+        files.append({"name": f["name"], "role": f["role"], "source": source})
+    return json.dumps(
+        {"id": format_id, "description": meta["description"],
+         "capabilities": meta["capabilities"], "files": files},
+        indent=2,
+    )
 
 
 # --- Prompt ---
