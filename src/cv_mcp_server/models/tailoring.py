@@ -1,8 +1,8 @@
 """Tailoring specification models for job-specific CV rendering.
 
 A TailoringSpec controls how the CV is rendered for a specific job:
-section ordering, entry emphasis/omission, keyword highlighting,
-profile override, and page budget.
+section ordering, entry emphasis/omission, profile override,
+and page budget. Keywords are metadata for skill analysis.
 """
 
 from __future__ import annotations

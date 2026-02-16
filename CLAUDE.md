@@ -156,7 +156,7 @@ Semantic query tools:
 - `get_entry_context(entry_id)` - Full semantic context (topics, relationships, impact)
 
 Rendering tools:
-- `get_tailored_cv(tailoring_config)` - Render a tailored LaTeX CV from a TailoringSpec JSON (section reordering, entry filtering, keyword highlighting)
+- `get_tailored_cv(tailoring_config)` - Render a tailored LaTeX CV from a TailoringSpec JSON (section reordering, entry filtering, profile override)
 
 Prompt-wrapping tool (fallback for non-skill clients):
 - `summarize_cv` - Configurable CV summary (depth, context, emphasis, audience, tone, format, length)
@@ -232,7 +232,7 @@ Links:
 - `{% raw %}...{% endraw %}` blocks in templates protect LaTeX special chars from Jinja2. These work correctly inside `{% include %}` — included files process raw/endraw independently
 - `_preamble.tex.j2` contains personal data (name, title, profiles) between two raw blocks. Both `cv.tex.j2` and `cv_tailored.tex.j2` get personal data from this shared partial. The `profile_override` is handled separately in `cv_tailored.tex.j2` inside `\begin{document}`, not in the preamble
 - `_template_context()` passes `enrich=False` for all LaTeX rendering — semantic enrichment (project links, skill levels) is for markdown only
-- `\newcommand{\highlight}[1]{\textbf{#1}}` in `cv_tailored.tex.j2` must be wrapped in `{% raw %}` because `{#1}` triggers Jinja2's comment parser (`{#`). This is distinct from the `{{ "{" }}` brace-escaping used elsewhere
+- LaTeX commands containing `{#N}` (e.g., `\newcommand{\foo}[1]{#1}`) must be inside `{% raw %}` blocks because `{#` triggers Jinja2's comment parser. This is distinct from the `{{ "{" }}` brace-escaping used elsewhere
 - New Pydantic models follow `ConfigDict(populate_by_name=True)` + `Field()` pattern — same as `resume.py` and `semantics.py`
 
 ### Technical Debt

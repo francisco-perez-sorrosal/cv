@@ -82,7 +82,7 @@ Construct a TailoringSpec JSON object from the Phase 2 analysis:
 - `job_id`: Job posting identifier (LinkedIn job ID, requisition number, or short slug). Used in output filenames to distinguish multiple applications to the same company.
 - `section_order`: Ordered list of sections to include. Each has `section_name`, `include` (true/false), `position` (0-indexed render order). Omit sections that add no value for this role.
 - `entry_emphasis`: Per-entry weight assignments. Use `weight: 0` to omit irrelevant entries. Use `weight: 2` to highlight the most relevant ones. Include `reason` for audit trail.
-- `keywords`: Job-relevant terms to bold in the output. Extract from Phase 1 job deconstruction.
+- `keywords`: Job-relevant terms extracted from Phase 1 job deconstruction. Used as metadata for analysis and the markdown deliverable.
 - `profile_override`: Tailored professional summary rewritten from existing CV content (never fabricate).
 - `max_pages`: Target page count (2 or 3). Use 2 for focused roles, 3 when broader experience is relevant.
 
@@ -142,7 +142,7 @@ Scoring matrix table as described in Phase 3.
 
 ### 5. Compiled PDF
 
-LaTeX-rendered CV (moderncv format) compiled to PDF, constrained to 2-3 pages. Sections reordered by job relevance, entries filtered for fit, keywords highlighted.
+LaTeX-rendered CV (moderncv format) compiled to PDF, constrained to 2-3 pages. Sections reordered by job relevance, entries filtered for fit, profile tailored to role.
 
 ## Methodology Notes
 
