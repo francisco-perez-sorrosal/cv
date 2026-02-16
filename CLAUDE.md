@@ -216,17 +216,27 @@ Links:
 - Python >=3.13, `src/` layout, hatch build system
 - pixi for dependency management and task execution
 - **Data layer**: `resume.yaml` (structured CV, source of truth) + `resume-semantics.yaml` (semantic overlay with topic taxonomy)
-- **Pydantic models**: `models/resume.py` (Resume hierarchy) and `models/semantics.py` (SemanticOverlay hierarchy)
+- **Pydantic models**: `models/resume.py` (Resume hierarchy), `models/semantics.py` (SemanticOverlay hierarchy), `models/tailoring.py` (TailoringSpec)
 - **ResumeStore** (`store.py`): loads both YAML files, validates cross-references, provides query and write methods
 - **Renderer** (`renderers.py`): generates markdown, LaTeX, and tailored LaTeX from Resume model using Jinja2 templates (full doc + per-section + tailored)
 - Entry IDs follow `<type>-<slug>` convention (e.g., `work-yahoo-kgs-2023`, `pub-htl-acl-2019`)
 - MCP resources use hierarchical `fps-cv://` URI scheme
 - Server supports stdio and streamable-http transports (SSE is deprecated)
-- Run tests: `pixi run test`, `pixi run test-unit`, `pixi run test-integration`
+- Run tests: `pixi run -e dev python -m pytest` (the `-e dev` flag is required — `pixi run test` may fail if pyenv intercepts pytest)
 - MCPB bundles vendor dependencies in `lib/` directory
 - `manifest.json` defines the MCPB package metadata and tool declarations
 - The `cv-analyst` skill in `skills/` handles CV summarization for skill-compatible clients; `summarize_cv` tool serves as fallback for other clients
 - The `cv-tailoring` skill in `skills/` handles job-targeted CV tailoring with LaTeX/PDF output via the `get_tailored_cv` tool
+
+### Jinja2/LaTeX Template Gotchas
+- `{% raw %}...{% endraw %}` blocks in templates protect LaTeX special chars from Jinja2. These work correctly inside `{% include %}` — included files process raw/endraw independently
+- `_preamble.tex.j2` contains personal data (name, title, profiles) between two raw blocks. Both `cv.tex.j2` and `cv_tailored.tex.j2` get personal data from this shared partial. The `profile_override` is handled separately in `cv_tailored.tex.j2` inside `\begin{document}`, not in the preamble
+- `_template_context()` passes `enrich=False` for all LaTeX rendering — semantic enrichment (project links, skill levels) is for markdown only
+- `\newcommand{\highlight}[1]{\textbf{#1}}` in `cv_tailored.tex.j2` must be wrapped in `{% raw %}` because `{#1}` triggers Jinja2's comment parser (`{#`). This is distinct from the `{{ "{" }}` brace-escaping used elsewhere
+- New Pydantic models follow `ConfigDict(populate_by_name=True)` + `Field()` pattern — same as `resume.py` and `semantics.py`
+
+### Technical Debt
+- `main.py` is at 688 lines (hard ceiling: 800). Future tools should extract tool registrations into separate modules
 
 ## Plugins
 
