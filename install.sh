@@ -4,8 +4,8 @@
 #
 # Usage:
 #   ./install.sh                       # remote install (default, curl-friendly)
-#   ./install.sh desktop               # local: build MCPB + skill, show manual install steps
-#   ./install.sh desktop remote        # remote: build skill + inject MCP config into Claude Desktop
+#   ./install.sh desktop               # local: build MCPB + skills, show manual install steps
+#   ./install.sh desktop remote        # remote: build skills + inject MCP config into Claude Desktop
 #   ./install.sh code                  # local: local plugin + local MCP (dev mode)
 #   ./install.sh code remote           # remote: marketplace plugin (remote MCP built-in)
 #
@@ -18,8 +18,8 @@ show_usage() {
     echo "Usage: $0 [desktop|code] [local|remote]"
     echo ""
     echo "  (no args)          Install Claude Code plugin from bit-agora marketplace"
-    echo "  desktop             Build MCPB + skill, show Claude Desktop install instructions"
-    echo "  desktop remote      Build skill + inject remote MCP config into Claude Desktop"
+    echo "  desktop             Build MCPB + skills, show Claude Desktop install instructions"
+    echo "  desktop remote      Build skills + inject remote MCP config into Claude Desktop"
     echo "  code                Install Claude Code plugin with local MCP (dev mode)"
     echo "  code remote         Install Claude Code plugin from bit-agora marketplace"
     exit 1

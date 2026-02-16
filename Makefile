@@ -5,7 +5,7 @@ DIST_MCPB   = $(DIST_DIR)/mcpb
 DIST_WHEEL  = $(DIST_DIR)/wheel
 DIST_SKILL  = $(DIST_DIR)/skill
 
-SKILL_NAME  = cv-analyst
+SKILLS = cv-analyst cv-tailoring
 
 CLAUDE_DESKTOP_CONFIG = $(HOME)/Library/Application Support/Claude/claude_desktop_config.json
 MCP_SERVER_KEY        = fps_cv_mcp
@@ -29,10 +29,12 @@ build-mcpb:
 	pixi run -e dev mcp-bundle
 	DIST_MCPB=$(DIST_MCPB) pixi run pack
 
-# Package the cv-analyst skill as a zip for claude.ai (Settings > Features)
+# Package skills as zips for claude.ai (Settings > Features > Add Skill)
 build-skill:
 	mkdir -p $(DIST_SKILL)
-	cd skills/$(SKILL_NAME) && zip -r ../../$(DIST_SKILL)/$(SKILL_NAME).zip SKILL.md references/
+	@for skill in $(SKILLS); do \
+		cd skills/$$skill && zip -r ../../$(DIST_SKILL)/$$skill.zip SKILL.md references/ && cd ../..; \
+	done
 
 # --- Install targets ---
 
@@ -47,7 +49,7 @@ ifeq ($(MCP_TARGET),local)
 	@echo "Packages built. Install manually in Claude Desktop:"
 	@echo ""
 	@echo "  MCP Server:  Open Settings > Extensions > Add, install $(DIST_MCPB)/*.mcpb"
-	@echo "  Skill:       Open Settings > Features > Add Skill, upload $(DIST_SKILL)/$(SKILL_NAME).zip"
+	@echo "  Skills:      Open Settings > Features > Add Skill, upload each zip from $(DIST_SKILL)/"
 	@echo ""
 else ifeq ($(MCP_TARGET),remote)
 	$(MAKE) build-skill
@@ -64,8 +66,8 @@ else ifeq ($(MCP_TARGET),remote)
 		echo "MCP server: $(MCP_SERVER_KEY) injected into Claude Desktop config"; \
 	fi
 	@echo ""
-	@echo "Skill built. Install manually in Claude Desktop:"
-	@echo "  Skill: Open Settings > Features > Add Skill, upload $(DIST_SKILL)/$(SKILL_NAME).zip"
+	@echo "Skills built. Install manually in Claude Desktop:"
+	@echo "  Skills: Open Settings > Features > Add Skill, upload each zip from $(DIST_SKILL)/"
 	@echo ""
 endif
 
