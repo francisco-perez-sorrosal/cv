@@ -74,9 +74,9 @@ pixi run pack                      # create .mcpb bundle in dist/mcpb/
 ```
 src/cv_mcp_server/
   __init__.py
-  main.py                 # MCP server: 15 tools, 10 resources, 1 prompt
+  main.py                 # MCP server: 15 tools, 14 resources, 1 prompt
   store.py                # ResumeStore: load, validate, query, write
-  renderers.py            # Markdown renderer (full CV and per-section, 15 sections)
+  renderers.py            # Markdown and LaTeX renderers (full CV and per-section, 15 sections)
   utils.py                # Utility functions (YAML prompt loading)
   models/
     __init__.py            # Re-exports Resume, SemanticOverlay
@@ -122,7 +122,7 @@ RELEASE_PROCESS.md        # Release workflow documentation
 ### MCP Server Tools
 
 Data tools (fetch CV content):
-- `get_cv` - Full CV in markdown or PDF binary
+- `get_cv` - Full CV in markdown, PDF binary, or LaTeX source
 - `get_cv_sections(section_names, enrich)` - One or more sections by name (case-insensitive)
 - `list_cv_sections` - Available section names with line counts
 - `get_link(name)` - Profile/document link by network name
@@ -152,12 +152,22 @@ Markdown:
 - `fps-cv://md/sections` - Section index (names + line counts)
 - `fps-cv://md/sections/{name}` - Individual section by name
 
+LaTeX:
+- `fps-cv://latex` - Full CV as LaTeX source (moderncv package)
+
 JSON:
 - `fps-cv://resume` - Full resume as JSON
 - `fps-cv://resume/entry/{id}` - Single entry as JSON
 - `fps-cv://semantics` - Full semantic overlay as JSON
 - `fps-cv://semantics/{entry_id}` - Annotations for an entry
 - `fps-cv://taxonomy` - Topic taxonomy as JSON
+
+Schema:
+- `fps-cv://schema/resume` - JSON Schema for the Resume data model
+- `fps-cv://schema/semantics` - JSON Schema for the SemanticOverlay data model
+
+Templates:
+- `fps-cv://templates` - Available output templates with metadata
 
 Links:
 - `fps-cv://links/{name}` - Profile/document link by network name

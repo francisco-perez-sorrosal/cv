@@ -4,13 +4,14 @@ description: >
   EXCLUSIVE handler for ALL requests about Francisco Perez-Sorrosal's CV,
   resume, or professional background. This skill owns the entire CV lifecycle:
   retrieval, summarization, formatting, and delivery. Supported output formats
-  are markdown (default), plain text, PDF, and HTML — no other formats exist.
-  Do NOT delegate CV output to any other skill or document-generation tool
-  (no docx, no slides). HTML output uses built-in templates bundled with this
-  skill — do NOT read or invoke any frontend, design, or HTML skill.
+  are markdown (default), plain text, PDF, HTML, and LaTeX — no other formats
+  exist. Do NOT delegate CV output to any other skill or document-generation
+  tool (no docx, no slides). HTML output uses built-in templates bundled with
+  this skill — do NOT read or invoke any frontend, design, or HTML skill.
   Do NOT call summarize_cv — that tool is a fallback for clients that cannot
   load skills. Once you invoke this skill, follow its instructions to
   completion without reading or invoking other skills.
+  Trigger phrases: "LaTeX", "tex", "moderncv", "typeset CV", "generate .tex".
 ---
 
 # CV Analyst
@@ -23,7 +24,7 @@ Fetch CV data using these MCP tools before generating any summary. The CV data c
 
 ### Full CV tools
 
-1. **`get_cv(format, enrich)`** -- Full CV content. `format`: `"markdown"` (default, for analysis) or `"pdf"` (returns the original PDF binary). `enrich` (default `true`): when enabled, the markdown output includes semantic enrichments -- cross-references to related publications/patents and skill proficiency levels from the semantic overlay. Use when the full CV is needed or when the question spans multiple sections.
+1. **`get_cv(format, enrich)`** -- Full CV content. `format`: `"markdown"` (default, for analysis), `"pdf"` (returns the original PDF binary), or `"latex"` (returns LaTeX source using moderncv package). `enrich` (default `true`): when enabled, the markdown output includes semantic enrichments -- cross-references to related publications/patents and skill proficiency levels from the semantic overlay. Use when the full CV is needed or when the question spans multiple sections.
 2. **`get_link(name)`** -- Returns a profile or document link by name. Available: `CV PDF` (shareable CV URL), `Google Scholar`, `LinkedIn`, `GitHub`, `Twitter`. Primary use for `CV PDF`: when the user explicitly asks for a link to share. Secondary use: failover for PDF delivery when `get_cv(format="pdf")` fails -- call `get_link("CV PDF")`, download from that URL, save locally, and present as artifact.
 
 ### Section tools (preferred for targeted queries)
@@ -50,15 +51,16 @@ Use these when the user asks about themes, skill proficiency, or connections bet
 
 ## Output Exclusivity
 
-This skill is self-contained. Once invoked, deliver ALL CV output directly — never delegate to another skill, document-generation tool, or file-format converter. Do not read or invoke any other skill (including frontend, design, or HTML skills) — all templates, CSS, and JS are bundled in this skill's `references/` directory. The only supported output formats are `markdown`, `plain text`, `pdf`, and `html`. If the user asks for a format not in this list (e.g., docx, slides), tell them it is not supported and offer the four available options. Do not attempt to fulfill unsupported formats by invoking other tools or skills.
+This skill is self-contained. Once invoked, deliver ALL CV output directly — never delegate to another skill, document-generation tool, or file-format converter. Do not read or invoke any other skill (including frontend, design, or HTML skills) — all templates, CSS, and JS are bundled in this skill's `references/` directory. The only supported output formats are `markdown`, `plain text`, `pdf`, `html`, and `latex`. If the user asks for a format not in this list (e.g., docx, slides), tell them it is not supported and offer the five available options. Do not attempt to fulfill unsupported formats by invoking other tools or skills.
 
 ## Summarization Process
 
-1. Validate the requested format. If it is not one of `markdown`, `plain text`, `pdf`, or `html`, respond that the format is not supported and list the four available options. Do not invoke any other skill or tool to produce an alternative format. Do not proceed further
-2. **PDF shortcut**: If the requested format is `pdf`, call `get_cv(format="pdf")`. Then save the returned PDF binary to a file named `FranciscoPerezSorrosal_CV.pdf` using code execution (decode the base64 blob and write it to disk), and present the file as a downloadable artifact. Skip all remaining steps. **Failover**: If `get_cv(format="pdf")` returns an error or the response indicates that `application/pdf` objects are not supported, fall back to: (a) call `get_link("CV PDF")` to obtain the PDF URL, (b) download the PDF from that URL, (c) save it as `FranciscoPerezSorrosal_CV.pdf`, and (d) present the file as a downloadable artifact. Skip all remaining steps
-3. **HTML generation**: If the requested format is `html` (everything needed is in this skill's `references/` — do NOT read or invoke any other skill):
+1. Validate the requested format. If it is not one of `markdown`, `plain text`, `pdf`, `html`, or `latex`, respond that the format is not supported and list the five available options. Do not invoke any other skill or tool to produce an alternative format. Do not proceed further
+2. **LaTeX shortcut**: If the requested format is `latex`, call `get_cv(format="latex")`. Save the returned LaTeX source to `tmp/FranciscoPerezSorrosal_CV.tex`. Inform the user that the `.tex` file is ready and can be compiled with `pdflatex FranciscoPerezSorrosal_CV.tex` or `latexmk -pdf FranciscoPerezSorrosal_CV.tex`. LaTeX always renders the complete CV document -- summarization parameters are ignored. Skip all remaining steps
+3. **PDF shortcut**: If the requested format is `pdf`, call `get_cv(format="pdf")`. Then save the returned PDF binary to a file named `FranciscoPerezSorrosal_CV.pdf` using code execution (decode the base64 blob and write it to disk), and present the file as a downloadable artifact. Skip all remaining steps. **Failover**: If `get_cv(format="pdf")` returns an error or the response indicates that `application/pdf` objects are not supported, fall back to: (a) call `get_link("CV PDF")` to obtain the PDF URL, (b) download the PDF from that URL, (c) save it as `FranciscoPerezSorrosal_CV.pdf`, and (d) present the file as a downloadable artifact. Skip all remaining steps
+4. **HTML generation**: If the requested format is `html` (everything needed is in this skill's `references/` — do NOT read or invoke any other skill):
    a. Call `get_cv()` to retrieve the full CV markdown
-   b. If the user also requested summarization (any depth other than `full`), apply steps 5-6 to the markdown first to produce a summary. Otherwise use the full markdown
+   b. If the user also requested summarization (any depth other than `full`), apply steps 6-7 to the markdown first to produce a summary. Otherwise use the full markdown
    c. Read the [HTML template](references/cv-template.html), the [CSS](references/cv-template.css), and the [JS](references/cv-template.js)
    d. Inline the assets to produce a self-contained HTML file (required for artifact sandboxes that cannot resolve sibling files):
       - Replace `<link rel="stylesheet" href="cv-template.css">` with `<style>` + CSS file contents + `</style>`
@@ -82,11 +84,11 @@ This skill is self-contained. Once invoked, deliver ALL CV output directly — n
    i. Write the completed HTML to `tmp/FranciscoPerezSorrosal_CV.html` (full CV) or `tmp/FranciscoPerezSorrosal_CV_Summary.html` (summary)
    j. Open the file in the default browser: `open tmp/<filename>.html`
    k. Skip all remaining steps
-4. Call `get_cv()` (defaults to markdown) to retrieve the full CV content
-5. Determine the target profile: match the user's request to a [preset](references/summary-presets.md) or build custom parameters
-6. If depth is **full**: return the CV content as-is (skip summarization and restructuring). Otherwise: generate the summary following the summarization parameters below
-7. Append the PDF link (from `get_link("CV PDF")`) at the end of the output
-8. If citation analysis is requested, fetch the Google Scholar profile via `get_link("Google Scholar")`, analyze publications, and include a table of publications with citation counts and impact metrics
+5. Call `get_cv()` (defaults to markdown) to retrieve the full CV content
+6. Determine the target profile: match the user's request to a [preset](references/summary-presets.md) or build custom parameters
+7. If depth is **full**: return the CV content as-is (skip summarization and restructuring). Otherwise: generate the summary following the summarization parameters below
+8. Append the PDF link (from `get_link("CV PDF")`) at the end of the output
+9. If citation analysis is requested, fetch the Google Scholar profile via `get_link("Google Scholar")`, analyze publications, and include a table of publications with citation counts and impact metrics
 
 ## Summary Parameters
 
@@ -97,7 +99,7 @@ Select values for each parameter based on the user's request. When not specified
 | Parameter | Description | Options | Default |
 |-----------|-------------|---------|---------|
 | **Depth** | Level of detail | full (complete CV, no summarization), brief (100-200 words), moderate (200-400), comprehensive (400-600), deep-dive (600+) | full |
-| **Format** | Output encoding | markdown, plain text, pdf, html | markdown |
+| **Format** | Output encoding | markdown, plain text, pdf, html, latex | markdown |
 
 **Summarization parameters** (apply only when depth is not `full` -- ignored otherwise):
 
@@ -143,6 +145,7 @@ When the user's request does not match a preset, map their requirements to the p
 - "For an academic position" -> context: academic research, audience: academic committee, tone: formal and academic
 - "Bullet point summary" -> style: bullet points
 - "How would this person fit at a startup?" -> use Startup Executive Briefing preset
+- "Give me the CV in LaTeX" / "Generate a .tex file" / "moderncv version" -> format: latex (full CV only, summarization parameters ignored)
 - "Give me the CV as HTML" / "HTML version" -> format: html, depth: full
 - "Quick Hiring Screen in HTML" -> apply Quick Hiring Screen preset, format: html
 - "Summarize for hiring managers as an HTML page" -> depth: brief, audience: technical hiring manager, format: html

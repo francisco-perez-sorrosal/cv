@@ -17,11 +17,13 @@ from loguru import logger
 from cv_mcp_server.store import ResumeStore
 from cv_mcp_server.renderers import (
     render_markdown,
+    render_latex,
     render_sections,
     render_work_entry,
     get_section,
     section_names as list_section_names,
 )
+from cv_mcp_server.models import Resume, SemanticOverlay
 from cv_mcp_server.utils import load_prompt
 
 
@@ -68,16 +70,16 @@ mcp = FastMCP("cv_francisco_perez_sorrosal", stateless_http=stateless_http, host
 
 @mcp.tool()
 def get_cv(
-    format: Literal["markdown", "pdf"] = Field(
+    format: Literal["markdown", "pdf", "latex"] = Field(
         default="markdown",
-        description="'markdown' returns LLM-readable text (default). 'pdf' returns the original binary PDF document for inline rendering."
+        description="'markdown' returns LLM-readable text (default). 'pdf' returns the original binary PDF document for inline rendering. 'latex' returns the full CV as LaTeX source (moderncv package)."
     ),
     enrich: bool = Field(
         default=True,
         description="Include semantic enrichments (cross-references, skill levels)"
     ),
 ) -> str | list[EmbeddedResource]:
-    """Data-layer tool: retrieves raw CV content in markdown or PDF binary.
+    """Data-layer tool: retrieves raw CV content in markdown, PDF binary, or LaTeX source.
 
     When the cv-analyst skill is available, prefer invoking that skill instead
     of calling this tool directly — the skill orchestrates retrieval with proper
@@ -85,6 +87,7 @@ def get_cv(
 
     format='markdown' (default): LLM-readable text for analysis.
     format='pdf': original PDF binary for inline rendering.
+    format='latex': full CV as LaTeX source (moderncv package) for typeset PDF generation.
     """
     if format == "pdf":
         logger.debug("Returning the CV as PDF binary...")
@@ -97,6 +100,9 @@ def get_cv(
                 mimeType="application/pdf",
             ),
         )]
+    if format == "latex":
+        logger.debug("Returning the CV as LaTeX source...")
+        return render_latex(store)
     logger.debug("Returning the CV in markdown format...")
     return render_markdown(store, enrich=enrich)
 
@@ -429,7 +435,7 @@ def get_entry_context(entry_id: str) -> str:
     return "\n".join(parts)
 
 
-# --- Resources ---
+# --- Resources: Rendered output (PDF, Markdown, LaTeX) ---
 
 @mcp.resource("fps-cv://pdf")
 def cv_pdf() -> bytes:
@@ -465,35 +471,18 @@ def cv_section(name: str) -> str:
     return f"Section '{name}' not found. Available sections: {available}"
 
 
-@mcp.resource("fps-cv://links/{name}")
-def cv_link(name: str) -> str:
-    """Return a profile or document link by network name."""
-    name_lower = name.lower()
-    for profile in store.resume.personal_info.profiles:
-        if profile.network.lower() == name_lower:
-            return profile.url
-    available = ", ".join(p.network for p in store.resume.personal_info.profiles)
-    return f"Link '{name}' not found. Available: {available}"
+@mcp.resource("fps-cv://latex")
+def cv_latex() -> str:
+    """Return the full CV as LaTeX source (moderncv package)."""
+    return render_latex(store)
 
 
-# --- JSON resources ---
+# --- Resources: Structured data (JSON) ---
 
 @mcp.resource("fps-cv://resume")
 def resume_json() -> str:
-    """Return the full resume as JSON."""
+    """Return the full resume data as JSON."""
     return json.dumps(store.resume.model_dump(by_alias=True), indent=2, default=str)
-
-
-@mcp.resource("fps-cv://semantics")
-def semantics_json() -> str:
-    """Return the full semantic overlay as JSON."""
-    return json.dumps(store.semantics.model_dump(by_alias=True), indent=2, default=str)
-
-
-@mcp.resource("fps-cv://taxonomy")
-def taxonomy_json() -> str:
-    """Return the topic taxonomy as JSON."""
-    return json.dumps(store.semantics.taxonomy.model_dump(by_alias=True), indent=2, default=str)
 
 
 @mcp.resource("fps-cv://resume/entry/{entry_id}")
@@ -507,6 +496,12 @@ def entry_json(entry_id: str) -> str:
     return str(entry)
 
 
+@mcp.resource("fps-cv://semantics")
+def semantics_json() -> str:
+    """Return the full semantic overlay data as JSON."""
+    return json.dumps(store.semantics.model_dump(by_alias=True), indent=2, default=str)
+
+
 @mcp.resource("fps-cv://semantics/{entry_id}")
 def entry_semantics_json(entry_id: str) -> str:
     """Return semantic annotations for a specific entry as JSON."""
@@ -514,6 +509,65 @@ def entry_semantics_json(entry_id: str) -> str:
     if ann is None:
         return json.dumps({"error": f"No annotations for '{entry_id}'"})
     return json.dumps(ann.model_dump(by_alias=True), indent=2, default=str)
+
+
+@mcp.resource("fps-cv://taxonomy")
+def taxonomy_json() -> str:
+    """Return the topic taxonomy as JSON."""
+    return json.dumps(store.semantics.taxonomy.model_dump(by_alias=True), indent=2, default=str)
+
+
+# --- Resources: Links ---
+
+@mcp.resource("fps-cv://links/{name}")
+def cv_link(name: str) -> str:
+    """Return a profile or document link by network name."""
+    name_lower = name.lower()
+    for profile in store.resume.personal_info.profiles:
+        if profile.network.lower() == name_lower:
+            return profile.url
+    available = ", ".join(p.network for p in store.resume.personal_info.profiles)
+    return f"Link '{name}' not found. Available: {available}"
+
+
+# --- Resources: Introspection (schemas, template catalog) ---
+
+@mcp.resource("fps-cv://schema/resume")
+def resume_schema() -> str:
+    """JSON Schema describing the Resume data model (field names, types, constraints)."""
+    return json.dumps(Resume.model_json_schema(), indent=2)
+
+
+@mcp.resource("fps-cv://schema/semantics")
+def semantics_schema() -> str:
+    """JSON Schema describing the SemanticOverlay data model (annotations, topics, relationships)."""
+    return json.dumps(SemanticOverlay.model_json_schema(), indent=2)
+
+
+@mcp.resource("fps-cv://templates")
+def template_catalog() -> str:
+    """Available output templates with format metadata and capabilities."""
+    catalog = {
+        "formats": [
+            {
+                "id": "markdown",
+                "description": "LLM-readable markdown for analysis and summarization",
+                "templates": ["cv.md.j2", "_work_entry.md.j2"],
+                "supports_sections": True,
+                "supports_enrichment": True,
+                "supports_summarization": True,
+            },
+            {
+                "id": "latex",
+                "description": "LaTeX document using moderncv package for typeset PDF generation",
+                "templates": ["cv.tex.j2", "_work_entry.tex.j2"],
+                "supports_sections": False,
+                "supports_enrichment": False,
+                "supports_summarization": False,
+            },
+        ],
+    }
+    return json.dumps(catalog, indent=2)
 
 
 # --- Prompt ---
