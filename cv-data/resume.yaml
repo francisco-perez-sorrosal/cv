@@ -5,21 +5,22 @@ personal_info:
   phone: ""
   url: http://francisco-perez-sorrosal.github.io/
   summary: >-
-    Reliable, goal-oriented, and detail-focused professional with extensive
-    experience in research and software engineering across both academic and
-    industry settings, specializing in machine learning, artificial
-    intelligence, and distributed systems. As a Research Engineer, curious and
-    passionate about exploring and implementing cutting-edge technologies,
-    particularly in AI/ML, to tackle complex challenges and foster innovation.
-    As a Software Engineer, capable of designing, developing, and ensuring the
-    maintainability of robust and scalable big data applications, whether
-    on-prem or cloud, always prioritizing high availability, scalability,
-    performance, and reliability. Adaptable, capable of taking initiative and
-    leading efforts with a strategic approach when needed, or collaborating as
-    a communicative, supportive, and empathetic team player to achieve shared
-    goals. Thrives in open, dynamic, and multidisciplinary environments,
-    integrating visionary and practical insights to deliver impactful results
-    while empowering others and fostering collaboration.
+    I am a reliable, goal-oriented, and detail-focused professional with
+    extensive experience in research and software engineering across both
+    academic and industry settings, specializing in machine learning,
+    artificial intelligence, and distributed systems. As a Research Engineer,
+    I am curious and love exploring and implementing with cutting-edge
+    technologies, particularly in AI/ML, to tackle complex challenges and
+    foster innovation. As a Software Engineer, I can design, develop, and
+    ensure the maintainability of robust and scalable big data applications,
+    whether on-prem or cloud, always prioritizing high availability,
+    scalability, performance, and reliability. I am adaptable, capable of
+    taking initiative and leading efforts with a strategic approach when
+    needed, or collaborating as a communicative, supportive, and empathetic
+    team player to achieve shared goals. I thrive in open, dynamic, and
+    multidisciplinary environments, integrating visionary and practical
+    insights to deliver impactful results while empowering others and
+    fostering collaboration.
   location:
     address: ""
     city: San Francisco
@@ -41,7 +42,7 @@ personal_info:
     - network: CV PDF
       url: https://github.com/francisco-perez-sorrosal/cv/blob/main/2025_FranciscoPerezSorrosal_CV_English.pdf
 
-quote: "Any man could, if he were so inclined, be the sculptor of his own brain. -- Santiago Ramon y Cajal"
+quote: '"Any man could, if he were so inclined, be the sculptor of his ossswn brain." -- Santiago Ramón y Cajal'
 
 institutions:
   # Companies
@@ -74,7 +75,7 @@ institutions:
 
   # Universities
   - id: inst-upm
-    name: Universidad Politecnica de Madrid
+    name: Universidad Politécnica de Madrid
     type: university
     location: Spain
     aliases:
@@ -251,7 +252,7 @@ work:
         achievements:
           - >-
             Devised a solution to reduce the number of models maintained in
-            production from ~30 heterogeneous (heuristic-based, SVMs,
+            production from ≈ 30 heterogeneous (heuristic-based, SVMs,
             Tree-based) to just 4, which encompass the main 4 meta-entity
             types in YK.
           - >-
@@ -288,6 +289,7 @@ work:
     institution_id: inst-yahoo
     location: Sunnyvale
     department: Mail
+    employer_display: "Mail @ Yahoo"
     position: Principal Research Engineer
     start_date: "2022-06"
     end_date: "2022-12"
@@ -317,6 +319,7 @@ work:
           optimized for speed and suitable for real-time classification tasks,
           and (2) offline models, designed to include richer information for
           improved accuracy in non-real-time applications.
+        description_label: Approach
         highlights: []
         achievements:
           - >-
@@ -336,6 +339,7 @@ work:
     institution_id: inst-yahoo
     location: Sunnyvale
     department: Digital Transformation Office
+    employer_display: "Digital Transformation Office @ Yahoo"
     position: Technical Advisor
     start_date: "2022-04"
     end_date: "2022-12"
@@ -386,6 +390,7 @@ work:
     institution_id: inst-yahoo
     location: Sunnyvale
     department: Ads
+    employer_display: "Ads @ Yahoo"
     position: Principal Research Engineer
     start_date: "2021"
     end_date: "2022"
@@ -435,6 +440,7 @@ work:
     institution_id: inst-yahoo
     location: Sunnyvale
     department: Science and Content Platform
+    employer_display: "Science and Content Platform @ Verizon Media/Oath"
     position: Principal Research Engineer
     start_date: "2018"
     end_date: "2022"
@@ -482,6 +488,7 @@ work:
           Class representations are encoded in parallel but produce independent
           binary labels for each input through a shared classification output
           layer.
+        description_label: Method
         highlights: []
         achievements:
           - >-
@@ -675,6 +682,7 @@ work:
     institution_id: inst-yahoo
     location: Spain
     department: Scalable Computing Group
+    employer_display: "Scalable Computing Group @ Yahoo Labs."
     position: Research Engineer
     start_date: "2012"
     end_date: "2015"
@@ -783,6 +791,7 @@ work:
     institution_id: inst-greenhouse-coop
     location: Spain
     department: ""
+    employer_display: "Freelance, Greenhouse Cooperative"
     position: Software Architect/Engineer
     start_date: "2010"
     end_date: "2011"
@@ -793,13 +802,14 @@ work:
     highlights:
       - >-
         Analysis, design and Ruby/Rails implementation of a web application
-        to manage the different domains of a greenhouse farm. LoC ~20,000.
+        to manage the different domains of a greenhouse farm. LoC ≈ 20,000.
     projects: []
 
   - id: work-upm-research-2003
     institution_id: inst-upm
     location: Spain
     department: School of CS
+    employer_display: "School of CS at Univ. Politécnica de Madrid (UPM)"
     position: Software Architect/Research Engineer
     start_date: "2003"
     end_date: "2010"
@@ -871,7 +881,7 @@ work:
           provided high availability for critical applications deployed in
           application server clusters, scaling-out the cluster when
           overloaded. UPM & BULL signed a pre-agreement to include it in the
-          commercial version. LoC Java (HA&S Service) ~4,000.
+          commercial version. LoC Java (HA&S Service) ≈ 4,000.
         keywords:
           - High Availability
           - JOnAS
@@ -888,7 +898,7 @@ work:
           5th European Framework Programme (IST-2001-37126). Developed a
           high-available service for the JOnAS application server maintained
           by Bull SAS (France). Available since v.4.8. LoC Java (JOnAS)
-          ~150,000.
+          ≈ 150,000.
         keywords:
           - High Availability
           - JOnAS
@@ -904,7 +914,7 @@ work:
           Spanish Ministry of Education and Science (TIN2004-07474-C02-01).
           Built an open-source reference implementation of the WS-CAF
           specification for adding transactions to SOAP Web Services. LoC
-          ~50,000.
+          ≈ 50,000.
         keywords:
           - WS-CAF
           - Web Services
@@ -920,9 +930,9 @@ work:
         description: >-
           EUREKA/ITEA project (Label 04025). Implemented a transactional-aware
           replication architecture for stateful EJBs for JBoss. LoC Java
-          ~10,600. Open-sourced the implementation of the Activity Service
+          ≈ 10,600. Open-sourced the implementation of the Activity Service
           specification to add advanced transactions models to J2EE. LoC Java
-          ~10,000.
+          ≈ 10,000.
         keywords:
           - EJB
           - JBoss
@@ -935,6 +945,7 @@ work:
     institution_id: inst-upsa
     location: Spain
     department: School of CS
+    employer_display: "School of CS at Universidad Pontificia de Salamanca (Madrid Campus)"
     position: Lecturer
     start_date: "2001"
     end_date: "2003"
@@ -949,6 +960,7 @@ work:
     institution_id: inst-upsa
     location: Spain
     department: School of CS
+    employer_display: "School of CS at Universidad Pontificia de Salamanca (Madrid Campus)"
     position: Systems Administrator
     start_date: "2000"
     end_date: "2001"
@@ -963,6 +975,7 @@ work:
     institution_id: inst-meta4
     location: Madrid, Spain
     department: ""
+    employer_display: "Meta 4 S.A. (now Cegid)"
     position: Quality Analyst
     start_date: "1999"
     end_date: "1999"
@@ -985,6 +998,7 @@ work:
     institution_id: inst-upm
     location: Spain
     department: School of CS
+    employer_display: "School of CS at Universidad Politécnica de Madrid (UPM)"
     position: Researcher
     start_date: "2003"
     end_date: "2011"
@@ -1003,7 +1017,7 @@ work:
           scalability to multi-tier architectures by combining snapshot-isolation
           and an innovative vertical replication approach.
         description: >-
-          Advisors: Prof. Marta Patino-Martinez and Prof. Ricardo Jimenez-Peris
+          Advisors: Prof. Marta Patiño-Martínez and Prof. Ricardo Jiménez-Péris
           (UPM). Specialization: Distributed Systems, Transactional Systems,
           Scalability, High Availability, SOAs.
         keywords:
@@ -1529,14 +1543,14 @@ leadership:
 interests:
   - name: Cognitive Sciences & Interdisciplinary
     description: >-
-      Beyond the core professional focus, but some way related to it, a strong
-      interest in the intersection of fields such as neuroscience, psychology,
-      decision-making, cognitive sciences, learning techniques, behavioral
-      economics, and philosophy, as they offer valuable insights into human
-      behavior, intelligence, and how the brain works (and why!). Deeply
-      fascinated by the mechanisms of human thought, learning, and behavior,
-      and how these insights can inform and inspire advancements in AI and
-      daily lives and wellbeing in general.
+      Beyond my core professional focus, but some way related to it, I have a
+      strong interest in the intersection of fields such as neuroscience,
+      psychology, decision-making, cognitive sciences, learning techniques,
+      behavioral economics, and philosophy, as they offer valuable insights
+      into human behavior, intelligence, and how the brain works (and why!)
+      I am deeply fascinated by the mechanisms of human thought, learning,
+      and behavior, and how these insights can inform and inspire advancements
+      in AI and our daily lives and wellbeing in general.
     keywords:
       - Neuroscience
       - Psychology
@@ -1547,9 +1561,10 @@ interests:
       - Philosophy
   - name: Sports & Wellness
     description: >-
-      Staying active through activities like running, mountain biking, yoga,
-      cold-plunging, and playing tennis, which not only keep physically fit
-      but also provide a sense of balance and focus.
+      In my personal life, I enjoy staying active through activities like
+      running, mountain biking, yoga, cold-plunging, and playing tennis,
+      which not only keep me physically fit but also provide a sense of
+      balance and focus.
     keywords:
       - Running
       - Mountain Biking
