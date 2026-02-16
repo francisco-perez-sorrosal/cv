@@ -120,6 +120,7 @@ class Project(ResumeEntry):
     start_date: str = Field("", alias="startDate")
     end_date: str = Field("", alias="endDate")
     description: str = ""
+    description_label: str = Field("", description="Label for description (e.g., 'Approach', 'Method'); when absent, description is plain text")
     goal: str = Field("", description="Project goal statement")
     highlights: list[str] = []
     achievements: list[str] = Field([], description="Outcomes distinct from goal and general highlights")
@@ -135,6 +136,7 @@ class WorkEntry(ResumeEntry):
     institution_id: EntryId = Field(description="Reference to institution")
     location: str = ""
     department: str = Field("", description="Team or department")
+    employer_display: str = Field("", description="Overrides default 'department @ institution' display name")
     position: str = ""
     start_date: str = Field("", alias="startDate")
     end_date: str = Field("", alias="endDate")

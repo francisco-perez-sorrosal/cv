@@ -1,0 +1,361 @@
+{% raw %}
+%% start of file `template.tex'.
+%% Copyright 2006-2010 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+% A modern LaTeX CV template config links:
+% https://www.baeldung.com/cs/latex-moderncv-resume
+
+%------------- PACKAGES --------------------------------------------
+
+\documentclass[11pt,a4paper,english, sans]{moderncv}      % a4paper, a5paper, b5paper, letterpaper, legalpaper, executivepaper, landscape
+                                                          % 10pt, 11pt, 12pt, english, sans
+
+% moderncv setup
+\moderncvcolor{blue} % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
+\moderncvstyle{classic} % casual (default), classic, banking, oldstyle, fancy
+
+% adjust the page margins
+\usepackage[scale=0.8]{geometry}
+
+% Font encoding and family
+% \usepackage[utf8]{inputenc}                   % character encoding: replace by the encoding you are using
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% language
+\usepackage[english]{babel}
+
+% symbols
+\usepackage{amssymb}
+
+% additional packages for safety
+\usepackage{enumitem}
+\usepackage{ifthen}
+
+%------------- PACKAGES --------------------------------------------
+{% endraw %}
+
+
+%------------- PERSONAL DATA ---------------------------------------
+% personal data
+\name{\Huge {{ resume.personal_info.name.split()[0] }}}{\Huge {{ resume.personal_info.name.split()[-1] }}}
+\title{{ "{" }}{{ resume.personal_info.label }}{{ "}" }}
+\address{N/A}{{ "{" }}{{ resume.personal_info.location.postal_code }} {{ resume.personal_info.location.city }}, {{ resume.personal_info.location.region }} (U.S.){{ "}" }}
+\phone[mobile]{Ask through LinkedIn}
+\email{Ask through LinkedIn}
+{% for p in resume.personal_info.profiles %}
+{% if p.network == "LinkedIn" %}
+\social[linkedin]{{ "{" }}{{ p.username }}{{ "}" }}
+{% elif p.network == "GitHub" %}
+\social[github]{{ "{" }}{{ p.username }}{{ "}" }}
+{% endif %}
+{% endfor %}
+\homepage{{ "{" }}{{ resume.personal_info.url }}{{ "}" }}
+{% for p in resume.personal_info.profiles %}
+{% if p.network == "CV PDF" %}
+\extrainfo{\homepagesymbol ~\href{{ "{" }}{{ p.url }}{{ "}" }}{Full CV}}      % optional, remove the line if not wanted
+{% endif %}
+{% endfor %}
+%------------- PERSONAL DATA ---------------------------------------
+
+%------------- QUOTE -----------------------------------------------
+% Quote (optional)
+\quote{\textit{{ "{" }}{{ resume.quote | latex_escape }}{{ "}" }}}
+%------------- QUOTE -----------------------------------------------
+
+{% raw %}
+%------------- CONTENT SETUP ---------------------------------------
+
+% Page numbering (yes/no)
+%\nopagenumbers{}
+
+%\setlength{\hintscolumnwidth}{3cm}						% if you want to change the width of the column with the dates
+%\AtBeginDocument{\setlength{\maketitlenamewidth}{8.3cm}}  % only for the classic theme, if you want to change the width of your name placeholder (to leave more space for your address details
+\AtBeginDocument{\recomputelengths}                     % required when changes are made to page layout lengths
+
+% Compact itemize globally with smaller bullets
+\setlist[itemize]{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt,label={\tiny$\bullet$}}
+
+% Reduce interlining space
+\renewcommand{\baselinestretch}{1}
+
+% Reduce spacing between sections
+\renewcommand{\sectionfont}{\Large\mdseries\upshape\bfseries}
+\setlength{\hintscolumnwidth}{1.6cm}
+% Change subsection style
+\renewcommand{\subsectionfont}{\large\upshape\bfseries}
+\renewcommand*{\subsectionstyle}[1]{{\subsectionfont\textcolor{color1!90}{#1}}}
+
+% Customize section to make it larger and in color1
+\makeatletter % to allow for customizing the section command
+\renewcommand*{\section}[1]{%
+  \par\addvspace{.6cm}%
+  \phantomsection{}%
+  \addcontentsline{toc}{section}{#1}%
+  \parbox[t]{\hintscolumnwidth}{\strut\raggedleft\raisebox{\baseletterheight}{\color{color1}\rule{\hintscolumnwidth}{0.5ex}}}%
+  \hspace{\separatorcolumnwidth}%
+  \parbox[t]{\maincolumnwidth}{\strut\sectionstyle{#1}}%
+  \par\nobreak\addvspace{0.9ex}\@afterheading}
+\makeatother
+
+% Customize cventry to make job position (third parameter) default to color1
+% and company (fourth parameter) in color1 and italics
+\renewcommand*{\cventry}[7][.5em]{%
+  \cvitem[#1]{#2}{%
+    {\textcolor{color1}{\textbf{#3}}}%
+    \ifthenelse{\equal{#4}{}}{}{, \textcolor{gray}{\textit{\textbf{#4}}}}%
+    \ifthenelse{\equal{#5}{}}{}{, #5}%
+    \ifthenelse{\equal{#6}{}}{}{, #6}%
+    .\strut%
+    \ifx&#7&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\vspace{-5pt}#7\end{minipage}}\fi}}
+
+%------------- BIBLIOGRAPHY STYLE --------------------------------------------
+% to show numerical labels in the bibliography; only useful if you make citations in your resume
+\makeatletter
+\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}
+\makeatother
+
+% bibliography with mutiple entries
+%\usepackage{multibib}
+
+%\newcites{book,misc}{{Books},{Others}}
+
+%------------- BIBLIOGRAPHY STYLE --------------------------------------------
+{% endraw %}
+
+%------------- BEGIN DOCUMENT --------------------------------------------
+
+\begin{document}
+
+\maketitle
+\vspace{-0.5cm}
+
+%------------- PROFILE AND GOALS --------------------------------------------
+{% if resume.personal_info.summary %}
+\section{Profile and Goals}
+
+\small {{ resume.personal_info.summary | latex_escape }}
+{% endif %}
+%------------- PROFILE AND GOALS --------------------------------------------
+
+%------------- PROFESSIONAL EXPERIENCE --------------------------------------------
+{% if industry_work %}
+\section{Professional Experience}
+
+% For Professional Experience, use the \cventry syntax: \cventry{{ "{" }}{{ "{" }}period/year(s){{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}job position{{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}company{{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}location (optional){{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}role(s){{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}description using LaTeXitemized lists{{ "}" }}{{ "}" }}
+
+{% for w in industry_work %}
+{% include '_work_entry.tex.j2' %}
+
+{% endfor %}
+{% endif %}
+%------------- PROFESSIONAL EXPERIENCE --------------------------------------------
+
+%---------------------------------- PATENTS --------------------------------------------
+{% if resume.patents %}
+\section{Patents}
+
+% For Patents, use the \cventry syntax: \cventry{{ "{" }}{{ "{" }}year{{ "}" }}{{ "}" }}{{ "{" }}pat. number{{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}title{{ "}" }}{{ "}" }}{{ "{" }}{{ "{" }}Status: App. (application)or Pat. (patent){{ "}" }}{{ "}" }}{}{}
+
+{% for p in resume.patents %}
+\cventry{{ "{" }}{{ p.date }}{{ "}" }}{{ "{" }}{{ p.number }}{{ "}" }}{{ "{" }}{{ p.title | latex_escape }}{{ "}" }}{{ "{" }}{{ "App" if p.status.value == "application" else "Pat" }}{{ "}" }}{}{}
+{% endfor %}
+{% endif %}
+%---------------------------------- PATENTS --------------------------------------------
+
+%------------- ACADEMIC RESEARCH EXPERIENCE --------------------------------------------
+{% if academic_work %}
+
+\section{Academic Research Experience}
+
+{% for w in academic_work %}
+{% include '_work_entry.tex.j2' %}
+
+{% endfor %}
+{% if academic_publications %}
+\cventry{}{Publications in Top Conferences and Journals}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+{% for p in academic_publications %}
+{% set cite_mark = " \\textbf{" ~ p.citations ~ " Citations}" if p.citations else "" %}
+\item \textit{{ "{" }}{{ p.name | latex_escape }}{{ "}" }}. In {{ p.publisher | latex_escape }}{{ cite_mark }}
+{% endfor %}
+\end{itemize}
+}
+{% endif %}
+{% endif %}
+%------------- ACADEMIC RESEARCH EXPERIENCE --------------------------------------------
+
+%------------- SKILLS --------------------------------------------
+{% if resume.skills %}
+
+\section{Skills}
+
+{% for sg in resume.skills %}
+\subsection{{ "{" }}{{ sg.name | latex_escape }}{{ "}" }}
+{% for skill in sg.skills %}
+\cvitem{{ "{" }}{{ skill.name }}{{ "}" }}{{ "{" }}{{ skill.keywords | join(", ") | latex_escape }}.{{ "}" }}
+{% endfor %}
+
+{% endfor %}
+{% endif %}
+%------------- SKILLS --------------------------------------------
+
+%------------- EDUCATION --------------------------------------------
+{% if resume.certificates %}
+
+\section{Courses}
+
+{% for c in resume.certificates %}
+{% set inst = c.institution_id | inst_name %}
+{% set cert_link = "\\href{" ~ c.url ~ "}{Certificate}" if c.url else "" %}
+{% set loc_or_format = c.format if c.format else "" %}
+{% set loc = c.location if c.location else "" %}
+\cventry{{ "{" }}{{ c.date }}{{ "}" }}{{ "{" }}{{ c.name | latex_escape }}{{ "}" }}{{ "{" }}{{ inst | latex_escape }}{{ "}" }}{{ "{" }}{{ loc_or_format }}{{ "}" }}{{ "{" }}{% if loc and cert_link %}{{ loc }}{{ "}" }}{{ "{" }}{{ cert_link }}{% elif loc %}{{ loc }}{% elif cert_link %}{{ cert_link }}{% endif %}{{ "}" }}{}
+{% endfor %}
+{% endif %}
+{% if resume.education %}
+
+\section{Education}
+
+{% for e in resume.education %}
+{% set inst = e.institution_id | inst_name %}
+{% set period = e | latex_period %}
+{% set dept_inst = (e.department ~ " at " if e.department else "") ~ (inst | latex_escape) %}
+{% set loc = e.location if e.location else "" %}
+{% set degree = e.study_type | latex_escape %}
+{% if e.area and e.area not in e.study_type %}
+{% set degree = degree ~ " in " ~ e.area %}
+{% endif %}
+\cventry{{ "{" }}{{ period }}{{ "}" }}{{ "{" }}{{ degree }}{{ "}" }}{{ "{" }}{{ dept_inst }}{{ "}" }}{{ "{" }}{{ loc }}{{ "}" }}{}{}
+{% endfor %}
+{% endif %}
+
+%------------- EDUCATION --------------------------------------------
+
+%------------- LEADERSHIP AND COMMUNICATION SKILLS --------------------------------------------
+{% if resume.leadership %}
+
+\section{Leadership \& Communication}
+
+{% for cat in resume.leadership %}
+\subsection{{ "{" }}{{ cat.name | latex_escape }}{{ "}" }}
+{% for item in cat.items %}
+\cvitem{{ "{" }}{{ item.label | latex_escape }}{{ "}" }}{{ "{" }}{{ item.description | latex_escape }}{{ "}" }}
+{% endfor %}
+
+{% endfor %}
+{% endif %}
+%------------- LEADERSHIP AND COMMUNICATION SKILLS --------------------------------------------
+
+%------------- LANGUAGES --------------------------------------------
+{% if resume.languages %}
+
+\section{Languages}
+
+{% set lang_pairs = [] %}
+{% for i in range(0, resume.languages | length, 2) %}
+{% set l1 = resume.languages[i] %}
+{% set l2 = resume.languages[i + 1] if i + 1 < resume.languages | length else none %}
+{% if l2 %}
+{% set fluency1 = l1.fluency | replace("native", "Mother tongue") | replace("professional", "Professional proficiency") | replace("intermediate", "Intermediate proficiency") | replace("fluent", "Fluent proficiency") %}
+{% set fluency2 = l2.fluency | replace("native", "Mother tongue") | replace("professional", "Professional proficiency") | replace("intermediate", "Intermediate proficiency") | replace("fluent", "Fluent proficiency") %}
+\cvcomputer{{ "{" }}{{ l1.language }}{{ "}" }}{{ "{" }}\textit{{ "{" }}{{ fluency1 }}{{ "}" }}{{ "}" }}{{ "{" }}{{ l2.language }}{{ "}" }}{{ "{" }}\textit{{ "{" }}{{ fluency2 }}{{ "}" }}{{ "}" }}
+{% else %}
+\cvcomputer{{ "{" }}{{ l1.language }}{{ "}" }}{{ "{" }}\textit{{ "{" }}{{ l1.fluency }}{{ "}" }}{{ "}" }}{}{}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+%------------- LANGUAGES --------------------------------------------
+
+%------------- OTHER ACTIVITIES RELATED TO CS --------------------------------------------
+{% if resume.projects or resume.memberships or resume.conferences %}
+\section{Other Activities Related to Computer Science}
+{% if resume.projects %}
+\cventry{}{Open Source Project Maintainer}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+{% for p in resume.projects %}
+{% set url_mark = " \\href{" ~ p.url ~ "}{Crates Info}" if p.url else "" %}
+\item \textit{{ "{" }}{{ p.name | latex_escape }}{{ "}" }}: {{ p.description | latex_escape }}{{ url_mark }}
+{% endfor %}
+\end{itemize}
+}
+{% endif %}
+{% if committers %}
+\cventry{}{Committer in the Apache Software Foundation}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+{% for m in committers %}
+\item \textit{Apache Omid project, a high-performant and scalable Transaction Manager for HBase}
+{% endfor %}
+\end{itemize}
+}
+{% endif %}
+{% if reviewer_groups %}
+\cventry{}{Reviewer in International Academic Conferences}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+{% for r in reviewer_groups %}
+\item \textit{{ "{" }}{{ r.name | latex_escape }}{{ "}" }}, {{ r.years }}
+{% endfor %}
+\end{itemize}
+}
+{% endif %}
+{% if conference_list %}
+\cventry{}{Speaker/Attendee in Academic/Technical Conferences}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+{% for c in conference_list %}
+{% set speaker_mark = " (Speaker)" if c.role == "speaker" else "" %}
+{% set location_mark = ", " ~ (c.location | latex_escape) if c.location else "" %}
+\item \textit{{ "{" }}{{ c.name | latex_escape }}{{ speaker_mark }}{{ "}" }}, {{ c.date }}{{ location_mark }}
+{% endfor %}
+\end{itemize}
+}
+{% endif %}
+{% if members %}
+\cventry{}{Member}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+{% for m in members %}
+{% set url_mark = ", \\href{" ~ m.url ~ "}{" ~ m.url ~ "}" if m.url else "" %}
+\item \textit{{ "{" }}{{ m.organization | latex_escape }}{{ "}" }}{{ url_mark }}
+{% endfor %}
+\end{itemize}
+}
+{% endif %}
+{% endif %}
+
+%------------- OTHER ACTIVITIES RELATED TO CS --------------------------------------------
+
+%------------- HOBBIES AND INTERESTS --------------------------------------------
+{% if resume.interests %}
+\section{Hobbies and Interests}
+{% for i in resume.interests %}
+\cvline{}{{ "{" }}{{ i.description | latex_escape }}
+{{ "}" }}
+{% endfor %}
+{% endif %}
+%------------- HOBBIES AND INTERESTS --------------------------------------------
+
+{% raw %}
+% ------------------ PUBLICATIONS --------------------------------------------
+% Publications from a BibTeX file without multibib\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}% for BibTeX numerical labels
+\nocite{*}
+\bibliographystyle{plain}
+%\bibliography{publications}       % 'publications' is the name of a BibTeX file
+
+% Publications from a BibTeX file using the multibib package
+%\section{Publications}
+%\nocitebook{book1,book2}
+%\bibliographystylebook{plain}
+%\bibliographybook{publications}   % 'publications' is the name of a BibTeX file
+%\nocitemisc{misc1,misc2,misc3}
+%\bibliographystylemisc{plain}
+%\bibliographymisc{publications}   % 'publications' is the name of a BibTeX file
+
+% ------------------ END OF DOCUMENT --------------------------------------------
+
+\end{document}
+{% endraw %}
