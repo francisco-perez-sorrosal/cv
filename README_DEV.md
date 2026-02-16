@@ -37,7 +37,7 @@ pdflatex 2025_FranciscoPerezSorrosal_CV_English.tex
 
 ### MCP Branch - Python MCP Server
 
-The MCP branch contains a Python-based Model Context Protocol server implementation.
+The MCP branch contains a Python-based Model Context Protocol server implementation. It serves CV content in markdown, PDF, and LaTeX formats. The LaTeX renderer uses Jinja2 templates (`cv.tex.j2`, `_work_entry.tex.j2` in `src/cv_mcp_server/templates/`) to generate moderncv-compatible `.tex` files from the structured YAML data layer.
 
 #### Development Setup
 
@@ -59,6 +59,9 @@ pixi run cv-mcp-server
 pixi run cv-mcp-server    # Main MCP server command (project script)
 pixi run mcps            # Direct Python module execution
 pixi run start           # Alias for mcps
+
+# LaTeX generation
+pixi run generate-tex    # Generate LaTeX CV (.tex) from YAML data
 
 # MCPB (MCP Bundle) tasks
 pixi run python-bundle   # Build Python wheel package to dist/wheel/

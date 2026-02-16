@@ -4,8 +4,8 @@ A suite of agent utilities for working with Francisco Perez-Sorrosal's CV and pr
 
 ## Components
 
-- **MCP Server** — serves CV content, PDF links, and Google Scholar profile as tools for any MCP-compatible client
-- **`cv-analyst` Skill** — structured CV summarization for different audiences (hiring screens, executive briefings, technical reviews)
+- **MCP Server** — serves CV content in markdown, PDF, and LaTeX formats, plus PDF links and Google Scholar profile as tools for any MCP-compatible client
+- **`cv-analyst` Skill** — structured CV summarization for different audiences (hiring screens, executive briefings, technical reviews) with output in markdown, plain text, PDF, HTML, or LaTeX
 - **Claude Code Plugin** — bundles the MCP server and skill for one-step installation
 
 ## Installation
@@ -82,6 +82,8 @@ Example prompts:
 - "Summarize Francisco's CV for a startup executive briefing"
 - "What is Francisco's Google Scholar profile link?"
 - "Give me a 3 page summary of my CV for a hiring manager oriented towards an ai engineer position in html"
+- "Give me the CV in LaTeX"
+- "Generate a .tex file from the CV data"
 
 ## Local Development
 
