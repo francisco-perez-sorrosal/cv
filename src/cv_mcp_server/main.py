@@ -601,7 +601,7 @@ _FORMAT_REGISTRY: dict[str, dict] = {
         },
     },
     "tailored-latex": {
-        "description": "Job-tailored LaTeX CV with section reordering, entry filtering, and keyword highlighting. Accessed via get_tailored_cv tool.",
+        "description": "Job-tailored LaTeX CV with section reordering, entry filtering, and profile override. Accessed via get_tailored_cv tool.",
         "files": [
             {"name": "cv_tailored.tex.j2", "role": "main"},
             {"name": "_preamble.tex.j2", "role": "partial"},

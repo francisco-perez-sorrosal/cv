@@ -40,7 +40,7 @@ pdflatex 2025_FranciscoPerezSorrosal_CV_English.tex
 The MCP branch contains a Python-based Model Context Protocol server implementation. It serves CV content in markdown, PDF, and LaTeX formats via 16 tools. The LaTeX renderer uses Jinja2 templates in `src/cv_mcp_server/templates/`:
 
 - `cv.tex.j2` — full CV template (uses `_preamble.tex.j2` and `_work_entry.tex.j2` partials)
-- `cv_tailored.tex.j2` — tailored CV template with dynamic section ordering, entry filtering, and keyword highlighting (uses the same partials)
+- `cv_tailored.tex.j2` — tailored CV template with dynamic section ordering, entry filtering, and profile override (uses the same partials)
 
 Two agent skills extend the server:
 - **`cv-analyst`** — general CV retrieval, summarization, and formatting
@@ -439,13 +439,13 @@ Key source files:
 | `src/cv_mcp_server/renderers.py` | `render_tailored_latex(store, spec)` — filters entries, reorders sections, renders template |
 | `src/cv_mcp_server/templates/cv_tailored.tex.j2` | LaTeX template with dynamic section iteration from `included_sections` |
 | `src/cv_mcp_server/templates/_preamble.tex.j2` | Shared LaTeX preamble (packages, moderncv setup, custom commands) |
-| `skills/cv-tailoring/SKILL.md` | Skill definition with 6-step workflow |
+| `skills/cv-tailoring/SKILL.md` | Skill definition with 7-step workflow |
 | `skills/cv-tailoring/references/methodology.md` | 4-phase methodology (analysis, repositioning, evaluation, rendered output) |
 
 The `TailoringSpec` controls:
 - **Section ordering** — `section_order` with `SectionDirective(section_name, include, position)`
 - **Entry filtering** — `entry_emphasis` with `EntryEmphasis(entry_id, weight, reason)` where `weight=0` omits
-- **Keyword highlighting** — `keywords` with `KeywordHighlight(term, weight)` rendered as `\highlight{}` in LaTeX
+- **Keywords** — `keywords` with `KeywordHighlight(term, weight)` for job-relevant terms (metadata for skill analysis; not rendered in LaTeX)
 - **Profile override** — `profile_override` replaces the generic summary with a role-targeted one
 - **Page budget** — `max_pages` (1-3, default 2)
 
