@@ -4,7 +4,7 @@
   "display_name": "Francisco Perez-Sorrosal CV MCP Server",
   "version": "0.0.5",
   "description": "MCP server serving Francisco Perez-Sorrosal's CV with structured data layer, semantic annotations, and comprehensive query tools",
-  "long_description": "A comprehensive MCP Bundle that exposes Francisco Perez-Sorrosal's curriculum vitae through structured YAML data, a semantic overlay with topic taxonomy, and 15+ MCP tools. Features include: full CV in markdown/PDF, per-section retrieval, structured work/entry queries, semantic topic queries, skill proficiency profiles, cross-entry relationship graphs, leadership/communication section, and configurable summarization. The server supports both local (stdio) and remote (streamable-http) deployment modes.",
+  "long_description": "A comprehensive MCP Bundle that exposes Francisco Perez-Sorrosal's curriculum vitae through structured YAML data, a semantic overlay with topic taxonomy, and 16 MCP tools. Features include: full CV in markdown/PDF, per-section retrieval, structured work/entry queries, semantic topic queries, skill proficiency profiles, cross-entry relationship graphs, leadership/communication section, and configurable summarization. The server supports both local (stdio) and remote (streamable-http) deployment modes.",
   "author": {
     "name": "Francisco Perez-Sorrosal",
     "email": "fperezsorrosal@gmail.com",
@@ -95,6 +95,10 @@
     {
       "name": "get_entry_context",
       "description": "Get full semantic context for an entry: topics, relationships, summaries, impact."
+    },
+    {
+      "name": "get_tailored_cv",
+      "description": "Render a tailored LaTeX CV from a TailoringSpec JSON."
     }
   ],
   "prompts": [
