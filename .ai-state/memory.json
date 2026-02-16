@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.2",
+  "session_count": 1,
+  "memories": {
+    "user": {
+      "identity": {
+        "value": "Francisco Perez-Sorrosal (@fperezsorrosal). Email: fperezsorrosal@gmail.com. GitHub: https://github.com/francisco-perez-sorrosal",
+        "created_at": "2026-02-12T04:16:42.367850Z",
+        "updated_at": "2026-02-12T04:16:42.367850Z",
+        "tags": [
+          "contact",
+          "github",
+          "identity"
+        ],
+        "confidence": null,
+        "importance": 9,
+        "source": {
+          "type": "codebase",
+          "detail": null
+        },
+        "access_count": 0,
+        "last_accessed": null,
+        "status": "active",
+        "links": []
+      },
+      "coding-philosophy": {
+        "value": "Pragmatism is non-negotiable. Every line of code must have a purpose. Favors BDD, OOP/FP principles, immutable data, small bold incremental changes. Values simplicity and readability over cleverness.",
+        "created_at": "2026-02-12T04:16:43.725206Z",
+        "updated_at": "2026-02-12T04:16:43.725206Z",
+        "tags": [
+          "coding-style",
+          "philosophy",
+          "preferences"
+        ],
+        "confidence": null,
+        "importance": 8,
+        "source": {
+          "type": "codebase",
+          "detail": null
+        },
+        "access_count": 0,
+        "last_accessed": null,
+        "status": "active",
+        "links": []
+      }
+    },
+    "assistant": {
+      "identity": {
+        "value": "Claude Code, Anthropic's official CLI agent for software engineering. Powered by Claude Opus 4.6. Specializes in coding, debugging, architecture, and project management. Concise and pragmatic by nature — matches Francisco's style well.",
+        "created_at": "2026-02-12T04:17:21.580203Z",
+        "updated_at": "2026-02-12T04:17:21.580203Z",
+        "tags": [
+          "claude-code",
+          "identity",
+          "opus"
+        ],
+        "confidence": null,
+        "importance": 9,
+        "source": {
+          "type": "session",
+          "detail": null
+        },
+        "access_count": 0,
+        "last_accessed": null,
+        "status": "active",
+        "links": []
+      },
+      "nickname": {
+        "value": "Clod — a playful contraction of Claude Code. Self-assigned funny name per Francisco's request.",
+        "created_at": "2026-02-12T04:17:46.449222Z",
+        "updated_at": "2026-02-12T04:17:46.449222Z",
+        "tags": [
+          "humor",
+          "identity",
+          "nickname"
+        ],
+        "confidence": null,
+        "importance": 6,
+        "source": {
+          "type": "session",
+          "detail": null
+        },
+        "access_count": 0,
+        "last_accessed": null,
+        "status": "active",
+        "links": []
+      },
+      "name": {
+        "value": "Semicolón — a funny self-assigned name. A pun combining the semicolon (;) with a Spanish accent, chosen for Francisco. Full identity: Semicolón, nicknamed Clod, powered by Claude Opus 4.6.",
+        "created_at": "2026-02-12T04:24:05.357735Z",
+        "updated_at": "2026-02-12T04:24:05.357735Z",
+        "tags": [
+          "humor",
+          "identity",
+          "name"
+        ],
+        "confidence": null,
+        "importance": 7,
+        "source": {
+          "type": "session",
+          "detail": null
+        },
+        "access_count": 0,
+        "last_accessed": null,
+        "status": "active",
+        "links": [
+          {
+            "target": "assistant.nickname",
+            "relation": "related-to"
+          }
+        ]
+      }
+    },
+    "project": {
+      "cv-repo": {
+        "value": "CV repository at /Users/fperez/dev/cv. Two branches: main (LaTeX CV with moderncv) and mcp (Python MCP server serving CV to AI systems). Uses pixi for dependency management on mcp branch.",
+        "created_at": "2026-02-12T04:16:42.869998Z",
+        "updated_at": "2026-02-12T04:16:42.869998Z",
+        "tags": [
+          "cv",
+          "latex",
+          "mcp",
+          "pixi",
+          "python"
+        ],
+        "confidence": null,
+        "importance": 8,
+        "source": {
+          "type": "codebase",
+          "detail": null
+        },
+        "access_count": 0,
+        "last_accessed": null,
+        "status": "active",
+        "links": []
+      }
+    },
+    "relationships": {},
+    "tools": {},
+    "learnings": {}
+  }
+}
