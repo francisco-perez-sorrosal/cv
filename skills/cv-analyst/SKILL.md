@@ -49,46 +49,36 @@ Use these when the user asks about themes, skill proficiency, or connections bet
 3. **`get_skill_profile(topic)`** -- Get skill proficiency levels with evidence, optionally filtered by topic.
 4. **`get_entry_context(entry_id)`** -- Full semantic context for an entry: topics, relationships, impact metrics, and audience-specific summaries.
 
-## Output Exclusivity
+## Workflow
 
-This skill handles untailored CV delivery. Once invoked, deliver output directly -- never delegate to another skill except cv-tailoring when the user introduces a job description mid-conversation. Do not read or invoke any other skill (including frontend, design, or HTML skills) -- all templates, CSS, and JS are bundled in this skill's `references/` directory. The only supported output formats are `markdown`, `plain text`, `pdf`, `html`, and `latex`. If the user asks for a format not in this list (e.g., docx, slides), tell them it is not supported and offer the five available options. Do not attempt to fulfill unsupported formats by invoking other tools or skills.
+### Step 1: Validate format
 
-## Summarization Process
+Supported formats: `markdown`, `plain text`, `pdf`, `html`, `latex`. If the user requests anything else (docx, slides, etc.), decline and list the five available options.
 
-1. Validate the requested format. If it is not one of `markdown`, `plain text`, `pdf`, `html`, or `latex`, respond that the format is not supported and list the five available options. Do not invoke any other skill or tool to produce an alternative format. Do not proceed further
-2. **LaTeX shortcut**: If the requested format is `latex`, call `get_cv(format="latex")`. Save the returned LaTeX source to `tmp/FranciscoPerezSorrosal_CV.tex`. Inform the user that the `.tex` file is ready and can be compiled with `pdflatex FranciscoPerezSorrosal_CV.tex` or `latexmk -pdf FranciscoPerezSorrosal_CV.tex`. LaTeX always renders the complete CV document -- summarization parameters are ignored. Skip all remaining steps
-3. **PDF shortcut**: If the requested format is `pdf`, call `get_cv(format="pdf")`. Then save the returned PDF binary to a file named `FranciscoPerezSorrosal_CV.pdf` using code execution (decode the base64 blob and write it to disk), and present the file as a downloadable artifact. Skip all remaining steps. **Failover**: If `get_cv(format="pdf")` returns an error or the response indicates that `application/pdf` objects are not supported, fall back to: (a) call `get_link("CV PDF")` to obtain the PDF URL, (b) download the PDF from that URL, (c) save it as `FranciscoPerezSorrosal_CV.pdf`, and (d) present the file as a downloadable artifact. Skip all remaining steps
-4. **HTML generation**: If the requested format is `html` (everything needed is in this skill's `references/` — do NOT read or invoke any other skill):
-   a. Call `get_cv()` to retrieve the full CV markdown
-   b. If the user also requested summarization (any depth other than `full`), apply steps 6-7 to the markdown first to produce a summary. Otherwise use the full markdown
-   c. Read the [HTML template](references/cv-template.html), the [CSS](references/cv-template.css), and the [JS](references/cv-template.js)
-   d. Inline the assets to produce a self-contained HTML file (required for artifact sandboxes that cannot resolve sibling files):
-      - Replace `<link rel="stylesheet" href="cv-template.css">` with `<style>` + CSS file contents + `</style>`
-      - Replace `<script src="cv-template.js"></script>` with `<script>` + JS file contents + `</script>`
-   e. Set the `.hero-label` text to match the output type: "Full CV" for depth full, "Candidate Summary" for general summaries, or the preset name (e.g., "Hiring Screen", "Executive Briefing")
-   f. Convert the CV/summary content into rich HTML using the template's component classes. Map CV sections to visual components:
-      - Profile/summary paragraph → `.profile-text`, key facts → `.tags > .tag`
-      - Quantitative highlights (years, papers, citations, patents) → `.stats-row > .stat > .stat-number + .stat-label`
-      - Skill categories → `.skills-grid > .skill-card > h3 + p`
-      - Experience/achievements → `.achievements-list > .achievement > .achievement-meta + .achievement-title + p`
-      - Education entries → `.edu-grid > .edu-card > .degree + .school + .year`
-      - Wrap each group in `<section data-label="Name"><div class="container"><div class="section-label">NN — Label</div><h2 class="section-title">Title</h2>...</div></section>`
-      - Make cards interactive: add class `expandable` to any stat, skill-card, achievement, or edu-card that has additional detail. Put the detail inside `<div class="expand-content">` and add `<span class="expand-indicator"></span>`. The component shows a + icon and expands on click to reveal the full content. Use rich formatting inside: `<strong>` for titles and names (papers, patents, projects), `<em>` for venues and the CV owner's name in author lists, `<small>` for metadata lines (authors, dates, citation counts)
-      - **Data sourcing for expandable lists**: call `get_link("Google Scholar")` and visit the profile page to obtain real publication data. Use this data to populate the expandable bullet-point lists in the generated HTML:
-        - **Publications stat**: one `<li>` per paper — wrap title in `<a>` linking to its Google Scholar citation page, show venue, year, and citation count in `<small>`. Omit author lists for cleanliness
-        - **Citations stat**: top-cited papers as bullet points — `<strong>` citation count + `<a>` linked short title in `<em>` + venue in `<small>`. Include h-index and a link to the full Google Scholar profile at the bottom
-        - **Patents stat**: one `<li>` per patent — wrap title in `<a>` linking to its Google Scholar page, show patent app number and year in `<small>`
-        - The template shows the HTML pattern for each list item type; populate with real data from the profile
-   g. Replace everything inside `<main>` (`<!-- BODY_CONTENT -->`) with the generated section HTML
-   h. Call `get_cv_pdf_link()` and replace `<!-- PDF_LINK -->` with the URL (all occurrences)
-   i. Write the completed HTML to `tmp/FranciscoPerezSorrosal_CV.html` (full CV) or `tmp/FranciscoPerezSorrosal_CV_Summary.html` (summary)
-   j. Open the file in the default browser: `open tmp/<filename>.html`
-   k. Skip all remaining steps
-5. Call `get_cv()` (defaults to markdown) to retrieve the full CV content
-6. Determine the target profile: match the user's request to a [preset](references/summary-presets.md) or build custom parameters
-7. If depth is **full**: return the CV content as-is (skip summarization and restructuring). Otherwise: generate the summary following the summarization parameters below
-8. Append the PDF link (from `get_link("CV PDF")`) at the end of the output
-9. If citation analysis is requested, fetch the Google Scholar profile via `get_link("Google Scholar")`, analyze publications, and include a table of publications with citation counts and impact metrics
+### Step 2: Route by format
+
+| Format | Action |
+|--------|--------|
+| **LaTeX** | Call `get_cv(format="latex")`. Save to `tmp/FranciscoPerezSorrosal_CV.tex`. Inform user it can be compiled with `pdflatex` or `latexmk -pdf`. Always renders the complete CV — summarization parameters are ignored. **Done.** |
+| **PDF** | Call `get_cv(format="pdf")`. Decode base64 blob, save to `FranciscoPerezSorrosal_CV.pdf`, present as downloadable artifact. **Failover**: if the call fails, use `get_link("CV PDF")` → download → save → present. **Done.** |
+| **HTML** | Follow the [HTML rendering guide](references/html-rendering.md). Supports both full CV and summarized output. All templates are bundled in `references/` — do NOT invoke any other skill. **Done.** |
+| **markdown / plain text** | Continue to step 3. |
+
+### Step 3: Fetch and summarize
+
+1. Call `get_cv()` to retrieve the full CV in markdown
+2. Match the user's request to a [preset](references/summary-presets.md) or build custom parameters from the tables below
+3. If depth is **full**: return the CV content as-is. Otherwise: generate the summary applying emphasis across these dimensions:
+   - Technical skills and expertise areas
+   - Research contributions and publications
+   - Industry experience and impact
+   - Academic background and achievements
+   - Leadership and collaboration experience
+
+### Step 4: Deliver
+
+1. Append the PDF link (from `get_link("CV PDF")`) at the end of the output
+2. If citation analysis is requested, fetch the Google Scholar profile via `get_link("Google Scholar")`, analyze publications, and include a table with citation counts and impact metrics
 
 ## Summary Parameters
 
@@ -111,16 +101,6 @@ Select values for each parameter based on the user's request. When not specified
 | **Audience** | Intended reader | technical hiring manager, academic committee, executive leadership, peer researchers, investment team, collaboration partners | technical hiring manager |
 | **Tone** | Writing register | professional and objective, enthusiastic and promotional, analytical and critical, conversational and accessible, formal and academic | professional and objective |
 | **Length** | Target size | 1-2 paragraphs (100-200 words), half-page (200-400), full-page (400-600), detailed report (600+), slide content (50-100) | half-page |
-
-## Content Focus Areas
-
-Apply the emphasis distribution across these aspects of the CV:
-
-- Technical skills and expertise areas
-- Research contributions and publications
-- Industry experience and impact
-- Academic background and achievements
-- Leadership and collaboration experience
 
 ## Preset Profiles
 
@@ -151,3 +131,10 @@ When the user's request does not match a preset, map their requirements to the p
 - "Summarize for hiring managers as an HTML page" -> depth: brief, audience: technical hiring manager, format: html
 
 When the user provides additional instructions (e.g., "focus on AI/ML healthcare experience", "highlight open-source contributions"), incorporate them as supplementary guidance applied on top of the selected parameters.
+
+## Boundaries
+
+- **Supported formats**: markdown, plain text, PDF, HTML, LaTeX — no others
+- **Skill handoff**: delegates to cv-tailoring when the user introduces a job description mid-conversation
+- **Self-contained**: all HTML templates, CSS, and JS are bundled in `references/` — never read or invoke any other skill
+- **`summarize_cv` tool**: fallback for MCP clients that cannot load Agent Skills. Exposes the same parameters as a tool-prompt pattern — the client calls the tool, receives a parameterized prompt, and processes it against CV data fetched via `get_cv`. Skill-capable clients should NOT call this tool
