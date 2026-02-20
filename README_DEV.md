@@ -37,14 +37,18 @@ pdflatex 2025_FranciscoPerezSorrosal_CV_English.tex
 
 ### MCP Branch - Python MCP Server
 
-The MCP branch contains a Python-based Model Context Protocol server implementation. It serves CV content in markdown, PDF, and LaTeX formats via 16 tools. The LaTeX renderer uses Jinja2 templates in `src/cv_mcp_server/templates/`:
+The MCP branch contains a Python-based Model Context Protocol server implementation. It serves CV content in markdown, PDF, LaTeX, HTML, and Typst formats via 16 tools. Jinja2 templates in `src/cv_mcp_server/templates/` drive all output formats:
 
-- `cv.tex.j2` — full CV template (uses `_preamble.tex.j2` and `_work_entry.tex.j2` partials)
-- `cv_tailored.tex.j2` — tailored CV template with dynamic section ordering, entry filtering, and profile override (uses the same partials)
+- `cv.md.j2` — markdown template (uses `_work_entry.md.j2` partial)
+- `cv.tex.j2` — LaTeX template using moderncv (uses `_preamble.tex.j2` and `_work_entry.tex.j2` partials)
+- `cv_tailored.tex.j2` — tailored LaTeX template with dynamic section ordering, entry filtering, and profile override
+- `cv.html.j2` — self-contained interactive HTML (uses `_cv_styles.css.j2` and `_cv_scripts.js.j2` partials)
+- `cv.typ.j2` — Typst template using moderner-cv (uses `_preamble.typ.j2` and `_work_entry.typ.j2` partials)
+- `cv_tailored.typ.j2` — tailored Typst template with dynamic section ordering, entry filtering, and profile override
 
 Two agent skills extend the server:
 - **`cv-analyst`** — general CV retrieval, summarization, and formatting
-- **`cv-tailoring`** — job-targeted CV tailoring that produces page-constrained (2-3 pages) LaTeX/PDF output via the `get_tailored_cv` MCP tool
+- **`cv-tailoring`** — job-targeted CV tailoring that produces page-constrained (2-3 pages) PDF output via LaTeX or Typst backends
 
 #### Development Setup
 
@@ -418,15 +422,15 @@ Job Description
     |-- Generates a TailoringSpec JSON
     |
     v
-[MCP tool: get_tailored_cv(tailoring_config)]
+[MCP tool: get_tailored_cv(tailoring_config, format?)]
     |-- Validates TailoringSpec via Pydantic
-    |-- Calls render_tailored_latex(store, spec)
-    |-- Returns compilable LaTeX source
+    |-- Calls render_tailored_latex() or render_tailored_typst()
+    |-- Returns compilable source (LaTeX or Typst)
     |
     v
 [cv-tailoring skill: compilation]
-    |-- Writes .tex to tmp/
-    |-- Runs pdflatex (twice for cross-references)
+    |-- Writes .tex or .typ to tmp/
+    |-- Runs pdflatex (twice) or typst compile (once)
     |-- Error correction loop (max 2 retries)
     |-- Presents compiled PDF
 ```
@@ -436,9 +440,11 @@ Key source files:
 | File | Purpose |
 |------|---------|
 | `src/cv_mcp_server/models/tailoring.py` | `TailoringSpec`, `SectionDirective`, `EntryEmphasis`, `KeywordHighlight` Pydantic models |
-| `src/cv_mcp_server/renderers.py` | `render_tailored_latex(store, spec)` — filters entries, reorders sections, renders template |
+| `src/cv_mcp_server/renderers.py` | `render_tailored_latex()` and `render_tailored_typst()` — filter entries, reorder sections, render template |
 | `src/cv_mcp_server/templates/cv_tailored.tex.j2` | LaTeX template with dynamic section iteration from `included_sections` |
+| `src/cv_mcp_server/templates/cv_tailored.typ.j2` | Typst template with dynamic section iteration from `included_sections` |
 | `src/cv_mcp_server/templates/_preamble.tex.j2` | Shared LaTeX preamble (packages, moderncv setup, custom commands) |
+| `src/cv_mcp_server/templates/_preamble.typ.j2` | Shared Typst preamble (moderner-cv import, page setup) |
 | `skills/cv-tailoring/SKILL.md` | Skill definition with 7-step workflow |
 | `skills/cv-tailoring/references/methodology.md` | 4-phase methodology (analysis, repositioning, evaluation, rendered output) |
 

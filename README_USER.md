@@ -4,9 +4,9 @@ A suite of agent utilities for working with Francisco Perez-Sorrosal's CV and pr
 
 ## Components
 
-- **MCP Server** — serves CV content in markdown, PDF, and LaTeX formats via 16 tools, plus semantic query capabilities and tailored CV rendering
-- **`cv-analyst` Skill** — structured CV summarization for different audiences (hiring screens, executive briefings, technical reviews) with output in markdown, plain text, PDF, HTML, or LaTeX
-- **`cv-tailoring` Skill** — job-targeted CV tailoring that analyzes a job description, selects relevant content, and produces a page-constrained (2-3 pages) compiled LaTeX/PDF CV
+- **MCP Server** — serves CV content in markdown, PDF, LaTeX, HTML, and Typst formats via 16 tools, plus semantic query capabilities and tailored CV rendering
+- **`cv-analyst` Skill** — structured CV summarization for different audiences (hiring screens, executive briefings, technical reviews) with output in markdown, plain text, PDF, HTML, LaTeX, or Typst
+- **`cv-tailoring` Skill** — job-targeted CV tailoring that analyzes a job description, selects relevant content, and produces a page-constrained (2-3 pages) compiled PDF via LaTeX or Typst
 - **Claude Code Plugin** — bundles the MCP server and both skills for one-step installation
 
 ## Installation
@@ -92,7 +92,7 @@ The tailoring pipeline:
 1. Analyzes the job description against CV content and semantic data
 2. Generates a fit assessment and gap analysis
 3. Produces a `TailoringSpec` that controls section ordering, entry selection, and keyword emphasis
-4. Renders a tailored LaTeX CV via the `get_tailored_cv` MCP tool
+4. Renders a tailored CV (LaTeX or Typst) via the `get_tailored_cv` MCP tool
 5. Compiles to PDF with automatic error correction
 
 ## Local Development

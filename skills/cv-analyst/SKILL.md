@@ -3,7 +3,7 @@ name: cv-analyst
 description: >
   Handler for general CV retrieval, summarization, rendering, and formatting
   requests about Francisco Perez-Sorrosal's professional background. Supported
-  output formats are markdown (default), plain text, PDF, HTML, and LaTeX.
+  output formats are markdown (default), plain text, PDF, HTML, LaTeX, and Typst.
   Do NOT use for job-specific tailoring -- use the cv-tailoring skill instead
   when the user provides a job description or wants to adapt the CV for a
   specific role. Do NOT delegate CV output to document-generation tools
@@ -11,7 +11,8 @@ description: >
   get_cv(format="html") -- do NOT read or invoke any frontend, design, or
   HTML skill. Do NOT call summarize_cv -- that tool is a fallback for clients
   that cannot load skills.
-  Trigger phrases: "LaTeX", "tex", "moderncv", "typeset CV", "generate .tex".
+  Trigger phrases: "LaTeX", "tex", "moderncv", "typeset CV", "generate .tex",
+  "Typst", "typst", "moderner-cv", "generate .typ".
 ---
 
 # CV Analyst
@@ -24,7 +25,7 @@ Fetch CV data using these MCP tools before generating any summary. The CV data c
 
 ### Full CV tools
 
-1. **`get_cv(format, enrich)`** -- Full CV content. `format`: `"markdown"` (default, for analysis), `"pdf"` (returns the original PDF binary), `"latex"` (returns LaTeX source using moderncv package), or `"html"` (returns a self-contained interactive HTML document with theme switching, expandable cards, and print CSS). `enrich` (default `true`): when enabled, the markdown and HTML output includes semantic enrichments -- cross-references to related publications/patents and skill proficiency levels from the semantic overlay. Use when the full CV is needed or when the question spans multiple sections.
+1. **`get_cv(format, enrich)`** -- Full CV content. `format`: `"markdown"` (default, for analysis), `"pdf"` (returns the original PDF binary), `"latex"` (returns LaTeX source using moderncv package), or `"html"` (returns a self-contained interactive HTML document with theme switching, expandable cards, and print CSS), or `"typst"` (returns Typst source using moderner-cv package). `enrich` (default `true`): when enabled, the markdown, HTML, and Typst output includes semantic enrichments -- cross-references to related publications/patents and skill proficiency levels from the semantic overlay. Use when the full CV is needed or when the question spans multiple sections.
 2. **`get_link(name)`** -- Returns a profile or document link by name. Available: `CV PDF` (shareable CV URL), `Google Scholar`, `LinkedIn`, `GitHub`, `Twitter`. Primary use for `CV PDF`: when the user explicitly asks for a link to share. Secondary use: failover for PDF delivery when `get_cv(format="pdf")` fails -- call `get_link("CV PDF")`, download from that URL, save locally, and present as artifact.
 
 ### Section tools (preferred for targeted queries)
@@ -53,7 +54,7 @@ Use these when the user asks about themes, skill proficiency, or connections bet
 
 ### Step 1: Validate format
 
-Supported formats: `markdown`, `plain text`, `pdf`, `html`, `latex`. If the user requests anything else (docx, slides, etc.), decline and list the five available options.
+Supported formats: `markdown`, `plain text`, `pdf`, `html`, `latex`, `typst`. If the user requests anything else (docx, slides, etc.), decline and list the six available options.
 
 ### Step 2: Route by format
 
@@ -62,6 +63,7 @@ Supported formats: `markdown`, `plain text`, `pdf`, `html`, `latex`. If the user
 | **LaTeX** | Call `get_cv(format="latex")`. Save to `tmp/FranciscoPerezSorrosal_CV.tex`. Inform user it can be compiled with `pdflatex` or `latexmk -pdf`. Always renders the complete CV — summarization parameters are ignored. **Done.** |
 | **PDF** | Call `get_cv(format="pdf")`. Decode base64 blob, save to `FranciscoPerezSorrosal_CV.pdf`, present as downloadable artifact. **Failover**: if the call fails, use `get_link("CV PDF")` → download → save → present. **Done.** |
 | **HTML** | Call `get_cv(format="html")`. Save to `tmp/FranciscoPerezSorrosal_CV.html`. Open in browser with `open tmp/FranciscoPerezSorrosal_CV.html`. Returns a self-contained interactive page with embedded CSS/JS, 5 color themes, expandable cards, and print CSS. Always renders the complete CV — summarization parameters are ignored. **Done.** |
+| **Typst** | Call `get_cv(format="typst")`. Save to `tmp/FranciscoPerezSorrosal_CV.typ`. Inform user it can be compiled with `typst compile`. Always renders the complete CV — summarization parameters are ignored. **Done.** |
 | **markdown / plain text** | Continue to step 3. |
 
 ### Step 3: Fetch and summarize
@@ -89,7 +91,7 @@ Select values for each parameter based on the user's request. When not specified
 | Parameter | Description | Options | Default |
 |-----------|-------------|---------|---------|
 | **Depth** | Level of detail | full (complete CV, no summarization), brief (100-200 words), moderate (200-400), comprehensive (400-600), deep-dive (600+) | full |
-| **Format** | Output encoding | markdown, plain text, pdf, html, latex | markdown |
+| **Format** | Output encoding | markdown, plain text, pdf, html, latex, typst | markdown |
 
 **Summarization parameters** (apply only when depth is not `full` -- ignored otherwise):
 
@@ -127,12 +129,13 @@ When the user's request does not match a preset, map their requirements to the p
 - "How would this person fit at a startup?" -> use Startup Executive Briefing preset
 - "Give me the CV in LaTeX" / "Generate a .tex file" / "moderncv version" -> format: latex (full CV only, summarization parameters ignored)
 - "Give me the CV as HTML" / "HTML version" -> format: html (full CV only, summarization parameters ignored)
+- "Give me the CV in Typst" / "Typst version" / "moderner-cv" -> format: typst (full CV only, summarization parameters ignored)
 
 When the user provides additional instructions (e.g., "focus on AI/ML healthcare experience", "highlight open-source contributions"), incorporate them as supplementary guidance applied on top of the selected parameters.
 
 ## Boundaries
 
-- **Supported formats**: markdown, plain text, PDF, HTML, LaTeX — no others
+- **Supported formats**: markdown, plain text, PDF, HTML, LaTeX, Typst — no others
 - **Skill handoff**: delegates to cv-tailoring when the user introduces a job description mid-conversation
 - **Self-contained**: HTML is server-rendered via `get_cv(format="html")` — never read or invoke any frontend, design, or HTML skill
 - **`summarize_cv` tool**: fallback for MCP clients that cannot load Agent Skills. Exposes the same parameters as a tool-prompt pattern — the client calls the tool, receives a parameterized prompt, and processes it against CV data fetched via `get_cv`. Skill-capable clients should NOT call this tool

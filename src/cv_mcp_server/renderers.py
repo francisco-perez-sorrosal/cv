@@ -1,8 +1,8 @@
 """Template-based renderers for the Resume model.
 
-Uses Jinja2 templates to generate markdown, LaTeX, and HTML output from
-structured CV data. Supports both full-document and per-section rendering
-for markdown, and full-document rendering for LaTeX and HTML.
+Uses Jinja2 templates to generate markdown, LaTeX, HTML, and Typst output
+from structured CV data. Supports both full-document and per-section
+rendering for markdown, and full-document rendering for LaTeX, HTML, and Typst.
 """
 
 from __future__ import annotations

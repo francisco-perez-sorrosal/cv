@@ -4,7 +4,7 @@
   "display_name": "Francisco Perez-Sorrosal CV MCP Server",
   "version": "0.0.5",
   "description": "MCP server serving Francisco Perez-Sorrosal's CV with structured data layer, semantic annotations, and comprehensive query tools",
-  "long_description": "A comprehensive MCP Bundle that exposes Francisco Perez-Sorrosal's curriculum vitae through structured YAML data, a semantic overlay with topic taxonomy, and 16 MCP tools. Features include: full CV in markdown/PDF, per-section retrieval, structured work/entry queries, semantic topic queries, skill proficiency profiles, cross-entry relationship graphs, leadership/communication section, and configurable summarization. The server supports both local (stdio) and remote (streamable-http) deployment modes.",
+  "long_description": "A comprehensive MCP Bundle that exposes Francisco Perez-Sorrosal's curriculum vitae through structured YAML data, a semantic overlay with topic taxonomy, and 16 MCP tools. Features include: full CV in markdown, PDF, LaTeX, HTML, and Typst formats; per-section retrieval; structured work/entry queries; semantic topic queries; skill proficiency profiles; cross-entry relationship graphs; tailored CV rendering; and configurable summarization. The server supports both local (stdio) and remote (streamable-http) deployment modes.",
   "author": {
     "name": "Francisco Perez-Sorrosal",
     "email": "fperezsorrosal@gmail.com",
@@ -38,7 +38,7 @@
   "tools": [
     {
       "name": "get_cv",
-      "description": "Retrieve full CV in markdown (default), PDF binary, LaTeX source (moderncv), or Typst source (moderner-cv) format."
+      "description": "Retrieve full CV in markdown (default), PDF binary, LaTeX source (moderncv), interactive HTML, or Typst source (moderner-cv) format."
     },
     {
       "name": "get_link",
