@@ -1,0 +1,37 @@
+{% raw %}
+// Typst CV generated from structured YAML data via Jinja2 templates.
+// Uses moderner-cv package for professional layout matching LaTeX moderncv.
+// Compile with: typst compile output.typ output.pdf
+
+#import "@preview/moderner-cv:0.2.1": *
+{% endraw %}
+
+#show: moderner-cv.with(
+  name: [{{ resume.personal_info.name.split()[0] | typst_escape }}],
+  family-name: [{{ resume.personal_info.name.split()[-1] | typst_escape }}],
+  title: [{{ resume.personal_info.label | typst_escape }}],
+{% raw %}
+  accent-color: blue,
+{% endraw %}
+{% for p in resume.personal_info.profiles %}
+{% if p.network == "LinkedIn" %}
+  linkedin: "{{ p.username }}",
+{% elif p.network == "GitHub" %}
+  github: "{{ p.username }}",
+{% endif %}
+{% endfor %}
+{% if resume.personal_info.email %}
+  email: "{{ resume.personal_info.email }}",
+{% endif %}
+{% if resume.personal_info.url %}
+  homepage: "{{ resume.personal_info.url }}",
+{% endif %}
+)
+
+{% if resume.quote %}
+{% raw %}
+#align(center)[
+  #emph[{% endraw %}{{ resume.quote | typst_escape }}{% raw %}]
+]
+{% endraw %}
+{% endif %}

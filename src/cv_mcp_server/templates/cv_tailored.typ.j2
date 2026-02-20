@@ -1,0 +1,216 @@
+{% include '_preamble.typ.j2' %}
+
+//------------- DYNAMIC SECTIONS (ordered by TailoringSpec) --------------------
+{% for section_name in included_sections %}
+
+//------------- {{ section_name | upper }} --------------------------------------
+{% if section_name == "Profile and Goals" %}
+{% if tailoring.profile_override %}
+{% raw %}= Profile and Goals{% endraw %}
+
+{{ tailoring.profile_override | typst_escape }}
+{% elif resume.personal_info.summary %}
+{% raw %}= Profile and Goals{% endraw %}
+
+{{ resume.personal_info.summary | typst_escape }}
+{% endif %}
+
+{% elif section_name == "Professional Experience" %}
+{% if industry_work %}
+{% raw %}= Professional Experience{% endraw %}
+
+{% for w in industry_work %}
+{% include '_work_entry.typ.j2' %}
+
+{% endfor %}
+{% endif %}
+
+{% elif section_name == "Patents" %}
+{% if resume.patents %}
+{% raw %}= Patents{% endraw %}
+
+{% for p in resume.patents %}
+{% raw %}#cv-entry({% endraw %}
+  date: [{{ p.date }}],
+  title: [{{ p.number }}],
+  employer: [{{ p.title | typst_escape }}],
+  description: [{{ "App" if p.status.value == "application" else "Pat" }}],
+)
+{% endfor %}
+{% endif %}
+
+{% elif section_name == "Academic Research Experience" %}
+{% if academic_work %}
+{% raw %}= Academic Research Experience{% endraw %}
+
+{% for w in academic_work %}
+{% include '_work_entry.typ.j2' %}
+
+{% endfor %}
+{% if academic_publications %}
+{% raw %}#cv-entry({% endraw %}
+  title: [Publications in Top Conferences and Journals],
+)
+{% for p in academic_publications %}
+{% set cite_mark = " *" ~ (p.citations | string) ~ " Citations*" if p.citations else "" %}
+- _{{ p.name | typst_escape }}_. In {{ p.publisher | typst_escape }}{{ cite_mark }}
+{% endfor %}
+
+{% endif %}
+{% endif %}
+
+{% elif section_name == "Skills" %}
+{% if resume.skills %}
+{% raw %}= Skills{% endraw %}
+
+{% for sg in resume.skills %}
+{% raw %}== {% endraw %}{{ sg.name | typst_escape }}
+
+{% for skill in sg.skills %}
+{% raw %}#cv-entry({% endraw %}
+  title: [{{ skill.name }}],
+  description: [{{ skill.keywords | join(", ") | typst_escape }}.],
+)
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+{% elif section_name == "Courses and Certifications" %}
+{% if resume.certificates %}
+{% raw %}= Courses{% endraw %}
+
+{% for c in resume.certificates %}
+{% set inst = c.institution_id | inst_name %}
+{% set loc_or_format = c.format if c.format else "" %}
+{% set loc = c.location if c.location else "" %}
+{% raw %}#cv-entry({% endraw %}
+  date: [{{ c.date }}],
+  title: [{{ c.name | typst_escape }}],
+  employer: [{{ inst | typst_escape }}],
+{% if loc_or_format %}
+  location: [{{ loc_or_format }}],
+{% endif %}
+{% if c.url %}
+  description: [#link("{{ c.url }}")[Certificate]],
+{% endif %}
+)
+{% endfor %}
+{% endif %}
+
+{% elif section_name == "Education" %}
+{% if resume.education %}
+{% raw %}= Education{% endraw %}
+
+{% for e in resume.education %}
+{% set inst = e.institution_id | inst_name %}
+{% set period = e | typst_period %}
+{% set dept_inst = (e.department ~ " at " if e.department else "") ~ (inst | typst_escape) %}
+{% set loc = e.location if e.location else "" %}
+{% set degree = e.study_type | typst_escape %}
+{% if e.area and e.area not in e.study_type %}
+{% set degree = degree ~ " in " ~ e.area %}
+{% endif %}
+{% raw %}#cv-entry({% endraw %}
+  date: [{{ period }}],
+  title: [{{ degree }}],
+  employer: [{{ dept_inst }}],
+{% if loc %}
+  location: [{{ loc }}],
+{% endif %}
+)
+{% endfor %}
+{% endif %}
+
+{% elif section_name == "Leadership & Communication" %}
+{% if resume.leadership %}
+{% raw %}= Leadership & Communication{% endraw %}
+
+{% for cat in resume.leadership %}
+{% raw %}== {% endraw %}{{ cat.name | typst_escape }}
+
+{% for item in cat.items %}
+{% raw %}#cv-entry({% endraw %}
+  title: [{{ item.label | typst_escape }}],
+  description: [{{ item.description | typst_escape }}],
+)
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+{% elif section_name == "Languages" %}
+{% if resume.languages %}
+{% raw %}= Languages{% endraw %}
+
+{% for lang in resume.languages %}
+{% set fluency = lang.fluency | replace("native", "Mother tongue") | replace("professional", "Professional proficiency") | replace("intermediate", "Intermediate proficiency") | replace("fluent", "Fluent proficiency") %}
+{% raw %}#cv-entry({% endraw %}
+  title: [{{ lang.language }}],
+  description: [_{{ fluency }}_],
+)
+{% endfor %}
+{% endif %}
+
+{% elif section_name == "Other Activities Related to CS" %}
+{% if resume.projects or resume.memberships or resume.conferences %}
+{% raw %}= Other Activities Related to Computer Science{% endraw %}
+
+{% if resume.projects %}
+{% raw %}== {% endraw %}Open Source Project Maintainer
+
+{% for p in resume.projects %}
+{% if p.url %}
+- _{{ p.name | typst_escape }}_: {{ p.description | typst_escape }} #link("{{ p.url }}")[Info]
+{% else %}
+- _{{ p.name | typst_escape }}_: {{ p.description | typst_escape }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if committers %}
+{% raw %}== {% endraw %}Committer in the Apache Software Foundation
+
+{% for m in committers %}
+- _Apache Omid project, a high-performant and scalable Transaction Manager for HBase_
+{% endfor %}
+{% endif %}
+{% if reviewer_groups %}
+{% raw %}== {% endraw %}Reviewer in International Academic Conferences
+
+{% for r in reviewer_groups %}
+- _{{ r.name | typst_escape }}_, {{ r.years }}
+{% endfor %}
+{% endif %}
+{% if conference_list %}
+{% raw %}== {% endraw %}Speaker/Attendee in Academic/Technical Conferences
+
+{% for c in conference_list %}
+{% set speaker_mark = " (Speaker)" if c.role == "speaker" else "" %}
+{% set location_mark = ", " ~ (c.location | typst_escape) if c.location else "" %}
+- _{{ c.name | typst_escape }}{{ speaker_mark }}_, {{ c.date }}{{ location_mark }}
+{% endfor %}
+{% endif %}
+{% if members %}
+{% raw %}== {% endraw %}Member
+
+{% for m in members %}
+{% if m.url %}
+- _{{ m.organization | typst_escape }}_, #link("{{ m.url }}")[{{ m.url }}]
+{% else %}
+- _{{ m.organization | typst_escape }}_
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{% elif section_name == "Hobbies and Interests" %}
+{% if resume.interests %}
+{% raw %}= Hobbies and Interests{% endraw %}
+
+{% for i in resume.interests %}
+{{ i.description | typst_escape }}
+
+{% endfor %}
+{% endif %}
+
+{% endif %}
+{% endfor %}
+//------------- END DYNAMIC SECTIONS -------------------------------------------

@@ -2,17 +2,19 @@
 name: cv-tailoring
 description: >
   Tailors Francisco Perez-Sorrosal's CV to a specific job description.
-  Produces a page-constrained (2-3 pages) compiled LaTeX/PDF CV optimized
-  for the target role. Takes over from cv-analyst when a job description is
+  Produces a page-constrained (2-3 pages) compiled PDF CV optimized
+  for the target role. Supports both LaTeX (moderncv) and Typst (moderner-cv)
+  as compilation backends. Takes over from cv-analyst when a job description is
   provided. Orchestrates the CV MCP server (for CV content and rendering)
   and optionally the LinkedIn MCP server (for job data).
   Trigger terms: tailor CV, adapt resume, customize CV, CV for job,
-  resume optimization, CV tailoring, match CV to job.
+  resume optimization, CV tailoring, match CV to job, typst CV,
+  tailor with typst.
 ---
 
 # CV Tailoring
 
-Adapt Francisco's CV to a specific job description using a structured methodology that produces a compiled, page-constrained LaTeX/PDF CV.
+Adapt Francisco's CV to a specific job description using a structured methodology that produces a compiled, page-constrained PDF CV. Supports LaTeX (moderncv) and Typst (moderner-cv) backends.
 
 ## Prerequisites
 
@@ -57,16 +59,31 @@ Construct a `TailoringSpec` JSON from the Phase 2 analysis:
 - **`keywords`**: list of `KeywordHighlight` objects with `term` and `weight` -- terms from the job description to emphasize in the CV
 - **`profile_override`**: tailored professional summary paragraph replacing the generic one (must use only existing CV content, rephrased for the role)
 - **`max_pages`**: 2 or 3 -- the page budget for the compiled CV
+- **`output_format`**: `"latex"` (default) or `"typst"`. Controls which template backend is used for rendering. LaTeX uses `moderncv`, Typst uses `moderner-cv`. Both produce compilable source for PDF generation
 
 ### Step 5: Render and Compile
 
-1. Call `get_tailored_cv(tailoring_config)` with the TailoringSpec JSON to get LaTeX source
-2. Save the LaTeX source to `tmp/FranciscoPerezSorrosal_CV_<Company>_<JobID>.tex` (replace `<Company>` and `<JobID>` with values from the TailoringSpec, no spaces)
-3. Compile with `pdflatex` (run twice for cross-references):
+1. Call `get_tailored_cv(tailoring_config)` with the TailoringSpec JSON. The response is compilable source in the format specified by `output_format` (LaTeX by default, Typst if requested).
+2. Save the source file:
+   - **LaTeX**: `tmp/FranciscoPerezSorrosal_CV_<Company>_<JobID>.tex`
+   - **Typst**: `tmp/FranciscoPerezSorrosal_CV_<Company>_<JobID>.typ`
+3. Compile to PDF:
+
+   **LaTeX** (requires TeX distribution):
    ```
    cd tmp && pdflatex FranciscoPerezSorrosal_CV_<Company>_<JobID>.tex && pdflatex FranciscoPerezSorrosal_CV_<Company>_<JobID>.tex
    ```
-4. Check the `.log` file for errors. On error: read the log, fix the LaTeX source, retry (max 2 retries)
+   Two passes are needed for cross-reference resolution.
+
+   **Typst** (requires `typst` binary):
+   ```
+   typst compile tmp/FranciscoPerezSorrosal_CV_<Company>_<JobID>.typ tmp/FranciscoPerezSorrosal_CV_<Company>_<JobID>.pdf
+   ```
+   Single pass. The `moderner-cv` package is auto-fetched from the Typst universe on first compile.
+
+4. Check for errors:
+   - **LaTeX**: read the `.log` file. On error: fix the LaTeX source, retry (max 2 retries)
+   - **Typst**: errors are printed to stderr. On error: fix the `.typ` source, retry (max 2 retries)
 5. On success: verify page count is within `max_pages` budget. If over budget, reduce content (increase `weight: 0` entries or tighten `profile_override`) and recompile
 
 ### Step 6: Content Integrity Check
@@ -95,7 +112,7 @@ Produce six deliverables:
 - `get_skill_profile` -- skill proficiency levels with evidence
 - `query_by_topic` -- find entries by semantic topic
 - `get_entry_context` -- full semantic context for an entry
-- `get_tailored_cv` -- render a tailored LaTeX CV from a TailoringSpec JSON
+- `get_tailored_cv` -- render a tailored CV from a TailoringSpec JSON (LaTeX or Typst source depending on `output_format`)
 
 ### LinkedIn MCP Tools (optional)
 
@@ -104,12 +121,13 @@ Produce six deliverables:
 
 ### Host Agent Tools
 
-- **Write** -- save `.tex` files to `tmp/`
-- **Bash** -- run `pdflatex` for compilation
+- **Write** -- save `.tex` or `.typ` files to `tmp/`
+- **Bash** -- run `pdflatex` (LaTeX) or `typst compile` (Typst) for compilation
 
 ## Important Constraints
 
 - **Page constraint**: The tailored CV MUST fit within 2-3 pages. Use `max_pages` in the TailoringSpec and aggressively select content -- omit entries with `weight=0` that do not contribute to job fit.
+- **Typst prerequisites**: When using Typst output, the client must have `typst` installed. Unlike LaTeX which requires a full TeX distribution (MacTeX/TeX Live), Typst is a single binary installable via `brew install typst`, `cargo install typst-cli`, or from [typst.app](https://typst.app). The `moderner-cv` package is resolved automatically by Typst at compile time.
 - **Content integrity**: Never add, modify, or fabricate information not in Francisco's original CV. Only reorganize, emphasize, filter, and rephrase existing content.
 - **Honest assessment**: Provide realistic scores. Acknowledge limitations while highlighting genuine strengths.
 - **Professional formatting**: Use clean hierarchy and consistent structure in all deliverables.

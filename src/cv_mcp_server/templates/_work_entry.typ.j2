@@ -1,0 +1,53 @@
+{% set period = w | typst_period %}
+{% set employer = w | employer_name | typst_escape %}
+{% set loc = w.location if w.location else "" %}
+{% if w.roles %}
+{% set roles_str = w.roles | join(", ") | typst_escape %}
+{% endif %}
+{% raw %}#cv-entry({% endraw %}
+  date: [{{ period }}],
+  title: [{{ w.position | typst_escape }}],
+  employer: [{{ employer }}],
+{% if loc %}
+  location: [{{ loc }}],
+{% endif %}
+{% if w.roles %}
+  description: [*Roles*: {{ roles_str }}],
+{% endif %}
+)
+{% if w.projects %}
+{% for p in w.projects %}
+{% set p_period = p | typst_period %}
+{% set show_p_period = p_period and p_period != period %}
+{% if show_p_period %}
+{% set p_header = (p.name | typst_escape) ~ " (" ~ p_period ~ ")" %}
+{% else %}
+{% set p_header = p.name | typst_escape %}
+{% endif %}
+- *{{ p_header }}*:
+{%- if p.description and not p.description_label and p.goal %} {{ p.description | typst_escape }}{% endif %}
+{%- if p.goal %} *Goal* -- {{ p.goal | typst_escape }}{% endif %}
+{%- if p.description and p.description_label %} *{{ p.description_label }}* -- {{ p.description | typst_escape }}{% endif %}
+{%- if p.description and not p.description_label and not p.goal %} {{ p.description | typst_escape }}{% endif %}
+{%- if p.achievements %} *{{ "Achievement" if p.achievements | length == 1 else "Achievements" }}* --{% if p.achievements | length == 1 %} {{ p.achievements[0] | typst_escape }}{% else %}{% for a in p.achievements %} ({{ loop.index }}) {{ a | typst_escape | strip_period }}{% if not loop.last %};{% else %}.{% endif %}{% endfor %}{% endif %}{% endif %}
+{%- if p.highlights %}{% for h in p.highlights %} {{ h | typst_escape }}{% endfor %}{% endif %}
+{% if project_links and project_links.get(p.id) %}
+{% for link in project_links[p.id] %}
+{% if link.type == "published-as" %}
+{% set cite = " -- " ~ (link.target.citations | string) ~ " citations" if link.target.citations else "" %}
+  - Published: _{{ link.label }}_  ({{ link.target.publisher }}, {{ link.target.release_date }}{{ cite }})
+{% elif link.type == "patented-as" %}
+{% set status = " -- " ~ link.target.status.value if link.target.status else "" %}
+  - Patent: _{{ link.label }}_ (No. {{ link.target.number }}, {{ link.target.date }}{{ status }})
+{% elif link.type == "presented-at" %}
+  - Presented at _{{ link.label }}_ ({{ link.target.date }})
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+{% elif w.highlights %}
+{% for h in w.highlights %}
+- {{ h | typst_escape }}
+{% endfor %}
+{% endif %}

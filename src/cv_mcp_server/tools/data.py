@@ -15,6 +15,8 @@ from cv_mcp_server.renderers import (
     render_latex,
     render_html,
     render_tailored_latex,
+    render_typst,
+    render_tailored_typst,
     render_sections,
     get_section,
     section_names as list_section_names,
@@ -24,16 +26,22 @@ from cv_mcp_server.models import TailoringSpec
 
 @mcp.tool()
 def get_cv(
-    format: Literal["markdown", "pdf", "latex", "html"] = Field(
+    format: Literal["markdown", "pdf", "latex", "html", "typst"] = Field(
         default="markdown",
-        description="'markdown' returns LLM-readable text (default). 'pdf' returns the original binary PDF document for inline rendering. 'latex' returns the full CV as LaTeX source (moderncv package). 'html' returns a self-contained interactive HTML document."
+        description=(
+            "'markdown' returns LLM-readable text (default). "
+            "'pdf' returns the original binary PDF document for inline rendering. "
+            "'latex' returns the full CV as LaTeX source (moderncv package). "
+            "'html' returns a self-contained interactive HTML document. "
+            "'typst' returns the full CV as Typst source (moderner-cv package)."
+        ),
     ),
     enrich: bool = Field(
         default=True,
         description="Include semantic enrichments (cross-references, skill levels)"
     ),
 ) -> str | list[EmbeddedResource]:
-    """Data-layer tool: retrieves raw CV content in markdown, PDF, LaTeX, or HTML.
+    """Data-layer tool: retrieves raw CV content in markdown, PDF, LaTeX, HTML, or Typst source.
 
     When the cv-analyst skill is available, prefer invoking that skill instead
     of calling this tool directly — the skill orchestrates retrieval with proper
@@ -43,6 +51,7 @@ def get_cv(
     format='pdf': original PDF binary for inline rendering.
     format='latex': full CV as LaTeX source (moderncv package) for typeset PDF generation.
     format='html': self-contained interactive HTML with theme switching and expandable cards.
+    format='typst': full CV as Typst source (moderner-cv package) for typeset PDF generation.
     """
     if format == "pdf":
         logger.debug("Returning the CV as PDF binary...")
@@ -61,6 +70,9 @@ def get_cv(
     if format == "html":
         logger.debug("Returning the CV as interactive HTML...")
         return render_html(store, enrich=enrich)
+    if format == "typst":
+        logger.debug("Returning the CV as Typst source...")
+        return render_typst(store, enrich=enrich)
     logger.debug("Returning the CV in markdown format...")
     return render_markdown(store, enrich=enrich)
 
@@ -74,11 +86,15 @@ def get_tailored_cv(
             "and page budget. See TailoringSpec schema for full field definitions."
         )
     ),
+    format: Literal["latex", "typst"] = Field(
+        default="latex",
+        description="Output format: 'latex' (default, moderncv) or 'typst' (moderner-cv).",
+    ),
 ) -> str:
-    """Render a tailored LaTeX CV from a TailoringSpec.
+    """Render a tailored CV from a TailoringSpec in LaTeX or Typst format.
 
     The tailoring config controls section ordering, entry emphasis,
-    and profile override. Returns compilable LaTeX source.
+    and profile override. Returns compilable source code.
     Use this tool after analyzing a job description to produce a targeted CV.
     """
     try:
@@ -90,6 +106,8 @@ def get_tailored_cv(
             f"Expected JSON schema:\n{schema}"
         )
     logger.debug(f"Rendering tailored CV for '{spec.job_title}' at '{spec.company}'...")
+    if format == "typst":
+        return render_tailored_typst(store, spec)
     return render_tailored_latex(store, spec)
 
 

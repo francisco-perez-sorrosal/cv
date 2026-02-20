@@ -85,16 +85,26 @@ Construct a TailoringSpec JSON object from the Phase 2 analysis:
 - `keywords`: Job-relevant terms extracted from Phase 1 job deconstruction. Used as metadata for analysis and the markdown deliverable.
 - `profile_override`: Tailored professional summary rewritten from existing CV content (never fabricate).
 - `max_pages`: Target page count (2 or 3). Use 2 for focused roles, 3 when broader experience is relevant.
+- `output_format`: `"latex"` (default) or `"typst"`. Choose based on user preference or tool availability. LaTeX produces a moderncv-styled PDF. Typst produces a moderner-cv-styled PDF with faster compilation.
 
-### LaTeX Rendering
-Call `get_tailored_cv` with the TailoringSpec JSON to get compilable LaTeX source.
+### Rendering
+Call `get_tailored_cv` with the TailoringSpec JSON. The tool returns compilable source in the format specified by `output_format`: LaTeX (moderncv) or Typst (moderner-cv).
 
 ### Compilation
+
+**LaTeX backend:**
 1. Save the LaTeX source to `tmp/FranciscoPerezSorrosal_CV_<Company>_<JobID>.tex`
 2. Run `pdflatex` twice (second pass resolves cross-references)
 3. Check the `.log` file for errors
 4. On error: read the log, identify the issue, fix the LaTeX source, save, and recompile (max 2 retries)
 5. On success: verify page count is within `max_pages` budget
+
+**Typst backend:**
+1. Save the Typst source to `tmp/FranciscoPerezSorrosal_CV_<Company>_<JobID>.typ`
+2. Run `typst compile <input>.typ <output>.pdf` (single pass, no second run needed)
+3. Errors are printed to stderr. On error: read the output, identify the issue, fix the `.typ` source, save, and recompile (max 2 retries)
+4. On success: verify page count is within `max_pages` budget
+5. Note: The `moderner-cv` Typst package is fetched automatically from the Typst universe on first compile. No manual installation required.
 
 ### Content Integrity Check
 Before delivering, verify:
@@ -142,7 +152,7 @@ Scoring matrix table as described in Phase 3.
 
 ### 5. Compiled PDF
 
-LaTeX-rendered CV (moderncv format) compiled to PDF, constrained to 2-3 pages. Sections reordered by job relevance, entries filtered for fit, profile tailored to role.
+Compiled PDF CV constrained to 2-3 pages. Rendered via LaTeX (moderncv format) or Typst (moderner-cv format) depending on the chosen backend. Sections reordered by job relevance, entries filtered for fit, profile tailored to role.
 
 ## Methodology Notes
 
