@@ -462,3 +462,98 @@ def _html_period_filter(obj) -> str:
     if not start:
         return ""
     return f"{start}&ndash;{end}" if end else f"{start}&ndash;Present"
+
+
+# --- Typst rendering ---
+
+_TYPST_SPECIAL = re.compile(r"([#$@<>])")
+
+
+def _typst_escape_filter(text: str) -> str:
+    """Escape Typst special characters in content mode.
+
+    Escapes: # (code mode), $ (math mode), @ (citation/reference),
+    < > (label delimiters). Uses backslash escaping per Typst syntax.
+    """
+    return _TYPST_SPECIAL.sub(r"\\\1", text)
+
+
+def _typst_period_filter(obj) -> str:
+    """Format a date range with en-dash for Typst output.
+
+    Same logic as _latex_period_filter: handles year-only, year-month,
+    same-year ranges, and month-level ranges.
+    """
+    start = getattr(obj, "start_date", "")
+    end = getattr(obj, "end_date", "")
+    if not start:
+        return ""
+    if not end:
+        return f"{start}--Now"
+
+    s_year, s_month = _parse_date(start)
+    e_year, e_month = _parse_date(end)
+
+    if s_year == e_year and not s_month and not e_month:
+        return s_year
+    if s_year == e_year and s_month and e_month:
+        return f"{_MONTH_NAMES[s_month]}--{_MONTH_NAMES[e_month]} {s_year}"
+    if s_month:
+        start_fmt = f"{_MONTH_NAMES[s_month]} {s_year}"
+    else:
+        start_fmt = s_year
+    if e_month:
+        end_fmt = f"{_MONTH_NAMES[e_month]} {e_year}"
+    else:
+        end_fmt = e_year
+    return f"{start_fmt}--{end_fmt}"
+
+
+def _create_typst_env(store: ResumeStore) -> Environment:
+    """Create a Jinja2 environment configured for Typst output."""
+    env = Environment(
+        loader=FileSystemLoader(TEMPLATES_DIR),
+        trim_blocks=True,
+        lstrip_blocks=True,
+        keep_trailing_newline=True,
+    )
+    env.filters["inst_name"] = _make_inst_name_filter(store.resume)
+    env.filters["typst_period"] = _typst_period_filter
+    env.filters["patent_status"] = _patent_status_filter
+    env.filters["typst_escape"] = _typst_escape_filter
+    env.filters["strip_period"] = _strip_trailing_period
+    env.filters["employer_name"] = _make_employer_name_filter(store.resume)
+    return env
+
+
+def render_typst(store: ResumeStore, *, enrich: bool = True) -> str:
+    """Render a complete Resume as Typst source using moderner-cv layout."""
+    env = _create_typst_env(store)
+    template = env.get_template("cv.typ.j2")
+    context = _template_context(store, enrich)
+    return template.render(**context)
+
+
+def render_tailored_typst(store: ResumeStore, spec: TailoringSpec) -> str:
+    """Render a tailored Typst CV based on a TailoringSpec.
+
+    Uses cv_tailored.typ.j2 which supports:
+    - Section reordering via spec.section_order
+    - Entry emphasis via spec.entry_emphasis (weight=0 omits entries)
+    - Profile summary override via spec.profile_override
+    """
+    context = _template_context(store, enrich=False)
+
+    emphasis_map = _build_emphasis_map(spec)
+    included_sections = _build_included_sections(spec)
+
+    context["industry_work"] = _filter_work_entries(context["industry_work"], emphasis_map)
+    context["academic_work"] = _filter_work_entries(context["academic_work"], emphasis_map)
+
+    context["tailoring"] = spec.model_dump()
+    context["emphasis_map"] = emphasis_map
+    context["included_sections"] = included_sections
+
+    env = _create_typst_env(store)
+    template = env.get_template("cv_tailored.typ.j2")
+    return template.render(**context)

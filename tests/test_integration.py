@@ -10,6 +10,8 @@ from cv_mcp_server.renderers import (
     render_markdown,
     render_sections,
     render_tailored_latex,
+    render_tailored_typst,
+    render_typst,
 )
 from cv_mcp_server.models.tailoring import SectionDirective, TailoringSpec
 
@@ -84,6 +86,32 @@ class TestRenderLatexRealData:
         assert len(latex) > 1000
         assert r"\section{Professional Experience}" in latex
         assert "Francisco" in latex
+
+
+class TestRenderTypstRealData:
+    def test_render_typst_real_data(self, real_store):
+        typst = render_typst(real_store)
+        assert len(typst) > 1000
+        assert "= Professional Experience" in typst
+        assert "Francisco" in typst
+
+    def test_render_tailored_typst_real_data(self, real_store):
+        spec = TailoringSpec(
+            job_title="Senior ML Engineer",
+            company="Test Corp",
+            section_order=[
+                SectionDirective(section_name="Professional Experience", include=True, position=0),
+                SectionDirective(section_name="Skills", include=True, position=1),
+                SectionDirective(section_name="Education", include=True, position=2),
+            ],
+        )
+        tailored = render_tailored_typst(real_store, spec)
+        full = render_typst(real_store)
+
+        assert "= Professional Experience" in tailored
+        assert "= Skills" in tailored
+        assert "= Education" in tailored
+        assert len(tailored) < len(full)
 
 
 class TestEnrichmentToggle:

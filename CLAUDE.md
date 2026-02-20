@@ -71,7 +71,7 @@ src/cv_mcp_server/
   server.py               # Shared state: transport config, store, mcp instance
   resources.py            # 16 MCP resources (fps-cv:// endpoints) + _FORMAT_REGISTRY
   store.py                # ResumeStore: load, validate, query, write
-  renderers.py            # Markdown, LaTeX, and HTML renderers (full CV and per-section, 13 sections)
+  renderers.py            # Markdown, LaTeX, HTML, and Typst renderers (full CV, per-section, tailored)
   utils.py                # Utility functions (YAML prompt loading)
   tools/
     __init__.py            # Package marker
@@ -94,9 +94,13 @@ src/cv_mcp_server/
     cv.html.j2             # Jinja2 template for HTML output (self-contained interactive)
     _cv_styles.css.j2      # HTML CSS partial (themes, responsive, print)
     _cv_scripts.js.j2      # HTML JS partial (theme switching, expandable cards)
+    cv.typ.j2              # Jinja2 template for Typst output (moderner-cv)
+    cv_tailored.typ.j2     # Jinja2 template for tailored Typst output
     _preamble.tex.j2       # Shared LaTeX preamble partial
+    _preamble.typ.j2       # Shared Typst preamble partial (moderner-cv import, page setup)
     _work_entry.md.j2      # Markdown work entry partial
     _work_entry.tex.j2     # LaTeX work entry partial
+    _work_entry.typ.j2     # Typst work entry partial
   prompts/
     summary.yaml           # Configurable CV summary prompt
 .claude-plugin/
@@ -139,7 +143,7 @@ RELEASE_PROCESS.md        # Release workflow documentation
 ### MCP Server Tools
 
 Data tools (fetch CV content):
-- `get_cv` - Full CV in markdown, PDF binary, LaTeX source, or interactive HTML
+- `get_cv` - Full CV in markdown, PDF binary, LaTeX source, interactive HTML, or Typst source
 - `get_cv_sections(section_names, enrich)` - One or more sections by name (case-insensitive)
 - `list_cv_sections` - Available section names with line counts
 - `get_link(name)` - Profile/document link by network name
@@ -159,7 +163,7 @@ Semantic query tools:
 - `get_entry_context(entry_id)` - Full semantic context (topics, relationships, impact)
 
 Rendering tools:
-- `get_tailored_cv(tailoring_config)` - Render a tailored LaTeX CV from a TailoringSpec JSON (section reordering, entry filtering, profile override)
+- `get_tailored_cv(tailoring_config, format?)` - Render a tailored CV from a TailoringSpec JSON (section reordering, entry filtering, profile override). Supports `format="latex"` (default) and `format="typst"`
 
 Prompt-wrapping tool (fallback for non-skill clients):
 - `summarize_cv` - Configurable CV summary (depth, context, emphasis, audience, tone, format, length)
@@ -177,6 +181,9 @@ LaTeX:
 
 HTML:
 - `fps-cv://html` - Full CV as self-contained interactive HTML
+
+Typst:
+- `fps-cv://typst` - Full CV as Typst source (moderner-cv package)
 
 JSON:
 - `fps-cv://resume` - Full resume as JSON
@@ -204,7 +211,7 @@ The skill is the preferred mechanism for CV summarization. The `summarize_cv` to
 
 ### Agent Skill: `cv-tailoring`
 
-The `skills/cv-tailoring/` skill provides job-targeted CV tailoring. It analyzes a job description, generates a `TailoringSpec`, renders a page-constrained (2-3 pages) LaTeX CV via the `get_tailored_cv` MCP tool, and compiles it to PDF. Works with the LinkedIn MCP server for job description retrieval.
+The `skills/cv-tailoring/` skill provides job-targeted CV tailoring. It analyzes a job description, generates a `TailoringSpec`, renders a page-constrained (2-3 pages) CV via the `get_tailored_cv` MCP tool (LaTeX or Typst format), and compiles it to PDF. Works with the LinkedIn MCP server for job description retrieval.
 
 ### Deployment
 - **render.com**: env vars `TRANSPORT`, `PORT`, `HOST`
@@ -229,7 +236,7 @@ The `skills/cv-tailoring/` skill provides job-targeted CV tailoring. It analyzes
 - **Data layer**: `resume.yaml` (structured CV, source of truth) + `resume-semantics.yaml` (semantic overlay with topic taxonomy)
 - **Pydantic models**: `models/resume.py` (Resume hierarchy), `models/semantics.py` (SemanticOverlay hierarchy), `models/tailoring.py` (TailoringSpec)
 - **ResumeStore** (`store.py`): loads both YAML files, validates cross-references, provides query and write methods
-- **Renderer** (`renderers.py`): generates markdown, LaTeX, HTML, and tailored LaTeX from Resume model using Jinja2 templates (full doc + per-section + tailored + interactive HTML)
+- **Renderer** (`renderers.py`): generates markdown, LaTeX, HTML, Typst, and tailored LaTeX/Typst from Resume model using Jinja2 templates (full doc + per-section + tailored)
 - Entry IDs follow `<type>-<slug>` convention (e.g., `work-yahoo-kgs-2023`, `pub-htl-acl-2019`)
 - MCP resources use hierarchical `fps-cv://` URI scheme
 - Server supports stdio and streamable-http transports (SSE is deprecated)
@@ -245,6 +252,15 @@ The `skills/cv-tailoring/` skill provides job-targeted CV tailoring. It analyzes
 - `_template_context()` passes `enrich=False` for all LaTeX rendering — semantic enrichment (project links, skill levels) is for markdown and HTML only
 - LaTeX commands containing `{#N}` (e.g., `\newcommand{\foo}[1]{#1}`) must be inside `{% raw %}` blocks because `{#` triggers Jinja2's comment parser. This is distinct from the `{{ "{" }}` brace-escaping used elsewhere
 - New Pydantic models follow `ConfigDict(populate_by_name=True)` + `Field()` pattern — same as `resume.py` and `semantics.py`
+
+### Jinja2/Typst Template Gotchas
+- Typst templates (`.typ.j2`) use the same `{% raw %}` block pattern as LaTeX for native Typst code (e.g., `#import`, `#cv-entry(`, `= Section Heading`)
+- `_preamble.typ.j2` imports `moderner-cv` 0.2.1 and sets up `#show: moderner-cv.with(...)` with personal data injection between raw blocks
+- Typst special characters (`#`, `$`, `@`, `<`, `>`) are escaped via `_typst_escape_filter` — lighter than LaTeX (fewer specials in content mode)
+- `render_typst()` defaults to `enrich=True` (like markdown), unlike LaTeX which always uses `enrich=False`. This means the Typst work entry partial renders project links when enriched
+- `render_tailored_typst()` uses `enrich=False` (like tailored LaTeX) — tailored output stays focused on job relevance
+- The `moderner-cv` package is resolved client-side by Typst's package manager on first compile. No server-side dependency
+- Both `cv.typ.j2` and `cv_tailored.typ.j2` share `_preamble.typ.j2` and `_work_entry.typ.j2` partials
 
 ### Technical Debt
 - No current items — tool extraction complete (`main.py` ~216 lines, tools in `tools/` subpackage)

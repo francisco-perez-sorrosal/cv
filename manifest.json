@@ -38,7 +38,7 @@
   "tools": [
     {
       "name": "get_cv",
-      "description": "Retrieve full CV in markdown (default) or PDF binary format."
+      "description": "Retrieve full CV in markdown (default), PDF binary, LaTeX source (moderncv), or Typst source (moderner-cv) format."
     },
     {
       "name": "get_link",
@@ -98,7 +98,7 @@
     },
     {
       "name": "get_tailored_cv",
-      "description": "Render a tailored LaTeX CV from a TailoringSpec JSON."
+      "description": "Render a tailored CV from a TailoringSpec JSON. Supports LaTeX (default, moderncv) and Typst (moderner-cv) output formats."
     }
   ],
   "prompts": [

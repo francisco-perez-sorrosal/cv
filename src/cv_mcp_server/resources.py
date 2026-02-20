@@ -9,6 +9,7 @@ from cv_mcp_server.renderers import (
     render_markdown,
     render_latex,
     render_html,
+    render_typst,
     render_sections,
     get_section,
     section_names as list_section_names,
@@ -63,6 +64,12 @@ def cv_latex() -> str:
 def cv_html() -> str:
     """Return the full CV as self-contained interactive HTML."""
     return render_html(store)
+
+
+@mcp.resource("fps-cv://typst")
+def cv_typst() -> str:
+    """Return the full CV as Typst source (moderner-cv package)."""
+    return render_typst(store)
 
 
 # --- Structured data (JSON) ---
@@ -181,6 +188,32 @@ _FORMAT_REGISTRY: dict[str, dict] = {
         "capabilities": {
             "sections": False,
             "enrichment": True,
+            "summarization": False,
+        },
+    },
+    "typst": {
+        "description": "Typst document using moderner-cv package for typeset PDF generation",
+        "files": [
+            {"name": "cv.typ.j2", "role": "main"},
+            {"name": "_preamble.typ.j2", "role": "partial"},
+            {"name": "_work_entry.typ.j2", "role": "partial"},
+        ],
+        "capabilities": {
+            "sections": False,
+            "enrichment": True,
+            "summarization": False,
+        },
+    },
+    "tailored-typst": {
+        "description": "Job-tailored Typst CV with section reordering, entry filtering, and profile override. Accessed via get_tailored_cv tool with format='typst'.",
+        "files": [
+            {"name": "cv_tailored.typ.j2", "role": "main"},
+            {"name": "_preamble.typ.j2", "role": "partial"},
+            {"name": "_work_entry.typ.j2", "role": "partial"},
+        ],
+        "capabilities": {
+            "sections": True,
+            "enrichment": False,
             "summarization": False,
         },
     },
