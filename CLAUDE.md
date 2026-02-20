@@ -67,10 +67,18 @@ pixi run generate-tex              # generate LaTeX CV from YAML data
 ```
 src/cv_mcp_server/
   __init__.py
-  main.py                 # MCP server: 16 tools, 15 resources, 1 prompt
+  main.py                 # Entry point: imports trigger registration, main()
+  server.py               # Shared state: transport config, store, mcp instance
+  resources.py            # 15 MCP resources (fps-cv:// endpoints) + _FORMAT_REGISTRY
   store.py                # ResumeStore: load, validate, query, write
   renderers.py            # Markdown and LaTeX renderers (full CV and per-section, 13 sections)
   utils.py                # Utility functions (YAML prompt loading)
+  tools/
+    __init__.py            # Package marker
+    data.py                # 8 data tools (get_cv, get_tailored_cv, links, sections)
+    query.py               # 3 query tools (query_work, get_entry, list_entry_ids)
+    semantic.py            # 4 semantic tools (topics, relationships, skills, context)
+    summarize.py           # summarize_cv tool + summary prompt
   models/
     __init__.py            # Re-exports Resume, SemanticOverlay, TailoringSpec
     resume.py              # Pydantic models: Resume, WorkEntry, Project (with cross-refs), etc.
@@ -233,7 +241,7 @@ The `skills/cv-tailoring/` skill provides job-targeted CV tailoring. It analyzes
 - New Pydantic models follow `ConfigDict(populate_by_name=True)` + `Field()` pattern — same as `resume.py` and `semantics.py`
 
 ### Technical Debt
-- `main.py` is at 688 lines (hard ceiling: 800). Future tools should extract tool registrations into separate modules
+- No current items — tool extraction complete (`main.py` ~216 lines, tools in `tools/` subpackage)
 
 ## Plugins
 
