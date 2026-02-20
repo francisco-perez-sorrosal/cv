@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ resume.personal_info.name }} — CV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link id="font-stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+  <style>
+{% include '_cv_styles.css.j2' %}
+  </style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-name">{{ resume.personal_info.name.split()[0][0] }}. {{ resume.personal_info.name.split()[-1] }}</div>
+    <div class="nav-links" id="nav-links"></div>
+    <div class="nav-controls">
+      <select id="font-selector" aria-label="Body font">
+        <option value="DM Sans" selected>DM Sans</option>
+        <option value="Inter">Inter</option>
+        <option value="Lato">Lato</option>
+        <option value="Source Sans 3">Source Sans 3</option>
+        <option value="Roboto">Roboto</option>
+        <option value="Open Sans">Open Sans</option>
+        <option value="Merriweather">Merriweather</option>
+        <option value="Libre Baskerville">Libre Baskerville</option>
+        <option value="Crimson Text">Crimson Text</option>
+      </select>
+      <div class="color-picker" aria-label="Color theme">
+        <button class="color-swatch active" data-theme="warm-paper" style="background:#f8f6f1" title="Warm Paper"></button>
+        <button class="color-swatch" data-theme="cool-white" style="background:#f5f7fa" title="Cool White"></button>
+        <button class="color-swatch" data-theme="cream" style="background:#faf3eb" title="Cream"></button>
+        <button class="color-swatch" data-theme="slate" style="background:#1e293b" title="Slate"></button>
+        <button class="color-swatch" data-theme="midnight" style="background:#0f172a" title="Midnight"></button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-label">Curriculum Vitae</div>
+    {% set name_parts = resume.personal_info.name.split() %}
+    <h1 class="hero-name">{{ name_parts[:-1] | join(' ') }}<br>{{ name_parts[-1] }}</h1>
+    {% if resume.personal_info.label %}
+    <p class="hero-title">{{ resume.personal_info.label }}</p>
+    {% endif %}
+    <div class="hero-links">
+      {% for p in resume.personal_info.profiles %}
+      {% if p.url and p.network != "CV PDF" %}
+      <a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.network }}</a>
+      {% endif %}
+      {% endfor %}
+      {% if pdf_link %}
+      <a href="{{ pdf_link }}" target="_blank" rel="noopener">Full CV &#8599;</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</header>
+
+<main>
+{% set ns = namespace(section_num=1) %}
+
+{% if resume.personal_info.summary %}
+<section data-label="Profile">
+  <div class="container">
+    <div class="section-label">{{ "%02d" | format(ns.section_num) }} — Overview</div>
+    <h2 class="section-title">Professional Profile</h2>
+    <p class="profile-text">{{ resume.personal_info.summary }}</p>
+    {% if contact_parts %}
+    <div class="tags">
+      {% for part in contact_parts %}
+      <span class="tag">{{ part }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% set ns.section_num = ns.section_num + 1 %}
+{% endif %}
+
+{% if sorted_publications or resume.patents %}
+<section data-label="Impact">
+  <div class="container">
+    <div class="stats-row">
+      {% if sorted_publications %}
+      <div class="stat expandable">
+        <span class="expand-indicator"></span>
+        <div class="stat-number">{{ sorted_publications | length }}</div>
+        <div class="stat-label">Publications</div>
+        <div class="expand-content">
+          <ul>
+            {% for p in sorted_publications %}
+            <li>
+              <strong>{{ p.name }}</strong>
+              <small>{{ p.publisher }} &middot; {{ p.release_date }}{% if p.citations %} &middot; {{ p.citations }} citations{% endif %}</small>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+      {% if total_citations %}
+      <div class="stat">
+        <div class="stat-number">~{{ total_citations }}</div>
+        <div class="stat-label">Citations</div>
+      </div>
+      {% endif %}
+      {% if resume.patents %}
+      <div class="stat expandable">
+        <span class="expand-indicator"></span>
+        <div class="stat-number">{{ resume.patents | length }}</div>
+        <div class="stat-label">Patents</div>
+        <div class="expand-content">
+          <ul>
+            {% for p in resume.patents %}
+            <li>
+              <strong>{{ p.title }}</strong>
+              <small>No. {{ p.number }} &middot; {{ p.date }}{{ p.status | patent_status }}</small>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% set ns.section_num = ns.section_num + 1 %}
+{% endif %}
+
+{% if resume.skills %}
+<section data-label="Skills">
+  <div class="container">
+    <div class="section-label">{{ "%02d" | format(ns.section_num) }} — Expertise</div>
+    <h2 class="section-title">Technical Skills</h2>
+    <div class="skills-grid">
+      {% for sg in resume.skills %}
+      <div class="skill-card expandable">
+        <span class="expand-indicator"></span>
+        <h3>{{ sg.name }}</h3>
+        <p>{{ sg.skills | map(attribute='name') | join(', ') }}</p>
+        <div class="expand-content">
+          {% for skill in sg.skills %}
+          <div class="tags">
+            {% set level = skill_levels.get(skill.name | lower, "") %}
+            {% if level %}
+            <span class="tag">{{ skill.name }} [{{ level }}]</span>
+            {% endif %}
+            {% for kw in skill.keywords %}
+            <span class="tag">{{ kw }}</span>
+            {% endfor %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% set ns.section_num = ns.section_num + 1 %}
+{% endif %}
+
+{% if industry_work %}
+<section data-label="Experience">
+  <div class="container">
+    <div class="section-label">{{ "%02d" | format(ns.section_num) }} — Career</div>
+    <h2 class="section-title">Professional Experience</h2>
+    <div class="achievements-list">
+      {% for w in industry_work %}
+      <div class="achievement{% if w.projects %} expandable{% endif %}">
+        {% if w.projects %}
+        <span class="expand-indicator"></span>
+        {% endif %}
+        <div class="achievement-meta">{{ w.institution_id | inst_name }} &middot; {{ w | html_period }}</div>
+        <div class="achievement-title">{{ w.position }}</div>
+        {% if w.roles %}
+        <p>{{ w.roles | join(' &middot; ') }}</p>
+        {% endif %}
+        {% if w.highlights %}
+        <p>{{ w.highlights | join('. ') }}.</p>
+        {% endif %}
+        {% if w.projects %}
+        <div class="expand-content">
+          {% for proj in w.projects %}
+          <p><strong>{{ proj.name }}</strong>{% if proj.description %}: {{ proj.description }}{% endif %}</p>
+          {% if proj.highlights %}
+          <p>{{ proj.highlights | join('. ') }}.</p>
+          {% endif %}
+          {% if proj.keywords %}
+          <div class="tags">
+            {% for kw in proj.keywords %}
+            <span class="tag">{{ kw }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% set ns.section_num = ns.section_num + 1 %}
+{% endif %}
+
+{% if academic_work %}
+<section data-label="Academic">
+  <div class="container">
+    <div class="section-label">{{ "%02d" | format(ns.section_num) }} — Research</div>
+    <h2 class="section-title">Academic Research Experience</h2>
+    <div class="achievements-list">
+      {% for w in academic_work %}
+      <div class="achievement">
+        <div class="achievement-meta">{{ w.institution_id | inst_name }} &middot; {{ w | html_period }}</div>
+        <div class="achievement-title">{{ w.position }}</div>
+        {% if w.summary %}
+        <p>{{ w.summary }}</p>
+        {% endif %}
+        {% if w.highlights %}
+        <p>{{ w.highlights | join('. ') }}.</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% if academic_publications %}
+    <h3 style="margin-top: 40px; font-family: var(--font-heading); font-size: 22px;">Publications</h3>
+    <div class="achievements-list" style="margin-top: 20px;">
+      {% for p in academic_publications %}
+      <div class="achievement">
+        <div class="achievement-meta">{{ p.publisher }} &middot; {{ p.release_date }}</div>
+        <div class="achievement-title">{{ p.name }}</div>
+        {% if p.citations %}
+        <p><strong>{{ p.citations }}</strong> citations</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% set ns.section_num = ns.section_num + 1 %}
+{% endif %}
+
+{% if resume.patents %}
+<section data-label="Patents">
+  <div class="container">
+    <div class="section-label">{{ "%02d" | format(ns.section_num) }} — Intellectual Property</div>
+    <h2 class="section-title">Patents</h2>
+    <div class="achievements-list">
+      {% for p in resume.patents %}
+      <div class="achievement">
+        <div class="achievement-meta">No. {{ p.number }} &middot; {{ p.date }}{{ p.status | patent_status }}</div>
+        <div class="achievement-title">{{ p.title }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% set ns.section_num = ns.section_num + 1 %}
+{% endif %}
+
+{% if resume.education %}
+<section data-label="Education">
+  <div class="container">
+    <div class="section-label">{{ "%02d" | format(ns.section_num) }} — Credentials</div>
+    <h2 class="section-title">Education</h2>
+    <div class="edu-grid">
+      {% for e in resume.education %}
+      <div class="edu-card">
+        <div class="degree">{{ e.study_type }}{% if e.area %}, {{ e.area }}{% endif %}</div>
+        <div class="school">{{ e.institution_id | inst_name }}</div>
+        <div class="year">{{ e | html_period }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% set ns.section_num = ns.section_num + 1 %}
+{% endif %}
+
+{% if resume.leadership %}
+<section data-label="Leadership">
+  <div class="container">
+    <div class="section-label">{{ "%02d" | format(ns.section_num) }} — Leadership</div>
+    <h2 class="section-title">Leadership &amp; Communication</h2>
+    {% for cat in resume.leadership %}
+    <h3 style="font-family: var(--font-heading); font-size: 18px; margin-top: 24px; margin-bottom: 12px;">{{ cat.name }}</h3>
+    <div class="achievements-list">
+      {% for item in cat.items %}
+      <div class="achievement">
+        <div class="achievement-title">{{ item.label }}</div>
+        <p>{{ item.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% set ns.section_num = ns.section_num + 1 %}
+{% endif %}
+
+{% if resume.languages %}
+<section data-label="Languages">
+  <div class="container">
+    <div class="section-label">{{ "%02d" | format(ns.section_num) }} — Languages</div>
+    <h2 class="section-title">Languages</h2>
+    <div class="tags">
+      {% for lang in resume.languages %}
+      <span class="tag">{{ lang.language }}{% if lang.fluency %} ({{ lang.fluency }}){% endif %}</span>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% set ns.section_num = ns.section_num + 1 %}
+{% endif %}
+
+{% if resume.projects or resume.memberships or resume.conferences %}
+<section data-label="Activities">
+  <div class="container">
+    <div class="section-label">{{ "%02d" | format(ns.section_num) }} — Community</div>
+    <h2 class="section-title">Other Activities</h2>
+    {% if resume.projects %}
+    <h3 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 16px;">Open Source Projects</h3>
+    <div class="skills-grid" style="margin-bottom: 32px;">
+      {% for p in resume.projects %}
+      <div class="skill-card">
+        <h3>{{ p.name }}</h3>
+        {% if p.description %}
+        <p>{{ p.description }}</p>
+        {% endif %}
+        {% if p.url %}
+        <p><a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.url }}</a></p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if committers %}
+    <h3 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 16px;">Open Source Committer</h3>
+    <div class="tags" style="margin-bottom: 32px;">
+      {% for m in committers %}
+      <span class="tag">{{ m.organization }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if reviewer_groups %}
+    <h3 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 16px;">Reviewer</h3>
+    <div class="achievements-list" style="margin-bottom: 32px;">
+      {% for r in reviewer_groups %}
+      <div class="achievement">
+        <div class="achievement-title">{{ r.name }}</div>
+        <p>{{ r.years }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if conference_list %}
+    <h3 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 16px;">Conferences</h3>
+    <div class="tags" style="margin-bottom: 32px;">
+      {% for c in conference_list %}
+      <span class="tag">{{ c.name }} ({{ c.date }}){% if c.role == "speaker" %} — Speaker{% endif %}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if members %}
+    <h3 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 16px;">Memberships</h3>
+    <div class="tags">
+      {% for m in members %}
+      <span class="tag">{{ m.organization }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% set ns.section_num = ns.section_num + 1 %}
+{% endif %}
+
+{% if resume.interests %}
+<section data-label="Interests">
+  <div class="container">
+    <div class="section-label">{{ "%02d" | format(ns.section_num) }} — Personal</div>
+    <h2 class="section-title">Hobbies &amp; Interests</h2>
+    <div class="skills-grid">
+      {% for i in resume.interests %}
+      <div class="skill-card">
+        <h3>{{ i.name }}</h3>
+        {% if i.description %}
+        <p>{{ i.description }}</p>
+        {% endif %}
+        {% if i.keywords %}
+        <div class="tags">
+          {% for kw in i.keywords %}
+          <span class="tag">{{ kw }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+</main>
+
+<footer>
+  <div class="container">
+    {% if pdf_link %}
+    <a class="download-btn" href="{{ pdf_link }}" target="_blank" rel="noopener">Download Full CV</a>
+    {% endif %}
+    <p>Generated from structured CV data</p>
+  </div>
+</footer>
+
+<script>
+{% include '_cv_scripts.js.j2' %}
+</script>
+</body>
+</html>

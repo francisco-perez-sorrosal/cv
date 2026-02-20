@@ -1,8 +1,8 @@
 """Template-based renderers for the Resume model.
 
-Uses Jinja2 templates to generate markdown and LaTeX output from structured
-CV data. Supports both full-document and per-section rendering for markdown,
-and full-document rendering for LaTeX.
+Uses Jinja2 templates to generate markdown, LaTeX, and HTML output from
+structured CV data. Supports both full-document and per-section rendering
+for markdown, and full-document rendering for LaTeX and HTML.
 """
 
 from __future__ import annotations
@@ -416,3 +416,49 @@ def _make_employer_name_filter(resume: Resume):
             return f"{w.department} @ {inst_name}"
         return inst_name
     return employer_name
+
+
+# --- HTML rendering ---
+
+_CV_PDF_NETWORK = "CV PDF"
+
+
+def render_html(store: ResumeStore, *, enrich: bool = True) -> str:
+    """Render a complete Resume as self-contained interactive HTML."""
+    env = _create_html_env(store)
+    template = env.get_template("cv.html.j2")
+    context = _template_context(store, enrich)
+    context["pdf_link"] = _extract_pdf_link(store.resume)
+    return template.render(**context)
+
+
+def _extract_pdf_link(resume: Resume) -> str:
+    """Extract the CV PDF link from personal_info profiles."""
+    for p in resume.personal_info.profiles:
+        if p.network == _CV_PDF_NETWORK:
+            return p.url
+    return ""
+
+
+def _create_html_env(store: ResumeStore) -> Environment:
+    """Create a Jinja2 environment configured for HTML output."""
+    env = Environment(
+        loader=FileSystemLoader(TEMPLATES_DIR),
+        autoescape=True,
+        trim_blocks=True,
+        lstrip_blocks=True,
+        keep_trailing_newline=True,
+    )
+    env.filters["inst_name"] = _make_inst_name_filter(store.resume)
+    env.filters["html_period"] = _html_period_filter
+    env.filters["patent_status"] = _patent_status_filter
+    return env
+
+
+def _html_period_filter(obj) -> str:
+    """Format a date range with HTML en-dash entity."""
+    start = getattr(obj, "start_date", "")
+    end = getattr(obj, "end_date", "")
+    if not start:
+        return ""
+    return f"{start}&ndash;{end}" if end else f"{start}&ndash;Present"
