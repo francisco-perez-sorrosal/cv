@@ -7,10 +7,10 @@ description: >
   Do NOT use for job-specific tailoring -- use the cv-tailoring skill instead
   when the user provides a job description or wants to adapt the CV for a
   specific role. Do NOT delegate CV output to document-generation tools
-  (no docx, no slides). HTML output uses built-in templates bundled with this
-  skill -- do NOT read or invoke any frontend, design, or HTML skill.
-  Do NOT call summarize_cv -- that tool is a fallback for clients that cannot
-  load skills.
+  (no docx, no slides). HTML output is server-rendered via
+  get_cv(format="html") -- do NOT read or invoke any frontend, design, or
+  HTML skill. Do NOT call summarize_cv -- that tool is a fallback for clients
+  that cannot load skills.
   Trigger phrases: "LaTeX", "tex", "moderncv", "typeset CV", "generate .tex".
 ---
 
@@ -24,7 +24,7 @@ Fetch CV data using these MCP tools before generating any summary. The CV data c
 
 ### Full CV tools
 
-1. **`get_cv(format, enrich)`** -- Full CV content. `format`: `"markdown"` (default, for analysis), `"pdf"` (returns the original PDF binary), or `"latex"` (returns LaTeX source using moderncv package). `enrich` (default `true`): when enabled, the markdown output includes semantic enrichments -- cross-references to related publications/patents and skill proficiency levels from the semantic overlay. Use when the full CV is needed or when the question spans multiple sections.
+1. **`get_cv(format, enrich)`** -- Full CV content. `format`: `"markdown"` (default, for analysis), `"pdf"` (returns the original PDF binary), `"latex"` (returns LaTeX source using moderncv package), or `"html"` (returns a self-contained interactive HTML document with theme switching, expandable cards, and print CSS). `enrich` (default `true`): when enabled, the markdown and HTML output includes semantic enrichments -- cross-references to related publications/patents and skill proficiency levels from the semantic overlay. Use when the full CV is needed or when the question spans multiple sections.
 2. **`get_link(name)`** -- Returns a profile or document link by name. Available: `CV PDF` (shareable CV URL), `Google Scholar`, `LinkedIn`, `GitHub`, `Twitter`. Primary use for `CV PDF`: when the user explicitly asks for a link to share. Secondary use: failover for PDF delivery when `get_cv(format="pdf")` fails -- call `get_link("CV PDF")`, download from that URL, save locally, and present as artifact.
 
 ### Section tools (preferred for targeted queries)
@@ -61,7 +61,7 @@ Supported formats: `markdown`, `plain text`, `pdf`, `html`, `latex`. If the user
 |--------|--------|
 | **LaTeX** | Call `get_cv(format="latex")`. Save to `tmp/FranciscoPerezSorrosal_CV.tex`. Inform user it can be compiled with `pdflatex` or `latexmk -pdf`. Always renders the complete CV — summarization parameters are ignored. **Done.** |
 | **PDF** | Call `get_cv(format="pdf")`. Decode base64 blob, save to `FranciscoPerezSorrosal_CV.pdf`, present as downloadable artifact. **Failover**: if the call fails, use `get_link("CV PDF")` → download → save → present. **Done.** |
-| **HTML** | Follow the [HTML rendering guide](references/html-rendering.md). Supports both full CV and summarized output. All templates are bundled in `references/` — do NOT invoke any other skill. **Done.** |
+| **HTML** | Call `get_cv(format="html")`. Save to `tmp/FranciscoPerezSorrosal_CV.html`. Open in browser with `open tmp/FranciscoPerezSorrosal_CV.html`. Returns a self-contained interactive page with embedded CSS/JS, 5 color themes, expandable cards, and print CSS. Always renders the complete CV — summarization parameters are ignored. **Done.** |
 | **markdown / plain text** | Continue to step 3. |
 
 ### Step 3: Fetch and summarize
@@ -126,9 +126,7 @@ When the user's request does not match a preset, map their requirements to the p
 - "Bullet point summary" -> style: bullet points
 - "How would this person fit at a startup?" -> use Startup Executive Briefing preset
 - "Give me the CV in LaTeX" / "Generate a .tex file" / "moderncv version" -> format: latex (full CV only, summarization parameters ignored)
-- "Give me the CV as HTML" / "HTML version" -> format: html, depth: full
-- "Quick Hiring Screen in HTML" -> apply Quick Hiring Screen preset, format: html
-- "Summarize for hiring managers as an HTML page" -> depth: brief, audience: technical hiring manager, format: html
+- "Give me the CV as HTML" / "HTML version" -> format: html (full CV only, summarization parameters ignored)
 
 When the user provides additional instructions (e.g., "focus on AI/ML healthcare experience", "highlight open-source contributions"), incorporate them as supplementary guidance applied on top of the selected parameters.
 
@@ -136,5 +134,5 @@ When the user provides additional instructions (e.g., "focus on AI/ML healthcare
 
 - **Supported formats**: markdown, plain text, PDF, HTML, LaTeX — no others
 - **Skill handoff**: delegates to cv-tailoring when the user introduces a job description mid-conversation
-- **Self-contained**: all HTML templates, CSS, and JS are bundled in `references/` — never read or invoke any other skill
+- **Self-contained**: HTML is server-rendered via `get_cv(format="html")` — never read or invoke any frontend, design, or HTML skill
 - **`summarize_cv` tool**: fallback for MCP clients that cannot load Agent Skills. Exposes the same parameters as a tool-prompt pattern — the client calls the tool, receives a parameterized prompt, and processes it against CV data fetched via `get_cv`. Skill-capable clients should NOT call this tool

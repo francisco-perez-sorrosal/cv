@@ -1,4 +1,4 @@
-"""MCP resources: 15 fps-cv:// endpoints + format registry."""
+"""MCP resources: 16 fps-cv:// endpoints + format registry."""
 
 import json
 
@@ -8,6 +8,7 @@ from cv_mcp_server.server import mcp, store, CV_PATH
 from cv_mcp_server.renderers import (
     render_markdown,
     render_latex,
+    render_html,
     render_sections,
     get_section,
     section_names as list_section_names,
@@ -56,6 +57,12 @@ def cv_section(name: str) -> str:
 def cv_latex() -> str:
     """Return the full CV as LaTeX source (moderncv package)."""
     return render_latex(store)
+
+
+@mcp.resource("fps-cv://html")
+def cv_html() -> str:
+    """Return the full CV as self-contained interactive HTML."""
+    return render_html(store)
 
 
 # --- Structured data (JSON) ---
@@ -161,6 +168,19 @@ _FORMAT_REGISTRY: dict[str, dict] = {
         "capabilities": {
             "sections": True,
             "enrichment": False,
+            "summarization": False,
+        },
+    },
+    "html": {
+        "description": "Self-contained interactive HTML with theme switching, expandable cards, and print CSS",
+        "files": [
+            {"name": "cv.html.j2", "role": "main"},
+            {"name": "_cv_styles.css.j2", "role": "partial"},
+            {"name": "_cv_scripts.js.j2", "role": "partial"},
+        ],
+        "capabilities": {
+            "sections": False,
+            "enrichment": True,
             "summarization": False,
         },
     },

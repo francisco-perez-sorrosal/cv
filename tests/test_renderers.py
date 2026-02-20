@@ -1,4 +1,4 @@
-"""Tests for markdown rendering and enrichment."""
+"""Tests for markdown, LaTeX, and HTML rendering."""
 
 from __future__ import annotations
 
@@ -16,6 +16,7 @@ from cv_mcp_server.renderers import (
     _patent_status_filter,
     _period_filter,
     get_section,
+    render_html,
     render_latex,
     render_markdown,
     render_sections,
@@ -318,3 +319,45 @@ class TestRenderTailoredLatex:
         assert "Acme Corp" not in output
         # The work entry's project should also be absent
         assert "Widget Builder" not in output
+
+
+# --- render_html ---
+
+
+class TestRenderHtml:
+    def test_returns_non_empty(self, minimal_store):
+        html = render_html(minimal_store)
+        assert len(html) > 0
+
+    def test_has_html_document_structure(self, minimal_store):
+        html = render_html(minimal_store)
+        assert "<!DOCTYPE html>" in html
+        assert "<html" in html
+        assert "</html>" in html
+        assert "<head>" in html
+        assert "<body>" in html
+
+    def test_contains_candidate_name(self, minimal_store):
+        html = render_html(minimal_store)
+        assert "Test" in html
+        assert "Candidate" in html
+
+    def test_self_contained_css(self, minimal_store):
+        html = render_html(minimal_store)
+        assert "<style>" in html
+        assert "--bg:" in html
+
+    def test_self_contained_js(self, minimal_store):
+        html = render_html(minimal_store)
+        assert "<script>" in html
+        assert "applyTheme" in html
+
+    def test_has_interactive_features(self, minimal_store):
+        html = render_html(minimal_store)
+        assert "expandable" in html
+        assert "data-label" in html
+
+    def test_enrichment_toggle(self, minimal_store):
+        html = render_html(minimal_store, enrich=False)
+        assert "<!DOCTYPE html>" in html
+        assert "<html" in html

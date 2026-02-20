@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Francisco Perez-Sorrosal's CV repository. Two branches serve different purposes:
 
 - **`main`**: LaTeX source CV (`2025_FranciscoPerezSorrosal_CV_English.tex`) and generated PDF
-- **`mcp`**: Python MCP server (v0.0.5) with structured YAML data layer, semantic overlay, and 16 query/rendering tools for AI systems
+- **`mcp`**: Python MCP server (v0.0.5) with structured YAML data layer, semantic overlay, 16 query/rendering tools, and 16 resources for AI systems
 
 ## Common Commands
 
@@ -69,9 +69,9 @@ src/cv_mcp_server/
   __init__.py
   main.py                 # Entry point: imports trigger registration, main()
   server.py               # Shared state: transport config, store, mcp instance
-  resources.py            # 15 MCP resources (fps-cv:// endpoints) + _FORMAT_REGISTRY
+  resources.py            # 16 MCP resources (fps-cv:// endpoints) + _FORMAT_REGISTRY
   store.py                # ResumeStore: load, validate, query, write
-  renderers.py            # Markdown and LaTeX renderers (full CV and per-section, 13 sections)
+  renderers.py            # Markdown, LaTeX, and HTML renderers (full CV and per-section, 13 sections)
   utils.py                # Utility functions (YAML prompt loading)
   tools/
     __init__.py            # Package marker
@@ -91,6 +91,9 @@ src/cv_mcp_server/
     cv.md.j2               # Jinja2 template for markdown output
     cv.tex.j2              # Jinja2 template for LaTeX output (moderncv)
     cv_tailored.tex.j2     # Jinja2 template for tailored LaTeX output
+    cv.html.j2             # Jinja2 template for HTML output (self-contained interactive)
+    _cv_styles.css.j2      # HTML CSS partial (themes, responsive, print)
+    _cv_scripts.js.j2      # HTML JS partial (theme switching, expandable cards)
     _preamble.tex.j2       # Shared LaTeX preamble partial
     _work_entry.md.j2      # Markdown work entry partial
     _work_entry.tex.j2     # LaTeX work entry partial
@@ -136,7 +139,7 @@ RELEASE_PROCESS.md        # Release workflow documentation
 ### MCP Server Tools
 
 Data tools (fetch CV content):
-- `get_cv` - Full CV in markdown, PDF binary, or LaTeX source
+- `get_cv` - Full CV in markdown, PDF binary, LaTeX source, or interactive HTML
 - `get_cv_sections(section_names, enrich)` - One or more sections by name (case-insensitive)
 - `list_cv_sections` - Available section names with line counts
 - `get_link(name)` - Profile/document link by network name
@@ -171,6 +174,9 @@ Markdown:
 
 LaTeX:
 - `fps-cv://latex` - Full CV as LaTeX source (moderncv package)
+
+HTML:
+- `fps-cv://html` - Full CV as self-contained interactive HTML
 
 JSON:
 - `fps-cv://resume` - Full resume as JSON
@@ -223,7 +229,7 @@ The `skills/cv-tailoring/` skill provides job-targeted CV tailoring. It analyzes
 - **Data layer**: `resume.yaml` (structured CV, source of truth) + `resume-semantics.yaml` (semantic overlay with topic taxonomy)
 - **Pydantic models**: `models/resume.py` (Resume hierarchy), `models/semantics.py` (SemanticOverlay hierarchy), `models/tailoring.py` (TailoringSpec)
 - **ResumeStore** (`store.py`): loads both YAML files, validates cross-references, provides query and write methods
-- **Renderer** (`renderers.py`): generates markdown, LaTeX, and tailored LaTeX from Resume model using Jinja2 templates (full doc + per-section + tailored)
+- **Renderer** (`renderers.py`): generates markdown, LaTeX, HTML, and tailored LaTeX from Resume model using Jinja2 templates (full doc + per-section + tailored + interactive HTML)
 - Entry IDs follow `<type>-<slug>` convention (e.g., `work-yahoo-kgs-2023`, `pub-htl-acl-2019`)
 - MCP resources use hierarchical `fps-cv://` URI scheme
 - Server supports stdio and streamable-http transports (SSE is deprecated)
@@ -236,7 +242,7 @@ The `skills/cv-tailoring/` skill provides job-targeted CV tailoring. It analyzes
 ### Jinja2/LaTeX Template Gotchas
 - `{% raw %}...{% endraw %}` blocks in templates protect LaTeX special chars from Jinja2. These work correctly inside `{% include %}` — included files process raw/endraw independently
 - `_preamble.tex.j2` contains personal data (name, title, profiles) between two raw blocks. Both `cv.tex.j2` and `cv_tailored.tex.j2` get personal data from this shared partial. The `profile_override` is handled separately in `cv_tailored.tex.j2` inside `\begin{document}`, not in the preamble
-- `_template_context()` passes `enrich=False` for all LaTeX rendering — semantic enrichment (project links, skill levels) is for markdown only
+- `_template_context()` passes `enrich=False` for all LaTeX rendering — semantic enrichment (project links, skill levels) is for markdown and HTML only
 - LaTeX commands containing `{#N}` (e.g., `\newcommand{\foo}[1]{#1}`) must be inside `{% raw %}` blocks because `{#` triggers Jinja2's comment parser. This is distinct from the `{{ "{" }}` brace-escaping used elsewhere
 - New Pydantic models follow `ConfigDict(populate_by_name=True)` + `Field()` pattern — same as `resume.py` and `semantics.py`
 

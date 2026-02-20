@@ -13,6 +13,7 @@ from cv_mcp_server.server import mcp, store, CV_PATH
 from cv_mcp_server.renderers import (
     render_markdown,
     render_latex,
+    render_html,
     render_tailored_latex,
     render_sections,
     get_section,
@@ -23,16 +24,16 @@ from cv_mcp_server.models import TailoringSpec
 
 @mcp.tool()
 def get_cv(
-    format: Literal["markdown", "pdf", "latex"] = Field(
+    format: Literal["markdown", "pdf", "latex", "html"] = Field(
         default="markdown",
-        description="'markdown' returns LLM-readable text (default). 'pdf' returns the original binary PDF document for inline rendering. 'latex' returns the full CV as LaTeX source (moderncv package)."
+        description="'markdown' returns LLM-readable text (default). 'pdf' returns the original binary PDF document for inline rendering. 'latex' returns the full CV as LaTeX source (moderncv package). 'html' returns a self-contained interactive HTML document."
     ),
     enrich: bool = Field(
         default=True,
         description="Include semantic enrichments (cross-references, skill levels)"
     ),
 ) -> str | list[EmbeddedResource]:
-    """Data-layer tool: retrieves raw CV content in markdown, PDF binary, or LaTeX source.
+    """Data-layer tool: retrieves raw CV content in markdown, PDF, LaTeX, or HTML.
 
     When the cv-analyst skill is available, prefer invoking that skill instead
     of calling this tool directly — the skill orchestrates retrieval with proper
@@ -41,6 +42,7 @@ def get_cv(
     format='markdown' (default): LLM-readable text for analysis.
     format='pdf': original PDF binary for inline rendering.
     format='latex': full CV as LaTeX source (moderncv package) for typeset PDF generation.
+    format='html': self-contained interactive HTML with theme switching and expandable cards.
     """
     if format == "pdf":
         logger.debug("Returning the CV as PDF binary...")
@@ -56,6 +58,9 @@ def get_cv(
     if format == "latex":
         logger.debug("Returning the CV as LaTeX source...")
         return render_latex(store)
+    if format == "html":
+        logger.debug("Returning the CV as interactive HTML...")
+        return render_html(store, enrich=enrich)
     logger.debug("Returning the CV in markdown format...")
     return render_markdown(store, enrich=enrich)
 
