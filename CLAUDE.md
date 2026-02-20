@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Francisco Perez-Sorrosal's CV repository. Two branches serve different purposes:
 
 - **`main`**: LaTeX source CV (`2025_FranciscoPerezSorrosal_CV_English.tex`) and generated PDF
-- **`mcp`**: Python MCP server (v0.0.5) with structured YAML data layer, semantic overlay, 16 query/rendering tools, and 16 resources for AI systems
+- **`mcp`**: Python MCP server (v0.0.5) with structured YAML data layer, semantic overlay, 16 query/rendering tools, and 17 resources for AI systems
 
 ## Common Commands
 
@@ -244,12 +244,12 @@ The `skills/cv-tailoring/` skill provides job-targeted CV tailoring. It analyzes
 - MCPB bundles vendor dependencies in `lib/` directory
 - `manifest.json` defines the MCPB package metadata and tool declarations
 - The `cv-analyst` skill in `skills/` handles CV summarization for skill-compatible clients; `summarize_cv` tool serves as fallback for other clients
-- The `cv-tailoring` skill in `skills/` handles job-targeted CV tailoring with LaTeX/PDF output via the `get_tailored_cv` tool
+- The `cv-tailoring` skill in `skills/` handles job-targeted CV tailoring with LaTeX/PDF or Typst/PDF output via the `get_tailored_cv` tool
 
 ### Jinja2/LaTeX Template Gotchas
 - `{% raw %}...{% endraw %}` blocks in templates protect LaTeX special chars from Jinja2. These work correctly inside `{% include %}` — included files process raw/endraw independently
 - `_preamble.tex.j2` contains personal data (name, title, profiles) between two raw blocks. Both `cv.tex.j2` and `cv_tailored.tex.j2` get personal data from this shared partial. The `profile_override` is handled separately in `cv_tailored.tex.j2` inside `\begin{document}`, not in the preamble
-- `_template_context()` passes `enrich=False` for all LaTeX rendering — semantic enrichment (project links, skill levels) is for markdown and HTML only
+- `_template_context()` passes `enrich=False` for all LaTeX rendering — semantic enrichment (project links, skill levels) is for markdown, HTML, and Typst
 - LaTeX commands containing `{#N}` (e.g., `\newcommand{\foo}[1]{#1}`) must be inside `{% raw %}` blocks because `{#` triggers Jinja2's comment parser. This is distinct from the `{{ "{" }}` brace-escaping used elsewhere
 - New Pydantic models follow `ConfigDict(populate_by_name=True)` + `Field()` pattern — same as `resume.py` and `semantics.py`
 

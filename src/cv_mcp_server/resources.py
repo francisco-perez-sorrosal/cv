@@ -1,4 +1,4 @@
-"""MCP resources: 16 fps-cv:// endpoints + format registry."""
+"""MCP resources: 17 fps-cv:// endpoints + format registry."""
 
 import json
 

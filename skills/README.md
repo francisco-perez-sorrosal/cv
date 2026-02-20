@@ -6,14 +6,14 @@
 
 | Skill | Purpose | Trigger Examples |
 |-------|---------|-----------------|
-| [cv-analyst](cv-analyst/SKILL.md) | CV retrieval, summarization, and rendering | "summarize CV", "HTML version", "LaTeX", "quick overview" |
+| [cv-analyst](cv-analyst/SKILL.md) | CV retrieval, summarization, and rendering | "summarize CV", "HTML version", "LaTeX", "Typst", "quick overview" |
 | [cv-tailoring](cv-tailoring/SKILL.md) | Job-targeted CV tailoring with compiled PDF output | "tailor CV for this job", "adapt resume", "CV for job" |
 
 ## cv-analyst
 
-General-purpose CV retrieval and summarization. Outputs: markdown, plain text, PDF, HTML, LaTeX.
+General-purpose CV retrieval and summarization. Outputs: markdown, plain text, PDF, HTML, LaTeX, Typst.
 
-- HTML and LaTeX are server-rendered via `get_cv(format=...)` — no client-side template assembly
+- HTML, LaTeX, and Typst are server-rendered via `get_cv(format=...)` — no client-side template assembly
 - Summarization (depth, audience, tone, emphasis) applies to markdown/plain text only
 - Delegates to cv-tailoring when a job description is introduced
 
@@ -21,7 +21,7 @@ Reference files: [summary-presets.md](cv-analyst/references/summary-presets.md)
 
 ## cv-tailoring
 
-Job-targeted CV tailoring. Analyzes a job description, generates a `TailoringSpec`, renders a page-constrained LaTeX CV via `get_tailored_cv`, and compiles to PDF.
+Job-targeted CV tailoring. Analyzes a job description, generates a `TailoringSpec`, renders a page-constrained CV via `get_tailored_cv` (LaTeX or Typst backend), and compiles to PDF.
 
 - Integrates with LinkedIn MCP server for job description retrieval
 - 7-step workflow: obtain job context, retrieve CV, analyze, generate spec, render, integrity check, deliver
