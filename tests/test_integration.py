@@ -120,14 +120,14 @@ class TestWorkQueries:
 
 class TestGetTailoredCvTool:
     def test_invalid_json_returns_schema(self):
-        from cv_mcp_server.main import get_tailored_cv
+        from cv_mcp_server.tools.data import get_tailored_cv
 
         result = get_tailored_cv('{"not": "a valid spec"}')
         assert "Invalid TailoringSpec" in result
         assert "json_schema" in result.lower() or "properties" in result
 
     def test_empty_string_returns_schema(self):
-        from cv_mcp_server.main import get_tailored_cv
+        from cv_mcp_server.tools.data import get_tailored_cv
 
         result = get_tailored_cv("")
         assert "Invalid TailoringSpec" in result
