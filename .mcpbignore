@@ -57,6 +57,11 @@ LICENSE
 .mcp.json
 .playwright-mcp/
 
+# Rendered CV artifacts (not needed at server runtime)
+latest-cv/
+latest.pdf
+rendered-cv/
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
