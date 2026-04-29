@@ -35,7 +35,10 @@ def find_project_root():
 
 
 PROJECT_ROOT = find_project_root()
-DATA_DIR = Path(__file__).parent / "data"
+# CV_DATA_DIR env var allows overriding the data location (e.g. in containerised deployments).
+# Default: cv-data/ at the project root, so the YAML files live outside the Python package.
+_data_dir_env = os.environ.get("CV_DATA_DIR")
+DATA_DIR = Path(_data_dir_env) if _data_dir_env else PROJECT_ROOT / "cv-data"
 CV_PATH = PROJECT_ROOT / "FranciscoPerezSorrosal_CV_English.pdf"
 
 # Eager initialization: load structured data at import time

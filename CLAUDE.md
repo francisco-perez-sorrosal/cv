@@ -56,7 +56,8 @@ Individual pixi tasks:
 pixi run -e dev update-mcpb-deps   # sync and export requirements.txt
 pixi run -e dev mcp-bundle         # install deps to lib/
 pixi run pack                      # create .mcpb bundle in dist/mcpb/
-pixi run generate-tex              # generate LaTeX CV from YAML data
+pixi run render-cv                 # render LaTeX CV from YAML data (default: tex)
+pixi run render-cv -- --format md  # render to markdown (tex|md|html|typst)
 ```
 
 ### Release
@@ -92,9 +93,6 @@ src/cv_mcp_server/
     resume.py              # Pydantic models: Resume, WorkEntry, Project (with cross-refs), etc.
     semantics.py           # Pydantic models: SemanticOverlay, Topic, Relationship, etc.
     tailoring.py           # Pydantic models: TailoringSpec, SectionDirective, EntryEmphasis, KeywordHighlight
-  data/
-    resume.yaml            # Structured CV data (source of truth)
-    resume-semantics.yaml  # Semantic overlay (topics, annotations, relationships)
   templates/
     cv.md.j2               # Jinja2 template for markdown output
     cv.tex.j2              # Jinja2 template for LaTeX output (moderncv)
@@ -111,6 +109,14 @@ src/cv_mcp_server/
     _work_entry.typ.j2     # Typst work entry partial
   prompts/
     summary.yaml           # Configurable CV summary prompt
+cv-data/
+  resume.yaml            # Structured CV data (source of truth)
+  resume-semantics.yaml  # Semantic overlay (topics, annotations, relationships)
+rendered-cv/             # Generated render outputs (gitignored; regenerate with pixi run generate-tex)
+  tex/                   # LaTeX renders (.tex)
+  md/                    # Markdown renders (.md)
+  html/                  # HTML renders (.html)
+  typst/                 # Typst renders (.typ)
 .claude-plugin/
   plugin.json             # Claude Code plugin manifest (skills, remote MCP config)
   mcp-local.json          # MCP override: stdio via pixi (dev mode)
@@ -127,7 +133,7 @@ config/
   cv_mcp.json             # Remote MCP server config (render.com, used for desktop remote injection)
 scripts/
   release.sh              # Release automation
-  generate_tex.py         # Standalone LaTeX generation from YAML data
+  render_cv.py            # Render CV from YAML data to any format (--format tex|md|html|typst)
 dist/
   mcpb/                   # Built .mcpb bundles (fps-cv-mcp-*.mcpb)
   wheel/                  # Built Python wheels
@@ -236,7 +242,7 @@ Links:
 ### When Working with MCP Server (mcp branch)
 - Python >=3.13, `src/` layout, hatch build system
 - pixi for dependency management and task execution
-- **Data layer**: `resume.yaml` (structured CV, source of truth) + `resume-semantics.yaml` (semantic overlay with topic taxonomy)
+- **Data layer**: `cv-data/resume.yaml` (structured CV, source of truth) + `cv-data/resume-semantics.yaml` (semantic overlay with topic taxonomy); located at the project root, outside the Python package. Override via `CV_DATA_DIR` env var
 - **Pydantic models**: `models/resume.py` (Resume hierarchy), `models/semantics.py` (SemanticOverlay hierarchy), `models/tailoring.py` (TailoringSpec)
 - **ResumeStore** (`store.py`): loads both YAML files, validates cross-references, provides query and write methods
 - **Renderer** (`renderers.py`): generates markdown, LaTeX, HTML, Typst, and tailored LaTeX/Typst from Resume model using Jinja2 templates (full doc + per-section + tailored)

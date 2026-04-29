@@ -242,7 +242,7 @@ packages:
 - pypi: .
   name: cv-mcp-server
   version: 0.0.5
-  sha256: 3921cff79c26309c27635693a11bf320eae672faaacd1ba8bda97c9c74a7c654
+  sha256: 9de564ece4ecd7e8f71f2a92606263b331629e987831d282adbbbc0344e71c59
   requires_dist:
   - mcp[cli]>=1.9.2,<2
   - loguru>=0.7.3,<0.8

@@ -42,7 +42,7 @@ from cv_mcp_server.models.semantics import (
 from cv_mcp_server.store import ResumeStore
 
 
-DATA_DIR = Path(__file__).parent.parent / "src" / "cv_mcp_server" / "data"
+DATA_DIR = Path(__file__).parent.parent / "cv-data"
 
 
 # --- Tier 1: Synthetic fixtures (no disk I/O) ---
