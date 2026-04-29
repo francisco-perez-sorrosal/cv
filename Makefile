@@ -23,14 +23,20 @@ build-wheel:
 	DIST_WHEEL=$(DIST_WHEEL) pixi run -e dev python-bundle
 
 # Build process: update deps -> create lib directory -> create MCPB bundle
-# lib/ must be built with the system python3 (same binary the manifest.json
-# launches the server with), NOT pixi's Python — otherwise binary extensions
-# like pydantic_core have an ABI mismatch at runtime.
+# lib/ MUST be built with the EXACT Python interpreter that manifest.json
+# launches the server with (BUNDLE_PYTHON below). Claude Desktop is a GUI
+# app — launchd's sanitized PATH does NOT include Homebrew, so a bare
+# 'python3' resolves to /usr/bin/python3 (Apple's 3.9.6, too old for this
+# project). We pin to /opt/homebrew/bin/python3.13 in both places so the
+# native .so files match the runtime ABI.
+BUNDLE_PYTHON ?= /opt/homebrew/bin/python3.13
+
 build-mcpb:
+	@test -x $(BUNDLE_PYTHON) || (echo "ERROR: $(BUNDLE_PYTHON) not found. Override with: make build-mcpb BUNDLE_PYTHON=/path/to/python3.13" && exit 1)
 	pixi install
 	pixi run -e dev update-mcpb-deps
 	rm -rf lib/ && mkdir -p lib
-	python3 -m pip install -r requirements.txt --target lib --upgrade --force-reinstall
+	$(BUNDLE_PYTHON) -m pip install -r requirements.txt --target lib --upgrade --force-reinstall
 	DIST_MCPB=$(DIST_MCPB) pixi run pack
 
 # Package skills as zips for claude.ai (Settings > Features > Add Skill)
