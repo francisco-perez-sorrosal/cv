@@ -56,8 +56,7 @@ Individual pixi tasks:
 pixi run -e dev update-mcpb-deps   # sync and export requirements.txt
 pixi run -e dev mcp-bundle         # install deps to lib/
 pixi run pack                      # create .mcpb bundle in dist/mcpb/
-pixi run render-cv                 # render LaTeX CV from YAML data (default: tex)
-pixi run render-cv -- --format md  # render to markdown (tex|md|html|typst)
+pixi run render-cv                 # full pipeline: render tex → compile PDF → latest.pdf symlink
 ```
 
 ### Release
@@ -112,11 +111,11 @@ src/cv_mcp_server/
 cv-data/
   resume.yaml            # Structured CV data (source of truth)
   resume-semantics.yaml  # Semantic overlay (topics, annotations, relationships)
-rendered-cv/             # Generated render outputs (gitignored; regenerate with pixi run generate-tex)
-  tex/                   # LaTeX renders (.tex)
-  md/                    # Markdown renders (.md)
-  html/                  # HTML renders (.html)
-  typst/                 # Typst renders (.typ)
+rendered-cv/             # Quick render workspace (gitignored); python scripts/render_cv.py -f <fmt>
+  tex/ md/ html/ typst/  # One subdir per format
+latest-cv/               # Snapshot renders (gitignored); pixi run render-cv
+  tex/                   # <YYYY-MM-DD>_FranciscoPerezSorrosal_CV_English.{tex,pdf}
+latest.pdf               # Symlink → latest-cv/tex/<date>_*.pdf (gitignored)
 .claude-plugin/
   plugin.json             # Claude Code plugin manifest (skills, remote MCP config)
   mcp-local.json          # MCP override: stdio via pixi (dev mode)
@@ -133,7 +132,7 @@ config/
   cv_mcp.json             # Remote MCP server config (render.com, used for desktop remote injection)
 scripts/
   release.sh              # Release automation
-  render_cv.py            # Render CV from YAML data to any format (--format tex|md|html|typst)
+  render_cv.py            # Render CV to any format; --snapshot --compile --symlink for full pipeline
 dist/
   mcpb/                   # Built .mcpb bundles (fps-cv-mcp-*.mcpb)
   wheel/                  # Built Python wheels

@@ -51,7 +51,7 @@ dev = { features = ["dev"], solve-group = "default" }
 [tool.pixi.tasks]
 mcps="python src/cv_mcp_server/main.py"
 start="python src/cv_mcp_server/main.py"
-render-cv = { cmd = "python scripts/render_cv.py", description = "Render CV from YAML data (--format tex|md|html|typst, default tex) to rendered-cv/<format>/" }
+render-cv = { cmd = "python scripts/render_cv.py --format tex --snapshot --compile --symlink latest.pdf", description = "Render + compile latest CV to PDF → latest-cv/tex/<DATE>_*.pdf + latest.pdf symlink" }
 test = "pytest tests/ -v"
 test-unit = "pytest tests/ -v -m 'not integration'"
 test-integration = "pytest tests/ -v -m integration"
