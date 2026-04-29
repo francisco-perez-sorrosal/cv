@@ -23,10 +23,10 @@ Or download from https://tug.org/mactex/
 
 ```bash
 # Compile CV to PDF with latexmk (recommended) (-c cleans auxiliary files)
-latexmk -pdf -c 2025_FranciscoPerezSorrosal_CV_English.tex
+latexmk -pdf -c FranciscoPerezSorrosal_CV_English.tex
 
 # or compile it with pdflatex
-pdflatex 2025_FranciscoPerezSorrosal_CV_English.tex
+pdflatex FranciscoPerezSorrosal_CV_English.tex
 ```
 
 ## Dev

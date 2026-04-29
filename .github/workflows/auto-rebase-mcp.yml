@@ -249,7 +249,7 @@ jobs:
           
           # These files should exist on the MCP branch after rebase
           EXPECTED_FILES=(
-            "2025_FranciscoPerezSorrosal_CV_English.tex"
+            "FranciscoPerezSorrosal_CV_English.tex"
             "CLAUDE.md"
             "README.md"
           )

@@ -290,3 +290,6 @@ lib/
 mcpb-package/
 python-dist/
 __pycache__/
+
+# Temporary files
+tmp/

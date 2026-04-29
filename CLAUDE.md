@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This repository contains Francisco Perez-Sorrosal's CV in multiple formats and implementations:
 
-- **Main branch (`main`)**: Contains the LaTeX source CV (`2025_FranciscoPerezSorrosal_CV_English.tex`) and generated PDF
+- **Main branch (`main`)**: Contains the LaTeX source CV (`FranciscoPerezSorrosal_CV_English.tex`) and generated PDF
 - **MCP branch (`mcp`)**: Contains a Python-based MCP (Model Context Protocol) server that serves the CV as a resource for AI systems
 
 The repository serves as both a personal CV management system and a reference implementation of an MCP server for document serving.
@@ -16,13 +16,13 @@ The repository serves as both a personal CV management system and a reference im
 ### LaTeX CV Management (main branch)
 ```bash
 # Compile the CV to PDF using pdflatex
-pdflatex 2025_FranciscoPerezSorrosal_CV_English.tex
+pdflatex FranciscoPerezSorrosal_CV_English.tex
 
 # Or using latexmk (recommended for handling dependencies)
-latexmk -pdf 2025_FranciscoPerezSorrosal_CV_English.tex
+latexmk -pdf FranciscoPerezSorrosal_CV_English.tex
 
 # Clean auxiliary files
-latexmk -c 2025_FranciscoPerezSorrosal_CV_English.tex
+latexmk -c FranciscoPerezSorrosal_CV_English.tex
 ```
 
 ### MCP Server Development (mcp branch)
@@ -65,8 +65,8 @@ git log --oneline -10
 ## Architecture and Structure
 
 ### Main Branch Structure
-- `2025_FranciscoPerezSorrosal_CV_English.tex` - LaTeX source file containing the complete CV
-- `2025_FranciscoPerezSorrosal_CV_English.pdf` - Generated PDF output
+- `FranciscoPerezSorrosal_CV_English.tex` - LaTeX source file containing the complete CV
+- `FranciscoPerezSorrosal_CV_English.pdf` - Generated PDF output
 - `.gitignore` - Ignores LaTeX auxiliary files and common editor artifacts
 
 ### MCP Branch Structure (Python Project)
@@ -85,7 +85,7 @@ README.md               # Detailed MCP server documentation
 
 ### Key Components
 
-#### LaTeX CV (`2025_FranciscoPerezSorrosal_CV_English.tex`)
+#### LaTeX CV (`FranciscoPerezSorrosal_CV_English.tex`)
 - Uses `moderncv` document class with classic green theme
 - Structured sections: Profile, Experience, Patents, Education, Skills, Languages
 - Extensive professional experience spanning academic research and industry R&D
