@@ -23,20 +23,25 @@ build-wheel:
 	DIST_WHEEL=$(DIST_WHEEL) pixi run -e dev python-bundle
 
 # Build process: update deps -> create lib directory -> create MCPB bundle
-# lib/ MUST be built with the EXACT Python interpreter that manifest.json
-# launches the server with (BUNDLE_PYTHON below). Claude Desktop is a GUI
-# app — launchd's sanitized PATH does NOT include Homebrew, so a bare
-# 'python3' resolves to /usr/bin/python3 (Apple's 3.9.6, too old for this
-# project). We pin to /opt/homebrew/bin/python3.13 in both places so the
-# native .so files match the runtime ABI.
-BUNDLE_PYTHON ?= /opt/homebrew/bin/python3.13
+#
+# lib/ contains native binary extensions (.so files for pydantic_core, pyyaml…)
+# that are ABI-locked to the exact Python minor version used at build time.
+# At runtime, start_mcpb.sh picks the matching `python3.X` on the user's
+# machine using the version recorded in lib/.python-version.
+#
+# BUNDLE_PYTHON is auto-detected (prefers python3.13 to match
+# requires-python = ">=3.13") and overridable: make build-mcpb BUNDLE_PYTHON=python3.14
+BUNDLE_PYTHON ?= $(shell command -v python3.13 || command -v python3.14 || command -v python3)
 
 build-mcpb:
-	@test -x $(BUNDLE_PYTHON) || (echo "ERROR: $(BUNDLE_PYTHON) not found. Override with: make build-mcpb BUNDLE_PYTHON=/path/to/python3.13" && exit 1)
+	@test -n "$(BUNDLE_PYTHON)" || (echo "ERROR: no suitable python3.X found. Set BUNDLE_PYTHON=/path/to/python3.13" && exit 1)
+	@echo "Building lib/ with: $(BUNDLE_PYTHON) ($$($(BUNDLE_PYTHON) --version))"
 	pixi install
 	pixi run -e dev update-mcpb-deps
 	rm -rf lib/ && mkdir -p lib
 	$(BUNDLE_PYTHON) -m pip install -r requirements.txt --target lib --upgrade --force-reinstall
+	$(BUNDLE_PYTHON) -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' > lib/.python-version
+	@echo "Recorded lib/.python-version: $$(cat lib/.python-version)"
 	DIST_MCPB=$(DIST_MCPB) pixi run pack
 
 # Package skills as zips for claude.ai (Settings > Features > Add Skill)

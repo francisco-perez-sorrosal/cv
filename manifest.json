@@ -23,12 +23,9 @@
     "type": "python",
     "entry_point": "src/cv_mcp_server/main.py",
     "mcp_config": {
-      "command": "/opt/homebrew/bin/python3.13",
-      "args": [
-        "${__dirname}/src/cv_mcp_server/main.py"
-      ],
+      "command": "${__dirname}/start_mcpb.sh",
+      "args": [],
       "env": {
-        "PYTHONPATH": "${__dirname}/lib:${__dirname}/src:${__dirname}",
         "TRANSPORT": "stdio",
         "HOST": "0.0.0.0",
         "PORT": "10000"
