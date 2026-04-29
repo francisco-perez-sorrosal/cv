@@ -113,9 +113,9 @@ cv-data/
   resume-semantics.yaml  # Semantic overlay (topics, annotations, relationships)
 rendered-cv/             # Quick render workspace (gitignored); python scripts/render_cv.py -f <fmt>
   tex/ md/ html/ typst/  # One subdir per format
-latest-cv/               # Snapshot renders (gitignored); pixi run render-cv
+latest-cv/               # Snapshot renders (tracked); pixi run render-cv
   tex/                   # <YYYY-MM-DD>_FranciscoPerezSorrosal_CV_English.{tex,pdf}
-latest.pdf               # Symlink → latest-cv/tex/<date>_*.pdf (gitignored)
+latest.pdf               # Symlink → latest-cv/tex/<date>_*.pdf (tracked)
 .claude-plugin/
   plugin.json             # Claude Code plugin manifest (skills, remote MCP config)
   mcp-local.json          # MCP override: stdio via pixi (dev mode)

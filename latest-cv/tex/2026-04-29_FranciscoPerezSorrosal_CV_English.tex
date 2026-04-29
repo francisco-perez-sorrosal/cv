@@ -1,0 +1,483 @@
+
+%% start of file `template.tex'.
+%% Copyright 2006-2010 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+% A modern LaTeX CV template config links:
+% https://www.baeldung.com/cs/latex-moderncv-resume
+
+%------------- PACKAGES --------------------------------------------
+
+\documentclass[11pt,a4paper,english, sans]{moderncv}      % a4paper, a5paper, b5paper, letterpaper, legalpaper, executivepaper, landscape
+                                                          % 10pt, 11pt, 12pt, english, sans
+
+% moderncv setup
+\moderncvcolor{blue} % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
+\moderncvstyle{classic} % casual (default), classic, banking, oldstyle, fancy
+
+% adjust the page margins
+\usepackage[scale=0.8]{geometry}
+
+% Font encoding and family
+% \usepackage[utf8]{inputenc}                   % character encoding: replace by the encoding you are using
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% language
+\usepackage[english]{babel}
+
+% symbols
+\usepackage{amssymb}
+
+% additional packages for safety
+\usepackage{enumitem}
+\usepackage{ifthen}
+
+%------------- PACKAGES --------------------------------------------
+
+
+%------------- PERSONAL DATA ---------------------------------------
+% personal data
+\name{\Huge Francisco}{\Huge Perez-Sorrosal}
+\title{Principal Research Engineer}
+\address{N/A}{94123 San Francisco, CA (U.S.)}
+\phone[mobile]{Ask through LinkedIn}
+\email{Ask through LinkedIn}
+\social[linkedin]{fperezsorrosal}
+\social[github]{francisco-perez-sorrosal}
+\homepage{http://francisco-perez-sorrosal.github.io/}
+\extrainfo{\homepagesymbol ~\href{https://github.com/francisco-perez-sorrosal/cv/blob/main/FranciscoPerezSorrosal_CV_English.pdf}{Full CV}}      % optional, remove the line if not wanted
+%------------- PERSONAL DATA ---------------------------------------
+
+%------------- QUOTE -----------------------------------------------
+% Quote (optional)
+\quote{\textit{"Any man could, if he were so inclined, be the sculptor of his own brain." -- Santiago Ram\'on y Cajal}}
+%------------- QUOTE -----------------------------------------------
+
+
+%------------- CONTENT SETUP ---------------------------------------
+
+% Page numbering (yes/no)
+%\nopagenumbers{}
+
+%\setlength{\hintscolumnwidth}{3cm}						% if you want to change the width of the column with the dates
+%\AtBeginDocument{\setlength{\maketitlenamewidth}{8.3cm}}  % only for the classic theme, if you want to change the width of your name placeholder (to leave more space for your address details
+\AtBeginDocument{\recomputelengths}                     % required when changes are made to page layout lengths
+
+% Compact itemize globally with smaller bullets
+\setlist[itemize]{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt,label={\tiny$\bullet$}}
+
+% Reduce interlining space
+\renewcommand{\baselinestretch}{1}
+
+% Reduce spacing between sections
+\renewcommand{\sectionfont}{\Large\mdseries\upshape\bfseries}
+\setlength{\hintscolumnwidth}{1.6cm}
+% Change subsection style
+\renewcommand{\subsectionfont}{\large\upshape\bfseries}
+\renewcommand*{\subsectionstyle}[1]{{\subsectionfont\textcolor{color1!90}{#1}}}
+
+% Customize section to make it larger and in color1
+\makeatletter % to allow for customizing the section command
+\renewcommand*{\section}[1]{%
+  \par\addvspace{.6cm}%
+  \phantomsection{}%
+  \addcontentsline{toc}{section}{#1}%
+  \parbox[t]{\hintscolumnwidth}{\strut\raggedleft\raisebox{\baseletterheight}{\color{color1}\rule{\hintscolumnwidth}{0.5ex}}}%
+  \hspace{\separatorcolumnwidth}%
+  \parbox[t]{\maincolumnwidth}{\strut\sectionstyle{#1}}%
+  \par\nobreak\addvspace{0.9ex}\@afterheading}
+\makeatother
+
+% Customize cventry to make job position (third parameter) default to color1
+% and company (fourth parameter) in color1 and italics
+\renewcommand*{\cventry}[7][.5em]{%
+  \cvitem[#1]{#2}{%
+    {\textcolor{color1}{\textbf{#3}}}%
+    \ifthenelse{\equal{#4}{}}{}{, \textcolor{gray}{\textit{\textbf{#4}}}}%
+    \ifthenelse{\equal{#5}{}}{}{, #5}%
+    \ifthenelse{\equal{#6}{}}{}{, #6}%
+    .\strut%
+    \ifx&#7&%
+    \else{\newline{}\begin{minipage}[t]{\linewidth}\vspace{-5pt}#7\end{minipage}}\fi}}
+
+%------------- BIBLIOGRAPHY STYLE --------------------------------------------
+% to show numerical labels in the bibliography; only useful if you make citations in your resume
+\makeatletter
+\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}
+\makeatother
+
+% bibliography with mutiple entries
+%\usepackage{multibib}
+
+%\newcites{book,misc}{{Books},{Others}}
+
+%------------- BIBLIOGRAPHY STYLE --------------------------------------------
+
+%------------- BEGIN DOCUMENT --------------------------------------------
+
+\begin{document}
+
+\maketitle
+\vspace{-0.5cm}
+
+%------------- PROFILE AND GOALS --------------------------------------------
+\section{Profile and Goals}
+
+\small I am a reliable, goal-oriented, and detail-focused AI Engineer with extensive experience in software engineering and research across industry and academic settings, specializing in agentic AI, machine learning, and distributed systems. I am particularly drawn to AI-native companies or companies that want to introduce AI into their core processes. As a Software Engineer, I design, develop, and ensure the maintainability of robust and scalable big data applications, whether on-prem or cloud, always prioritizing high availability, scalability, performance, and reliability. As a Research Engineer, I am curious and love exploring and implementing cutting-edge technologies, especially in AI/ML, to tackle complex challenges and foster innovation. I take initiative and lead efforts with a strategic approach when needed, or collaborate as a communicative, supportive, and empathetic team player to achieve shared goals. I thrive in open, dynamic, multidisciplinary environments, integrating visionary and practical insights to deliver impactful results while empowering others and fostering collaboration.
+%------------- PROFILE AND GOALS --------------------------------------------
+
+%------------- PROFESSIONAL EXPERIENCE --------------------------------------------
+\section{Professional Experience}
+
+% For Professional Experience, use the \cventry syntax: \cventry{{period/year(s)}}{{job position}}{{company}}{{location (optional)}}{{role(s)}}{{description using LaTeXitemized lists}}
+
+\cventry{2025--Now}{\large Strategic Advisor on AI}{Independent}{}{\textbf{Roles}: Agentic AI, LLM Apps}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item Agentic AI: Deep-dive research of multi-agent systems, LLM orchestration, and autonomous reasoning frameworks; evaluated cutting-edge frameworks including AutoGen, CrewAI, OpenAI and custom agentic workflows.
+\item Strategic Advisory: Provided technical guidance to early-stage startups (Eni6ma, Wasmer) on AI strategy, model selection, and production requirements; advised on Agentic AI integration patterns and AI architecture design.
+\item Continuous Learning: maintained cutting-edge expertise in rapidly evolving field.
+\end{itemize}
+}
+
+\cventry{2023--2024}{\large Principal Research Engineer}{Knowledge Graph Science @ Yahoo Inc.}{Sunnyvale}{\textbf{Roles}: ML/AI Expert, MLOps}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{Dataset Quality Improvement (2024)}: \textbf{Goal} -- Since the labels of most entity pairs were generated in a semi-supervised manner, develop an LLM-based solution to validate and enhance the labeling accuracy of the dev and test datasets. \textbf{Achievement} -- Implemented a generative Entity Matching solution with Llama 2 to identify and fix (by re-labeling) misclassified examples in the dev/test sets.
+\item \textbf{Entity Reconciliation Model Training}: Fine-tuned transformer-based language models on heterogeneously labeled datasets, integrating editorially curated data with automatically labeled data through entity linking via common identifiers. This approach aimed to deduplicate and reconcile meta-entities related to People and Creative Works. \textbf{Goal} -- Improve current production metrics on People and Creative Works entity reconciliation by fine-tuning transformer-based language models on heterogeneously labeled datasets. \textbf{Achievements} -- (1) Trained and optimized a unified, type-agnostic LM model for entity matching/reconciliation, replacing tens of type-specific production models and simplifying the maintenance of the reconciliation stage in the Knowledge Graph; (2) Metric improvements: overall increases of 22.23\% and 16.11\% in precision and recall for Person, and 5\% and 4\% for Creative Works; (3) Reduced model size by 33\%, lowering storage requirements and improving efficiency without compromising accuracy.
+\item \textbf{Entity Reconciliation Pipeline (2023)}: Developed an automated pipeline for training entity reconciliation models for YK, from data curation to inference testing. \textbf{Goal} -- Build pipelines for distributed sampling, preprocessing, and transformation of large-scale entity data extracted from various complementary sources that accurately reflect user search behavior. \textbf{Achievements} -- (1) Devised a solution to reduce the number of models maintained in production from $\simeq$ 30 heterogeneous (heuristic-based, SVMs, Tree-based) to just 4, which encompass the main 4 meta-entity types in YK; (2) Expanded entity type coverage to 20 new types of people entities (e.g., directors, producers, composers, writers, politicians) and 32 new types of creative works (e.g., visual works, theatrical works, critic's reviews, periodicals, poems).
+\item \textbf{Entity Reconciliation Inference (2023)}: \textbf{Goal} -- Design and architect a PoC solution for cloud-based inference. \textbf{Achievement} -- Implemented a Ray Serve-based solution to deploy new YK models in the cloud, optimizing for cost efficiency by evaluating CPU and GPU-based approaches.
+\end{itemize}
+}
+
+\cventry{Jun--Dec 2022}{\large Principal Research Engineer}{Mail @ Yahoo}{Sunnyvale}{\textbf{Roles}: ML/AI Expert}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{Kamino Project - Mail Classification System}: \textbf{Goal} -- Upgrade legacy production models to a new generation of deep learning-based, small distilled models optimized for large-scale deployment. These models were designed to classify incoming mail using a newly developed multilabel taxonomy tailored to the mail team's specific use cases. \textbf{Approach} -- Developed a deep learning pipeline using Hugging Face to train/evaluate models based on the Teacher/Student knowledge distillation framework. Starting with limited human-labeled training data, a large and complex teacher model was created to achieve high accuracy. This model was then used to generate teacher-labeled data for training lightweight student models optimized for deployment. Two types of student models were produced: (1) online models, optimized for speed and suitable for real-time classification tasks, and (2) offline models, designed to include richer information for improved accuracy in non-real-time applications. \textbf{Achievement} -- The resulting student models for an expanded taxonomy, more than doubling the number of deployable categories in the taxonomy while improving performance on existing categories in production by 3.1-5.9\%.
+\end{itemize}
+}
+
+\cventry{Apr--Dec 2022}{\large Technical Advisor}{Digital Transformation Office @ Yahoo}{Sunnyvale}{\textbf{Roles}: ML/AI Expert, Strategy}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{AI/ML Working Group - AI/ML Future Strategy Definition in the Cloud}: As Yahoo transitioned its infrastructure from on-premises data centers to a fully cloud-based environment, scientists and research engineers required modern tools to streamline their workflows. These tools needed to facilitate dataset and model sharing, ensure reproducibility of experiments, enable rapid experimentation and iteration on new models, and support seamless publishing and deployment into pre-production/production environments. \textbf{Goal} -- Specifically, the Model Development subgroup was dedicated to establishing the requirements, standards, tools, and frameworks needed to scale ML/DL applications effectively across the company during the transition from on-premises to cloud-based infrastructure. \textbf{Achievements} -- (1) Led the discussions on the Model Development subgroup, although participated actively in the remaining three (Data Management, Model Management, and Model Serving); (2) Delivered a set of recommendations (prioritized and categorized in topics) and tasks to do (internal processes, external relations, tools, etc.) to guarantee that ML/DL practitioners could work with less friction in the new cloud environments.
+\end{itemize}
+}
+
+\cventry{2021--2022}{\large Principal Research Engineer}{Ads @ Yahoo}{Sunnyvale}{\textbf{Roles}: ML/AI Expert, Strategy}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{Contextual Targeting Solution}: In the Ads platform, as we were moving towards a cookie-less world, the ability to track users' online signals for behavioral targeting would be drastically reduced, making contextual targeting an appealing alternative for advertising platforms. Using our experience in hierarchical multilabel classification in other contexts, we helped the Ads team to use it in category-based contextual targeting at Yahoo. We proposed and implemented a multilingual model that can accurately classify web pages into a hierarchical taxonomy (specifically, the Yahoo Interest Categories taxonomy) without crawling their content. \textbf{Goal} -- Transfer the knowledge and experience in taxonomy-based multi-label classification to the Ads team and build a platform for training/evaluating the models for category-based contextual targeting in a cookie-less world. \textbf{Achievements} -- (1) Helped the Ads team to develop a pipeline for training models for the task at hand; (2) Paper published: 'Multilingual taxonomic web page classification for contextual targeting at Yahoo' (ACM SIGKDD 2022, 7 Citations).
+\end{itemize}
+}
+
+\cventry{2018--2022}{\large Principal Research Engineer}{Science and Content Platform @ Verizon Media/Oath}{Sunnyvale}{\textbf{Roles}: ML/DL Engineer, Research Engineer}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{Deep Learning-based Multi-label Classification (2020--2021)}: \textbf{Goal} -- Modernize the production models and infrastructure using new deep learning models. \textbf{Achievements} -- (1) Developed a modern pipeline based on HuggingFace Transformers to train/evaluate multi-label, multi-class and binary classification problems; (2) Built a tool for plugin taxonomies for the multi-label configurations; (3) Trained new models obtaining significantly better metrics over the ones in production (+10\% over baseline); (4) Developed a serving pipeline based on NVIDIA's Triton Server to deploy in production.
+\item \textbf{Scalable Few-shot Classification with Parallel Prefix Conditioning (2021)}: \textbf{Goal} -- Modify a transformer architecture (e.g. BERT) to achieve fast and effective few-shot classification by prefixing multiple category labels to the input. \textbf{Method} -- Class representations are encoded in parallel but produce independent binary labels for each input through a shared classification output layer. \textbf{Achievements} -- (1) Conducted experiments on the DBPedia dataset demonstrating improved few-shot performance over standard multi-class classifiers and a speedup over binarized formulations; (2) Further analysis showed that the approach could be scaled to a large number of categories and may hold promise for zero-shot learning of unseen categories.
+\item \textbf{Clickbait Classifier based on Transformers (2019)}: \textbf{Goal} -- Improve the current SVM-based model in production using a BERT-based model. \textbf{Achievements} -- (1) Proposed an integration strategy for serving the model in production using the existing pipeline; (2) Improved F1 metric over 5\% compared to current classifier in production; (3) PoC of a generative-based clickbait classification approach using Google's T5.
+\item \textbf{Hierarchical Transfer Learning for Multi-label Text Classification (2018)}: \textbf{Goal} -- Propose a novel transfer learning based strategy where binary classifiers at lower levels in a hierarchy of classes are initialized using parameters of the parent classifier and subsequently fine-tuned on the child categories for the classification task. \textbf{Achievement} -- Paper published in ACL 2019: 'Hierarchical transfer learning for multi-label text classification'. 127 Citations.
+\end{itemize}
+}
+
+\cventry{2017--2018}{\large Senior Research Engineer}{Content Ingestion Platform (CAP) @ Yahoo Inc.}{Sunnyvale}{\textbf{Roles}: ML/DL Engineer}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{DL-based Multi-class Classification for Content Ingestion (2018)}: Experimented with LSTM/GRU-based models for multi-class classification using TF/Keras. Explored transfer learning techniques for multi-label text classification.
+\item \textbf{Machine Learning Content Classification Pipeline (2017)}: Built a pipeline for easy data ingestion, model training and evaluation based on SVMs for the Sieve platform.
+\item \textbf{ML Pipeline Scalability (k8s-make) (2017)}: Built k8s-make, a tool and a workflow-based framework to harness the compute-power in Yahoo's on-prem clusters to deploy a tailor-made Kubernetes cluster to parallelize the training of our SVM-based pipeline in a simple way.
+\end{itemize}
+}
+
+\cventry{2015--2017}{\large Senior Research Engineer}{Sieve @ Yahoo Inc.}{Sunnyvale}{\textbf{Roles}: Distributed Systems Expert, Research Engineer}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{Twitter Firehose: At-scale Ingestion Streaming System for Tweets (2017)}: Reimplemented the new Twitter API (v2.0) in the firehose. Re-architected previous solution to be more performant yet keeping backwards compatibility. Collaborated with the Sports team for the productization of the new firehose.
+\item \textbf{Scalable Content Ingestion Platform (Omid OSS) (2016)}: Transferred Omid as full open-source project into the Apache Software Foundation (ASF). Continued supporting the Omid transaction manager project in production. \textbf{Goal} -- Transfer Omid as a full open-source project into the Apache Software Foundation. Omid presented at Hadoop Summit, 2016, San Jose, CA (USA). Paper: 'Omid, reloaded: scalable and Highly-Available transaction processing' (USENIX FAST 2017, 20 Citations).
+\item \textbf{Scalable Content Ingestion Platform (Omid HA) (2015)}: Worked at the multi-tenant content ingestion platform at Search organization. Added High Availability to the Omid Transaction Manager for HBase. Scaled Omid in multi-core architectures. Supported the Omid transaction manager in the production infrastructure of the content ingestion platform. Started exploring the transfer of Omid as open-source project to the Apache Software Foundation.
+\end{itemize}
+}
+
+\cventry{2012--2015}{\large Research Engineer}{Scalable Computing Group @ Yahoo Labs.}{Spain}{\textbf{Roles}: Distributed Systems Expert, Research Software Engineer}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{Omid - Transaction Manager for Big Datastores (2014)}: Re-architected the original codebase and implemented new features. Supported the Omid integration in Sieve project (Yahoo's large scale Internet content ingestion platform). Presented Omid and its poster at Yahoo's internal technical conference (Techpulse Conf. 2014).
+\item \textbf{Edentity/Pachiderm - Ubiquitous Content Access and Management (2014)}: Ubiquitous content access and management of personal data (images, video) held on 3rd party services (Flickr, GDrive, Dropbox). Designed and implemented a scalable synchronization data module. Defined and implemented a RESTful API for each module defined (User Registration, Search, Content Fetching).
+\item \textbf{RiddlR - Percolator-like Incremental Processing System (2013)}: Prototyped the framework and built a multi-stage example application on top of it. Presented RiddlR and its poster at Yahoo's Techpulse Conf. 2013.
+\item \textbf{CumuloNimbo - 7th European Framework Programme (FP7-257993) (2012--2013)}: Designed and implemented a prototype of an incremental processing system for Big Datastores. Added durability guarantees to HBase through BookKeeper. Represented Yahoo in project meetings and evaluation sessions.
+\end{itemize}
+}
+
+\cventry{2011--2012}{\large Software Architect}{Lumata}{Spain}{\textbf{Roles}: Distributed Systems Expert, Architect}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{Giddra Project - SONY Socialife Application (2012)}: High Scalable Big-Data Backend Platform for web and social content ingestion and aggregation. Contributed to the architectural definition of the platform. Did coordination over multiple teams. Defined the REST API for allowing clients to access/use the backend.
+\end{itemize}
+}
+
+\cventry{2010--2011}{\large Software Architect/Engineer}{Freelance, Greenhouse Cooperative}{Spain}{}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item Analysis, design and Ruby/Rails implementation of a web application to manage the different domains of a greenhouse farm. LoC $\simeq$ 20,000.
+\end{itemize}
+}
+
+\cventry{2003--2010}{\large Software Architect/Research Engineer}{School of CS at Univ. Polit\'ecnica de Madrid (UPM)}{Spain}{\textbf{Roles}: Distributed Systems Expert, Software Architect, Software Engineer}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{NEXOF-RA: NESSI Open Framework - Reference Architecture (2008--2010)}: 7th European Framework Programme (FP7-216446). Contributed to a reference architecture (RA) for a European service platform. Built the specification of a set of architectural patterns for non-functional attributes and analysis of how to integrate cloud platforms in the RA.
+\item \textbf{Highly Scalable Platform for the Construction of Dependable and Ubiquitous Services (2007--2010)}: Spanish Ministry of Education and Science (TIN2007-67353-C02). Analysis and tests of consistency problems that arose in end-user applications when second-level caches (e.g. Coherence, JBoss cache) are combined with object persistence mechanisms (e.g. Hibernate).
+\item \textbf{AUTOMAN - Autonomic Management of Grid-Based Enterprise Services (2006--2007)}: Did the integration of self-configuration and self-repair properties of autonomic computing in the core of a cloud platform at INRIA (France).
+\item \textbf{High Performance Distributed Systems (2006--2009)}: Community of Madrid (S-0505/TIC/000285). Developed a high-available and scalable service for the JOnAS J(2)EE application server. It provided high availability for critical applications deployed in application server clusters, scaling-out the cluster when overloaded. UPM \& BULL signed a pre-agreement to include it in the commercial version. LoC Java (HA\&S Service) $\simeq$ 4,000.
+\item \textbf{S4ALL (Services for All) (2005--2007)}: 5th European Framework Programme (IST-2001-37126). Developed a high-available service for the JOnAS application server maintained by Bull SAS (France). Available since v.4.8. LoC Java (JOnAS) $\simeq$ 150,000.
+\item \textbf{AUTONOMIC: Autonomic, Dependable and Middleware for Scalable, Distributed, Ubiquitous and Highly Available e-Services (2004--2007)}: Spanish Ministry of Education and Science (TIN2004-07474-C02-01). Built an open-source reference implementation of the WS-CAF specification for adding transactions to SOAP Web Services. LoC $\simeq$ 50,000.
+\item \textbf{ADAPT: Middleware for Adaptive and Composable Distributed Components (2002--2005)}: EUREKA/ITEA project (Label 04025). Implemented a transactional-aware replication architecture for stateful EJBs for JBoss. LoC Java $\simeq$ 10,600. Open-sourced the implementation of the Activity Service specification to add advanced transactions models to J2EE. LoC Java $\simeq$ 10,000.
+\end{itemize}
+}
+
+\cventry{2001--2003}{\large Lecturer}{School of CS at Universidad Pontificia de Salamanca (Madrid Campus)}{Spain}{\textbf{Roles}: Lecturer}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item Courses on Operating Systems and Programming (C and Pascal).
+\end{itemize}
+}
+
+\cventry{2000--2001}{\large Systems Administrator}{School of CS at Universidad Pontificia de Salamanca (Madrid Campus)}{Spain}{\textbf{Roles}: Systems Administrator}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item Managed and maintained UNIX/Linux servers and Windows workstations: task automation, security.
+\end{itemize}
+}
+
+\cventry{1999}{\large Quality Analyst}{Meta 4 S.A. (now Cegid)}{Madrid, Spain}{\textbf{Roles}: Quality Analyst}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item Tested the database connection modules of Meta4's ERP suite (now Cegid), gaining hands-on experience with multiple DBMSs, including Oracle, Microsoft SQL Server, Informix, and Sybase, as well as JDBC (Java Database Connectivity). Responsibilities included configuring database connections via JDBC, planning and executing tests, analyzing results, and reporting bugs to ensure system reliability and performance.
+\end{itemize}
+}
+
+%------------- PROFESSIONAL EXPERIENCE --------------------------------------------
+
+%---------------------------------- PATENTS --------------------------------------------
+\section{Patents}
+
+% For Patents, use the \cventry syntax: \cventry{{year}}{pat. number}}{{title}}{{Status: App. (application)or Pat. (patent)}}{}{}
+
+\cventry{2025}{18/512,871}{Systems and methods for automatically adding text content to generated images}{App}{}{}
+\cventry{2024}{18/365,941}{Method and system for webpage classification and content delivery}{App}{}{}
+%---------------------------------- PATENTS --------------------------------------------
+
+%------------- ACADEMIC RESEARCH EXPERIENCE --------------------------------------------
+
+\section{Academic Research Experience}
+
+\cventry{2003--2011}{\large Researcher}{School of CS at Universidad Polit\'ecnica de Madrid (UPM)}{Spain}{\textbf{Roles}: PhD Candidate, Researcher}{%
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textbf{PhD Thesis: Middleware for High Available and Scalable Multi-Tier and Service-Oriented Architectures (2003--2009)}: Advisors: Prof. Marta Pati\~no-Mart\'inez and Prof. Ricardo Jim\'enez-P\'eris (UPM). Specialization: Distributed Systems, Transactional Systems, Scalability, High Availability, SOAs. \textbf{Goal} -- Develop a brand-new approach to provide high availability and scalability to multi-tier architectures by combining snapshot-isolation and an innovative vertical replication approach.
+\item \textbf{Research Internship at SARDES Research Group, INRIA Grenoble (2007)}: Advisor: Prof. Sara Bouchenak. Integration of self-configuration and self-repair properties of autonomic computing in the core of a cloud platform.
+\end{itemize}
+}
+
+\cventry{}{Publications in Top Conferences and Journals}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textit{Elastic SI-Cache: Consistent and Scalable Caching in Multi-Tier Architectures}. In VLDB Journal 2011 \textbf{44 Citations}
+\item \textit{Scalability Evaluation of the Replication Support of JOnAS, an Industrial J2EE Application Server}. In EDCC Conf. 2010 \textbf{10 Citations}
+\item \textit{A System of Architectural Patterns for Scalable, Consistent and Highly Available Multi-tier Service Oriented Infrastructure}. In Architecting Dependable Systems VI, Springer 2009 \textbf{13 Citations}
+\item \textit{Consistent and Scalable Cache Replication for Multi-tier J2EE Applications}. In ACM/IFIP/USENIX Middleware Conf. 2007 \textbf{43 Citations}
+\item \textit{WS-Replication: A Framework for Highly Available Web Services}. In ACM WWW Conf. 2006 \textbf{230 Citations}
+\item \textit{Highly Available Long Running Transactions and Activities for J2EE Applications}. In IEEE ICDCS Conf. 2006 \textbf{28 Citations}
+\item \textit{ZenFlow: A Visual Tool for Web Service Composition}. In IEEE VL/HCC Conf. 2005 \textbf{53 Citations}
+\end{itemize}
+}
+%------------- ACADEMIC RESEARCH EXPERIENCE --------------------------------------------
+
+%------------- SKILLS --------------------------------------------
+
+\section{Skills}
+
+\subsection{AI/ML \& Data Science}
+\cvitem{AI/ML}{Agentic AI Frameworks (OpenAI, CrewAI, etc.), HuggingFace Transformers, PyTorch, Scikit-learn.}
+\cvitem{Areas}{Generative AI, NLP, Multi-label Classification, Knowledge Graphs.}
+\cvitem{Data}{Pandas, Dask, SQL, Vector Databases, Large-scale Data Pipeline Development.}
+\cvitem{MLOps}{Ray, NVIDIA Triton Server, Model Deployment \& Monitoring.}
+
+\subsection{Programming \& Engineering}
+\cvitem{Tools}{Agentic Tools (Cursor, Claude Code), Git, GitHub Actions, GitLab CI, IntelliJ, VSCode.}
+\cvitem{Code}{Python, Java, Rust, Go.}
+\cvitem{Cloud}{AWS, Google Cloud, Docker, Kubernetes.}
+\cvitem{Dev}{RESTful APIs, Distributed Systems, Software Architecture, Unit Testing.}
+
+\subsection{Data \& Infrastructure}
+\cvitem{DB}{Relational, NoSQL, Vector Databases, HBase.}
+\cvitem{BigData}{Distributed Processing, Highly Available and Scalable System Design, Performance Tuning.}
+
+\subsection{Architecture, Design \& Processes}
+\cvitem{Processes}{Architecture and Software Design, Design Patterns, RESTful APIs, UML, Agile.}
+
+%------------- SKILLS --------------------------------------------
+
+%------------- EDUCATION --------------------------------------------
+
+\section{Courses}
+
+\cventry{2025}{Claude with Amazon Bedrock}{Anthropic Education}{}{\href{https://verify.skilljar.com/c/swok3v3uo84t}{Certificate}}{}
+\cventry{2025}{Claude Code: A Highly Agentic Coding Assistant}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/8a8a3b69-c549-4f9e-a301-8105436e4ff4?usp=sharing}{Certificate}}{}
+\cventry{2025}{Model Context Protocol: Advanced Topics}{Anthropic Education}{}{\href{http://verify.skilljar.com/c/d7e2d2xp2hu9}{Certificate}}{}
+\cventry{2025}{Introduction to Model Context Protocol}{Anthropic Education}{}{\href{http://verify.skilljar.com/c/aaofdzhtwit2}{Certificate}}{}
+\cventry{2025}{Claude Code in Action}{Anthropic Education}{}{\href{https://verify.skilljar.com/c/kfpzhosaxa35}{Certificate}}{}
+\cventry{2025}{Claude with the Anthropic API}{Anthropic Education}{}{\href{https://verify.skilljar.com/c/k3pctnrj4k34}{Certificate}}{}
+\cventry{2025}{LLMs as Operating Systems: Agent Memory (Letta)}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/24080236-1809-44a5-af44-31f843eb7168?usp=sharing}{Certificate}}{}
+\cventry{2025}{ACP: Agent Communication Protocol}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/da472e4b-b5a2-4d6e-bfbc-78615f32af0d?usp=sharing}{Certificate}}{}
+\cventry{2025}{Fundamentals of Agents}{HuggingFace}{}{}{}
+\cventry{2025}{Building toward Computer Use with Anthropic}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/e3d34e5d-0865-4e25-8ab5-b1156cff1b82?usp=sharing}{Certificate}}{}
+\cventry{2025}{MCP: Build Rich-Context AI Apps with Anthropic}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/e355dfbc-c428-426f-87ae-9473cd837b79?usp=sharing}{Certificate}}{}
+\cventry{2025}{Attention in Transformers: Concepts and Code in PyTorch}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/3ed4ede6-132d-4c48-adac-1929a17a8980?usp=sharing}{Certificate}}{}
+\cventry{2025}{How Transformer LLMs Work}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/73a5c102-d10f-4981-9c27-058505464db9?usp=sharing}{Certificate}}{}
+\cventry{2025}{Practical Multi AI Agents and Advanced Use Cases with crewAI}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/1ff3a3e1-9cc0-43f7-a0e9-7069fe6a5c33?usp=sharing}{Certificate}}{}
+\cventry{2024}{Multi AI Agent Systems with CrewAI}{DeepLearning.AI}{}{\href{https://www.linkedin.com/in/fperezsorrosal/overlay/1733693789455/single-media-viewer/}{Certificate}}{}
+\cventry{2024}{Knowledge Graphs for RAG}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/e9934e71-56c4-4776-b59a-598d58f64a60?usp=sharing}{Certificate}}{}
+\cventry{2024}{AI Agentic Design Patterns with AutoGen}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/f5763004-1e46-4153-a466-9fede55d2c8c?usp=sharing}{Certificate}}{}
+\cventry{2024}{Functions, Tools and Agents with LangChain}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/2b4a25d6-3d3c-43b4-9909-29a5594d71a4?usp=sharing}{Certificate}}{}
+\cventry{2024}{Improving Accuracy of LLM Applications}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/9ba0d65d-0c9b-4939-b5b9-7e5ac0369167?usp=sharing}{Certificate}}{}
+\cventry{2024}{LangChain for LLM Application Development}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/f7c4a5b8-4bb9-4363-bf2e-14e475537873?usp=sharing}{Certificate}}{}
+\cventry{2024}{AI Agents in LangGraph}{DeepLearning.AI}{}{\href{https://learn.deeplearning.ai/accomplishments/34f2e69e-04f8-49b9-b402-2cc7331122d5?usp=sharing}{Certificate}}{}
+\cventry{2024}{RAG Developer Bootcamp}{Pinecone + Anyscale}{In-Person}{San Francisco}{\href{https://www.anyscale.com/events/2024/03/08/rag-developer-bootcamp}{Certificate}}{}
+\cventry{2023}{LLM102x: Large Language Models: Foundation Models from the Ground Up}{edX/Databricks}{}{\href{https://courses.edx.org/certificates/e36174eec12748e7b62afd517060cf2d}{Certificate}}{}
+\cventry{2023}{LLM101x: Large Language Models: Application through Production}{edX/Databricks}{}{\href{https://courses.edx.org/certificates/efcc7ec7b2234b538809447c1f37babf}{Certificate}}{}
+\cventry{2023}{LLM Bootcamp}{FSDL}{In-Person}{South San Francisco, CA}{}
+\cventry{2023}{Yahoo Leadership Program}{The Forem}{Remote}{}{}
+\cventry{2022}{Full Stack Deep Learning 22'Edition}{FSDL}{}{\href{https://fullstackdeeplearning.com/course/2022/}{Certificate}}{}
+\cventry{2022}{Machine Learning Specialization (3 Courses)}{Coursera/DeepLearning.AI/Stanford}{}{\href{https://www.coursera.org/account/accomplishments/specialization/certificate/KREGWAZ87SQN}{Certificate}}{}
+\cventry{2021}{Full Stack Deep Learning 21'Edition}{FSDL}{}{\href{https://fullstackdeeplearning.com/spring2021/}{Certificate}}{}
+\cventry{2019}{Machine Learning Specialization (4 Courses)}{Coursera/Univ. Washington}{}{\href{https://www.coursera.org/account/accomplishments/specialization/certificate/UY6W586XQMW3}{Certificate}}{}
+\cventry{2018}{Mathematics for Machine Learning Specialization (3 Courses)}{Coursera/Imperial College London}{}{\href{https://www.coursera.org/account/accomplishments/specialization/K7TBGLD4Y6ML}{Certificate}}{}
+\cventry{2018}{Deep Learning Specialization (5 Courses)}{Coursera/DeepLearning.AI}{}{\href{https://www.coursera.org/account/accomplishments/specialization/YTPXQJ42EUCK}{Certificate}}{}
+\cventry{2011}{Certificate of Training, Advanced Scala}{Typesafe}{}{Switzerland}{}
+\cventry{2011}{Certificate of Training, Scala}{Typesafe}{}{Switzerland}{}
+\cventry{2011}{Course in Business Administration and Economics (268 hours)}{Community of Madrid}{}{Spain}{}
+
+\section{Education}
+
+\cventry{2003--2009}{Ph.D. in Computer Science}{School of CS at Universidad Polit\'ecnica de Madrid}{Spain}{}{}
+\cventry{2004}{Postgraduate Certificate in Education}{Educational Sciences Institute at Universidad Complutense de Madrid}{Spain}{}{}
+\cventry{1994--2001}{B.Eng \& M.Sc. in Computer Science}{School of CS at Universidad Pontificia de Salamanca (Madrid Campus)}{Spain}{}{}
+
+%------------- EDUCATION --------------------------------------------
+
+%------------- LEADERSHIP AND COMMUNICATION SKILLS --------------------------------------------
+
+\section{Leadership \& Communication}
+
+\subsection{Mentoring \& Team Leadership}
+\cvitem{Research}{Mentored junior researchers across multiple teams; led cross-functional product, engineering, and strategy discussions; enabled knowledge transfer from research to production engineering.}
+\cvitem{Academia}{Taught undergraduate courses in Operating Systems and Programming, developing curriculum and guiding students through core concepts and practical applications.}
+
+\subsection{Technical Communication}
+\cvitem{Presentations \& Publications}{Presented research findings at both international and national conferences, effectively communicating complex ideas to diverse audiences. Delivered project updates in internal meetings within corporate environments. Authored 10+ peer-reviewed publications with extensive citations.}
+
+\subsection{Professional Service}
+\cvitem{Open Source \& Review}{Committer and maintainer for Apache Omid, a high-performant and scalable Transaction Manager for HBase; conference reviewer for 7+ international academic conferences; active open-source maintainer of mdbook-bib (Rust-based bibliography management tool).}
+
+%------------- LEADERSHIP AND COMMUNICATION SKILLS --------------------------------------------
+
+%------------- LANGUAGES --------------------------------------------
+
+\section{Languages}
+
+\cvcomputer{Spanish}{\textit{Mother tongue}}{English}{\textit{Professional proficiency}}
+\cvcomputer{French}{\textit{Intermediate proficiency}}{Catalan}{\textit{Intermediate proficiency}}
+
+%------------- LANGUAGES --------------------------------------------
+
+%------------- OTHER ACTIVITIES RELATED TO CS --------------------------------------------
+\section{Other Activities Related to Computer Science}
+\cventry{}{Technical Book Reviewer}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textit{Sutskever's List} by Richard Heimann (Manning 2026)
+\end{itemize}
+}
+\cventry{}{Open Source Project Maintainer}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textit{mdbook-bib}: Rust-based bibliography management plugin for mdBook (official Rust documentation system). Active maintenance and community engagement with significant adoption. \href{https://crates.io/crates/mdbook-bib}{Crates Info}
+\end{itemize}
+}
+\cventry{}{Committer in the Apache Software Foundation}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textit{Apache Omid project, a high-performant and scalable Transaction Manager for HBase}
+\end{itemize}
+}
+\cventry{}{Reviewer in International Academic Conferences}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textit{IEEE International Symposium on Reliable Distributed Systems (SRDS)}, 2008 and 2009
+\item \textit{IEEE International Conference in Distributed Computing Systems (ICDCS)}, 2009
+\item \textit{International Conference on Parallel and Distributed Computing (Europar)}, 2007 and 2010
+\item \textit{ACM Symposium on Applied Computing (SAC)}, 2008 and 2010
+\item \textit{International Conference on Service-Oriented Computing (ICSOC)}, 2009
+\item \textit{EDBTs International Workshop on Data Management in Peer-to-peer Systems (DAMAP)}, 2009
+\item \textit{International Workshop on Assurance in Distributed Systems and Networks (ADSN)}, 2010
+\end{itemize}
+}
+\cventry{}{Speaker/Attendee in Academic/Technical Conferences}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textit{Coding Agents: AI Driven Dev Conference}, Mar 3--4, 2026, San Francisco, CA
+\item \textit{NeurIPS 2025}, Dec 2--7, 2025, San Diego, CA
+\item \textit{Decentralized AGI Summit (dAGI)}, Oct 24, 2025, San Francisco, CA
+\item \textit{Agentic AI Summit}, Aug 2, 2025, Berkeley, CA
+\item \textit{AI Engineer World's Fair}, Jun 3--5, 2025, San Francisco, CA
+\item \textit{MLSys 2025}, May 11--15, 2025, Santa Clara, CA
+\item \textit{AI Dev 2025}, Apr 4, 2025, San Francisco, CA
+\item \textit{NeurIPS 2024}, Dec 10--15, 2024, Vancouver, BC
+\item \textit{ICML 2024}, Jul 21--27, 2024, Vienna, Austria
+\item \textit{AI Engineer World's Fair}, Jun 25--27, 2024, San Francisco, CA
+\item \textit{MLSys 2024}, May 13--16, 2024, Santa Clara, CA
+\item \textit{W\&B Fully Connected Conference 2024, The Era of Generative AI}, Apr 17--18, 2024, San Francisco, CA
+\item \textit{NeurIPS 2023}, Dec 10, 2023, New Orleans, LA
+\item \textit{Amazon Re:Invent 2023}, Nov 27--30, 2023, Las Vegas, NV
+\item \textit{Ray Summit 2023}, Sep 18--20, 2023, San Francisco, CA
+\item \textit{ICML 2023}, Jul 23--29, 2023, Honolulu, HI
+\item \textit{MLSys 2023}, Jun 4--8, 2023, Miami, FL
+\item \textit{MLSys 2022}, Aug 31--Sep 3, 2022, Santa Clara, CA
+\item \textit{Ray Summit 2022}, Aug 23--24, 2022, San Francisco, CA
+\item \textit{ACL 2019 (Speaker)}, Jul 28--Aug 2, 2019, Florence, Italy
+\item \textit{@Scale Conference}, Aug 31, 2016, San Jose, CA
+\item \textit{Hadoop Summit (Speaker)}, Jun 28--30, 2016, San Jose, CA
+\item \textit{@Scale Conference}, Sep 14, 2015, San Jose, CA
+\item \textit{Hadoop Summit Europe}, Apr 15--16, 2015, Brussels, Belgium
+\item \textit{NoSQL Matters}, Nov 21--22, 2014, Barcelona, Spain
+\item \textit{Hadoop Summit Europe}, Apr 2--3, 2014, Amsterdam, Netherlands
+\item \textit{NoSQL Matters}, Nov 29--30, 2013, Barcelona, Spain
+\item \textit{NoSQL Matters}, Oct 6, 2012, Barcelona, Spain
+\item \textit{IEEE SRDS}, Oct 4--7, 2011, Madrid, Spain
+\item \textit{World Wide Web Conference}, Apr 20--24, 2009, Madrid, Spain
+\item \textit{Spanish Conference on Concurrency and Distributed Systems}, Sep 13--16, 2005, Granada, Spain
+\item \textit{ObjectWebCon'05}, Jan 17--20, 2005, Lyon, France
+\item \textit{ObjectWeb's Workshop on Transactions}, Feb 23--24, 2004, Grenoble, France
+\item \textit{ObjectWeb's Architecture Meeting}, Jan 13--15, 2004, Sevilla, Spain
+\end{itemize}
+}
+\cventry{}{Member}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+\item \textit{ObjectWeb Consortium}, \href{http://www.ow2.org}{http://www.ow2.org}
+\item \textit{Java Community Process (JCP)}, \href{http://jcp.org}{http://jcp.org}
+\end{itemize}
+}
+
+%------------- OTHER ACTIVITIES RELATED TO CS --------------------------------------------
+
+%------------- HOBBIES AND INTERESTS --------------------------------------------
+\section{Hobbies and Interests}
+\cvline{}{Beyond my core professional focus, but some way related to it, I have a strong interest in the intersection of fields such as neuroscience, psychology, decision-making, cognitive sciences, learning techniques, behavioral economics, and philosophy, as they offer valuable insights into human behavior, intelligence, and how the brain works (and why!) I am deeply fascinated by the mechanisms of human thought, learning, and behavior, and how these insights can inform and inspire advancements in AI and our daily lives and wellbeing in general.
+}
+\cvline{}{In my personal life, I enjoy staying active through activities like running, mountain biking, yoga, cold-plunging, and playing tennis, which not only keep me physically fit but also provide a sense of balance and focus.
+}
+%------------- HOBBIES AND INTERESTS --------------------------------------------
+
+
+% ------------------ PUBLICATIONS --------------------------------------------
+% Publications from a BibTeX file without multibib\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}% for BibTeX numerical labels
+\nocite{*}
+\bibliographystyle{plain}
+%\bibliography{publications}       % 'publications' is the name of a BibTeX file
+
+% Publications from a BibTeX file using the multibib package
+%\section{Publications}
+%\nocitebook{book1,book2}
+%\bibliographystylebook{plain}
+%\bibliographybook{publications}   % 'publications' is the name of a BibTeX file
+%\nocitemisc{misc1,misc2,misc3}
+%\bibliographystylemisc{plain}
+%\bibliographymisc{publications}   % 'publications' is the name of a BibTeX file
+
+% ------------------ END OF DOCUMENT --------------------------------------------
+
+\end{document}

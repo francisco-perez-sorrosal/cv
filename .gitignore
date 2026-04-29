@@ -295,5 +295,3 @@ tmp/
 
 # Rendered CV outputs (generated artifacts — regenerate with `pixi run render-cv`)
 rendered-cv/
-latest-cv/
-latest.pdf
