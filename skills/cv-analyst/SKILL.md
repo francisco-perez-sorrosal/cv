@@ -39,7 +39,7 @@ Prefer these over `get_cv` when the user asks about a specific company, time per
 
 1. **`query_work(company, start_year, end_year, topic, enrich)`** -- Filter work entries by company name, date range, or semantic topic. Returns matching entries as markdown. All parameters are optional.
 2. **`get_entry(entry_id)`** -- Retrieve any resume entry by its stable ID as JSON. Entry IDs follow the `<type>-<slug>` convention (e.g., `work-yahoo-kgs-2023`, `pub-htl-acl-2019`).
-3. **`list_entry_ids(section)`** -- List all entry IDs with labels, optionally filtered by section type (work, patents, publications, education, certificates, conferences, memberships, skills).
+3. **`list_entry_ids(section)`** -- List all entry IDs with labels, optionally filtered by section type (work, patents, publications, education, certificates, conferences, memberships, skills, book_reviews).
 
 ### Semantic query tools (for topic-based and cross-reference queries)
 

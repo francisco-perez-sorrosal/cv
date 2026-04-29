@@ -26,7 +26,9 @@ def render_markdown(store: ResumeStore, *, enrich: bool = True) -> str:
     return "\n\n".join(sections.values()) + "\n"
 
 
-def render_sections(store: ResumeStore, *, enrich: bool = True) -> OrderedDict[str, str]:
+def render_sections(
+    store: ResumeStore, *, enrich: bool = True
+) -> OrderedDict[str, str]:
     """Render the Resume into named sections, preserving order.
 
     Returns an OrderedDict mapping section name -> rendered markdown.
@@ -76,6 +78,7 @@ def _create_env(store: ResumeStore) -> Environment:
     env.filters["inst_name"] = _make_inst_name_filter(store.resume)
     env.filters["period"] = _period_filter
     env.filters["patent_status"] = _patent_status_filter
+    env.filters["conf_period"] = _conf_period_filter
     return env
 
 
@@ -93,22 +96,28 @@ def _template_context(store: ResumeStore, enrich: bool) -> dict:
     reviewer_map: dict[str, list[str]] = {}
     for c in resume.conferences:
         if c.role == "reviewer":
-            reviewer_map.setdefault(c.name, []).append(c.date)
+            reviewer_map.setdefault(c.name, []).append(c.start_date)
     reviewer_groups = [
         {"name": name, "years": " and ".join(sorted(years))}
         for name, years in reviewer_map.items()
     ]
 
     non_reviewers = [c for c in resume.conferences if c.role != "reviewer"]
-    conference_list = sorted(non_reviewers, key=lambda c: c.date, reverse=True)
+    conference_list = sorted(non_reviewers, key=lambda c: c.start_date, reverse=True)
 
     # Memberships: separate committer contributions from organizational affiliations
-    committers = [m for m in resume.memberships if m.role and m.role.lower() == "committer"]
-    members = [m for m in resume.memberships if not m.role or m.role.lower() != "committer"]
+    committers = [
+        m for m in resume.memberships if m.role and m.role.lower() == "committer"
+    ]
+    members = [
+        m for m in resume.memberships if not m.role or m.role.lower() != "committer"
+    ]
 
     # Publications: sorted chronologically descending, with total citations
     sorted_publications = sorted(
-        resume.publications, key=lambda p: p.release_date, reverse=True,
+        resume.publications,
+        key=lambda p: p.release_date,
+        reverse=True,
     )
     total_citations = sum(p.citations for p in resume.publications)
 
@@ -119,8 +128,7 @@ def _template_context(store: ResumeStore, enrich: bool) -> dict:
         e = int(w.end_date[:4]) if w.end_date else s
         academic_years.update(range(s, e + 1))
     academic_publications = [
-        p for p in sorted_publications
-        if int(p.release_date[:4]) in academic_years
+        p for p in sorted_publications if int(p.release_date[:4]) in academic_years
     ]
 
     b = resume.personal_info
@@ -183,11 +191,13 @@ def _build_project_links(store: ResumeStore) -> dict[str, list[dict]]:
         if rel.type.value in displayable:
             target = store.entry_by_id(rel.target_id)
             if target:
-                project_links.setdefault(rel.source_id, []).append({
-                    "type": rel.type.value,
-                    "label": store.entry_label(rel.target_id),
-                    "target": target,
-                })
+                project_links.setdefault(rel.source_id, []).append(
+                    {
+                        "type": rel.type.value,
+                        "label": store.entry_label(rel.target_id),
+                        "target": target,
+                    }
+                )
     return project_links
 
 
@@ -234,9 +244,11 @@ def _normalize(name: str) -> str:
 
 def _make_inst_name_filter(resume: Resume):
     """Create an inst_name filter bound to a specific resume."""
+
     def inst_name(inst_id: str) -> str:
         inst = resume.institution_by_id(inst_id)
         return inst.name if inst else inst_id
+
     return inst_name
 
 
@@ -252,6 +264,66 @@ def _period_filter(obj) -> str:
 def _patent_status_filter(status) -> str:
     """Format patent status."""
     return f" ({status.value})" if status else ""
+
+
+def _conf_period_filter(c, *, dash: str = "–") -> str:
+    """Format a conference date range as a human-readable string.
+
+    Examples:
+      2026-03-03 / 2026-03-04  → "Mar 3–4, 2026"
+      2025-12-02 / 2025-12-07  → "Dec 2–7, 2025"
+      2019-07-28 / 2019-08-02  → "Jul 28–Aug 2, 2019"
+      2025-08-02 / 2025-08-02  → "Aug 2, 2025"
+      2008       / 2008        → "2008"
+    """
+    start = getattr(c, "start_date", "")
+    end = getattr(c, "end_date", "")
+    if not start:
+        return ""
+    # Year-only entries (reviewer roles)
+    if len(start) == 4:
+        return start
+    s_parts = start.split("-")
+    s_year = s_parts[0]
+    s_month = s_parts[1] if len(s_parts) > 1 else ""
+    s_day = s_parts[2].lstrip("0") if len(s_parts) > 2 else ""
+
+    if not end or start == end:
+        if s_day and s_month:
+            return f"{_MONTH_NAMES[s_month]} {s_day}, {s_year}"
+        return f"{_MONTH_NAMES[s_month]} {s_year}" if s_month else s_year
+
+    e_parts = end.split("-")
+    e_year = e_parts[0]
+    e_month = e_parts[1] if len(e_parts) > 1 else ""
+    e_day = e_parts[2].lstrip("0") if len(e_parts) > 2 else ""
+
+    if s_year == e_year and s_month == e_month:
+        return f"{_MONTH_NAMES[s_month]} {s_day}{dash}{e_day}, {s_year}"
+    if s_year == e_year:
+        s_fmt = (
+            f"{_MONTH_NAMES[s_month]} {s_day}"
+            if s_day
+            else _MONTH_NAMES.get(s_month, s_month)
+        )
+        e_fmt = (
+            f"{_MONTH_NAMES[e_month]} {e_day}"
+            if e_day
+            else _MONTH_NAMES.get(e_month, e_month)
+        )
+        return f"{s_fmt}{dash}{e_fmt}, {s_year}"
+    # Different years
+    s_fmt = (
+        f"{_MONTH_NAMES[s_month]} {s_day}, {s_year}"
+        if s_day
+        else f"{_MONTH_NAMES.get(s_month, s_month)} {s_year}"
+    )
+    e_fmt = (
+        f"{_MONTH_NAMES[e_month]} {e_day}, {e_year}"
+        if e_day
+        else f"{_MONTH_NAMES.get(e_month, e_month)} {e_year}"
+    )
+    return f"{s_fmt}{dash}{e_fmt}"
 
 
 # --- LaTeX rendering ---
@@ -282,8 +354,12 @@ def render_tailored_latex(store: ResumeStore, spec: TailoringSpec) -> str:
     emphasis_map = _build_emphasis_map(spec)
     included_sections = _build_included_sections(spec)
 
-    context["industry_work"] = _filter_work_entries(context["industry_work"], emphasis_map)
-    context["academic_work"] = _filter_work_entries(context["academic_work"], emphasis_map)
+    context["industry_work"] = _filter_work_entries(
+        context["industry_work"], emphasis_map
+    )
+    context["academic_work"] = _filter_work_entries(
+        context["academic_work"], emphasis_map
+    )
 
     context["tailoring"] = spec.model_dump()
     context["emphasis_map"] = emphasis_map
@@ -315,9 +391,7 @@ def _filter_work_entries(
     for w in entries:
         if emphasis_map.get(w.id, 1.0) == 0:
             continue
-        filtered_projects = [
-            p for p in w.projects if emphasis_map.get(p.id, 1.0) != 0
-        ]
+        filtered_projects = [p for p in w.projects if emphasis_map.get(p.id, 1.0) != 0]
         if filtered_projects != w.projects:
             w = w.model_copy(update={"projects": filtered_projects})
         filtered.append(w)
@@ -338,6 +412,7 @@ def _create_latex_env(store: ResumeStore) -> Environment:
     env.filters["latex_escape"] = _latex_escape_filter
     env.filters["strip_period"] = _strip_trailing_period
     env.filters["employer_name"] = _make_employer_name_filter(store.resume)
+    env.filters["conf_period"] = lambda c: _conf_period_filter(c, dash="--")
     return env
 
 
@@ -360,9 +435,18 @@ def _latex_escape_filter(text: str) -> str:
 
 
 _MONTH_NAMES = {
-    "01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr",
-    "05": "May", "06": "Jun", "07": "Jul", "08": "Aug",
-    "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dec",
+    "01": "Jan",
+    "02": "Feb",
+    "03": "Mar",
+    "04": "Apr",
+    "05": "May",
+    "06": "Jun",
+    "07": "Jul",
+    "08": "Aug",
+    "09": "Sep",
+    "10": "Oct",
+    "11": "Nov",
+    "12": "Dec",
 }
 
 
@@ -407,6 +491,7 @@ def _parse_date(date_str: str) -> tuple[str, str]:
 
 def _make_employer_name_filter(resume: Resume):
     """Create an employer_name filter that respects employer_display overrides."""
+
     def employer_name(w: WorkEntry) -> str:
         if w.employer_display:
             return w.employer_display
@@ -415,6 +500,7 @@ def _make_employer_name_filter(resume: Resume):
         if w.department:
             return f"{w.department} @ {inst_name}"
         return inst_name
+
     return employer_name
 
 
@@ -452,6 +538,7 @@ def _create_html_env(store: ResumeStore) -> Environment:
     env.filters["inst_name"] = _make_inst_name_filter(store.resume)
     env.filters["html_period"] = _html_period_filter
     env.filters["patent_status"] = _patent_status_filter
+    env.filters["conf_period"] = _conf_period_filter
     return env
 
 
@@ -523,6 +610,7 @@ def _create_typst_env(store: ResumeStore) -> Environment:
     env.filters["typst_escape"] = _typst_escape_filter
     env.filters["strip_period"] = _strip_trailing_period
     env.filters["employer_name"] = _make_employer_name_filter(store.resume)
+    env.filters["conf_period"] = _conf_period_filter
     return env
 
 
@@ -547,8 +635,12 @@ def render_tailored_typst(store: ResumeStore, spec: TailoringSpec) -> str:
     emphasis_map = _build_emphasis_map(spec)
     included_sections = _build_included_sections(spec)
 
-    context["industry_work"] = _filter_work_entries(context["industry_work"], emphasis_map)
-    context["academic_work"] = _filter_work_entries(context["academic_work"], emphasis_map)
+    context["industry_work"] = _filter_work_entries(
+        context["industry_work"], emphasis_map
+    )
+    context["academic_work"] = _filter_work_entries(
+        context["academic_work"], emphasis_map
+    )
 
     context["tailoring"] = spec.model_dump()
     context["emphasis_map"] = emphasis_map

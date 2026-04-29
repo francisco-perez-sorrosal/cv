@@ -29,10 +29,10 @@ Or download from https://tug.org/mactex/
 
 ```bash
 # Compile CV to PDF with latexmk (recommended) (-c cleans auxiliary files)
-latexmk -pdf -c 2025_FranciscoPerezSorrosal_CV_English.tex
+latexmk -pdf -c FranciscoPerezSorrosal_CV_English.tex
 
 # or compile it with pdflatex
-pdflatex 2025_FranciscoPerezSorrosal_CV_English.tex
+pdflatex FranciscoPerezSorrosal_CV_English.tex
 ```
 
 ### MCP Branch - Python MCP Server
@@ -208,7 +208,7 @@ Ensure you have all required files in the project root:
 - `manifest.json` - MCPB manifest (already created)
 - `requirements.txt` - Python dependencies (generate if missing)
 - `runtime.txt` - Python version specification (generate if missing)
-- `2025_FranciscoPerezSorrosal_CV_English.pdf` - CV PDF (optional, will use remote if missing)
+- `FranciscoPerezSorrosal_CV_English.pdf` - CV PDF (optional, will use remote if missing)
 
 ```bash
 # Generate requirements.txt if missing
@@ -260,7 +260,7 @@ The MCPB bundle includes:
 - `lib/` - Bundled Python dependencies (built for target Python version)
 - `manifest.json` - Bundle metadata and configuration (includes server startup configuration)
 - `requirements.txt` - Python dependencies list
-- `2025_FranciscoPerezSorrosal_CV_English.pdf` - CV PDF (if available)
+- `FranciscoPerezSorrosal_CV_English.pdf` - CV PDF (if available)
 
 ##### Installation and Usage
 
@@ -467,8 +467,8 @@ pixi run -e dev python -m pytest tests/test_renderers.py -k tailored  # tailored
 
 ### Working on LaTeX CV (Main Branch)
 
-1. Make changes to `2025_FranciscoPerezSorrosal_CV_English.tex`
-2. Test compilation: `latexmk -pdf -c 2025_FranciscoPerezSorrosal_CV_English.tex`
+1. Make changes to `FranciscoPerezSorrosal_CV_English.tex`
+2. Test compilation: `latexmk -pdf -c FranciscoPerezSorrosal_CV_English.tex`
 3. Commit changes to main branch
 
 ### Working on MCP Server (MCP Branch)

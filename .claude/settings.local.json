@@ -91,7 +91,7 @@
       "Bash(git -C /Users/fperez/dev/cv commit -m \"$\\(cat <<''EOF''\nchore: Remove stale commands/ directory\n\nBoth slash commands \\(create-mcpb, get-job-desc\\) were bootstrapping\nartifacts superseded by Makefile targets and natural-language requests.\nAdd HTML example prompt to README_USER.md. Update CLAUDE.md structure.\nEOF\n\\)\")",
       "Bash(git -C /Users/fperez/dev/cv push)",
       "Bash(test:*)",
-      "Bash(git -C /Users/fperez/dev/cv show main:2025_FranciscoPerezSorrosal_CV_English.tex)",
+      "Bash(git -C /Users/fperez/dev/cv show main:FranciscoPerezSorrosal_CV_English.tex)",
       "Bash(ls:*)",
       "mcp__ide__getDiagnostics",
       "Bash(wc:*)",

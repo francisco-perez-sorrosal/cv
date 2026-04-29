@@ -11,8 +11,9 @@ from cv_mcp_server.store import ResumeStore
 def main():
     parser = argparse.ArgumentParser(description="Generate LaTeX CV from YAML data")
     parser.add_argument(
-        "--output", "-o",
-        default="2026_FranciscoPerezSorrosal_CV_English.tex",
+        "--output",
+        "-o",
+        default="FranciscoPerezSorrosal_CV_English.tex",
         help="Output .tex file path",
     )
     args = parser.parse_args()

@@ -127,9 +127,16 @@
 <!-- END_SECTION: Languages -->
 {% endif %}
 
-{% if resume.projects or resume.memberships or resume.conferences %}
+{% if resume.projects or resume.memberships or resume.conferences or resume.book_reviews %}
 <!-- SECTION: Other Activities Related to CS -->
 ## Other Activities Related to Computer Science
+{% if resume.book_reviews %}
+
+### Technical Book Reviewer
+{% for br in resume.book_reviews %}
+- *{{ br.title }}* by {{ br.author }} ({{ br.publisher }}, {{ br.date }})
+{% endfor %}
+{% endif %}
 {% if resume.projects %}
 
 ### Open Source Project Maintainer
@@ -165,7 +172,7 @@
 {% for c in conference_list %}
 {% set loc = (", " ~ c.location) if c.location else "" %}
 {% set speaker_tag = " **(Speaker)**" if c.role == "speaker" else "" %}
-- *{{ c.name }}*{{ loc }} ({{ c.date }}){{ speaker_tag }}
+- *{{ c.name }}*{{ loc }} ({{ c | conf_period }}){{ speaker_tag }}
 {% endfor %}
 {% endif %}
 {% if members %}

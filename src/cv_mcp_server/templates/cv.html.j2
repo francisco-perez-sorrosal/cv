@@ -326,11 +326,22 @@
 {% set ns.section_num = ns.section_num + 1 %}
 {% endif %}
 
-{% if resume.projects or resume.memberships or resume.conferences %}
+{% if resume.projects or resume.memberships or resume.conferences or resume.book_reviews %}
 <section data-label="Activities">
   <div class="container">
     <div class="section-label">{{ "%02d" | format(ns.section_num) }} — Community</div>
     <h2 class="section-title">Other Activities</h2>
+    {% if resume.book_reviews %}
+    <h3 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 16px;">Technical Book Reviewer</h3>
+    <div class="achievements-list" style="margin-bottom: 32px;">
+      {% for br in resume.book_reviews %}
+      <div class="achievement">
+        <div class="achievement-title">{{ br.title }}</div>
+        <p>by {{ br.author }} &middot; {{ br.publisher }}, {{ br.date }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
     {% if resume.projects %}
     <h3 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 16px;">Open Source Projects</h3>
     <div class="skills-grid" style="margin-bottom: 32px;">
@@ -370,7 +381,7 @@
     <h3 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 16px;">Conferences</h3>
     <div class="tags" style="margin-bottom: 32px;">
       {% for c in conference_list %}
-      <span class="tag">{{ c.name }} ({{ c.date }}){% if c.role == "speaker" %} — Speaker{% endif %}</span>
+      <span class="tag">{{ c.name }} ({{ c | conf_period }}){% if c.role == "speaker" %} — Speaker{% endif %}</span>
       {% endfor %}
     </div>
     {% endif %}

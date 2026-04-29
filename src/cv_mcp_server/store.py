@@ -12,7 +12,11 @@ import yaml
 from loguru import logger
 
 from cv_mcp_server.models.resume import Institution, Resume
-from cv_mcp_server.models.semantics import EntryAnnotations, Relationship, SemanticOverlay
+from cv_mcp_server.models.semantics import (
+    EntryAnnotations,
+    Relationship,
+    SemanticOverlay,
+)
 
 
 class ResumeStore:
@@ -50,8 +54,12 @@ class ResumeStore:
         if semantics_path.exists():
             with open(semantics_path, encoding="utf-8") as f:
                 raw = yaml.safe_load(f)
-            semantics = SemanticOverlay.model_validate(raw) if raw else SemanticOverlay()
-            logger.info(f"Loaded semantic overlay: {len(semantics.annotations)} annotated entries")
+            semantics = (
+                SemanticOverlay.model_validate(raw) if raw else SemanticOverlay()
+            )
+            logger.info(
+                f"Loaded semantic overlay: {len(semantics.annotations)} annotated entries"
+            )
         else:
             semantics = SemanticOverlay()
             logger.info("No semantic overlay found; starting with empty annotations")
@@ -113,7 +121,8 @@ class ResumeStore:
     def work_by_date_range(self, start: str, end: str) -> list:
         """Find work entries overlapping a date range."""
         return [
-            w for w in self._resume.work
+            w
+            for w in self._resume.work
             if w.start_date <= end and (w.end_date >= start or w.end_date == "")
         ]
 
@@ -136,12 +145,14 @@ class ResumeStore:
         for ann in self._semantics.annotations:
             for ar in ann.audience_relevance:
                 if ar.audience == audience and ar.relevance.value != "exclude":
-                    results.append({
-                        "entry_id": ann.entry_id,
-                        "relevance": ar.relevance.value,
-                        "reason": ar.reason,
-                        "entry": self._entries_by_id.get(ann.entry_id),
-                    })
+                    results.append(
+                        {
+                            "entry_id": ann.entry_id,
+                            "relevance": ar.relevance.value,
+                            "reason": ar.reason,
+                            "entry": self._entries_by_id.get(ann.entry_id),
+                        }
+                    )
         results.sort(key=lambda r: relevance_order.get(r["relevance"], 99))
         return results
 
@@ -185,6 +196,7 @@ class ResumeStore:
             self._resume.patents,
             self._resume.conferences,
             self._resume.memberships,
+            self._resume.book_reviews,
         ]:
             for entry in section:
                 index[entry.id] = entry
@@ -204,5 +216,7 @@ class ResumeStore:
         """Write semantic overlay back to YAML."""
         data = self._semantics.model_dump(by_alias=True, exclude_defaults=True)
         with open(self._semantics_path, "w", encoding="utf-8") as f:
-            yaml.dump(data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+            yaml.dump(
+                data, f, default_flow_style=False, allow_unicode=True, sort_keys=False
+            )
         logger.info("Semantic overlay persisted to disk")

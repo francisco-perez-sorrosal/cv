@@ -53,7 +53,7 @@ Keywords: {{ p.keywords | join(", ") }}
 {% set status = (" — " ~ link.target.status.value) if link.target.status else "" %}
 - Patent: *{{ link.label }}* (No. {{ link.target.number }}, {{ link.target.date }}{{ status }})
 {% elif link.type == "presented-at" %}
-- Presented at *{{ link.label }}* ({{ link.target.date }})
+- Presented at *{{ link.label }}* ({{ link.target | conf_period }})
 {% endif %}
 {% endfor %}
 {% endif %}

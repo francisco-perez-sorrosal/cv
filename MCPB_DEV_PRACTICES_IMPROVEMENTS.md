@@ -49,7 +49,7 @@ def cv() -> str:
             logger.error(f"Project root not found: {PROJECT_ROOT}")
             return "Error: CV source not accessible"
 
-        cv_path = os.path.join(PROJECT_ROOT, "2025_FranciscoPerezSorrosal_CV_English.pdf")
+        cv_path = os.path.join(PROJECT_ROOT, "FranciscoPerezSorrosal_CV_English.pdf")
         if not os.path.exists(cv_path):
             logger.error(f"CV PDF not found: {cv_path}")
             return "Error: CV PDF file not found"

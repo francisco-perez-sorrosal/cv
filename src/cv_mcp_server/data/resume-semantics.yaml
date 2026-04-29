@@ -942,6 +942,92 @@ annotations:
         provenance: llm
         rationale: Middleware-focused open source consortium
 
+  # --- New 2025-2026 Conferences ---
+  - entryId: conf-coding-agents-2026
+    topics:
+      - topicId: ai.agentic
+        confidence: 0.95
+        provenance: llm
+        rationale: Conference dedicated to AI-driven coding agents and agentic development
+        primary: true
+
+  - entryId: conf-neurips-2025
+    topics:
+      - topicId: ai
+        confidence: 0.90
+        provenance: llm
+        rationale: NeurIPS 2025 — premier ML/AI research conference
+        primary: true
+      - topicId: ai.deep-learning
+        confidence: 0.85
+        provenance: llm
+        rationale: Deep learning and neural network research focus
+
+  - entryId: conf-dagi-summit-2025
+    topics:
+      - topicId: ai.agentic
+        confidence: 0.90
+        provenance: llm
+        rationale: Decentralized AGI Summit focused on autonomous AI systems
+        primary: true
+
+  - entryId: conf-ai-dev-2025
+    topics:
+      - topicId: ai
+        confidence: 0.85
+        provenance: llm
+        rationale: AI developer conference covering applied AI engineering
+        primary: true
+      - topicId: ai.agentic
+        confidence: 0.75
+        provenance: llm
+        rationale: Agentic AI tools and developer workflows featured
+
+  - entryId: conf-agentic-ai-summit-2025
+    topics:
+      - topicId: ai.agentic
+        confidence: 0.92
+        provenance: llm
+        rationale: Agentic AI Summit dedicated to autonomous agent systems and workflows
+        primary: true
+
+  - entryId: conf-ai-engineer-2025
+    topics:
+      - topicId: ai
+        confidence: 0.90
+        provenance: llm
+        rationale: AI Engineer World's Fair — applied AI engineering and deployment
+        primary: true
+      - topicId: ai.agentic
+        confidence: 0.80
+        provenance: llm
+        rationale: Major track on agentic frameworks and LLM-based engineering tools
+
+  - entryId: conf-mlsys-2025
+    topics:
+      - topicId: ai
+        confidence: 0.88
+        provenance: llm
+        rationale: MLSys 2025 — systems for machine learning, covering ML infrastructure and optimization
+        primary: true
+      - topicId: distributed-systems
+        confidence: 0.75
+        provenance: llm
+        rationale: ML systems conference with strong distributed and scalable systems track
+
+  # --- Book Reviews ---
+  - entryId: book-review-sutskever-list-2026
+    topics:
+      - topicId: ai.llm
+        confidence: 0.90
+        provenance: llm
+        rationale: "Technical reviewer of Sutskever's List by Richard Heimann (Manning 2026) — AI/LLM ecosystem book"
+        primary: true
+      - topicId: research
+        confidence: 0.80
+        provenance: llm
+        rationale: Technical peer review activity for a published book
+
 relationships:
   # Work -> Publication links
   - sourceId: proj-contextual-targeting-2021

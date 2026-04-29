@@ -151,9 +151,16 @@
 {% endif %}
 
 {% elif section_name == "Other Activities Related to CS" %}
-{% if resume.projects or resume.memberships or resume.conferences %}
+{% if resume.projects or resume.memberships or resume.conferences or resume.book_reviews %}
 {% raw %}= Other Activities Related to Computer Science{% endraw %}
 
+{% if resume.book_reviews %}
+{% raw %}== {% endraw %}Technical Book Reviewer
+
+{% for br in resume.book_reviews %}
+- _{{ br.title | typst_escape }}_ by {{ br.author | typst_escape }} ({{ br.publisher | typst_escape }} {{ br.date }})
+{% endfor %}
+{% endif %}
 {% if resume.projects %}
 {% raw %}== {% endraw %}Open Source Project Maintainer
 
@@ -185,7 +192,7 @@
 {% for c in conference_list %}
 {% set speaker_mark = " (Speaker)" if c.role == "speaker" else "" %}
 {% set location_mark = ", " ~ (c.location | typst_escape) if c.location else "" %}
-- _{{ c.name | typst_escape }}{{ speaker_mark }}_, {{ c.date }}{{ location_mark }}
+- _{{ c.name | typst_escape }}{{ speaker_mark }}_, {{ c | conf_period }}{{ location_mark }}
 {% endfor %}
 {% endif %}
 {% if members %}

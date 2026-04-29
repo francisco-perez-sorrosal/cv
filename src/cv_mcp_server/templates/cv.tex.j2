@@ -146,8 +146,17 @@
 %------------- LANGUAGES --------------------------------------------
 
 %------------- OTHER ACTIVITIES RELATED TO CS --------------------------------------------
-{% if resume.projects or resume.memberships or resume.conferences %}
+{% if resume.projects or resume.memberships or resume.conferences or resume.book_reviews %}
 \section{Other Activities Related to Computer Science}
+{% if resume.book_reviews %}
+\cventry{}{Technical Book Reviewer}{}{}{}{
+\begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
+{% for br in resume.book_reviews %}
+\item \textit{{ "{" }}{{ br.title | latex_escape }}{{ "}" }} by {{ br.author | latex_escape }} ({{ br.publisher | latex_escape }} {{ br.date }})
+{% endfor %}
+\end{itemize}
+}
+{% endif %}
 {% if resume.projects %}
 \cventry{}{Open Source Project Maintainer}{}{}{}{
 \begin{itemize}[leftmargin=*,noitemsep,topsep=0pt,parsep=3pt,partopsep=0pt]
@@ -182,7 +191,7 @@
 {% for c in conference_list %}
 {% set speaker_mark = " (Speaker)" if c.role == "speaker" else "" %}
 {% set location_mark = ", " ~ (c.location | latex_escape) if c.location else "" %}
-\item \textit{{ "{" }}{{ c.name | latex_escape }}{{ speaker_mark }}{{ "}" }}, {{ c.date }}{{ location_mark }}
+\item \textit{{ "{" }}{{ c.name | latex_escape }}{{ speaker_mark }}{{ "}" }}, {{ c | conf_period }}{{ location_mark }}
 {% endfor %}
 \end{itemize}
 }

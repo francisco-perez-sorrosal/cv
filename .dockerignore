@@ -84,8 +84,8 @@ instance/
 
 # The actual CV PDF should NOT be ignored if you plan to COPY it in Dockerfile.
 # If mounted as a volume, it doesn't need to be in the build context.
-# For example, if 'COPY 2025_FranciscoPerezSorrosal_CV_English.pdf ./' is in Dockerfile:
-# !2025_FranciscoPerezSorrosal_CV_English.pdf
+# For example, if 'COPY FranciscoPerezSorrosal_CV_English.pdf ./' is in Dockerfile:
+# !FranciscoPerezSorrosal_CV_English.pdf
 
 # Files from the root that are not part of the application's runtime or build process
 # Example: if you have .tex files that are not part of the app itself.

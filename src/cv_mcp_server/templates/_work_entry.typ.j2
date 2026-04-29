@@ -40,7 +40,7 @@
 {% set status = " -- " ~ link.target.status.value if link.target.status else "" %}
   - Patent: _{{ link.label }}_ (No. {{ link.target.number }}, {{ link.target.date }}{{ status }})
 {% elif link.type == "presented-at" %}
-  - Presented at _{{ link.label }}_ ({{ link.target.date }})
+  - Presented at _{{ link.label }}_ ({{ link.target | conf_period }})
 {% endif %}
 {% endfor %}
 {% endif %}

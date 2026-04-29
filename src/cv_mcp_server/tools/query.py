@@ -18,7 +18,7 @@ def query_work(
     topic: str = "",
     enrich: bool = Field(
         default=True,
-        description="Include semantic enrichments (cross-references to publications/patents)"
+        description="Include semantic enrichments (cross-references to publications/patents)",
     ),
 ) -> str:
     """Filter work entries by company, date range, or topic. Returns matching entries as markdown."""
@@ -38,15 +38,19 @@ def query_work(
 
     if start_year and end_year:
         results = [
-            w for w in results
-            if w.start_date <= end_year and (w.end_date >= start_year or w.end_date == "")
+            w
+            for w in results
+            if w.start_date <= end_year
+            and (w.end_date >= start_year or w.end_date == "")
         ]
 
     if topic:
         topic_entry_ids = {e["id"] for e in store.entries_by_topic(topic)}
         results = [
-            w for w in results
-            if w.id in topic_entry_ids or any(p.id in topic_entry_ids for p in w.projects)
+            w
+            for w in results
+            if w.id in topic_entry_ids
+            or any(p.id in topic_entry_ids for p in w.projects)
         ]
 
     if not results:
@@ -55,7 +59,9 @@ def query_work(
     return "\n\n".join(render_work_entry(w, store, enrich=enrich) for w in results)
 
 
-@mcp.tool(description="Retrieve a specific resume entry by its stable ID. Returns JSON representation.")
+@mcp.tool(
+    description="Retrieve a specific resume entry by its stable ID. Returns JSON representation."
+)
 def get_entry(entry_id: str) -> str:
     entry = store.entry_by_id(entry_id)
     if entry is None:
@@ -66,23 +72,30 @@ def get_entry(entry_id: str) -> str:
 
 
 @mcp.tool(
-    description="List all entry IDs with labels, optionally filtered by section type (work, patents, publications, education, certificates, conferences, memberships, skills)."
+    description="List all entry IDs with labels, optionally filtered by section type (work, patents, publications, education, certificates, conferences, memberships, skills, book_reviews)."
 )
 def list_entry_ids(section: str = "") -> str:
     lines = []
     r = store.resume
 
     section_map = {
-        "work": [(w.id, f"{w.position} at {store.institution_name(w.institution_id)}") for w in r.work]
-                + [(p.id, f"  Project: {p.name}") for w in r.work for p in w.projects],
+        "work": [
+            (w.id, f"{w.position} at {store.institution_name(w.institution_id)}")
+            for w in r.work
+        ]
+        + [(p.id, f"  Project: {p.name}") for w in r.work for p in w.projects],
         "institutions": [(i.id, f"{i.name} ({i.type.value})") for i in r.institutions],
         "patents": [(p.id, p.title) for p in r.patents],
         "publications": [(p.id, p.name) for p in r.publications],
-        "education": [(e.id, f"{e.study_type} at {store.institution_name(e.institution_id)}") for e in r.education],
+        "education": [
+            (e.id, f"{e.study_type} at {store.institution_name(e.institution_id)}")
+            for e in r.education
+        ],
         "certificates": [(c.id, c.name) for c in r.certificates],
         "conferences": [(c.id, c.name) for c in r.conferences],
         "memberships": [(m.id, m.organization) for m in r.memberships],
         "skills": [(s.id, s.name) for s in r.skills],
+        "book_reviews": [(br.id, br.title) for br in r.book_reviews],
     }
 
     if section:
