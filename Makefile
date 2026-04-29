@@ -23,10 +23,14 @@ build-wheel:
 	DIST_WHEEL=$(DIST_WHEEL) pixi run -e dev python-bundle
 
 # Build process: update deps -> create lib directory -> create MCPB bundle
+# lib/ must be built with the system python3 (same binary the manifest.json
+# launches the server with), NOT pixi's Python — otherwise binary extensions
+# like pydantic_core have an ABI mismatch at runtime.
 build-mcpb:
 	pixi install
 	pixi run -e dev update-mcpb-deps
-	pixi run -e dev mcp-bundle
+	rm -rf lib/ && mkdir -p lib
+	python3 -m pip install -r requirements.txt --target lib --upgrade --force-reinstall
 	DIST_MCPB=$(DIST_MCPB) pixi run pack
 
 # Package skills as zips for claude.ai (Settings > Features > Add Skill)
