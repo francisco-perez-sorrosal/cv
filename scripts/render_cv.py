@@ -11,6 +11,7 @@ Snapshot + compile + symlink (full pipeline via pixi run render-cv):
 
 import argparse
 import datetime
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -90,13 +91,15 @@ COMPILERS: dict[str, object] = {
 # --- Symlink helper ---
 
 
-def _update_symlink(link_path: Path, target: Path) -> None:
-    """Replace link_path with a relative symlink pointing to target."""
-    rel = target.relative_to(link_path.parent)
-    if link_path.is_symlink() or link_path.exists():
-        link_path.unlink()
-    link_path.symlink_to(rel)
-    print(f"Symlink   {link_path} -> {rel}")
+def _copy_pdf(dest: Path, source: Path) -> None:
+    """Copy source PDF to dest so the file works as a direct GitHub download link.
+
+    Removes an existing file or symlink at dest before copying.
+    """
+    if dest.is_symlink() or dest.exists():
+        dest.unlink()
+    shutil.copy2(source, dest)
+    print(f"Copied    {source.name} -> {dest}")
 
 
 # --- CLI ---
@@ -143,7 +146,7 @@ examples:
         "--symlink",
         metavar="PATH",
         default=None,
-        help="Create/replace a relative symlink at PATH pointing to the compiled PDF",
+        help="Copy compiled PDF to PATH (real file, not symlink — works as a direct GitHub link)",
     )
     args = parser.parse_args()
 
@@ -175,7 +178,7 @@ examples:
         print(f"Compiled  {pdf_path}")
 
         if args.symlink:
-            _update_symlink(PROJECT_ROOT / args.symlink, pdf_path)
+            _copy_pdf(PROJECT_ROOT / args.symlink, pdf_path)
 
 
 if __name__ == "__main__":
