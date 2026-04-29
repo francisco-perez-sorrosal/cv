@@ -56,7 +56,7 @@ Individual pixi tasks:
 pixi run -e dev update-mcpb-deps   # sync and export requirements.txt
 pixi run -e dev mcp-bundle         # install deps to lib/
 pixi run pack                      # create .mcpb bundle in dist/mcpb/
-pixi run render-cv                 # full pipeline: render tex → compile PDF → latest.pdf symlink
+pixi run render-pdf-cv             # full pipeline: render tex → compile PDF → latest.pdf
 ```
 
 ### Release
