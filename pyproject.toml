@@ -57,10 +57,10 @@ test-unit = "pytest tests/ -v -m 'not integration'"
 test-integration = "pytest tests/ -v -m integration"
 
 # MCPB (MCP Bundle) tasks - updated to use lib directory approach
-python-bundle="mkdir -p ${DIST_WHEEL:-dist/wheel} && pixi run -e dev python -m build --wheel --outdir ${DIST_WHEEL:-dist/wheel} && echo 'Wheel built and ready for MCPB bundle'"
+python-bundle = { cmd = "mkdir -p $DIST_WHEEL && pixi run -e dev python -m build --wheel --outdir $DIST_WHEEL && echo 'Wheel built and ready for MCPB bundle'", env = { DIST_WHEEL = "dist/wheel" } }
 update-mcpb-deps="rm -rf uv.lock && pixi run -e dev uv sync && pixi run -e dev uv lock && pixi run -e dev uv export --no-hashes --format requirements-txt > requirements.txt"
 mcp-bundle="rm -rf lib/ && mkdir -p lib && pixi run -e dev python -m pip install -r requirements.txt --target lib --upgrade --force-reinstall"
-pack="BUNDLE_NAME=$(python3 -c \"import json; print(f\\\"{json.load(open('manifest.json'))['name']}-{json.load(open('manifest.json'))['version']}.mcpb\\\")\") && mkdir -p ${DIST_MCPB:-dist/mcpb} && npx @anthropic-ai/mcpb pack . ${DIST_MCPB:-dist/mcpb}/$BUNDLE_NAME"
+pack = { cmd = "BUNDLE_NAME=$(python3 -c \"import json; print(f\\\"{json.load(open('manifest.json'))['name']}-{json.load(open('manifest.json'))['version']}.mcpb\\\")\") && mkdir -p $DIST_MCPB && npx @anthropic-ai/mcpb pack . $DIST_MCPB/$BUNDLE_NAME", env = { DIST_MCPB = "dist/mcpb" } }
 clean-bundles="rm -rf dist/ lib/"
 
 [tool.hatch.metadata]

@@ -124,6 +124,10 @@
     "knowledge graph"
   ],
   "compatibility": {
-    "python": ">=3.13"
+    "claude_desktop": ">=0.10.0",
+    "platforms": ["darwin", "linux", "win32"],
+    "runtimes": {
+      "python": ">=3.13"
+    }
   }
 }
