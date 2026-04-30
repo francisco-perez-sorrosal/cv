@@ -38,10 +38,9 @@ build-mcpb:
 	pixi install
 	pixi run -e dev update-mcpb-deps
 	pixi run -e dev mcp-bundle
-	@PYVER=$$(ls lib/pydantic_core/*.so 2>/dev/null | sed -n 's/.*cpython-\([0-9]\)\([0-9][0-9]*\).*/\1.\2/p' | head -1) && \
-		test -n "$$PYVER" || (echo "ERROR: could not detect cpython ABI from lib/pydantic_core/*.so" && exit 1) && \
-		echo "$$PYVER" > lib/.python-version && \
-		echo "Recorded lib/.python-version: $$PYVER (derived from .so ABI tag)"
+	@ls lib/pydantic_core/*.so 2>/dev/null | sed -n 's/.*cpython-\([0-9]\)\([0-9][0-9]*\).*/\1.\2/p' | head -1 > lib/.python-version
+	@test -s lib/.python-version || (echo "ERROR: could not detect cpython ABI from lib/pydantic_core/*.so" && exit 1)
+	@echo "Recorded lib/.python-version: $$(cat lib/.python-version) (derived from .so ABI tag)"
 	DIST_MCPB=$(DIST_MCPB) pixi run pack
 
 # Package skills as zips for claude.ai (Settings > Features > Add Skill)
