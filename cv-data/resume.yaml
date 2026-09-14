@@ -40,7 +40,7 @@ personal_info:
       url: https://x.com/fperezsorrosal
       username: fperezsorrosal
     - network: CV PDF
-      url: https://github.com/francisco-perez-sorrosal/cv/blob/main/FranciscoPerezSorrosal_CV_English.pdf
+      url: https://github.com/francisco-perez-sorrosal/cv/releases/latest/download/FranciscoPerezSorrosal_CV.pdf
 
 quote: '"Any man could, if he were so inclined, be the sculptor of his own brain." -- Santiago Ramón y Cajal'
 
@@ -1586,4 +1586,4 @@ interests:
 meta:
   version: "1.0.0"
   last_modified: "2026-02-13"
-  canonical: https://github.com/francisco-perez-sorrosal/cv/blob/main/FranciscoPerezSorrosal_CV_English.pdf
+  canonical: https://github.com/francisco-perez-sorrosal/cv/releases/latest/download/FranciscoPerezSorrosal_CV.pdf
