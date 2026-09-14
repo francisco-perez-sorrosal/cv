@@ -1,0 +1,457 @@
+{
+  "$defs": {
+    "AudienceRelevance": {
+      "description": "How relevant an entry is for a specific audience type.",
+      "properties": {
+        "audience": {
+          "description": "Audience type (e.g., 'hiring-manager', 'academic-committee', 'executive', 'startup-founder', 'peer-researcher')",
+          "title": "Audience",
+          "type": "string"
+        },
+        "entryId": {
+          "title": "Entryid",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance",
+          "default": "human"
+        },
+        "reason": {
+          "default": "",
+          "title": "Reason",
+          "type": "string"
+        },
+        "relevance": {
+          "$ref": "#/$defs/RelevanceLevel"
+        }
+      },
+      "required": [
+        "entryId",
+        "audience",
+        "relevance"
+      ],
+      "title": "AudienceRelevance",
+      "type": "object"
+    },
+    "EntryAnnotations": {
+      "description": "All annotations for a single resume entry, keyed by entry ID.",
+      "properties": {
+        "audienceRelevance": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/AudienceRelevance"
+          },
+          "title": "Audiencerelevance",
+          "type": "array"
+        },
+        "entryId": {
+          "title": "Entryid",
+          "type": "string"
+        },
+        "impact": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ImpactIndicator"
+          },
+          "title": "Impact",
+          "type": "array"
+        },
+        "summaries": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/EntrySummary"
+          },
+          "title": "Summaries",
+          "type": "array"
+        },
+        "topics": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TopicAnnotation"
+          },
+          "title": "Topics",
+          "type": "array"
+        }
+      },
+      "required": [
+        "entryId"
+      ],
+      "title": "EntryAnnotations",
+      "type": "object"
+    },
+    "EntrySummary": {
+      "description": "One-line summary of a resume entry, optionally audience-specific.",
+      "properties": {
+        "audience": {
+          "default": "general",
+          "description": "Which audience this summary targets",
+          "title": "Audience",
+          "type": "string"
+        },
+        "entryId": {
+          "title": "Entryid",
+          "type": "string"
+        },
+        "model": {
+          "default": "",
+          "description": "LLM model that generated this (empty if human)",
+          "title": "Model",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        }
+      },
+      "required": [
+        "entryId",
+        "summary",
+        "provenance"
+      ],
+      "title": "EntrySummary",
+      "type": "object"
+    },
+    "ImpactIndicator": {
+      "description": "Quantifiable impact beyond citations.",
+      "properties": {
+        "entryId": {
+          "title": "Entryid",
+          "type": "string"
+        },
+        "metric": {
+          "description": "What is measured (e.g., 'team_size', 'users_served')",
+          "title": "Metric",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance",
+          "default": "human"
+        },
+        "scope": {
+          "default": "",
+          "description": "Context (e.g., 'organization-wide', 'team-level')",
+          "title": "Scope",
+          "type": "string"
+        },
+        "value": {
+          "description": "The value (string to allow '50+', '$2M', etc.)",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "entryId",
+        "metric",
+        "value"
+      ],
+      "title": "ImpactIndicator",
+      "type": "object"
+    },
+    "ProficiencyLevel": {
+      "description": "Skill proficiency on a standardized scale.",
+      "enum": [
+        "novice",
+        "beginner",
+        "intermediate",
+        "advanced",
+        "expert",
+        "thought-leader"
+      ],
+      "title": "ProficiencyLevel",
+      "type": "string"
+    },
+    "Provenance": {
+      "description": "Who authored this annotation.",
+      "enum": [
+        "human",
+        "llm",
+        "derived"
+      ],
+      "title": "Provenance",
+      "type": "string"
+    },
+    "Relationship": {
+      "description": "A directed relationship between two resume entries.",
+      "properties": {
+        "confidence": {
+          "default": 1.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance",
+          "default": "human"
+        },
+        "sourceId": {
+          "description": "From entry ID",
+          "title": "Sourceid",
+          "type": "string"
+        },
+        "targetId": {
+          "description": "To entry ID",
+          "title": "Targetid",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/RelationshipType"
+        }
+      },
+      "required": [
+        "sourceId",
+        "targetId",
+        "type"
+      ],
+      "title": "Relationship",
+      "type": "object"
+    },
+    "RelationshipType": {
+      "description": "Types of cross-entry relationships.",
+      "enum": [
+        "relates-to",
+        "derived-from",
+        "resulted-in",
+        "uses-skill",
+        "published-as",
+        "patented-as",
+        "presented-at",
+        "supervised-by",
+        "continuation-of"
+      ],
+      "title": "RelationshipType",
+      "type": "string"
+    },
+    "RelevanceLevel": {
+      "description": "How relevant an entry is for a given audience.",
+      "enum": [
+        "primary",
+        "secondary",
+        "tertiary",
+        "exclude"
+      ],
+      "title": "RelevanceLevel",
+      "type": "string"
+    },
+    "SkillProficiency": {
+      "description": "Track skill proficiency at a specific entry/time.",
+      "properties": {
+        "entryId": {
+          "default": "",
+          "description": "Resume entry where this was demonstrated. Empty = overall/current level.",
+          "title": "Entryid",
+          "type": "string"
+        },
+        "evidence": {
+          "default": "",
+          "description": "What demonstrates this proficiency level",
+          "title": "Evidence",
+          "type": "string"
+        },
+        "level": {
+          "$ref": "#/$defs/ProficiencyLevel"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance",
+          "default": "human"
+        },
+        "topicId": {
+          "description": "Skill as topic ID",
+          "title": "Topicid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "topicId",
+        "level"
+      ],
+      "title": "SkillProficiency",
+      "type": "object"
+    },
+    "TemporalRelevance": {
+      "description": "How a topic's relevance to the candidate changes over time.",
+      "properties": {
+        "note": {
+          "default": "",
+          "title": "Note",
+          "type": "string"
+        },
+        "period": {
+          "description": "Date range (e.g., '2010-2015', '2020-present')",
+          "title": "Period",
+          "type": "string"
+        },
+        "topicId": {
+          "title": "Topicid",
+          "type": "string"
+        },
+        "weight": {
+          "description": "Relevance weight during this period (1.0 = primary focus)",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Weight",
+          "type": "number"
+        }
+      },
+      "required": [
+        "topicId",
+        "period",
+        "weight"
+      ],
+      "title": "TemporalRelevance",
+      "type": "object"
+    },
+    "Topic": {
+      "description": "A topic in the hierarchical taxonomy.\n\nTopics form a tree via dot-separated IDs:\n'ai.ml.nlp.entity-matching'\n\nThe ID encodes the hierarchy \u2014 'ai.ml' is the parent of 'ai.ml.nlp'.",
+      "properties": {
+        "aliases": {
+          "default": [],
+          "description": "Alternative names (e.g., ['NLP', 'natural language processing'])",
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "id": {
+          "description": "Dot-separated hierarchical path (e.g., 'ai.ml.nlp'). This IS the topic identity.",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "description": "Human-readable display name",
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label"
+      ],
+      "title": "Topic",
+      "type": "object"
+    },
+    "TopicAnnotation": {
+      "description": "A topic assigned to a resume entry.",
+      "properties": {
+        "confidence": {
+          "description": "Classification certainty",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "primary": {
+          "default": false,
+          "description": "Primary topic for the entry (vs supporting)",
+          "title": "Primary",
+          "type": "boolean"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "rationale": {
+          "default": "",
+          "description": "Why this topic was assigned",
+          "title": "Rationale",
+          "type": "string"
+        },
+        "topicId": {
+          "description": "Reference to taxonomy topic ID",
+          "title": "Topicid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "topicId",
+        "confidence",
+        "provenance"
+      ],
+      "title": "TopicAnnotation",
+      "type": "object"
+    },
+    "TopicTaxonomy": {
+      "description": "The full topic taxonomy. Defined once, referenced by annotations.",
+      "properties": {
+        "topics": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Topic"
+          },
+          "title": "Topics",
+          "type": "array"
+        },
+        "version": {
+          "default": "1.0.0",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "title": "TopicTaxonomy",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Semantic annotations for all resume entries.\n\nReferences entries in resume.yaml by their stable IDs.\nDesigned to be sparse \u2014 entries without annotations are simply absent.\nLLMs populate this over time; humans can also edit directly.",
+  "properties": {
+    "annotations": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/EntryAnnotations"
+      },
+      "title": "Annotations",
+      "type": "array"
+    },
+    "relationships": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Relationship"
+      },
+      "title": "Relationships",
+      "type": "array"
+    },
+    "skillProficiency": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SkillProficiency"
+      },
+      "title": "Skillproficiency",
+      "type": "array"
+    },
+    "taxonomy": {
+      "$ref": "#/$defs/TopicTaxonomy",
+      "default": {
+        "topics": [],
+        "version": "1.0.0"
+      }
+    },
+    "temporalRelevance": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/TemporalRelevance"
+      },
+      "title": "Temporalrelevance",
+      "type": "array"
+    },
+    "version": {
+      "default": "1.0.0",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "title": "SemanticOverlay",
+  "type": "object"
+}

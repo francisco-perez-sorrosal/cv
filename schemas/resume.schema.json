@@ -1,0 +1,1046 @@
+{
+  "$defs": {
+    "BookReview": {
+      "description": "Technical book reviewer credit (not in JSON Resume).",
+      "properties": {
+        "author": {
+          "default": "",
+          "description": "Book author(s)",
+          "title": "Author",
+          "type": "string"
+        },
+        "date": {
+          "default": "",
+          "description": "Publication year or date",
+          "title": "Date",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable identifier for semantic overlay references. Convention: <type>-<slug> (e.g., 'work-yahoo-kgs-2023', 'patent-em-2019').",
+          "title": "Id",
+          "type": "string"
+        },
+        "publisher": {
+          "default": "",
+          "description": "Publisher name",
+          "title": "Publisher",
+          "type": "string"
+        },
+        "title": {
+          "description": "Book title",
+          "title": "Title",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title"
+      ],
+      "title": "BookReview",
+      "type": "object"
+    },
+    "Certificate": {
+      "properties": {
+        "date": {
+          "default": "",
+          "title": "Date",
+          "type": "string"
+        },
+        "format": {
+          "default": "",
+          "description": "Delivery format (e.g., 'In-Person', 'Remote', 'Online')",
+          "title": "Format",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable identifier for semantic overlay references. Convention: <type>-<slug> (e.g., 'work-yahoo-kgs-2023', 'patent-em-2019').",
+          "title": "Id",
+          "type": "string"
+        },
+        "institution_id": {
+          "description": "Reference to institution (issuer)",
+          "title": "Institution Id",
+          "type": "string"
+        },
+        "location": {
+          "default": "",
+          "description": "Where the course took place",
+          "title": "Location",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "institution_id"
+      ],
+      "title": "Certificate",
+      "type": "object"
+    },
+    "Conference": {
+      "description": "Conference attendance/participation (not in JSON Resume).",
+      "properties": {
+        "endDate": {
+          "default": "",
+          "description": "Last day (YYYY-MM-DD); equals start_date for single-day events",
+          "title": "Enddate",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable identifier for semantic overlay references. Convention: <type>-<slug> (e.g., 'work-yahoo-kgs-2023', 'patent-em-2019').",
+          "title": "Id",
+          "type": "string"
+        },
+        "location": {
+          "default": "",
+          "title": "Location",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "role": {
+          "default": "",
+          "description": "attendee, speaker, organizer, reviewer",
+          "title": "Role",
+          "type": "string"
+        },
+        "startDate": {
+          "default": "",
+          "description": "First day (YYYY-MM-DD) or year only for reviewer entries",
+          "title": "Startdate",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Conference",
+      "type": "object"
+    },
+    "Education": {
+      "properties": {
+        "area": {
+          "default": "",
+          "description": "Field of study",
+          "title": "Area",
+          "type": "string"
+        },
+        "courses": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Courses",
+          "type": "array"
+        },
+        "department": {
+          "default": "",
+          "description": "School or institute within the institution",
+          "title": "Department",
+          "type": "string"
+        },
+        "endDate": {
+          "default": "",
+          "title": "Enddate",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable identifier for semantic overlay references. Convention: <type>-<slug> (e.g., 'work-yahoo-kgs-2023', 'patent-em-2019').",
+          "title": "Id",
+          "type": "string"
+        },
+        "institution_id": {
+          "description": "Reference to institution",
+          "title": "Institution Id",
+          "type": "string"
+        },
+        "location": {
+          "default": "",
+          "title": "Location",
+          "type": "string"
+        },
+        "score": {
+          "default": "",
+          "title": "Score",
+          "type": "string"
+        },
+        "startDate": {
+          "default": "",
+          "title": "Startdate",
+          "type": "string"
+        },
+        "studyType": {
+          "default": "",
+          "description": "Degree type",
+          "title": "Studytype",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "institution_id"
+      ],
+      "title": "Education",
+      "type": "object"
+    },
+    "Institution": {
+      "description": "An organization (company, university, education provider).",
+      "properties": {
+        "aliases": {
+          "default": [],
+          "description": "Former/alternative names",
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "description": {
+          "default": "",
+          "description": "Brief description",
+          "title": "Description",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable identifier for semantic overlay references. Convention: <type>-<slug> (e.g., 'work-yahoo-kgs-2023', 'patent-em-2019').",
+          "title": "Id",
+          "type": "string"
+        },
+        "location": {
+          "default": "",
+          "description": "Primary location",
+          "title": "Location",
+          "type": "string"
+        },
+        "name": {
+          "description": "Canonical name",
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/InstitutionType"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "type"
+      ],
+      "title": "Institution",
+      "type": "object"
+    },
+    "InstitutionType": {
+      "enum": [
+        "company",
+        "university",
+        "research_institution",
+        "education_platform",
+        "government",
+        "consortium",
+        "cooperative",
+        "independent"
+      ],
+      "title": "InstitutionType",
+      "type": "string"
+    },
+    "Interest": {
+      "properties": {
+        "description": {
+          "default": "",
+          "description": "Narrative description of the interest area",
+          "title": "Description",
+          "type": "string"
+        },
+        "keywords": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Keywords",
+          "type": "array"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Interest",
+      "type": "object"
+    },
+    "Language": {
+      "properties": {
+        "fluency": {
+          "default": "",
+          "title": "Fluency",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable identifier for semantic overlay references. Convention: <type>-<slug> (e.g., 'work-yahoo-kgs-2023', 'patent-em-2019').",
+          "title": "Id",
+          "type": "string"
+        },
+        "language": {
+          "title": "Language",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "language"
+      ],
+      "title": "Language",
+      "type": "object"
+    },
+    "LeadershipCategory": {
+      "description": "A subsection within Leadership & Communication.",
+      "properties": {
+        "items": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/LeadershipItem"
+          },
+          "title": "Items",
+          "type": "array"
+        },
+        "name": {
+          "description": "Subsection name (e.g., 'Mentoring & Team Leadership')",
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "LeadershipCategory",
+      "type": "object"
+    },
+    "LeadershipItem": {
+      "description": "A single leadership/communication item (e.g., a cvitem in LaTeX).",
+      "properties": {
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "label": {
+          "description": "Category label (e.g., 'Research', 'Apache')",
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "title": "LeadershipItem",
+      "type": "object"
+    },
+    "Location": {
+      "properties": {
+        "address": {
+          "default": "",
+          "title": "Address",
+          "type": "string"
+        },
+        "city": {
+          "default": "",
+          "title": "City",
+          "type": "string"
+        },
+        "countryCode": {
+          "default": "",
+          "title": "Countrycode",
+          "type": "string"
+        },
+        "postalCode": {
+          "default": "",
+          "title": "Postalcode",
+          "type": "string"
+        },
+        "state": {
+          "default": "",
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "title": "Location",
+      "type": "object"
+    },
+    "Membership": {
+      "description": "Professional membership (not in JSON Resume).",
+      "properties": {
+        "endDate": {
+          "default": "",
+          "title": "Enddate",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable identifier for semantic overlay references. Convention: <type>-<slug> (e.g., 'work-yahoo-kgs-2023', 'patent-em-2019').",
+          "title": "Id",
+          "type": "string"
+        },
+        "organization": {
+          "title": "Organization",
+          "type": "string"
+        },
+        "role": {
+          "default": "",
+          "title": "Role",
+          "type": "string"
+        },
+        "startDate": {
+          "default": "",
+          "title": "Startdate",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "organization"
+      ],
+      "title": "Membership",
+      "type": "object"
+    },
+    "Meta": {
+      "properties": {
+        "canonical": {
+          "default": "",
+          "description": "URL to the canonical version of this resume",
+          "title": "Canonical",
+          "type": "string"
+        },
+        "lastModified": {
+          "default": "",
+          "title": "Lastmodified",
+          "type": "string"
+        },
+        "version": {
+          "default": "1.0.0",
+          "description": "Schema version (semver)",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "title": "Meta",
+      "type": "object"
+    },
+    "Patent": {
+      "description": "Patent entry (not in JSON Resume).",
+      "properties": {
+        "date": {
+          "description": "Year filed or granted",
+          "title": "Date",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable identifier for semantic overlay references. Convention: <type>-<slug> (e.g., 'work-yahoo-kgs-2023', 'patent-em-2019').",
+          "title": "Id",
+          "type": "string"
+        },
+        "inventors": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Inventors",
+          "type": "array"
+        },
+        "number": {
+          "description": "Patent application or grant number",
+          "title": "Number",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/PatentStatus"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "number",
+        "title",
+        "date",
+        "status"
+      ],
+      "title": "Patent",
+      "type": "object"
+    },
+    "PatentStatus": {
+      "enum": [
+        "application",
+        "granted"
+      ],
+      "title": "PatentStatus",
+      "type": "string"
+    },
+    "PersonalInfo": {
+      "description": "Candidate identity and contact info. Maps to JSON Resume 'basics'.",
+      "properties": {
+        "email": {
+          "default": "",
+          "title": "Email",
+          "type": "string"
+        },
+        "label": {
+          "default": "",
+          "description": "Professional title (e.g., 'Principal Research Engineer')",
+          "title": "Label",
+          "type": "string"
+        },
+        "location": {
+          "$ref": "#/$defs/Location",
+          "default": {
+            "address": "",
+            "city": "",
+            "countryCode": "",
+            "postalCode": "",
+            "state": ""
+          }
+        },
+        "name": {
+          "default": "",
+          "title": "Name",
+          "type": "string"
+        },
+        "phone": {
+          "default": "",
+          "title": "Phone",
+          "type": "string"
+        },
+        "profiles": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Profile"
+          },
+          "title": "Profiles",
+          "type": "array"
+        },
+        "summary": {
+          "default": "",
+          "title": "Summary",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "title": "PersonalInfo",
+      "type": "object"
+    },
+    "Profile": {
+      "description": "Social/professional profile link.",
+      "properties": {
+        "network": {
+          "description": "Platform name (e.g., 'LinkedIn', 'GitHub')",
+          "title": "Network",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        },
+        "username": {
+          "default": "",
+          "title": "Username",
+          "type": "string"
+        }
+      },
+      "required": [
+        "network"
+      ],
+      "title": "Profile",
+      "type": "object"
+    },
+    "Project": {
+      "description": "A named project within a work position or standalone.",
+      "properties": {
+        "achievements": {
+          "default": [],
+          "description": "Outcomes distinct from goal and general highlights",
+          "items": {
+            "type": "string"
+          },
+          "title": "Achievements",
+          "type": "array"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "description_label": {
+          "default": "",
+          "description": "Label for description (e.g., 'Approach', 'Method'); when absent, description is plain text",
+          "title": "Description Label",
+          "type": "string"
+        },
+        "endDate": {
+          "default": "",
+          "title": "Enddate",
+          "type": "string"
+        },
+        "entity": {
+          "default": "",
+          "description": "Parent company/org (for top-level projects)",
+          "title": "Entity",
+          "type": "string"
+        },
+        "goal": {
+          "default": "",
+          "description": "Project goal statement",
+          "title": "Goal",
+          "type": "string"
+        },
+        "highlights": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Highlights",
+          "type": "array"
+        },
+        "id": {
+          "description": "Stable identifier for semantic overlay references. Convention: <type>-<slug> (e.g., 'work-yahoo-kgs-2023', 'patent-em-2019').",
+          "title": "Id",
+          "type": "string"
+        },
+        "keywords": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Keywords",
+          "type": "array"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "roles": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Roles",
+          "type": "array"
+        },
+        "startDate": {
+          "default": "",
+          "title": "Startdate",
+          "type": "string"
+        },
+        "type": {
+          "default": "",
+          "title": "Type",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Project",
+      "type": "object"
+    },
+    "Publication": {
+      "description": "Academic publication. Extends JSON Resume with citations and authors.",
+      "properties": {
+        "authors": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Authors",
+          "type": "array"
+        },
+        "citations": {
+          "default": 0,
+          "description": "Citation count",
+          "title": "Citations",
+          "type": "integer"
+        },
+        "id": {
+          "description": "Stable identifier for semantic overlay references. Convention: <type>-<slug> (e.g., 'work-yahoo-kgs-2023', 'patent-em-2019').",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "publisher": {
+          "default": "",
+          "description": "Venue (conference, journal)",
+          "title": "Publisher",
+          "type": "string"
+        },
+        "releaseDate": {
+          "default": "",
+          "title": "Releasedate",
+          "type": "string"
+        },
+        "summary": {
+          "default": "",
+          "title": "Summary",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Publication",
+      "type": "object"
+    },
+    "Skill": {
+      "description": "A skill subcategory with keyword list.",
+      "properties": {
+        "keywords": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Keywords",
+          "type": "array"
+        },
+        "name": {
+          "description": "Subcategory name (e.g., 'Languages', 'ML Frameworks')",
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Skill",
+      "type": "object"
+    },
+    "SkillGroup": {
+      "description": "Top-level skill category (e.g., 'Programming', 'Data Infrastructure').",
+      "properties": {
+        "id": {
+          "description": "Stable identifier for semantic overlay references. Convention: <type>-<slug> (e.g., 'work-yahoo-kgs-2023', 'patent-em-2019').",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Category name",
+          "title": "Name",
+          "type": "string"
+        },
+        "skills": {
+          "default": [],
+          "description": "Subcategories within this group",
+          "items": {
+            "$ref": "#/$defs/Skill"
+          },
+          "title": "Skills",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "SkillGroup",
+      "type": "object"
+    },
+    "WorkEntry": {
+      "description": "A professional position. Projects are nested, not flat.",
+      "properties": {
+        "department": {
+          "default": "",
+          "description": "Team or department",
+          "title": "Department",
+          "type": "string"
+        },
+        "employer_display": {
+          "default": "",
+          "description": "Overrides default 'department @ institution' display name",
+          "title": "Employer Display",
+          "type": "string"
+        },
+        "endDate": {
+          "default": "",
+          "title": "Enddate",
+          "type": "string"
+        },
+        "highlights": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Highlights",
+          "type": "array"
+        },
+        "id": {
+          "description": "Stable identifier for semantic overlay references. Convention: <type>-<slug> (e.g., 'work-yahoo-kgs-2023', 'patent-em-2019').",
+          "title": "Id",
+          "type": "string"
+        },
+        "institution_id": {
+          "description": "Reference to institution",
+          "title": "Institution Id",
+          "type": "string"
+        },
+        "location": {
+          "default": "",
+          "title": "Location",
+          "type": "string"
+        },
+        "position": {
+          "default": "",
+          "title": "Position",
+          "type": "string"
+        },
+        "projects": {
+          "default": [],
+          "description": "Named projects within this position",
+          "items": {
+            "$ref": "#/$defs/Project"
+          },
+          "title": "Projects",
+          "type": "array"
+        },
+        "roles": {
+          "default": [],
+          "description": "Role tags (e.g., 'ML/AI Expert', 'Tech Lead')",
+          "items": {
+            "type": "string"
+          },
+          "title": "Roles",
+          "type": "array"
+        },
+        "startDate": {
+          "default": "",
+          "title": "Startdate",
+          "type": "string"
+        },
+        "summary": {
+          "default": "",
+          "title": "Summary",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "institution_id"
+      ],
+      "title": "WorkEntry",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "JSON Resume-compatible schema with custom extensions.\n\nCustom extensions beyond JSON Resume:\n- work[].projects: nested projects within positions\n- work[].roles: role tags per position\n- patents[]: patent section\n- conferences[]: conference attendance and reviewer roles\n- memberships[]: professional memberships\n- book_reviews[]: technical book reviewer credits\n- leadership[]: leadership & communication section\n- publications[].citations: citation count\n- publications[].authors: author list\n- All entry types have an 'id' field for semantic overlay references",
+  "properties": {
+    "basics": {
+      "$ref": "#/$defs/PersonalInfo",
+      "default": {
+        "email": "",
+        "label": "",
+        "location": {
+          "address": "",
+          "city": "",
+          "countryCode": "",
+          "postalCode": "",
+          "state": ""
+        },
+        "name": "",
+        "phone": "",
+        "profiles": [],
+        "summary": "",
+        "url": ""
+      }
+    },
+    "book_reviews": {
+      "default": [],
+      "description": "Technical book reviewer credits",
+      "items": {
+        "$ref": "#/$defs/BookReview"
+      },
+      "title": "Book Reviews",
+      "type": "array"
+    },
+    "certificates": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Certificate"
+      },
+      "title": "Certificates",
+      "type": "array"
+    },
+    "conferences": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Conference"
+      },
+      "title": "Conferences",
+      "type": "array"
+    },
+    "education": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Education"
+      },
+      "title": "Education",
+      "type": "array"
+    },
+    "institutions": {
+      "default": [],
+      "description": "Organizations referenced by work, education, certificates",
+      "items": {
+        "$ref": "#/$defs/Institution"
+      },
+      "title": "Institutions",
+      "type": "array"
+    },
+    "interests": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Interest"
+      },
+      "title": "Interests",
+      "type": "array"
+    },
+    "languages": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Language"
+      },
+      "title": "Languages",
+      "type": "array"
+    },
+    "leadership": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/LeadershipCategory"
+      },
+      "title": "Leadership",
+      "type": "array"
+    },
+    "memberships": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Membership"
+      },
+      "title": "Memberships",
+      "type": "array"
+    },
+    "meta": {
+      "$ref": "#/$defs/Meta",
+      "default": {
+        "canonical": "",
+        "lastModified": "",
+        "version": "1.0.0"
+      }
+    },
+    "patents": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Patent"
+      },
+      "title": "Patents",
+      "type": "array"
+    },
+    "projects": {
+      "default": [],
+      "description": "Standalone projects not tied to a specific position",
+      "items": {
+        "$ref": "#/$defs/Project"
+      },
+      "title": "Projects",
+      "type": "array"
+    },
+    "publications": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Publication"
+      },
+      "title": "Publications",
+      "type": "array"
+    },
+    "quote": {
+      "default": "",
+      "title": "Quote",
+      "type": "string"
+    },
+    "skills": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SkillGroup"
+      },
+      "title": "Skills",
+      "type": "array"
+    },
+    "work": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/WorkEntry"
+      },
+      "title": "Work",
+      "type": "array"
+    }
+  },
+  "title": "Resume",
+  "type": "object"
+}

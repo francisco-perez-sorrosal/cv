@@ -1,130 +1,57 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Repository Overview
 
-This repository contains Francisco Perez-Sorrosal's CV in multiple formats and implementations:
+This repository is the single source of truth for Francisco Perez-Sorrosal's CV content. It contains only data (YAML), schema definitions, and CI workflows that validate and publish. All tooling (rendering, serving, editing) lives in the [`cv-forge`](https://github.com/francisco-perez-sorrosal/cv-forge) repository.
 
-- **Main branch (`main`)**: Contains the LaTeX source CV (`FranciscoPerezSorrosal_CV_English.tex`) and generated PDF
-- **MCP branch (`mcp`)**: Contains a Python-based MCP (Model Context Protocol) server that serves the CV as a resource for AI systems
+## Data Files
 
-The repository serves as both a personal CV management system and a reference implementation of an MCP server for document serving.
+- `cv-data/resume.yaml` — the primary CV data (experience, education, skills, patents, publications, languages)
+- `cv-data/resume-semantics.yaml` — semantic overlay (topics, relationships, cross-entry annotations)
+- `schemas/` — JSON Schema files (`resume.schema.json`, `semantics.schema.json`) mirrored from `cv-forge@v1`
 
-## Common Commands
+## Editing Conventions
 
-### LaTeX CV Management (main branch)
+**Entry IDs** — every entry that can be referenced carries an `id` field in the form `<type>-<slug>`, e.g. `work-yahoo-kgs-2023`, `pub-htl-acl-2019`, `patent-em-2019`.
+
+**Cross-references** — entries with an `institution_id` field (work, education, certificates) must name a declared institution from `institutions[]`. The schema enforces this; `cv-forge validate` flags unknown references with hints.
+
+**Chronological order** — within `work`, `education`, and `certificates`: list most recent first.
+
+**Date format** — `YYYY` or `YYYY-MM` for start/end dates on work, education, certificates. Conferences use full `YYYY-MM-DD` (different family — do not reuse their format elsewhere).
+
+**Semantic overlay references** — every `entry_id` in `resume-semantics.yaml` must name an actual entry in `resume.yaml`. Edit both files together when removing an entry.
+
+## Validation
+
+Validate before every PR:
+
 ```bash
-# Compile the CV to PDF using pdflatex
-pdflatex FranciscoPerezSorrosal_CV_English.tex
-
-# Or using latexmk (recommended for handling dependencies)
-latexmk -pdf FranciscoPerezSorrosal_CV_English.tex
-
-# Clean auxiliary files
-latexmk -c FranciscoPerezSorrosal_CV_English.tex
+check-jsonschema --schemafile schemas/resume.schema.json cv-data/resume.yaml
+check-jsonschema --schemafile schemas/semantics.schema.json cv-data/resume-semantics.yaml
 ```
 
-### MCP Server Development (mcp branch)
+The CI workflow runs these checks automatically; local validation catches issues faster.
+
+## Publishing
+
+Push a CalVer tag (`YYYY.MM.DD`) and the publishing workflow runs automatically, rendering all formats and creating a GitHub Release.
+
 ```bash
-# Switch to mcp branch
-git checkout mcp
-
-# Install dependencies using pixi (recommended)
-pixi install
-
-# Run MCP server locally
-pixi run mcps --transport stdio
-
-# Run with different transport types
-pixi run mcps --transport sse
-pixi run mcps --transport streamable-http
-
-# Install MCP server for Claude Desktop
-./install_claude_desktop_mcp.sh
-
-# Development tasks
-pixi run test      # Run tests
-pixi run lint      # Check code quality
-pixi run format    # Format code
-pixi run build     # Build package
+git tag 2026.09.13
+git push origin 2026.09.13
 ```
 
-### Git Workflow
-```bash
-# List all branches
-git branch -a
+All assets are published at stable, version-free URLs under `releases/latest/download/`.
 
-# Check current status
-git status
+## No tooling here
 
-# View recent commits
-git log --oneline -10
-```
+Do not add render logic, CLI commands, or scripting to this repository. This is a data-only repo; machinery (rendering, validation, serving, editing) lives in [`cv-forge`](https://github.com/francisco-perez-sorrosal/cv-forge).
 
-## Architecture and Structure
+## Rendered artifacts are release assets
 
-### Main Branch Structure
-- `FranciscoPerezSorrosal_CV_English.tex` - LaTeX source file containing the complete CV
-- `FranciscoPerezSorrosal_CV_English.pdf` - Generated PDF output
-- `.gitignore` - Ignores LaTeX auxiliary files and common editor artifacts
+Never commit PDF, LaTeX, HTML, or Typst output to this repository. Rendered artifacts are generated at publish time and distributed as GitHub Release assets.
 
-### MCP Branch Structure (Python Project)
-```
-src/cv_mcp_server/
-├── __init__.py
-└── main.py              # FastAPI-based MCP server implementation
-config/
-└── claude.json          # Claude Desktop MCP configuration
-pyproject.toml           # Python project configuration with pixi tasks
-requirements.txt         # Python dependencies for deployment
-runtime.txt             # Python version specification
-Dockerfile              # Container configuration
-README.md               # Detailed MCP server documentation
-```
+## Personal information
 
-### Key Components
-
-#### LaTeX CV (`FranciscoPerezSorrosal_CV_English.tex`)
-- Uses `moderncv` document class with classic green theme
-- Structured sections: Profile, Experience, Patents, Education, Skills, Languages
-- Extensive professional experience spanning academic research and industry R&D
-- Focus on AI/ML, distributed systems, and scalable architectures
-
-#### MCP Server (`src/cv_mcp_server/main.py`)
-- FastAPI-based server using the `mcp` library
-- Serves CV as markdown via `pymupdf4llm` for AI consumption
-- Provides tools for CV analysis and summarization
-- Supports multiple transport protocols (stdio, sse, streamable-http)
-- Includes comprehensive prompts for different use cases (hiring screens, executive briefings)
-
-## Development Guidelines
-
-### When Working with LaTeX (main branch)
-- You are an expert editor in latex format, with a background of computer science, research, and software engineering.
-- The CV is comprehensive and serves as the authoritative source
-- Auxiliary files (.aux, .log, .out, etc.) are gitignored
-- The instructions to use the `moderncv` package can be found in the document @.claude/docs/moderncv_userguide.txt
-- Extract and Read the content of the `moderncv` pdf
-- After you read the `moderncv` instructions, you are an expert, so use the package conventions for formatting
-- Maintain chronological order in experience sections, with recent years first
-
-### When Working with MCP Server (mcp branch)
-- Follow Python packaging best practices with src/ layout
-- Use pixi for dependency management and task execution
-- The server stateless_http mode is configurable via environment variables
-- MCP resources use custom URI scheme `cvfps://`
-- Tool functions provide different levels of CV analysis
-
-### Deployment Considerations
-- MCP server configured for render.com deployment
-- Environment variables: `TRANSPORT`, `PORT`, `HOST`
-- Remote MCP configuration uses `npx mcp-remote`
-- Local development supports multiple transport protocols
-
-## Important Notes
-
-- The CV contains real professional information and should be handled appropriately
-- MCP server includes usage tracking via mcpcat
-- Both branches serve different purposes but reference the same CV content
-- The repository demonstrates both traditional document management and modern AI integration patterns
+This repository contains Francisco's real professional information (work history, projects, contact links). Handle appropriately.

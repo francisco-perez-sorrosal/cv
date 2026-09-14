@@ -1,0 +1,30 @@
+name: Publish CV
+
+# ~15-line caller: the only coupling to cv-forge is the `uses:` line below
+# (SYSTEMS_PLAN.md Cross-Repo Contract §1). `v1` is a moving major tag,
+# re-pointed by cv-forge's own release script on each v1.x.y release.
+
+on:
+  push:
+    tags:
+      - '[0-9][0-9][0-9][0-9].[0-9][0-9].[0-9][0-9]*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: >-
+          Tag/ref to (re)publish. Leave blank to publish github.ref_name
+          (the ref this dispatch runs from); provide an explicit tag to
+          republish a specific past release.
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    uses: francisco-perez-sorrosal/cv-forge/.github/workflows/publish.yml@v1
+    with:
+      ref: ${{ inputs.tag || github.ref_name }}
+    secrets:
+      WASMER_TOKEN: ${{ secrets.WASMER_TOKEN }}

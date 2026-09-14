@@ -1,0 +1,78 @@
+name: Validate CV Data
+
+# Validates cv-data/*.yaml against the mirrored JSON Schemas (REQ-01) and
+# guards against the mirror drifting from cv-forge's own schemas/ (REQ-02).
+# See SYSTEMS_PLAN.md Cross-Repo Contract §2: nothing pushes across the
+# repo boundary -- schema sync is maintainer-initiated, this workflow only
+# detects drift and fails loudly.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: validate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  schema-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        with:
+          python-version: '3.13'
+
+      - name: Install check-jsonschema
+        run: pip install check-jsonschema==0.38.0
+
+      - name: Validate resume.yaml
+        run: check-jsonschema --schemafile schemas/resume.schema.json cv-data/resume.yaml
+
+      - name: Validate resume-semantics.yaml
+        run: check-jsonschema --schemafile schemas/semantics.schema.json cv-data/resume-semantics.yaml
+
+  schema-drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      - name: Fetch upstream schemas from cv-forge@v1 (anonymous)
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/upstream-schemas
+          for name in resume semantics; do
+            curl -fsS \
+              "https://raw.githubusercontent.com/francisco-perez-sorrosal/cv-forge/v1/schemas/${name}.schema.json" \
+              -o "/tmp/upstream-schemas/${name}.schema.json"
+          done
+
+      - name: Diff mirrored schemas against upstream
+        run: |
+          set -euo pipefail
+          status=0
+          for name in resume semantics; do
+            if ! diff -u "schemas/${name}.schema.json" "/tmp/upstream-schemas/${name}.schema.json"; then
+              echo "::error::schemas/${name}.schema.json has drifted from cv-forge@v1/schemas/${name}.schema.json"
+              status=1
+            fi
+          done
+          if [ "$status" -ne 0 ]; then
+            echo "::error::Schema mirror is stale. Re-sync via the cv-data-edit/cv-publish maintainer skill (plugins/cv-forge in this project's companion repo), or a maintainer-run workflow_dispatch that pulls the current cv-forge@v1/schemas/ and opens a PR here."
+            exit 1
+          fi
