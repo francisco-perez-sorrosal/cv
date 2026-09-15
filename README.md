@@ -50,11 +50,42 @@ The workflow automatically:
 
 All assets are stable, version-free URLs under `releases/latest/download/<name>`.
 
+### Republish an Existing Release
+
+To re-run the publish workflow without creating a new tag (useful when templates or rendering logic changes):
+
+```bash
+gh workflow run publish.yml -f tag=2026.09.14
+```
+
+Or via the GitHub Actions UI:
+1. Open Actions → Publish CV
+2. Click "Run workflow"
+3. Enter the tag in the `tag` input
+4. Click "Run workflow"
+
+This regenerates all eight release assets and redeploys the site, keeping the same version number. Assets at `releases/latest/download/` are updated in place (overwritten).
+
+### Schema Updates
+
+The JSON schemas in `schemas/` are mirrored from `cv-forge`. When `cv-forge` releases a new version that changes the data models (via `export-schemas`), update the schemas in this repo:
+
+1. **After cv-forge merges a PR** that changes `src/cv_forge/models/`:
+   ```bash
+   curl -s https://raw.githubusercontent.com/francisco-perez-sorrosal/cv-forge/v1/schemas/resume.schema.json > schemas/resume.schema.json
+   curl -s https://raw.githubusercontent.com/francisco-perez-sorrosal/cv-forge/v1/schemas/semantics.schema.json > schemas/semantics.schema.json
+   git add schemas/
+   git commit -m "chore: sync schemas from cv-forge v1"
+   git push
+   ```
+
+2. **The CI drift-check** (`.github/workflows/validate.yml`) compares the local schemas against the remote `cv-forge v1` copies. If they diverge, the check fails and blocks PRs until the sync above completes. The first publish after a `cv-forge` `v1` re-point may race the drift check by a few seconds — if so, re-run the publish workflow.
+
 ## Consuming the CV
 
 ### As data
 
-- **YAML sources**: `resume.yaml` and `resume-semantics.yaml` at `https://github.com/francisco-perez-sorrosal/cv/releases/latest/download/resume.yaml` (and `.semantics.yaml`)
+- **YAML sources**: `resume.yaml` and `resume-semantics.yaml` at `https://github.com/francisco-perez-sorrosal/cv/releases/latest/download/resume.yaml` and `resume-semantics.yaml`
 - **JSON**: `resume` and `semantics` as structured JSON
 
 ### As documents
