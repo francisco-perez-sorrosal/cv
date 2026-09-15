@@ -79,7 +79,7 @@ The JSON schemas in `schemas/` are mirrored from `cv-forge`. When `cv-forge` rel
    git push
    ```
 
-2. **The CI drift-check** (`.github/workflows/validate.yml`) compares the local schemas against the remote `cv-forge v1` copies. If they diverge, the check fails and blocks PRs until the sync above completes. The first publish after a `cv-forge` `v1` re-point may race the drift check by a few seconds — if so, re-run the publish workflow.
+2. **The CI drift-check** (`.github/workflows/validate.yml`) compares the local schemas against the remote `cv-forge v1` copies. If they diverge, the check fails and blocks PRs until the sync above completes. A push that lands seconds before `cv-forge` re-points its `v1` tag can fail the drift check with a 404 on the upstream fetch; re-run the failed `Validate CV Data` job once the tag exists.
 
 ## Consuming the CV
 
