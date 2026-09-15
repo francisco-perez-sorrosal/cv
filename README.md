@@ -43,9 +43,10 @@ git push origin 2026.09.13
 ```
 
 The workflow automatically:
+
 - Renders the CV in all formats (PDF, LaTeX, Typst, Markdown, HTML)
 - Publishes eight assets to the GitHub Release
-- Deploys the HTML to the live CV site at https://fps-cv.wasmer.app
+- Deploys the HTML to the [live CV site](https://fps-cv.wasmer.app)
 - Creates a `release.json` manifest (consumed by the MCP server)
 
 All assets are stable, version-free URLs under `releases/latest/download/<name>`.
@@ -59,6 +60,7 @@ gh workflow run publish.yml -f tag=2026.09.14
 ```
 
 Or via the GitHub Actions UI:
+
 1. Open Actions → Publish CV
 2. Click "Run workflow"
 3. Enter the tag in the `tag` input
@@ -70,7 +72,8 @@ This regenerates all eight release assets and redeploys the site, keeping the sa
 
 The JSON schemas in `schemas/` are mirrored from `cv-forge`. When `cv-forge` releases a new version that changes the data models (via `export-schemas`), update the schemas in this repo:
 
-1. **After cv-forge merges a PR** that changes `src/cv_forge/models/`:
+1. **After cv-forge merges a PR** that changes `src/cv_forge/models/`, refresh the mirrored copies:
+
    ```bash
    curl -s https://raw.githubusercontent.com/francisco-perez-sorrosal/cv-forge/v1/schemas/resume.schema.json > schemas/resume.schema.json
    curl -s https://raw.githubusercontent.com/francisco-perez-sorrosal/cv-forge/v1/schemas/semantics.schema.json > schemas/semantics.schema.json
@@ -85,13 +88,13 @@ The JSON schemas in `schemas/` are mirrored from `cv-forge`. When `cv-forge` rel
 
 ### As data
 
-- **YAML sources**: `resume.yaml` and `resume-semantics.yaml` at `https://github.com/francisco-perez-sorrosal/cv/releases/latest/download/resume.yaml` and `resume-semantics.yaml`
-- **JSON**: `resume` and `semantics` as structured JSON
+- **YAML sources**: `resume.yaml` and `resume-semantics.yaml`, published as release assets (see the URL pattern below)
+- **JSON**: the MCP server exposes the same data as JSON resources (`fps-cv://resume`, `fps-cv://semantics`) and per-entry lookups
 
 ### As documents
 
 - **PDF**: `FranciscoPerezSorrosal_CV.pdf`
-- **HTML** (interactive): `FranciscoPerezSorrosal_CV.html` or live at https://fps-cv.wasmer.app
+- **HTML** (interactive): `FranciscoPerezSorrosal_CV.html`, also served at the [live CV site](https://fps-cv.wasmer.app)
 - **LaTeX** (moderncv): `FranciscoPerezSorrosal_CV.tex`
 - **Typst** (moderner-cv): `FranciscoPerezSorrosal_CV.typ`
 - **Markdown**: `FranciscoPerezSorrosal_CV.md`
@@ -102,7 +105,7 @@ All at `https://github.com/francisco-perez-sorrosal/cv/releases/latest/download/
 
 The `cv` Claude Code plugin connects to an MCP server that serves the CV:
 
-```
+```text
 MCP Server: https://fps-cv-mcp.wasmer.app/mcp
 ```
 
